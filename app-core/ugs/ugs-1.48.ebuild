@@ -36,9 +36,6 @@ src_install() {
 		dobin "${FILESDIR}/bin/$f"
 	done
 
-	exeinto /usr/libexec/1g4
-	newexe "${FILESDIR}/bin/ssh-hostkeys" ssh-hostkeys
-
 	insinto /usr/lib/systemd/system
 	insopts -m 0644
 	local systemd_services=(

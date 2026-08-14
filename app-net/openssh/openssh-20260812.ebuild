@@ -22,9 +22,6 @@ DEPEND="
 	pam? ( lib-core/pam )
 	ssl? ( virtual/ssl )
 "
-RDEPEND="
-	systemd? ( app-core/ugs )
-"
 BDEPEND="
 	app-build/autoconf
 	app-dev/pkgconf
@@ -78,6 +75,9 @@ src_install() {
 	if use systemd; then
 		systemd_dounit "${FILESDIR}"/sshd.service
 	fi
+
+	exeinto /usr/libexec/1g4
+	newexe "${FILESDIR}"/ssh-hostkeys ssh-hostkeys
 
 	insinto /etc/ssh
 	doins "${FILESDIR}"/{ssh,sshd}_config

@@ -12,14 +12,13 @@ LICENSE="GPL-3 BSD LGPL-2.1 MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="apcupsd curl vim hddtemp imlib
+IUSE="apcupsd curl vim hddtemp
 	intel-backlight iostats math mpd ncurses nvidia
 	+portmon pulseaudio rss systemd +xft
 	wayland wifi +vim X xinerama xmms2"
 
 COMMON_DEPEND="
 	curl? ( app-net/curl )
-	imlib? ( xgui-lib/imlib2 )
 	ncurses? ( lib-core/ncurses )
 	nvidia? ( bin/nvidia-drivers )
 	pulseaudio? ( xmedia-lib/pulseaudio )
@@ -89,7 +88,7 @@ src_configure() {
 		-DBUILD_HTTP=no
 		-DBUILD_I18N=yes
 		-DBUILD_IBM=no
-		-DBUILD_IMLIB2=$(usex imlib)
+		-DBUILD_IMLIB2=no
 		-DBUILD_INTEL_BACKLIGHT=$(usex intel-backlight)
 		-DBUILD_IOSTATS=$(usex iostats)
 		-DBUILD_IPV6=yes

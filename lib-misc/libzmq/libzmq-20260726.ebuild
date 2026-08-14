@@ -22,7 +22,6 @@ DEPEND="
 PDEPEND="
 	lib-misc/cppzmq
 	lib-misc/czmq
-	lib-misc/zmqpp
 "
 
 src_prepare() {

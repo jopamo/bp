@@ -17,5 +17,6 @@ DEPEND="lib-core/readline:0="
 
 src_prepare() {
 	default
+	sed -i 's:AM_CONFIG_HEADER:AC_CONFIG_HEADERS:' configure.ac || die
 	eautoreconf
 }

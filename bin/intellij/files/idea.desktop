@@ -1,11 +1,11 @@
 [Desktop Entry]
 Version=1.0
 Type=Application
-Name=IntelliJ IDEA Community Edition
+Name=IntelliJ IDEA
 Comment=Develop with pleasure!
 Exec=idea
 Icon=idea
 Terminal=false
 StartupNotify=true
-StartupWMClass=jetbrains-idea-ce
+StartupWMClass=jetbrains-idea
 Categories=Development;IDE;Java;

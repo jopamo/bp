@@ -10,7 +10,12 @@ KEYWORDS="amd64 arm64"
 
 IUSE="nls"
 
-DEPEND="app-lang/perl"
+DEPEND="
+	app-lang/perl
+	nls? ( core-perl/libintl-perl )
+"
+RDEPEND="nls? ( core-perl/libintl-perl )"
+BDEPEND="nls? ( app-build/gettext )"
 
 src_configure() {
 	econf $(use_enable nls)

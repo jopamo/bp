@@ -6,7 +6,7 @@ After=acpid.socket
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/acpid -f
+ExecStart=/usr/sbin/acpid -f
 Restart=on-failure
 RestartSec=5
 

@@ -1,18 +1,16 @@
 # Distributed under the terms of the GNU General Public License v2
 
-inherit linux-info doins
+inherit autotools doins linux-info qa-policy
 
 DESCRIPTION="Daemon for Advanced Configuration and Power Interface"
 HOMEPAGE="https://sourceforge.net/projects/acpid2/"
-SRC_URI="https://downloads.sourceforge.net/${PN}2/${P}.tar.xz"
+SNAPSHOT=4d90b735fa7ac929059db75b8c2848863960418a
+SRC_URI="https://github.com/tedfelix/acpid2/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/acpid2-${SNAPSHOT}"
 
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-
-PATCHES=(
-	"${FILESDIR}"/${PN}-2.0.34-lfs.patch
-)
 
 pkg_pretend() {
 	local CONFIG_CHECK="~INPUT_EVDEV"
@@ -21,6 +19,16 @@ pkg_pretend() {
 }
 
 pkg_setup() { :; }
+
+src_prepare() {
+	default
+	eautoreconf
+}
+
+src_configure() {
+	qa-policy-configure
+	econf --sbindir=/usr/sbin
+}
 
 src_install() {
 	emake DESTDIR="${D}" install
@@ -37,4 +45,5 @@ src_install() {
 	newins "${FILESDIR}"/${PN}-1.0.4-default default
 
 	systemd_dounit "${FILESDIR}"/${PN}.{service,socket}
+	qa-policy-install
 }

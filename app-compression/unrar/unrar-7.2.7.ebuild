@@ -12,9 +12,7 @@ SLOT="0"
 
 KEYWORDS="amd64 arm64"
 
-PATCHES=(
-	"${FILESDIR}"/${PN}-6.2.6-honor-flags.patch
-)
+PATCHES=( "${FILESDIR}"/${PN}-honor-flags.patch )
 
 append-ldflags -Wl,-soname,libunrar.so.$(ver_cut 0-1)
 

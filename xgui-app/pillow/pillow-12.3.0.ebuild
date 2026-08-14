@@ -1,27 +1,25 @@
 # Distributed under the terms of the GNU General Public License v2
 
-BRANCH_NAME="$(ver_cut 1-2).x"
 DISTUTILS_EXT=1
 
 DISTUTILS_USE_PEP517=standalone
-PYTHON_COMPAT=( python3_{10..13} pypy3 )
+PYTHON_COMPAT=( python3_{11..14} pypy3_11 )
 
-inherit distutils-r1 toolchain-funcs flag-o-matic
+inherit distutils-r1 qa-policy toolchain-funcs flag-o-matic
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND=""
 # lockstep-pypi-deps: end
 DESCRIPTION="Python Imaging Library (fork)"
 HOMEPAGE="https://python-pillow.org/"
-SNAPSHOT=339bc5db93bd95decf65a59fab273f300db6594d
-SRC_URI="https://github.com/python-pillow/Pillow/archive/${SNAPSHOT}.tar.gz -> pillow-${SNAPSHOT}.tar.gz"
-S="${WORKDIR}/Pillow-${SNAPSHOT}"
+SRC_URI="https://files.pythonhosted.org/packages/1c/3d/bb7fca845737cf9d7dbde16ed1843984665ff2e0a518f5db43e77ec540b9/pillow-${PV}.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/pillow-${PV}"
 
 LICENSE="HPND"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="imagequant jpeg jpeg2k lcms test tiff truetype webp xcb zlib"
+IUSE="jpeg jpeg2k lcms test tiff truetype webp xcb zlib"
 
 REQUIRED_USE="test? ( jpeg jpeg2k lcms tiff truetype )"
 RESTRICT="!test? ( test )"
@@ -60,30 +58,55 @@ usepil() {
 src_prepare() {
 	default
 
-	sed -i '/^license[ ]*=.*/d;/^license-files[ ]*=.*/d' pyproject.toml || die
-
-	sed -i '/^]/{
-    	N
-    	s/\(\n]\)/\1\nlicense = { text = "MIT-CMU" }/
-	}' pyproject.toml || die
+	sed -i '/^  "pybind11",$/d' pyproject.toml || die
 }
 
 python_configure_all() {
 	filter-flags -Wl,-z,defs
-	cat >> setup.cfg <<-EOF || die
-		[build_ext]
-		debug = True
-		disable_platform_guessing = True
-		$(usepil truetype)_freetype = True
-		$(usepil jpeg)_jpeg = True
-		$(usepil jpeg2k)_jpeg2000 = True
-		$(usepil lcms)_lcms = True
-		$(usepil tiff)_tiff = True
-		$(usepil imagequant)_imagequant = True
-		$(usepil webp)_webp = True
-		$(usepil xcb)_xcb = True
-		$(usepil zlib)_zlib = True
-	EOF
+	qa-policy-configure
+
+	local pillow_configuration='configuration: dict[str, list[str]] = {'
+	local feature
+	for feature in \
+		"platform-guessing:disable" \
+		"freetype:$(usepil truetype)" \
+		"raqm:disable" \
+		"jpeg:$(usepil jpeg)" \
+		"jpeg2000:$(usepil jpeg2k)" \
+		"lcms:$(usepil lcms)" \
+		"tiff:$(usepil tiff)" \
+		"imagequant:disable" \
+		"webp:$(usepil webp)" \
+		"xcb:$(usepil xcb)" \
+		"zlib:$(usepil zlib)" \
+		"avif:disable"; do
+		pillow_configuration+=$'\n    "'"${feature%%:*}"'": ["'"${feature#*:}"'"],'
+	done
+	pillow_configuration+=$'\n}'
+
+	local -x PILLOW_CONFIGURATION="${pillow_configuration}"
+	"${EPYTHON}" - <<'PY' || die
+from pathlib import Path
+import os
+
+path = Path("setup.py")
+source = path.read_text()
+source = source.replace(
+    "from pybind11.setup_helpers import ParallelCompile\n", "", 1
+)
+source = source.replace(
+    'default = int(configuration.get("parallel", ["0"])[-1])\n'
+    'ParallelCompile("MAX_CONCURRENCY", default).install()\n\n',
+    "",
+    1,
+)
+source = source.replace(
+    "configuration: dict[str, list[str]] = {}",
+    os.environ["PILLOW_CONFIGURATION"],
+    1,
+)
+path.write_text(source)
+PY
 	tc-export PKG_CONFIG
 }
 
@@ -108,4 +131,5 @@ python_test() {
 python_install() {
 	python_doheader src/libImaging/*.h
 	distutils-r1_python_install
+	qa-policy-install
 }

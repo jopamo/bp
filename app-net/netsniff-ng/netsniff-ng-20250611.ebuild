@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-inherit toolchain-funcs
+inherit toolchain-funcs qa-policy
 
 DESCRIPTION="A Swiss army knife for your daily Linux network plumbing"
 HOMEPAGE="https://netsniff-ng.org/"
@@ -38,6 +38,7 @@ src_configure() {
 		$(usex zlib '' --disable-zlib)
 	)
 	# not an autoconf generated configure
+	qa-policy-configure
 	./configure "${myconfargs[@]}" || die
 }
 
@@ -49,4 +50,6 @@ src_install() {
 	emake PREFIX="${ED}/usr" ETCDIR="${ED}/etc" install
 
 	dodoc AUTHORS README REPORTING-BUGS
+
+	qa-policy-install
 }

@@ -3,7 +3,7 @@
 inherit autotools qa-policy
 
 DESCRIPTION="A decoder implementation of the JBIG2 image compression format"
-HOMEPAGE="http://ghostscript.com/jbig2dec.html"
+HOMEPAGE="https://github.com/ArtifexSoftware/jbig2dec"
 
 SNAPSHOT=6ecb04980813d693234190021bd1cf874c05b1b4
 SRC_URI="https://github.com/ArtifexSoftware/jbig2dec/archive/${SNAPSHOT}.tar.gz -> jbig2dec-${SNAPSHOT}.tar.gz"

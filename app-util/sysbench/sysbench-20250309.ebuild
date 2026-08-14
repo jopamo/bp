@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-inherit autotools
+inherit autotools qa-policy
 
 DESCRIPTION="Scriptable database and system performance benchmark"
 HOMEPAGE="https://github.com/akopytov/sysbench.git"
@@ -25,5 +25,11 @@ src_configure() {
 		--without-mysql
 		--with-system-luajit
 	)
+	qa-policy-configure
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
+}
+
+src_install() {
+	default
+	qa-policy-install
 }

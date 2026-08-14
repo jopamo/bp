@@ -16,7 +16,7 @@ diff --git a/src/core/capturerequest.cpp b/src/core/capturerequest.cpp
 index b5a2bb4..6277a15 100644
 --- a/src/core/capturerequest.cpp
 +++ b/src/core/capturerequest.cpp
-@@ -67,7 +67,7 @@ void CaptureRequest::addTask(CaptureRequest::ExportTask task)
+@@ -70,7 +70,7 @@ void CaptureRequest::addTask(CaptureRequest::ExportTask task)
  
  void CaptureRequest::removeTask(ExportTask task)
  {
@@ -27,4 +27,3 @@ index b5a2bb4..6277a15 100644
  void CaptureRequest::addSaveTask(const QString& path)
 -- 
 2.49.0
-

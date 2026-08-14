@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-inherit cmake
+inherit cmake qa-policy
 
 DESCRIPTION="A fast JSON parser/generator for C++ with both SAX/DOM style API"
 HOMEPAGE="http://rapidjson.org/"
@@ -20,10 +20,12 @@ src_configure() {
 		-DRAPIDJSON_BUILD_TESTS=$(usex test)
 		-DRAPIDJSON_BUILD_THIRDPARTY_GTEST=OFF
 	)
+	qa-policy-configure
 	cmake_src_configure
 }
 
 src_install() {
 	cmake_src_install
 	rm -rf "${ED}"/usr/share/doc
+	qa-policy-install
 }

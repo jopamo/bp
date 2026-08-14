@@ -16,7 +16,6 @@ RESTRICT="!test? ( test )"
 
 PATCHES=(
 	"${FILESDIR}"/${PN}-1.5.10-disable-tests.patch
-	"${FILESDIR}"/${PN}-1.5.9-header-extern-c.patch
 )
 
 src_prepare() {

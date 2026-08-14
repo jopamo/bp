@@ -2,9 +2,9 @@
 
 DESCRIPTION="Android SDK build-tools without SDK (apksigner only currently)"
 HOMEPAGE="https://developer.android.com/tools/releases/build-tools"
-SRC_URI="https://dl.google.com/android/repository/build-tools_r$(ver_cut 1)-rc$(ver_cut 2)-linux.zip"
+SRC_URI="https://dl.google.com/android/repository/build-tools_r37_linux.zip"
 
-S="${WORKDIR}/android-VanillaIceCream"
+S="${WORKDIR}/android-37.0"
 
 LICENSE="https://developer.android.com/studio/terms"
 SLOT="0"
@@ -12,12 +12,15 @@ KEYWORDS="amd64"
 
 src_install() {
 	exeinto /opt/${PN}
-	doexe {apksigner,lib/apksigner.jar}
+	doexe apksigner
+
+	insinto /opt/${PN}/lib
+	doins lib/apksigner.jar
 
 	cat > "${T}"/99${PN} <<- EOF || die
-		JAVA_HOME=/opt/openjdk8
+		JAVA_HOME=${EPREFIX}/opt/openjdk8
 		PATH=${EPREFIX}/opt/${PN}
-		PATH=$JAVA_HOME/bin:$PATH
+		PATH=\$JAVA_HOME/bin:\$PATH
 	EOF
 	doenvd "${T}"/99${PN}
 }

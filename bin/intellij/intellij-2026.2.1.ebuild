@@ -2,10 +2,10 @@
 
 inherit xdg doins
 
-DESCRIPTION="A complete toolset for web, mobile and enterprise development"
+DESCRIPTION="IntelliJ IDEA: a complete toolset for software development"
 HOMEPAGE="https://www.jetbrains.com/idea"
-SRC_URI="https://download.jetbrains.com/idea/ideaIC-${PV}.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/idea-IC-${PV}"
+SRC_URI="https://download.jetbrains.com/idea/idea-${PV}.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/idea-IU-262.9437.185"
 
 LICENSE="Apache-2.0 BSD BSD-2 CC0-1.0 CC-BY-2.5 CDDL-1.1
 	codehaus-classworlds CPL-1.0 EPL-1.0 EPL-2.0
@@ -21,19 +21,9 @@ QA_PREBUILT="opt/${PN}/*"
 
 RDEPEND="app-fs/e2fsprogs"
 
-src_unpack() {
-
-	default_src_unpack
-	if [ ! -d "$S" ]; then
-		einfo "Renaming source directory to predictable name..."
-		mv $(ls "${WORKDIR}") "idea-IC-${PV}" || die
-	fi
-}
-
 src_prepare() {
 	default
 
-	rm -r plugins/cwm-plugin/quiche-native/linux-aarch64 || die
 	rm plugins/webp/lib/libwebp/linux/libwebp_jni.so || die
 }
 

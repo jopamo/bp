@@ -3,10 +3,10 @@
 inherit xdg doins
 
 DESCRIPTION="JetBrains CLion: cross-platform C and C++ IDE"
-HOMEPAGE="https://www.jetbrains.com/idea"
+HOMEPAGE="https://www.jetbrains.com/clion/"
 SRC_URI="https://download.jetbrains.com/cpp/CLion-${PV}.tar.gz -> ${P}.tar.gz"
 
-S="${WORKDIR}/idea-IC-${PV}"
+S="${WORKDIR}/clion-${PV}"
 
 LICENSE="Apache-2.0 BSD BSD-2 CC0-1.0 CC-BY-2.5 CDDL-1.1
 	codehaus-classworlds CPL-1.0 EPL-1.0 EPL-2.0
@@ -20,20 +20,17 @@ RESTRICT="strip"
 
 QA_PREBUILT="opt/${PN}/*"
 
-src_unpack() {
-
-	default_src_unpack
-	if [ ! -d "$S" ]; then
-		einfo "Renaming source directory to predictable name..."
-		mv $(ls "${WORKDIR}") "idea-IC-${PV}" || die
-	fi
-}
-
 src_install() {
 	local HERE="${ED}/opt/${PN}"
 
 	mkdir -p "${HERE}" || die
 	cp -rp "${S}"/* "${HERE}/" || die
 
-	make_wrapper idea "/opt/${PN}/bin/idea.sh"
+	make_wrapper clion "/opt/${PN}/bin/clion.sh"
+
+	insinto /usr/share/icons/hicolor/128x128/apps/
+	doins "${S}"/bin/clion.png
+
+	insinto /usr/share/applications/
+	doins "${FILESDIR}"/clion.desktop
 }

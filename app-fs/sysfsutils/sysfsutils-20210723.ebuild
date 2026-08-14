@@ -17,7 +17,6 @@ IUSE="static-libs"
 
 src_prepare() {
 	default
-	sed -i 's:AM_CONFIG_HEADER:AC_CONFIG_HEADERS:' configure.ac || die
 	eautoreconf
 }
 

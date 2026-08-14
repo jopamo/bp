@@ -18,10 +18,6 @@ KEYWORDS="amd64 arm64"
 
 IUSE="python"
 
-DEPEND="
-	dev-pypi/pefile
-"
-
 filter-flags -flto\*
 
 src_prepare() {
@@ -40,7 +36,14 @@ src_compile() {
 }
 
 python_test() {
-	cd bindings/python && esetup.py test || die
+	cd bindings/python || die
+	"${EPYTHON}" - <<-'PY' || die "Keystone Python binding smoke test failed"
+	from keystone import KS_ARCH_X86, KS_MODE_64, Ks
+
+	encoding, count = Ks(KS_ARCH_X86, KS_MODE_64).asm("nop; ret")
+	assert encoding == [0x90, 0xc3], encoding
+	assert count == 2, count
+	PY
 }
 
 src_test() {

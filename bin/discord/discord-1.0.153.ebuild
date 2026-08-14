@@ -56,38 +56,25 @@ src_prepare() {
 	# remove post-install script
 	rm postinst.sh || die "the removal of the unneeded post-install script failed"
 
-	# fix .desktop exec location
-	sed -i "/Exec/s:/usr/share/discord/Discord:${DESTDIR}/${MY_PN^}:" \
-		"${MY_PN}.desktop" ||
-		die "fixing of exec location on .desktop failed"
-
 	# USE seccomp
 	if ! use seccomp; then
-		sed -i '/Exec/s/Discord/Discord --disable-seccomp-filter-sandbox/' \
-			"${MY_PN}.desktop" ||
-			die "sed failed for seccomp"
+		sed -i '/^Exec=/s|/usr/bin/discord|/usr/bin/discord --disable-seccomp-filter-sandbox|' \
+			discord.desktop || die "sed failed"
 	fi
 }
 
 src_install() {
-
 	exeinto "${DESTDIR}"
-
-	doexe "${MY_PN^}" chrome-sandbox libEGL.so libffmpeg.so libGLESv2.so libvk_swiftshader.so
+	doexe discord updater_bootstrap
 
 	insinto "${DESTDIR}"
-	doins chrome_100_percent.pak chrome_200_percent.pak icudtl.dat resources.pak snapshot_blob.bin v8_context_snapshot.bin
-	insopts -m0755
-	doins -r locales resources
+	doins discord.png
 
-	# Chrome-sandbox requires the setuid bit to be specifically set.
-	# see https://github.com/electron/electron/issues/17972
-	fowners root "${DESTDIR}/chrome-sandbox"
-	fperms 4711 "${DESTDIR}/chrome-sandbox"
+	insinto /usr/share/icons/hicolor/256x256/apps/
+	doins discord.png
 
-	# Crashpad is included in the package once in a while and when it does, it must be installed.
-	# See #903616 and #890595
-	[[ -x chrome_crashpad_handler ]] && doins chrome_crashpad_handler
+	insinto /usr/share/applications/
+	doins discord.desktop
 
-	dosym -r "${DESTDIR}/${MY_PN^}" "/usr/bin/${MY_PN}"
+	dosym -r "${DESTDIR}/discord" "/usr/bin/${MY_PN}"
 }

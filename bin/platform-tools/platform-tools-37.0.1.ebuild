@@ -14,7 +14,7 @@ DEPEND="app-util/android-udev-rules"
 
 src_install() {
 	exeinto /opt/${PN}
-	doexe {adb,fastboot,make_f2fs}
+	doexe {adb,fastboot,make_f2fs,make_f2fs_casefold}
 
 	cat > "${T}"/99${PN} <<- EOF || die
 		PATH=${EPREFIX}/opt/${PN}

@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-inherit python-utils-r1 autotools
+inherit python-utils-r1 autotools qa-policy
 
 DESCRIPTION="Python script wrapper"
 HOMEPAGE="https://github.com/mgorny/python-exec/"
@@ -23,6 +23,8 @@ src_prepare() {
 }
 
 src_configure() {
+	qa-policy-configure
+
 	local pyimpls=() i EPYTHON
 	for i in "${_PYTHON_ALL_IMPLS[@]}"; do
 		if use "python_targets_${i}"; then
@@ -58,4 +60,6 @@ src_install() {
 			dosym ../lib/python-exec/python-exec2 /usr/bin/"${f}"
 		done
 	fi
+
+	qa-policy-install
 }

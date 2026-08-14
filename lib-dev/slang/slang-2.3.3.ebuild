@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-inherit flag-o-matic
+inherit flag-o-matic qa-policy
 
 DESCRIPTION="S-Lang interpreter and terminal UI library (embedded scripting, curses-like widgets)"
 HOMEPAGE="http://www.jedsoft.org/slang/"
@@ -13,7 +13,12 @@ KEYWORDS="amd64 arm64"
 MAKEOPTS+=" -j1"
 
 src_prepare() {
+	qa-policy-configure
 	default
 	filter-flags -Wl,-z,defs
 }
 
+src_install() {
+	default
+	qa-policy-install
+}

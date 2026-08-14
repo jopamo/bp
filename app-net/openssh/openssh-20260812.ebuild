@@ -22,6 +22,9 @@ DEPEND="
 	pam? ( lib-core/pam )
 	ssl? ( virtual/ssl )
 "
+RDEPEND="
+	systemd? ( app-core/ugs )
+"
 BDEPEND="
 	app-build/autoconf
 	app-dev/pkgconf
@@ -73,7 +76,6 @@ src_install() {
 	fi
 
 	if use systemd; then
-		systemd_dounit "${FILESDIR}"/sshdgenkeys.service
 		systemd_dounit "${FILESDIR}"/sshd.service
 	fi
 

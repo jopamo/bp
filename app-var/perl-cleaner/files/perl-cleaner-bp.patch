@@ -1,0 +1,31 @@
+--- a/perl-cleaner
++++ b/perl-cleaner
+@@ -10,7 +10,7 @@
+ PMS_OPTIONS=( "-v1 --backtrack=200 --selective=n" "-D1" "-x1z" )
+ PMS_PRETEND=( "-p" "-p" "--no-execute" )
+ 
+-PMS_INSTALLED_COMMAND=( "qlist -IC" "" "cave print-packages --repository installed" )
++PMS_INSTALLED_COMMAND=( "coreq-installed -q -a" "" "cave print-packages --repository installed" )
+ PMS_DESELECT_COMMAND=( "emerge --deselect" "" "cave update-world --remove" )
+ PMS_SELECT_COMMAND=( "emerge --noreplace" "" "cave update-world" )
+ PMS_UPGRADE_COMMAND=( "emerge -u1" "" "cave resolve -x1zU perl-core/*" )
+@@ -19,7 +19,7 @@
+ 
+ PKGS_TO_REMERGE=""
+ 
+-PKGS_EXCEPTIONS="dev-lang/perl sys-devel/libperl app-emulation/emul-linux-x86-baselibs"
++PKGS_EXCEPTIONS="app-lang/perl dev-lang/perl sys-devel/libperl app-emulation/emul-linux-x86-baselibs"
+ PKGS_MANUAL=""
+ 
+ PKG_DBDIR="@GENTOO_PORTAGE_EPREFIX@/var/db/pkg"
+@@ -49,7 +49,9 @@
+ )
+ 
+ # See bug 504116 for details
+-if [ -e "@GENTOO_PORTAGE_EPREFIX@/lib/gentoo/functions.sh" ]; then
++if [ -e "@GENTOO_PORTAGE_EPREFIX@/lib/corepkg/functions/functions.sh" ]; then
++    . "@GENTOO_PORTAGE_EPREFIX@/lib/corepkg/functions/functions.sh"
++elif [ -e "@GENTOO_PORTAGE_EPREFIX@/lib/gentoo/functions.sh" ]; then
+     . "@GENTOO_PORTAGE_EPREFIX@/lib/gentoo/functions.sh"
+ elif [ -e "@GENTOO_PORTAGE_EPREFIX@/etc/init.d/functions.sh" ]; then
+     . "@GENTOO_PORTAGE_EPREFIX@/etc/init.d/functions.sh"

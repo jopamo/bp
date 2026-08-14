@@ -115,14 +115,6 @@ if [[ $(id -u) == 0 ]]; then
 		safe_chmod 755 /etc/ssh
 		safe_chown root:root /etc/ssh
 		safe_chmod 644 /etc/ssh/sshd_config /etc/ssh/ssh_config
-		for keyfile in /etc/ssh/ssh_host_*_key; do
-			safe_chmod 600 "${keyfile}"
-			safe_chown root:root "${keyfile}"
-		done
-		for pubfile in /etc/ssh/ssh_host_*_key.pub; do
-			safe_chmod 644 "${pubfile}"
-			safe_chown root:root "${pubfile}"
-		done
 	fi
 
 	safe_chmod 440 /etc/sudoers

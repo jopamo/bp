@@ -20,7 +20,6 @@ src_install() {
 		1g4-finalize-install
 		1g4-rootfs-policy
 		1g4-system-setup
-		ssh-hostkeys
 		dslam
 		efixperm
 		lighttpd_certs

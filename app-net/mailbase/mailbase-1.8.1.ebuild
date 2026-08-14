@@ -25,7 +25,8 @@ src_install() {
 	insinto /etc/mail
 	doins "${FILESDIR}"/aliases || die
 	insinto /etc
-	doins "${FILESDIR}"/mailcap || die
+	newins "${FILESDIR}"/mailcap-r4 mailcap || die
+	doman "${FILESDIR}"/mailcap.5
 
 	keepdir /var/spool/mail
 	fowners root:mail /var/spool/mail

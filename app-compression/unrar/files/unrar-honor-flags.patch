@@ -8,7 +8,7 @@ Gentoo-Bug: https://bugs.gentoo.org/461806
 
 --- a/makefile
 +++ b/makefile
-@@ -8,7 +8,7 @@ LIBFLAGS=-fPIC
+@@ -11,7 +11,7 @@
  DEFINES=-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -DRAR_SMP
  STRIP=strip
  AR=ar
@@ -16,8 +16,8 @@ Gentoo-Bug: https://bugs.gentoo.org/461806
 +LDFLAGS+=-pthread
  DESTDIR=/usr
  
- # Linux using LCC
-@@ -147,20 +147,21 @@ clean:
+ ##########################
+@@ -49,20 +49,21 @@
  
  unrar:	$(OBJECTS) $(UNRAR_OBJ)
  	@rm -f unrar
@@ -43,4 +43,3 @@ Gentoo-Bug: https://bugs.gentoo.org/461806
  	$(AR) rcs libunrar.a $(OBJECTS) $(LIB_OBJ)
  
  install-unrar:
---

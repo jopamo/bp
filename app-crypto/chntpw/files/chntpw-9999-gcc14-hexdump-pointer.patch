@@ -1,0 +1,33 @@
+From 3fb7f9a6a7c1e2b7d53eb3c1a5c89d1e9f14a1f0 Mon Sep 17 00:00:00 2001
+From: 1g4 QA <qa@oneg4.local>
+Date: Fri, 14 Aug 2026 08:00:00 +0000
+Subject: [PATCH] libsam: pass hexdump byte buffers with the declared type
+
+Current GCC diagnoses the existing int-pointer to char-pointer calls as
+incompatible pointer types.
+---
+ libsam.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/libsam.c b/libsam.c
+index 0d20e7f..6e28fac 100644
+--- a/libsam.c
++++ b/libsam.c
+@@ -511,7 +511,7 @@
+
+      if (gverbose) printf("put_grp_members_sid: ajusted: mofs = %x, mlen = %x (%d)\n", mofs + 0x34 ,mlen,mlen);
+ 
+-     if (gverbose) hexdump(&c->data, 0, c->len, 1);
++     if (gverbose) hexdump((char*)&c->data, 0, c->len, 1);
+ 
+     /* Get total size of new SID data */
+ 
+@@ -539,7 +539,7 @@ int sam_put_grp_members_sid(struct hive *hdesc, int rid, char *group, char *use
+     cd->members_len = sidlen;  /* Update member count in C struct */
+     cd->grp_members = i;
+ 
+-    if (gverbose) hexdump(&c->data, 0, c->len, 1);
++    if (gverbose) hexdump((char*)&c->data, 0, c->len, 1);
+ 
+     if (!put_buf2val(hdesc, c, 0, g, 0, TPF_VK_EXACT)) {
+       fprintf(stderr,"put_grp_members_sid: could not write back group info in value %s\n",g);

@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-BASEVERSION="8.0.452"
+BASEVERSION="8.0.502"
 
 DESCRIPTION="Zulu OpenJDK8 with JavaFX Support"
 HOMEPAGE="https://www.azul.com/"
@@ -15,7 +15,7 @@ KEYWORDS="amd64"
 
 RESTRICT="preserve-libs strip"
 
-QA_PREBUILT="*"
+QA_PREBUILT="opt/${PN}/*"
 
 src_compile() { :;}
 

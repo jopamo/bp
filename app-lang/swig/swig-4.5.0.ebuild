@@ -1,12 +1,11 @@
 # Distributed under the terms of the GNU General Public License v2
 
-SNAPSHOT=f8611c6288dfc38f838e9eab61aa802c46b21189
-BRANCH_NAME="release-$(ver_cut 1-2)"
+SNAPSHOT=d598176759f5d199e288cf78413cfaa3bf84449f
 
-inherit autotools
+inherit autotools qa-policy
 
 DESCRIPTION="Simplified Wrapper and Interface Generator"
-HOMEPAGE="http://www.swig.org/"
+HOMEPAGE="https://www.swig.org/"
 SRC_URI="https://github.com/swig/swig/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 
@@ -39,5 +38,11 @@ src_configure() {
 		$(use_with pcre)
 	)
 
+	qa-policy-configure
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
+}
+
+src_install() {
+	default
+	qa-policy-install
 }

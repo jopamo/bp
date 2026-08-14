@@ -3,11 +3,13 @@
 inherit cmake multibuild qa-policy
 
 DESCRIPTION="A simple, small, efficient, C++ XML parser"
-HOMEPAGE="http://www.grinninglizard.com/tinyxml2/ https://github.com/leethomason/tinyxml2/"
-SRC_URI="https://github.com/leethomason/${PN}/archive/${PV}.tar.gz -> ${P}.tar.gz"
+HOMEPAGE="https://www.grinninglizard.com/tinyxml2/ https://github.com/leethomason/tinyxml2/"
+SNAPSHOT=8224e427b655b83dae5e2298f1e6919523a78737
+SRC_URI="https://github.com/leethomason/${PN}/archive/${SNAPSHOT}.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="ZLIB"
-SLOT="0/6"
+SLOT="0/11"
 KEYWORDS="amd64 arm64"
 IUSE="static-libs test"
 

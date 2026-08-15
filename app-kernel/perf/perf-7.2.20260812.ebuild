@@ -22,6 +22,11 @@ KEYWORDS="amd64 arm64"
 IUSE="bpf +capstone debug"
 RESTRICT="debug? ( strip )"
 
+BDEPEND="
+	app-tex/asciidoc3
+	app-tex/docbookz
+"
+
 DEPEND="
 	app-kernel/libtraceevent
 	capstone? ( app-emu/capstone )
@@ -192,9 +197,22 @@ src_install() {
 		)
 	fi
 
-	emake -C tools/perf install \
+	emake -C tools/perf install-bin \
 		"${myemake[@]}" \
 		DESTDIR="${D}" \
 		prefix=/usr \
 		STRIP=true || die
+
+	# The wrapper Makefile drops command-line variables before recursing,
+	# so invoke Makefile.perf directly to make the documentation tool
+	# selection reach Documentation/Makefile.  Do not use try-install-man:
+	# it silently skips the manpages when a generator is unavailable.
+	emake -C tools/perf -f Makefile.perf \
+		FIXDEP_BUILT=1 \
+		install-man \
+		"${myemake[@]}" \
+		ASCIIDOC=asciidoc3 \
+		ASCIIDOC_EXTRA='--unsafe\ -f\ asciidoc.conf' \
+		DESTDIR="${D}" \
+		prefix=/usr || die
 }

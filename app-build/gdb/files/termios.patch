@@ -178,12 +178,16 @@ diff -urN a/gdb/ser-unix.c b/gdb/ser-unix.c
  }
  
  #elif HAVE_CUSTOM_BAUDRATE_SUPPORT && defined(IOSSIOSPEED)
-@@ -552,7 +548,7 @@
+@@ -583,9 +583,9 @@
  }
  
  #endif /* HAVE_CUSTOM_BAUDRATE_SUPPORT
--	  && (defined(BOTHER) || defined(IOSSIOSPEED)) */
-+          && (defined(BOTHER) || defined(IOSSIOSPEED)) */
+-	  && (defined(HAVE_CFSETSPEED_ARBITRARY)
+-	     || defined(BOTHER)
+-	     || defined(IOSSIOSPEED)) */
++          && (defined(HAVE_CFSETSPEED_ARBITRARY)
++             || defined(BOTHER)
++             || defined(IOSSIOSPEED)) */
  
  #if HAVE_CUSTOM_BAUDRATE_SUPPORT
  

@@ -35,7 +35,7 @@ src_prepare() {
 	tar -xf "${DISTDIR}/flameshot-kdsingleapplication-${KDSINGLEAPPLICATION_VERSION}.tar.gz" \
 		--strip-components=1 -C external/KDSingleApplication
 
-	default
+	cmake_src_prepare
 }
 
 src_configure() {

@@ -33,7 +33,6 @@ src_prepare() {
 	cmake_comment_add_subdirectory examples
 
 	# Unbundle glslang, spirv-headers, spirv-tools
-	cmake_comment_add_subdirectory third_party
 	sed -i \
 		-e "s|\$<TARGET_FILE:spirv-dis>|${EPREFIX}/usr/bin/spirv-dis|" \
 		glslc/test/CMakeLists.txt || die

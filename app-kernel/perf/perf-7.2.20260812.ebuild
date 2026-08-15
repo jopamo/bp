@@ -86,7 +86,7 @@ src_compile() {
 			;;
 	esac
 
-	[[ -n ${perf_timestamp} ]] || perf_timestamp='1970-01-01 00:00:00 +0000'
+	[[ -n ${perf_timestamp} ]] || perf_timestamp='1970-01-01'
 
 	filter-lto
 
@@ -151,7 +151,7 @@ src_install() {
 			;;
 	esac
 
-	[[ -n ${perf_timestamp} ]] || perf_timestamp='1970-01-01 00:00:00 +0000'
+	[[ -n ${perf_timestamp} ]] || perf_timestamp='1970-01-01'
 
 	filter-lto
 

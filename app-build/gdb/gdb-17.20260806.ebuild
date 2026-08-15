@@ -114,12 +114,23 @@ src_configure() {
 	append-flags -fpermissive
 	qa-policy-configure
 
+	local python_libdir
+	if use python; then
+		python_libdir=$(dirname "$(python_get_library_path)") || die
+
+		# GDB's python-config.py omits -L for shared Python installations.
+		# Keep the selected implementation's library directory available to
+		# the nested configure probe and to the final link.
+		append-ldflags "-L${python_libdir}"
+	fi
+
 	local myconf=(
 		$(use multitarget && echo --enable-targets=all)
 		$(use_enable server gdbserver auto)
 		$(usex client '' '--disable-gdb')
 		$(use_with lzma)
 		$(use_with python python "${EPYTHON}")
+		$(use python && echo "--with-python-libdir=${python_libdir}")
 		$(use_with xml expat)
 		--disable-dependency-tracking
 		--disable-install-libbfd

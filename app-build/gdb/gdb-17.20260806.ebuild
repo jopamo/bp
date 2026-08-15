@@ -16,7 +16,7 @@ LICENSE="GPL-3+ FDL-1.3 LGPL-2.1+"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="client lzma multitarget python server test xml"
+IUSE="+client lzma multitarget python server test xml"
 
 REQUIRED_USE="
 	lzma? ( client )

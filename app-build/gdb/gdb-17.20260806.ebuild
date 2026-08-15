@@ -101,6 +101,18 @@ src_prepare() {
 	default
 	use elibc_musl && eapply "${FILESDIR}"/termios.patch
 
+	if use python; then
+		local python_libpath
+
+		python_libpath=$(python_get_library_path) || die
+		# GDB's helper otherwise reconstructs -lpython${VERSION}. Use the
+		# installed library directly so the probe does not depend on an
+		# unversioned linker name being present.
+		sed -i \
+			-e "s|^        libs = \[\"-lpython\" + pyver + abiflags\]$|        libs = [\"${python_libpath}\"]|" \
+			gdb/python/python-config.py || die
+	fi
+
 	# Avoid redefining struct user_gcs when the kernel UAPI already provides it
 	sed -i \
 		-e 's/^#ifndef GCS_MAGIC$/#ifndef NT_ARM_GCS\n#define NT_ARM_GCS 0x410/' \

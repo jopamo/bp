@@ -25,6 +25,9 @@ src_install() {
 
 	insinto /usr/lib/modules-load.d
 	newins "${FILESDIR}"/1g4-zram.modules-load 1g4-zram.conf
+	if use router; then
+		newins "${FILESDIR}"/1g4-router.modules-load 1g4-router.conf
+	fi
 
 	insinto /usr/lib/modprobe.d
 	newins "${FILESDIR}"/1g4-zram.modprobe 1g4-zram.conf

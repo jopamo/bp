@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-inherit linux-info autotools qa-policy
+inherit linux-info autotools qa-policy doins
 
 DESCRIPTION="Linux kernel firewall, NAT and packet mangling tools"
 HOMEPAGE="https://netfilter.org/projects/nftables/"
@@ -59,15 +59,32 @@ src_install() {
 	if use systemd; then
 		insinto /usr/lib/systemd/system
 		insopts -m 0644
-		doins "${FILESDIR}/nftables.service"
+		if use router; then
+			newins "${FILESDIR}/nftables-router.service" nftables.service
+			systemd_enable_service network-pre.target nftables.service
+		else
+			doins "${FILESDIR}/nftables.service"
+		fi
 	fi
 
 	insinto /etc
 	if use router; then
 		newins "${FILESDIR}/router.conf" nftables.conf
+		insinto /etc/nftables.d
+		newins "${FILESDIR}/router-interfaces.nft.example" \
+			router-interfaces.nft.example
 	else
 		doins "${FILESDIR}/nftables.conf"
 	fi
 
 	qa-policy-install
+}
+
+pkg_postinst() {
+	if use router; then
+		elog "Router mode requires /etc/nftables.d/router-interfaces.nft."
+		elog "Copy the .example file there and assign the host's WAN/LAN roles."
+		elog "The router firewall keeps IPv4 forwarding disabled until that"
+		elog "role mapping and the complete nftables ruleset load successfully."
+	fi
 }

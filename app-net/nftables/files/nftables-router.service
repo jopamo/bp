@@ -1,0 +1,26 @@
+[Unit]
+Description=Netfilter Tables (router)
+Wants=network-pre.target
+After=systemd-sysctl.service
+Before=network-pre.target
+
+[Service]
+Type=oneshot
+# Forwarding stays disabled until the complete firewall loads successfully.
+ExecStartPre=/usr/bin/sysctl -w net.ipv4.ip_forward=0
+ExecStartPre=/usr/bin/test -r /etc/nftables.d/router-interfaces.nft
+ExecStartPre=/usr/bin/sh -eu -c '! /usr/bin/grep -q replace-with- /etc/nftables.d/router-interfaces.nft'
+ExecStart=/usr/bin/nft -f /etc/nftables.conf
+ExecStartPost=/usr/bin/sysctl -w net.ipv4.ip_forward=1
+ExecReload=/usr/bin/sh -eu -c '/usr/bin/sysctl -w net.ipv4.ip_forward=0; /usr/bin/nft flush ruleset; /usr/bin/nft -f /etc/nftables.conf; /usr/bin/sysctl -w net.ipv4.ip_forward=1'
+ExecStop=/usr/bin/sh -eu -c '/usr/bin/nft flush ruleset || true; /usr/bin/sysctl -w net.ipv4.ip_forward=0'
+ExecStopPost=/usr/bin/sysctl -w net.ipv4.ip_forward=0
+RemainAfterExit=yes
+ProtectSystem=full
+ProtectHome=read-only
+PrivateTmp=true
+CapabilityBoundingSet=CAP_NET_ADMIN
+NoNewPrivileges=true
+
+[Install]
+WantedBy=network-pre.target

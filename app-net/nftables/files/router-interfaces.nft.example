@@ -1,0 +1,9 @@
+# Host-owned router interface roles.
+#
+# Copy this file to /etc/nftables.d/router-interfaces.nft and replace the
+# example values with the interfaces assigned the WAN and LAN roles by the
+# host's network configuration. The shared router firewall does not assume
+# any kernel interface naming scheme.
+
+define WAN_IFACES = { "replace-with-wan-interface" }
+define LAN_IFACES = { "replace-with-lan-interface" }

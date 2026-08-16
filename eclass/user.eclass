@@ -59,6 +59,8 @@ enewuser() {
 	[[ -n ${root} ]] && opts+=( --prefix "${root}" )
 
 	# ---- uid ----------------------------------------------------------------
+	# -1 is the sentinel for an automatically allocated service UID.
+	[[ ${uid} == -1 ]] && uid=
 	if [[ -n ${uid} && ${uid} != -1 ]]; then
 		[[ ${uid} =~ ^[0-9]+$ && ${uid} -ge 0 ]] \
 			|| die "${FUNCNAME}: invalid UID '${uid}'"
@@ -137,6 +139,8 @@ enewgroup() {
 	[[ -n $(egetent group "${group}") ]] && return 0
 	elog "Adding group '${group}' ..."
 
+	# -1 is the sentinel for an automatically allocated service GID.
+	[[ ${gid} == -1 ]] && gid=
 	if [[ -n ${gid} && ${gid} != -1 ]]; then
 		[[ ${gid} =~ ^[0-9]+$ && ${gid} -ge 0 ]] \
 			|| die "${FUNCNAME}: bad gid ${gid}"

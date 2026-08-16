@@ -1,0 +1,27 @@
+--- a/src/parser_bison.y
++++ b/src/parser_bison.y
+@@ -6535,6 +6535,12 @@
+ 
+ %%
+ 
++#ifdef HAVE_VISIBILITY_HIDDEN
++#define NFT_BISON_VISIBLE __attribute__((visibility("default")))
++#else
++#define NFT_BISON_VISIBLE
++#endif
++
+ #ifdef YY_LAC_ESTABLISH
+ static int
+ yyreport_syntax_error(const yypcontext_t *yyctx, struct nft_ctx *nft,
+@@ -6592,8 +6598,9 @@
+ 	return 0;
+ }
+ 
+-bool nft_bison_have_extended_errors = true;
++bool nft_bison_have_extended_errors NFT_BISON_VISIBLE = true;
+ #else /* ! YY_LAC_ESTABLISH */
+-bool nft_bison_have_extended_errors = false;
++bool nft_bison_have_extended_errors NFT_BISON_VISIBLE = false;
+ #endif /* YY_LAC_ESTABLISH */
+ EXPORT_SYMBOL(nft_bison_have_extended_errors);
++#undef NFT_BISON_VISIBLE

@@ -88,6 +88,7 @@ src_install() {
 
 	cat > "${T}"/"${PN}"-tmpfiles <<- EOF || die
 		d /run/lighttpd 0750 lighttpd lighttpd -
+		d /var/lighttpd/default/http 0755 lighttpd lighttpd -
 	EOF
 
 	newsysusers "${T}/${PN}-sysusers" "${PN}.conf"

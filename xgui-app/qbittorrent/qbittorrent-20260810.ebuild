@@ -14,7 +14,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="createuser debug dbus systemd gui webui"
+IUSE="+createuser debug dbus systemd gui webui"
 
 DEPEND="
 	lib-dev/boost
@@ -26,7 +26,10 @@ DEPEND="
 "
 
 pkg_setup() {
-	use createuser && enewuser qbittorrent -1 /usr/bin/nologin "/var/lib/qbittorrent" qbittorrent
+	if use createuser; then
+		enewgroup qbittorrent
+		enewuser qbittorrent -1 /usr/bin/nologin "/var/lib/qbittorrent" qbittorrent
+	fi
 }
 
 src_prepare() {
@@ -62,7 +65,7 @@ src_configure() {
 src_install() {
 	cmake_src_install
 
-	if use systemd; then
+	if use systemd && use createuser; then
 		insinto /usr/lib/systemd/system
 		insopts -m 0644
 		doins "${FILESDIR}/qbittorrent.service"

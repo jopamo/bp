@@ -2,12 +2,16 @@
 Description=Lighttpd Daemon
 After=network.target
 Requires=network.target
+StartLimitIntervalSec=1min
+StartLimitBurst=3
 
 [Service]
 ExecStartPre=/usr/bin/lighttpd -tt -f /etc/lighttpd/lighttpd.conf
 ExecStart=/usr/bin/lighttpd-angel -D -f /etc/lighttpd/lighttpd.conf
 Restart=on-failure
-RestartSec=5s
+RestartSec=30s
+# A failed ExecStartPre config check is a persistent configuration error.
+RestartPreventExitStatus=255
 ProtectSystem=full
 ProtectHome=true
 PrivateTmp=true

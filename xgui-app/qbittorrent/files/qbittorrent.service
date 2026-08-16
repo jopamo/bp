@@ -1,6 +1,8 @@
 [Unit]
 Description=qBittorrent Daemon Service
 After=network.target
+StartLimitIntervalSec=1min
+StartLimitBurst=3
 
 [Service]
 User=qbittorrent
@@ -8,7 +10,9 @@ Group=qbittorrent
 Type=simple
 ExecStart=/usr/bin/qbittorrent-nox
 Restart=on-failure
-RestartSec=5
+RestartSec=30s
+# Do not retry indefinitely when the configured service account is absent.
+RestartPreventExitStatus=217
 NoNewPrivileges=yes
 PrivateTmp=yes
 PrivateDevices=yes

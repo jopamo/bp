@@ -224,7 +224,7 @@ src_configure() {
 		cargo = "${RUST_BOOTSTRAP_CARGO}"
 		rustc = "${RUST_BOOTSTRAP_RUSTC}"
 		# Build the complete stable extended toolchain.
-		tools = ["cargo","clippy","rustdoc","rustfmt","rust-analyzer","rust-analyzer-proc-macro-srv","analysis","src","wasm-component-ld"]
+		tools = ["cargo","clippy","rustdoc","rustfmt","rust-analyzer","analysis","src","wasm-component-ld"]
 		vendor = true
 		sanitizers = false
 		optimized-compiler-builtins = true

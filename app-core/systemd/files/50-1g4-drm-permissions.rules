@@ -1,0 +1,7 @@
+# 1g4 DRM device policy.
+#
+# The distro's graphical users are members of video. Keep both display
+# and render nodes usable by that group, regardless of which DRM driver
+# created them. Control nodes remain driver-specific.
+SUBSYSTEM=="drm", KERNEL=="card[0-9]*", GROUP="video", MODE="0660"
+SUBSYSTEM=="drm", KERNEL=="renderD[0-9]*", GROUP="video", MODE="0660"

@@ -219,10 +219,21 @@ src_install() {
 
 	rm "${ED}/usr/lib/sysusers.d/basic.conf" || die
 
-	for x in cdrom dialout render sgx tape; do
+	for x in cdrom dialout sgx tape; do
 		sed -i "/${x}/d" \
 			"${ED}/usr/lib/udev/rules.d/50-udev-default.rules" || die
 	done
+
+	# The base image owns the video group and uses it for all DRM nodes.
+	# Remove systemd's render/kfd/accel rules because that group is not part
+	# of the distro policy; preserve the card* video rule above.
+	sed -i \
+		-e '/SUBSYSTEM=="drm", KERNEL=="renderD\*", GROUP="render"/d' \
+		-e '/SUBSYSTEM=="kfd", GROUP="render"/d' \
+		-e '/SUBSYSTEM=="accel", GROUP="render"/d' \
+		"${ED}/usr/lib/udev/rules.d/50-udev-default.rules" || die
+
+	udev_dorules "${FILESDIR}"/50-1g4-drm-permissions.rules
 
 	dodir /usr/lib/systemd/user
 

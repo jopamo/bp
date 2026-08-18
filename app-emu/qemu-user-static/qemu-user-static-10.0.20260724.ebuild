@@ -25,7 +25,7 @@ IUSE="static-libs xattr"
 DEPEND="
     virtual/linux-sources
     lib-core/zlib[static-libs(+)]
-    lib-dev/libtasn1[static-libs(+)]
+    app-crypto/vesk[static-libs(+)]
     lib-core/glib[static-libs(+)]
     xattr? ( app-core/attr[static-libs(+)] )
 "

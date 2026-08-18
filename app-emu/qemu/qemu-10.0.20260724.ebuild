@@ -81,7 +81,7 @@ DEPEND="
 	lib-core/zlib
 	lib-dev/jemalloc
 	lib-dev/liburing
-	lib-dev/libtasn1
+	app-crypto/vesk
 	lib-net/libssh
 	xgui-lib/pixman
 	bpf? ( lib-net/libbpf )

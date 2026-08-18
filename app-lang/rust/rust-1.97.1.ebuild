@@ -168,23 +168,20 @@ replace_once(
 )
 PY
 
-	if use elibc_musl; then
-		if compgen -G "${FILESDIR}/rust/*.patch" > /dev/null; then
-			eapply "${FILESDIR}"/rust/*.patch
-		fi
-		# rustc bootstrap on musl cannot build rustc_driver as a dylib.
-		sed -i \
-			-e '/^crate-type = \["dylib"\]$/d' \
-			compiler/rustc_driver/Cargo.toml || die
-		sed -i 's/base\.crt_static_default = true;/base\.crt_static_default = false;/g' \
-			compiler/rustc_target/src/spec/base/linux_musl.rs || die
-		sed -i 's/base\.crt_static_default = true;/base\.crt_static_default = false;/g' \
-			compiler/rustc_target/src/spec/targets/x86_64_unknown_linux_musl.rs || die
-		sed -i 's/^\([[:space:]]*\)extern "C" *{$/\1unsafe extern "C" {/' \
-			library/unwind/src/lib.rs || die
-		sed -i 's/base\.crt_static_default = true;/base\.crt_static_default = false;/g' \
-			compiler/rustc_target/src/spec/targets/aarch64_unknown_linux_musl.rs || die
-	fi
+    if use elibc_musl; then
+        if compgen -G "${FILESDIR}/rust/*.patch" > /dev/null; then
+            eapply "${FILESDIR}"/rust/*.patch
+        fi
+
+        sed -i 's/base\.crt_static_default = true;/base\.crt_static_default = false;/g' \
+            compiler/rustc_target/src/spec/targets/aarch64_unknown_linux_musl.rs || die
+        sed -i 's/base\.crt_static_default = true;/base\.crt_static_default = false;/g' \
+            compiler/rustc_target/src/spec/targets/x86_64_unknown_linux_musl.rs || die
+        sed -i 's/base\.crt_static_default = true;/base\.crt_static_default = false;/g' \
+            compiler/rustc_target/src/spec/base/linux_musl.rs || die
+        sed -i 's/^\([[:space:]]*\)extern "C" *{$/\1unsafe extern "C" {/' \
+            library/unwind/src/lib.rs || die
+    fi
 
 	filter-clang
 	filter-lto
@@ -224,7 +221,7 @@ src_configure() {
 		cargo = "${RUST_BOOTSTRAP_CARGO}"
 		rustc = "${RUST_BOOTSTRAP_RUSTC}"
 		# Build the complete stable extended toolchain.
-		tools = ["cargo","clippy","rustdoc","rustfmt","rust-analyzer","analysis","src","wasm-component-ld"]
+		tools = ["cargo","clippy","rustdoc","rustfmt","rust-analyzer","rust-analyzer-proc-macro-srv","analysis","src","wasm-component-ld"]
 		vendor = true
 		sanitizers = false
 		optimized-compiler-builtins = true

@@ -10,7 +10,11 @@ KEYWORDS="amd64 arm64"
 
 IUSE="debug libffi"
 
-DEPEND="libffi? ( lib-core/libffi )"
+DEPEND="
+	app-crypto/vesk
+	libffi? ( lib-core/libffi )
+"
+RDEPEND="${DEPEND}"
 
 pkg_setup() {
 	# disable unsafe tests, bug#502088
@@ -19,7 +23,6 @@ pkg_setup() {
 
 src_configure() {
 	local myconf=(
-		--without-libtasn1
 		$(use_enable debug)
 		$(use_with libffi)
 	)

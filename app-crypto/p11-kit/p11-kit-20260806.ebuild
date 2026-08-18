@@ -11,3 +11,14 @@ S="${WORKDIR}/${PN}-${SNAPSHOT}"
 LICENSE="MIT"
 SLOT="0"
 #KEYWORDS="amd64 arm64"
+
+DEPEND="app-crypto/vesk"
+RDEPEND="${DEPEND}"
+
+src_configure() {
+	local emesonargs=(
+		-Dtrust_module=enabled
+	)
+
+	meson_src_configure
+}

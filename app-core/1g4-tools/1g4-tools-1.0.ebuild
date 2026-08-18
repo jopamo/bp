@@ -52,7 +52,6 @@ app-net/iputils
 app-net/iw
 app-net/nftables
 app-net/nmap
-app-net/socat
 app-net/tcpdump
 app-server/lighttpd
 app-util/lshw

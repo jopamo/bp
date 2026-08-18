@@ -1,5 +1,5 @@
 #!/bin/sh
-# ensure NVIDIA device and DRM nodes have correct groups
+# ensure NVIDIA device nodes have the correct group
 
 set -u
 
@@ -11,15 +11,10 @@ fi
 
 for node in \
     /dev/nvidia* \
-    /dev/dri/card* \
-    /dev/dri/renderD* \
     /dev/dri/controlD* \
     /dev/nvidia-caps/nvidia-cap*; do
     [ -e "${node}" ] || continue
-    case "${node}" in
-        /dev/dri/renderD*) chgrp render "${node}" 2>/dev/null || true ;;
-        *)                 chgrp video  "${node}" 2>/dev/null || true ;;
-    esac
+    chgrp video "${node}" 2>/dev/null || true
     chmod 0660 "${node}" 2>/dev/null || true
 done
 

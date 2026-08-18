@@ -35,7 +35,6 @@ DEPEND="
 	)
 	vaapi? (
 		xgui-lib/libva
-		xgui-lib/libva-intel-driver
 	)
 	vdpau? ( xgui-lib/libvdpau )
 "

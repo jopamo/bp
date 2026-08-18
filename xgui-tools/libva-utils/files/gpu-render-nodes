@@ -1,0 +1,26 @@
+#!/bin/sh
+
+set -eu
+
+found=0
+
+for node in /dev/dri/renderD*; do
+	[ -e "${node}" ] || continue
+
+	dev=${node##*/}
+	vendor=$(cat "/sys/class/drm/${dev}/device/vendor" 2>/dev/null) || continue
+
+	case "${vendor}" in
+		0x8086) gpu=Intel ;;
+		0x10de) gpu=NVIDIA ;;
+		*) gpu="unknown (${vendor})" ;;
+	esac
+
+	printf '%-20s %s\n' "${node}" "${gpu}"
+	found=1
+done
+
+if [ "${found}" -eq 0 ]; then
+	echo "no DRM render nodes found under /dev/dri" >&2
+	exit 1
+fi

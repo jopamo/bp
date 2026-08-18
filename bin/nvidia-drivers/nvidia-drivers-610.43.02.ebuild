@@ -17,7 +17,7 @@ SRC_URI="
 LICENSE="GPL-2 NVIDIA-r2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-IUSE+=" driver kernel-open kms static-libs uvm wayland X"
+IUSE+=" driver kernel-open kms primary-gpu static-libs uvm wayland X"
 REQUIRED_USE="kernel-open? ( driver )"
 
 S="${WORKDIR}"
@@ -107,6 +107,11 @@ src_prepare() {
     done
 
     default
+
+    if ! use primary-gpu; then
+        sed -i '/^[[:space:]]*Option "PrimaryGPU" "true"[[:space:]]*$/d' \
+            nvidia-drm-outputclass.conf || die
+    fi
 
     if ! [ -f nvidia_icd.json ]; then
         cp nvidia_icd.json.template nvidia_icd.json || die

@@ -37,7 +37,7 @@ app-net/nmap libssh2 nping nselib os-db scripts ncat
 app-server/nodejs icu node-snapshot
 app-tex/hunspell minimal
 app-tex/poppler utils
-bin/nvidia-drivers driver kms uvm -kernel-open
+bin/nvidia-drivers driver kms uvm -kernel-open -primary-gpu
 lib-core/libcap static-libs
 lib-core/expat static-libs
 lib-core/glib static-libs

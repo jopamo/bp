@@ -1,0 +1,117 @@
+diff --git a/arch/x86_64/reloc.h b/arch/x86_64/reloc.h
+index fac0c0ae..67d6cf98 100644
+--- a/arch/x86_64/reloc.h
++++ b/arch/x86_64/reloc.h
+@@ -5,6 +5,7 @@
+ #define REL_GOT         R_X86_64_GLOB_DAT
+ #define REL_PLT         R_X86_64_JUMP_SLOT
+ #define REL_RELATIVE    R_X86_64_RELATIVE
++#define REL_IRELATIVE   R_X86_64_IRELATIVE
+ #define REL_COPY        R_X86_64_COPY
+ #define REL_DTPMOD      R_X86_64_DTPMOD64
+ #define REL_DTPOFF      R_X86_64_DTPOFF64
+diff --git a/include/limits.h b/include/limits.h
+index 53a27b9d..409cfa33 100644
+--- a/include/limits.h
++++ b/include/limits.h
+@@ -63,7 +63,12 @@
+ 
+ /* Implementation choices... */
+ 
+-#define PTHREAD_KEYS_MAX 128
++/*
++ * Keep the glibc-compatible runtime key limit.  The NVIDIA/Mesa EGL stack
++ * can consume more than musl's POSIX-minimum allocation of 128 keys while
++ * loading, and glibc exposes 1024.
++ */
++#define PTHREAD_KEYS_MAX 1024
+ #define PTHREAD_STACK_MIN 2048
+ #define PTHREAD_DESTRUCTOR_ITERATIONS 4
+ #define SEM_VALUE_MAX 0x7fffffff
+diff --git a/ldso/dynlink.c b/ldso/dynlink.c
+index 10471b23..9a7efe6d 100644
+--- a/ldso/dynlink.c
++++ b/ldso/dynlink.c
+@@ -94,6 +94,7 @@ struct dso {
+ 	char mark;
+ 	char bfs_built;
+ 	char runtime_loaded;
++	char relocating;
+ 	struct dso **deps, *needed_by;
+ 	size_t ndeps_direct;
+ 	size_t next_dep;
+@@ -479,6 +480,18 @@ static void do_relocs(struct dso *dso, size_t *rel, size_t rel_size, size_t stri
+ 		case REL_RELATIVE:
+ 			*reloc_addr = (size_t)base + addend;
+ 			break;
++#ifdef REL_IRELATIVE
++		case REL_IRELATIVE:
++			/*
++			 * IRELATIVE stores the address of an IFUNC resolver in
++			 * the addend and expects the resolver's return value at
++			 * the relocation target.  Unlike REL_RELATIVE, the
++			 * resolver must run after this object's dependencies have
++			 * been relocated.
++			 */
++			*reloc_addr = ((size_t (*)(void))laddr(dso, addend))();
++			break;
++#endif
+ 		case REL_SYM_OR_REL:
+ 			if (sym) *reloc_addr = sym_val + addend;
+ 			else *reloc_addr = (size_t)base + addend;
+@@ -1409,11 +1422,16 @@ static void do_mips_relocs(struct dso *p, size_t *got)
+ 	}
+ }
+ 
+-static void reloc_all(struct dso *p)
++static void reloc_all(struct dso *p, struct dso *stop)
+ {
+ 	size_t dyn[DYN_CNT];
+-	for (; p; p=p->next) {
++	size_t i;
++	for (; p && p != stop; p=p->next) {
+ 		if (p->relocated) continue;
++		if (p->relocating) continue;
++		p->relocating = 1;
++		for (i=0; p->deps && p->deps[i]; i++)
++			reloc_all(p->deps[i], p->deps[i]->next);
+ 		decode_vec(p->dynv, dyn, DYN_CNT);
+ 		if (NEED_MIPS_GOT_RELOCS)
+ 			do_mips_relocs(p, laddr(p, dyn[DT_PLTGOT]));
+@@ -1436,6 +1454,7 @@ static void reloc_all(struct dso *p)
+ 		}
+ 
+ 		p->relocated = 1;
++		p->relocating = 0;
+ 	}
+ }
+ 
+@@ -1758,7 +1777,7 @@ hidden void __dls2(unsigned char *base, size_t *sp)
+ 	saved_addends = addends;
+ 
+ 	head = &ldso;
+-	reloc_all(&ldso);
++	reloc_all(&ldso, 0);
+ 
+ 	ldso.relocated = 0;
+ 
+@@ -2029,8 +2048,8 @@ void __dls3(size_t *sp, size_t *auxv)
+ 
+ 	/* The main program must be relocated LAST since it may contain
+ 	 * copy relocations which depend on libraries' relocations. */
+-	reloc_all(app.next);
+-	reloc_all(&app);
++	reloc_all(app.next, 0);
++	reloc_all(&app, 0);
+ 
+ 	/* Actual copying to new TLS needs to happen after relocations,
+ 	 * since the TLS images might have contained relocated addresses. */
+@@ -2197,7 +2216,7 @@ void *dlopen(const char *file, int mode)
+ 			add_syms(p->deps[i]);
+ 	}
+ 	if (!p->relocated) {
+-		reloc_all(p);
++		reloc_all(p, 0);
+ 	}
+ 
+ 	/* If RTLD_GLOBAL was not specified, undo any new additions

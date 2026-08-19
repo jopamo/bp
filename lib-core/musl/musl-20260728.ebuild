@@ -16,6 +16,8 @@ KEYWORDS="amd64 arm64"
 
 IUSE="libxcrypt elibc_musl"
 
+PATCHES=( "${FILESDIR}"/musl-irelative-pthread-keys.patch )
+
 src_prepare() {
 	default
 	cp "${FILESDIR}"/* "${S}"/ || die

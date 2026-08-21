@@ -35,6 +35,18 @@ filter-flags -Wl,-z,defs
 src_prepare() {
 	qa-policy-configure
 	default
+
+	if use python; then
+		sed -i \
+			-e 's/PyInt_Check/PyLong_Check/g' \
+			-e 's/PyInt_AsLong/PyLong_AsLong/g' \
+			-e 's/PyInt_FromLong/PyLong_FromLong/g' \
+			-e 's/PyString_Check/PyBytes_Check/g' \
+			-e 's/PyString_AsString/PyBytes_AsString/g' \
+			python/netlink/capi.i \
+			python/netlink/genl/capi.i || die
+	fi
+
 	eautoreconf
 
 	if use python; then

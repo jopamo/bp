@@ -1,0 +1,6 @@
+--- a/src/assistant/CMakeLists.txt
++++ b/src/assistant/CMakeLists.txt
+@@ -43,1 +43,2 @@
+-        qt_internal_set_exceptions_flags(litehtml OFF)
++        qt_internal_set_exceptions_flags(litehtml ON)
++        target_compile_options(litehtml PRIVATE -fexceptions)

@@ -9,7 +9,7 @@ HOMEPAGE="https://www.qt.io/"
 
 SNAPSHOT=4b1a5798e42d9ca737cda924cceddd9db0cf1e01
 QLITEHTML_SNAPSHOT=57c70c40009e65f396133fe2fb8f84cb63681ada
-QTTOOLS_LITEHTML_SNAPSHOT=6ca1ab0419e770e6d35a1ef690238773a1dafcee
+QTTOOLS_LITEHTML_SNAPSHOT=9bc84b8b8d15a4e50f18b327aa30955048b441c2
 SRC_URI="
 	https://invent.kde.org/qt/qt/${PN}/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2
 	https://invent.kde.org/qt/playground/qlitehtml/-/archive/${QLITEHTML_SNAPSHOT}/qlitehtml-${QLITEHTML_SNAPSHOT}.tar.bz2
@@ -33,6 +33,7 @@ src_prepare() {
 	mv "${WORKDIR}/qttools-litehtml-${QTTOOLS_LITEHTML_SNAPSHOT}" \
 		"${S}/src/assistant/qlitehtml/src/3rdparty/litehtml" || die
 
+	eapply "${FILESDIR}"/${PN}-litehtml-exceptions.patch
 	cmake_src_prepare
 }
 

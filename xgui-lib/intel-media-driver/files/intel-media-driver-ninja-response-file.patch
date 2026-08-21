@@ -1,0 +1,13 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -21,3 +21,9 @@
+ cmake_minimum_required(VERSION 3.11)
++# The media driver has very large per-source include and flag lists. Ninja
++# response files keep those lists out of the compiler driver's argv. GCC then
++# expands them before launching cc1plus; Clang handles cc1 in-process instead.
++if(CMAKE_GENERATOR MATCHES "Ninja")
++    set(CMAKE_NINJA_FORCE_RESPONSE_FILE ON)
++endif()
+ project(IntelMediaDriver)
+ set(MEDIA_VERSION "26.3.3${MEDIA_VERSION_EXTRA}" CACHE STRING "" FORCE)

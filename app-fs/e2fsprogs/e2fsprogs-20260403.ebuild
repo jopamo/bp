@@ -43,6 +43,7 @@ src_configure() {
 		--disable-libblkid
 		--disable-libuuid
 		--disable-nls
+		--disable-backtrace
 		--disable-uuidd
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"

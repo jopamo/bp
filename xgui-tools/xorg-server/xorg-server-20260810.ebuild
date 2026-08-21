@@ -60,6 +60,8 @@ PDEPEND="xgui-tools/xf86-input-libinput"
 src_prepare() {
 	default
 
+	eapply "${FILESDIR}"/${PN}-backtrace-execinfo.patch
+
 	sed -i -E \
 		'/^[[:space:]]*static[[:space:]]+inline[[:space:]]+int[[:space:]]+pci_device_is_boot_display[[:space:]]*\(/,/^[[:space:]]*}\s*$/d' \
 		hw/xfree86/common/xf86_pci_priv.h || die

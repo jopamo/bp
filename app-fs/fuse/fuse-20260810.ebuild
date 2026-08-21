@@ -11,6 +11,7 @@ S="${WORKDIR}/libfuse-${SNAPSHOT}"
 LICENSE="GPL-2 LGPL-2.1"
 SLOT="3"
 KEYWORDS="amd64 arm64"
+DEPEND="elibc_musl? ( lib-core/musl-bsd )"
 PATCHES=( "${FILESDIR}"/${PN}-clang-compat.patch )
 
 src_prepare() {
@@ -31,6 +32,14 @@ src_configure() {
 		-Dutils=true
 		-Dinitscriptdir=""
 	)
+
+	if use elibc_musl; then
+		# The current Clang driver auto-links musl-bsd only for ordinary
+		# executable links. FUSE is a shared library and needs the mount API
+		# wrappers explicitly while the driver transition is incomplete.
+		LDFLAGS+=" /usr/lib/musl-bsd/libmusl-bsd-core.a"
+	fi
+
 	meson_src_configure
 }
 

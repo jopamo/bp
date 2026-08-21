@@ -2,9 +2,7 @@ diff --git a/clang/include/clang/Basic/DiagnosticDriverKinds.td b/clang/include/
 index db0f521b735446764d994332f9ea2da3640317f0..af5bb5f3400661f2ce07e9039416965535750b5e 100644
 --- a/clang/include/clang/Basic/DiagnosticDriverKinds.td
 +++ b/clang/include/clang/Basic/DiagnosticDriverKinds.td
-@@ -189,0 +190,4 @@ def err_drv_incompatible_options : Error<
-+def err_drv_musl_bsd_archive_missing : Error<
-+  "musl target requires link-safe compatibility archive '%0'">;
+@@ -189,0 +190,2 @@ def err_drv_incompatible_options : Error<
 +def err_drv_musl_bsd_shared_missing : Error<
 +  "option '-fmusl-bsd-load-compat' requires shared compatibility runtime '%0'">;
 diff --git a/clang/include/clang/Options/Options.td b/clang/include/clang/Options/Options.td
@@ -81,8 +79,9 @@ index cb6a9b2424212d6791a6e2170e28ef265cbe59ef..a535a388418b463b71429bbd56ab170c
 +    }
 +  }
 +
-@@ -535 +591,30 @@ void tools::gnutools::Linker::ConstructJob(Compilation &C, const JobAction &JA,
+@@ -535,2 +591,30 @@ void tools::gnutools::Linker::ConstructJob(Compilation &C, const JobAction &JA,
 -      if (!Args.hasArg(options::OPT_nolibc))
+-        CmdArgs.push_back("-lc");
 +      if (!Args.hasArg(options::OPT_nolibc)) {
 +        // Select exactly one musl-bsd link mode. Ordinary final executables
 +        // use the link-safe archive, whose members remain lazy. Explicit
@@ -105,15 +104,13 @@ index cb6a9b2424212d6791a6e2170e28ef265cbe59ef..a535a388418b463b71429bbd56ab170c
 +          } else {
 +            std::string ArchivePath =
 +                getMuslBsdCorePath(D, "libmusl-bsd-core.a");
-+            if (!ToolChain.getVFS().exists(ArchivePath)) {
-+              D.Diag(diag::err_drv_musl_bsd_archive_missing) << ArchivePath;
-+              return;
++            if (ToolChain.getVFS().exists(ArchivePath)) {
++              CmdArgs.push_back(Args.MakeArgString(ArchivePath));
 +            }
-+            CmdArgs.push_back(Args.MakeArgString(ArchivePath));
 +          }
 +        }
 +
-@@ -536,0 +622 @@ void tools::gnutools::Linker::ConstructJob(Compilation &C, const JobAction &JA,
++        CmdArgs.push_back("-lc");
 +      }
 diff --git a/clang/lib/Driver/ToolChains/Linux.cpp b/clang/lib/Driver/ToolChains/Linux.cpp
 index d525b417b4eae4d11ba6cb99fe29ecf1cc434d22..c20e08830baba363acc679af745e39ef7b4add82 100644
@@ -210,7 +207,7 @@ index 0000000000000000000000000000000000000000..de4e1c01ca217d5dd68488a0b45397c0
 +// RUN: not %clang -### --target=x86_64-linux-musl --sysroot=%t \
 +// RUN:   -fmusl-bsd-load-compat -nolibc %s 2>&1 \
 +// RUN:   | FileCheck %s --check-prefix=NOLIBC-ERROR
-+// RUN: not %clang -### --target=x86_64-linux-musl --sysroot=%t/missing %s 2>&1 \
++// RUN: %clang -### --target=x86_64-linux-musl --sysroot=%t/missing %s 2>&1 \
 +// RUN:   | FileCheck %s --check-prefix=MISSING-ARCHIVE
 +// RUN: not %clang -### --target=x86_64-linux-musl --sysroot=%t/archive-only \
 +// RUN:   -fmusl-bsd-load-compat %s 2>&1 \
@@ -268,7 +265,8 @@ index 0000000000000000000000000000000000000000..de4e1c01ca217d5dd68488a0b45397c0
 +// NOSTDLIB-ERROR: error: invalid argument '-fmusl-bsd-load-compat' not allowed with '-nostdlib'
 +// NODEFAULTLIBS-ERROR: error: invalid argument '-fmusl-bsd-load-compat' not allowed with '-nodefaultlibs'
 +// NOLIBC-ERROR: error: invalid argument '-fmusl-bsd-load-compat' not allowed with '-nolibc'
-+// MISSING-ARCHIVE: error: musl target requires link-safe compatibility archive '{{.*}}/usr/lib/musl-bsd/libmusl-bsd-core.a'
++// MISSING-ARCHIVE-NOT: libmusl-bsd-core
++// MISSING-ARCHIVE: "-lc"
 +// MISSING-SHARED: error: option '-fmusl-bsd-load-compat' requires shared compatibility runtime '{{.*}}/usr/lib/musl-bsd/libmusl-bsd-core.so.2'
 +
 +int main(void) { return 0; }

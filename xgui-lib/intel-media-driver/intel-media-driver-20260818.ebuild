@@ -16,9 +16,19 @@ DEPEND="
 	xgui-lib/gmmlib
 	xgui-lib/libva
 "
+BDEPEND="
+	app-build/llvm
+"
 RDEPEND="${DEPEND}"
+PATCHES=( "${FILESDIR}"/intel-media-driver-ninja-response-file.patch )
 
 src_configure() {
+	# The media-driver include graph is large enough to exceed the compiler
+	# subprocess argument budget on both libc families. Clang handles cc1
+	# in-process, while GCC must exec cc1plus with the expanded argv.
+	local -x CC="clang --target=${CHOST}"
+	local -x CXX="clang++ --target=${CHOST}"
+
 	qa-policy-configure
 
 	local mycmakeargs=(

@@ -4,7 +4,7 @@ inherit autotools
 
 DESCRIPTION="Program matching and transformation engine for C code"
 HOMEPAGE="https://coccinelle.gitlabpages.inria.fr/website/ https://github.com/coccinelle/coccinelle"
-SNAPSHOT=03a1af0a3316ddfc2b54d827b8b9627a841c85c9
+SNAPSHOT=ab0c6c4900a981db7bca4e1323408dd46cdf56a2
 SRC_URI="https://github.com/coccinelle/coccinelle/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
@@ -17,8 +17,8 @@ BDEPEND="
 	app-build/autoconf
 	app-build/automake
 	app-dev/pkgconf
+	app-lang/findlib
 	app-lang/ocaml
-	dev-ml/findlib
 "
 
 src_prepare() {

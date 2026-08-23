@@ -7,18 +7,16 @@ inherit distutils-r1 pypi
 # lockstep-pypi-deps: begin
 RDEPEND+="
 	dev-pypi/anyio
-	dev-pypi/distro
 	dev-pypi/httpx2
 	dev-pypi/jiter
 	dev-pypi/pydantic
 	dev-pypi/sniffio
-	dev-pypi/tqdm
 	dev-pypi/typing-extensions
 "
 # lockstep-pypi-deps: end
 DESCRIPTION="Python client library for the OpenAI API"
 HOMEPAGE="https://github.com/openai/openai-python"
-SNAPSHOT=a1eeab58db02de46717ccebaf1eb83e314fa86ff
+SNAPSHOT=e43b422412a9e96c9cc5192c61fffbe2d7e04836
 SRC_URI="https://github.com/openai/openai-python/archive/${SNAPSHOT}.tar.gz -> openai-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/openai-python-${SNAPSHOT}"
 

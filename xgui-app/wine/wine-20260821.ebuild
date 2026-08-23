@@ -1,7 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
-SNAPSHOT=f3d2cbcff79ac0dc0e212d90484755a9340964ba
-SNAPSHOT2="fc0c82b10ce28db3932a8c4bc223038b54002a20"
+SNAPSHOT=8da89f8493b21ebfbe344a54dbef0cde23c7ea59
+SNAPSHOT2="f1936f02ba06b5012f89f75901944e8c2d26951c"
 
 inherit flag-o-matic xdg
 

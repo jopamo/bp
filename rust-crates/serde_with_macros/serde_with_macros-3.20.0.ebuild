@@ -3,8 +3,8 @@ EAPI=8
 MERGE_MANIFEST_MODE="tree-blake3-v1"
 
 CRATE_NAME="serde_with_macros"
-CRATE_VERSION="3.14.1"
-CRATE_CHECKSUM="327ada00f7d64abaac1e55a6911e90cf665aa051b9a561c7006c157f4633135e"
+CRATE_VERSION="3.20.0"
+CRATE_CHECKSUM="b90c488738ecb4fb0262f41f43bc40efc5868d9fb744319ddf5f5317f417bfac"
 CRATE_SOURCE="registry+https://github.com/rust-lang/crates.io-index"
 CRATE_SOURCE_KIND="registry"
 

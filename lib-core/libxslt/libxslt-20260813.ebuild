@@ -4,7 +4,7 @@ inherit autotools qa-policy
 
 DESCRIPTION="XSLT libraries and tools"
 HOMEPAGE="http://www.xmlsoft.org/"
-SNAPSHOT=35323d6a15f6e63c9919ddbc0abe64c90a0dd88a
+SNAPSHOT=ec95343e75c503523b91495f021d109173e169c4
 SRC_URI="https://gitlab.gnome.org/GNOME/libxslt/-/archive/${SNAPSHOT}/libxslt-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/libxslt-${SNAPSHOT}"
 

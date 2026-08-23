@@ -39,7 +39,6 @@ src_prepare() {
 
 	if use elibc_musl; then
 		eapply "${FILESDIR}"/fix-aarch64_fregs.patch
-		eapply "${FILESDIR}"/fix-musl-uio-headers.patch
 	fi
 
 	# https://sourceware.org/PR23914

@@ -4,7 +4,7 @@ inherit cmake
 
 DESCRIPTION="Binary-decimal and decimal-binary conversion routines for IEEE doubles"
 HOMEPAGE="https://github.com/google/double-conversion"
-SNAPSHOT=845b56a69c8583578c18be4b04da46ba02e0b317
+SNAPSHOT=2c1eb4ff051896503ec14203e9168a8bb5fe0426
 SRC_URI="https://github.com/google/double-conversion/archive/${SNAPSHOT}.tar.gz -> double-conversion-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/double-conversion-${SNAPSHOT}"
 

@@ -4,7 +4,7 @@ inherit meson qa-policy
 
 DESCRIPTION="LAME Ain't an MP3 Encoder"
 HOMEPAGE="https://github.com/jopamo/lamer"
-SNAPSHOT=c4e3e494971fa8a4c71e0b37476c072d723d5769
+SNAPSHOT=f85894ea71816d419784d64505d9e7e68c08d1c8
 SRC_URI="https://github.com/jopamo/lamer/archive/${SNAPSHOT}.tar.gz -> lamer-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/lamer-${SNAPSHOT}"
 

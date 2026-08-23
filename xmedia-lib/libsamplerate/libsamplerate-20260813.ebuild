@@ -4,7 +4,7 @@ inherit autotools qa-policy
 
 DESCRIPTION="Secret Rabbit Code (aka libsamplerate) is a Sample Rate Converter for audio"
 HOMEPAGE="http://www.mega-nerd.com/SRC/"
-SNAPSHOT=2ccde9568cca73c7b32c97fefca2e418c16ae5e3
+SNAPSHOT=0844c208f683527c08ea8a80acc13b398aa9c8bf
 SRC_URI="https://github.com/libsndfile/libsamplerate/archive/${SNAPSHOT}.tar.gz -> libsamplerate-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/libsamplerate-${SNAPSHOT}"
 

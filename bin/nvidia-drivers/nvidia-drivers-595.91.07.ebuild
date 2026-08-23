@@ -125,6 +125,12 @@ src_prepare() {
     for patch in "${FILESDIR}"/00*.patch; do
         [[ -e ${patch} ]] || continue
 
+        if [[ ${patch##*/} == 0005-dmem-cgroup-register-region-init.patch ]] &&
+            ! grep -Fq 'dmem_cgroup_register_region(size, name)' \
+                "${NV_SRC}"/nvidia/os-interface.c; then
+            continue
+        fi
+
         if use kernel-open; then
             eapply "${patch}"
         else

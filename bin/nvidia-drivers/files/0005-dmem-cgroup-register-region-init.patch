@@ -1,0 +1,50 @@
+diff --git a/kernel-open/conftest.sh b/kernel-open/conftest.sh
+--- a/kernel-open/conftest.sh
++++ b/kernel-open/conftest.sh
+@@ -5170,6 +5170,19 @@
+             compile_check_conftest "$CODE" "NV_DMEM_CGROUP_PRESENT" "" "types"
+         ;;
+ 
++        dmem_cgroup_init)
++            #
++            # Check whether dmem_cgroup_register_region() takes the
++            # struct dmem_cgroup_init argument introduced by Linux.
++            #
++            CODE="
++            #include <linux/cgroup_dmem.h>
++            struct dmem_cgroup_init init;
++            "
++
++            compile_check_conftest "$CODE" "NV_DMEM_CGROUP_INIT_PRESENT" "" "types"
++        ;;
++
+         misc_cgrp_id)
+             #
+             # Check to see if the misc cgroup type is available
+--- a/kernel-open/nvidia/nvidia.Kbuild
++++ b/kernel-open/nvidia/nvidia.Kbuild
+@@ -232,6 +232,7 @@
+ NV_CONFTEST_TYPE_COMPILE_TESTS += pci_resize_resource_has_exclude_bars_arg
+ NV_CONFTEST_TYPE_COMPILE_TESTS += is_vma_write_locked_has_mm_lock_seq_arg
+ NV_CONFTEST_TYPE_COMPILE_TESTS += dmem_cgrp_id
++NV_CONFTEST_TYPE_COMPILE_TESTS += dmem_cgroup_init
+ NV_CONFTEST_TYPE_COMPILE_TESTS += misc_cgrp_id
+ 
+ NV_CONFTEST_GENERIC_COMPILE_TESTS += dom0_kernel_present
+--- a/kernel-open/nvidia/os-interface.c
++++ b/kernel-open/nvidia/os-interface.c
+@@ -2817,7 +2817,14 @@
+ 
+ void* NV_API_CALL os_dmem_cgroup_register_region(NvU64 size, const char *name)
+ {
++#if defined(NV_DMEM_CGROUP_INIT_PRESENT)
++    struct dmem_cgroup_init init = {
++        .size = size,
++    };
++    void *region = dmem_cgroup_register_region(&init, "%s", name);
++#else
+     void *region = dmem_cgroup_register_region(size, name);
++#endif
+     if (IS_ERR(region))
+     {
+         return NULL;

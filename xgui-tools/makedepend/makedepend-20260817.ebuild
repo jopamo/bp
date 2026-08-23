@@ -5,7 +5,7 @@ inherit autotools
 DESCRIPTION="create dependencies in makefiles"
 HOMEPAGE="https://www.x.org/wiki/"
 
-SNAPSHOT=e6b69b245d1000b71bee61195b4307411f37fac1
+SNAPSHOT=2c03ef16e05c9eef6fcaf1fbd4b77356a17883b6
 SRC_URI="https://gitlab.freedesktop.org/xorg/util/makedepend/-/archive/${SNAPSHOT}/makedepend-${SNAPSHOT}.tar.bz2 -> makedepend-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/makedepend-${SNAPSHOT}"
 

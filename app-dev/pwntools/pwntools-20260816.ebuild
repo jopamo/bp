@@ -28,7 +28,7 @@ RDEPEND+="
 # lockstep-pypi-deps: end
 DESCRIPTION="CTF framework and exploit development library"
 HOMEPAGE="https://github.com/Gallopsled/pwntools"
-SNAPSHOT=7f891444b952d7356df982599cb72c6145b3895b
+SNAPSHOT=b22998ab12d3153ccbeb0fc99d66d34166f167c5
 SRC_URI="https://github.com/Gallopsled/pwntools/archive/${SNAPSHOT}.tar.gz -> pwntools-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/pwntools-${SNAPSHOT}"
 

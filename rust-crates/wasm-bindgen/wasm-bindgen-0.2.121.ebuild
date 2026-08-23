@@ -3,8 +3,8 @@ EAPI=8
 MERGE_MANIFEST_MODE="tree-blake3-v1"
 
 CRATE_NAME="wasm-bindgen"
-CRATE_VERSION="0.2.101"
-CRATE_CHECKSUM="7e14915cadd45b529bb8d1f343c4ed0ac1de926144b746e2710f9cd05df6603b"
+CRATE_VERSION="0.2.121"
+CRATE_CHECKSUM="49ace1d07c165b0864824eee619580c4689389afa9dc9ed3a4c75040d82e6790"
 CRATE_SOURCE="registry+https://github.com/rust-lang/crates.io-index"
 CRATE_SOURCE_KIND="registry"
 
@@ -21,6 +21,7 @@ CARGO_CRATE_FEATURES=(
 	"enable-interning"
 	"gg-alloc"
 	"msrv"
+	"rustversion"
 	"serde-serialize"
 	"spans"
 	"std"

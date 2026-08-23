@@ -1,7 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 BRANCH_NAME="$(ver_cut 1-2)"
-SNAPSHOT=382bda1c5a98bc0c0376930cf30ffd92eb3c5c18
+SNAPSHOT=0eb14894da51df6d1e4a748e3308b95deb85617d
 
 inherit autotools edo multiprocessing toolchain-funcs doins user
 

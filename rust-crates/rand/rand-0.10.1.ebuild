@@ -3,8 +3,8 @@ EAPI=8
 MERGE_MANIFEST_MODE="tree-blake3-v1"
 
 CRATE_NAME="rand"
-CRATE_VERSION="0.9.2"
-CRATE_CHECKSUM="6db2770f06117d490610c7488547d543617b21bfa07796d7a12f6f1bd53850d1"
+CRATE_VERSION="0.10.1"
+CRATE_CHECKSUM="d2e8e8bcc7961af1fdac401278c6a831614941f6164ee3bf4ce61b7edb162207"
 CRATE_SOURCE="registry+https://github.com/rust-lang/crates.io-index"
 CRATE_SOURCE_KIND="registry"
 
@@ -18,15 +18,14 @@ KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"alloc"
+	"chacha"
 	"default"
 	"log"
-	"nightly"
-	"os_rng"
 	"serde"
 	"simd_support"
-	"small_rng"
 	"std"
 	"std_rng"
+	"sys_rng"
 	"thread_rng"
 	"unbiased"
 )

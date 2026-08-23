@@ -4,7 +4,7 @@ inherit meson
 
 DESCRIPTION="Graph-based image processing framework"
 HOMEPAGE="https://gegl.org/"
-SNAPSHOT=74d67aafd1144d1e26afcbce42bf47f5b70bba7b
+SNAPSHOT=3d6ed0be1a538da469b0ad86bc37f815f4b807eb
 SRC_URI="https://gitlab.gnome.org/GNOME/gegl/-/archive/${SNAPSHOT}/gegl-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

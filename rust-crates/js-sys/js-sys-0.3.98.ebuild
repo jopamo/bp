@@ -3,8 +3,8 @@ EAPI=8
 MERGE_MANIFEST_MODE="tree-blake3-v1"
 
 CRATE_NAME="js-sys"
-CRATE_VERSION="0.3.78"
-CRATE_CHECKSUM="0c0b063578492ceec17683ef2f8c5e89121fbd0b172cbc280635ab7567db2738"
+CRATE_VERSION="0.3.98"
+CRATE_CHECKSUM="67df7112613f8bfd9150013a0314e196f4800d3201ae742489d999db2f979f08"
 CRATE_SOURCE="registry+https://github.com/rust-lang/crates.io-index"
 CRATE_SOURCE_KIND="registry"
 
@@ -18,5 +18,7 @@ KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"default"
+	"futures-core-03-stream"
 	"std"
+	"unsafe-eval"
 )

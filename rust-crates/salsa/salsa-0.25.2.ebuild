@@ -3,8 +3,8 @@ EAPI=8
 MERGE_MANIFEST_MODE="tree-blake3-v1"
 
 CRATE_NAME="salsa"
-CRATE_VERSION="0.23.0"
-CRATE_CHECKSUM="2e235afdb8e510f38a07138fbe5a0b64691894358a9c0cbd813b1aade110efc9"
+CRATE_VERSION="0.25.2"
+CRATE_CHECKSUM="e2e2aa2fca57727371eeafc975acc8e6f4c52f8166a78035543f6ee1c74c2dcc"
 CRATE_SOURCE="registry+https://github.com/rust-lang/crates.io-index"
 CRATE_SOURCE_KIND="registry"
 
@@ -17,8 +17,11 @@ SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
+	"accumulator"
 	"default"
+	"inventory"
 	"macros"
+	"persistence"
 	"salsa_unstable"
 	"shuttle"
 )

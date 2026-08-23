@@ -4,7 +4,7 @@ inherit autotools flag-o-matic qa-policy
 
 DESCRIPTION="utils for managing LZMA compressed files"
 HOMEPAGE="https://tukaani.org/xz/"
-SNAPSHOT=b8d0707ae788b401161babf0fe771c859e3f996c
+SNAPSHOT=e38f738e5cc5b72afc160285e65f5973f44db2fb
 SRC_URI="https://github.com/tukaani-project/xz/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/xz-${SNAPSHOT}"
 

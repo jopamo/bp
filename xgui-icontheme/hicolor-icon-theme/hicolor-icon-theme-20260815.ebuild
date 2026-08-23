@@ -4,7 +4,7 @@ inherit meson xdg
 
 DESCRIPTION="freedesktop default icon theme"
 HOMEPAGE="https://gitlab.freedesktop.org/xdg/default-icon-theme.git"
-SNAPSHOT=8d22bbf304775a3cc109a2220e633cafda50eaac
+SNAPSHOT=08d2acf17aefdb1b3760102ff5df8b95c1ef8884
 SRC_URI="https://gitlab.freedesktop.org/xdg/default-icon-theme/-/archive/${SNAPSHOT}/default-icon-theme-${SNAPSHOT}.tar.bz2 -> default-icon-theme-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/default-icon-theme-${SNAPSHOT}"
 

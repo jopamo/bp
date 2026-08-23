@@ -1,0 +1,85 @@
+--- a/gnulib/lib/exclude.h
++++ b/gnulib/lib/exclude.h
+@@ -54,6 +54,11 @@
+ /* Allocate storage for the pattern */
+ #define EXCLUDE_ALLOC     (1 << 26)
+ 
++
++/* Return status flags for excluded_file_name_status.  */
++#define EXCLUDED_EXCLUDED (1 << 0) /* The file name was excluded.  */
++#define EXCLUDED_MATCHED  (1 << 1) /* The file name was matched.  */
++
+ struct exclude;
+ 
+ bool fnmatch_pattern_has_wildcards (const char *, int) _GL_ATTRIBUTE_PURE;
+@@ -68,6 +73,7 @@
+                       struct exclude *, char const *, int, char);
+ int add_exclude_fp (void (*) (struct exclude *, char const *, int, void *),
+                     struct exclude *, FILE *, int, char, void *);
++int excluded_file_name_status (struct exclude const *, char const *);
+ bool excluded_file_name (struct exclude const *, char const *);
+ void exclude_add_pattern_buffer (struct exclude *ex, char *buf);
+ bool exclude_fnmatch (char const *, char const *, int);
+--- a/gnulib/lib/exclude.c
++++ b/gnulib/lib/exclude.c
+@@ -454,10 +454,10 @@
+   return false;
+ }
+ 
+-/* Return true if EX excludes F.  */
++/* Return the status of whether EX excludes F.  */
+ 
+-bool
+-excluded_file_name (struct exclude const *ex, char const *f)
++int
++excluded_file_name_status (struct exclude const *ex, char const *f)
+ {
+   /* If no patterns are given, the default is to include.  */
+   if (!ex->head)
+@@ -465,6 +465,7 @@
+ 
+   bool invert = false;
+   char *filename = nullptr;
++  bool found = false;
+ 
+   /* Scan through the segments, reporting the status of the first match.
+      The segments are in reverse order, so this reports the status of
+@@ -476,15 +477,16 @@
+         {
+           if (!filename)
+             filename = xmalloc (strlen (f) + 1);
+-          if (file_name_matches (seg, f, filename))
+-            break;
++          found = file_name_matches (seg, f, filename);
+         }
+       else
+         {
+-          if (file_pattern_matches (seg, f))
+-            break;
++          found = file_pattern_matches (seg, f);
+         }
+ 
++      if (found)
++        break;
++
+       if (! seg->next)
+         {
+           /* If patterns are given but none match, the default is the
+@@ -499,7 +501,16 @@
+     }
+ 
+   free (filename);
+-  return invert ^ ! (seg->options & EXCLUDE_INCLUDE);
++  return ((invert ^ ! (seg->options & EXCLUDE_INCLUDE) ? EXCLUDED_EXCLUDED : 0)
++          | (found ? EXCLUDED_MATCHED : 0));
++}
++
++/* Return true if EX excludes F.  */
++
++bool
++excluded_file_name (struct exclude const *ex, char const *f)
++{
++  return excluded_file_name_status (ex, f) & EXCLUDED_EXCLUDED;
+ }
+ 
+ /* Append to EX the exclusion PATTERN with OPTIONS.  */

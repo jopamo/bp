@@ -54,6 +54,7 @@ src_configure() {
 		--disable-md2man
 		--without-included-zlib
 		--with-included-popt=no
+		--disable-idn
 	)
 	econf "${myconf[@]}"
 }

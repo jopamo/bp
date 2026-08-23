@@ -3,8 +3,8 @@ EAPI=8
 MERGE_MANIFEST_MODE="tree-blake3-v1"
 
 CRATE_NAME="notify-types"
-CRATE_VERSION="2.0.0"
-CRATE_CHECKSUM="5e0826a989adedc2a244799e823aece04662b66609d96af8dff7ac6df9a8925d"
+CRATE_VERSION="2.1.0"
+CRATE_CHECKSUM="42b8cfee0e339a0337359f3c88165702ac6e600dc01c0cc9579a92d62b08477a"
 CRATE_SOURCE="registry+https://github.com/rust-lang/crates.io-index"
 CRATE_SOURCE_KIND="registry"
 
@@ -17,5 +17,6 @@ SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
+	"serde"
 	"serialization-compat-6"
 )

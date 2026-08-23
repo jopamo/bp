@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-SNAPSHOT=af13aa8f259f958049d3703252068e125b412d5e
+SNAPSHOT=20be8f8eaf88e6b6c571eba1d84adbfbd769dc25
 
 inherit go-module
 

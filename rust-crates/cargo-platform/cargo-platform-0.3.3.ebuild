@@ -3,8 +3,8 @@ EAPI=8
 MERGE_MANIFEST_MODE="tree-blake3-v1"
 
 CRATE_NAME="cargo-platform"
-CRATE_VERSION="0.2.0"
-CRATE_CHECKSUM="84982c6c0ae343635a3a4ee6dedef965513735c8b183caa7289fa6e27399ebd4"
+CRATE_VERSION="0.3.3"
+CRATE_CHECKSUM="dd0061da739915fae12ea00e16397555ed4371a6bb285431aab930f61b0aa4ba"
 CRATE_SOURCE="registry+https://github.com/rust-lang/crates.io-index"
 CRATE_SOURCE_KIND="registry"
 

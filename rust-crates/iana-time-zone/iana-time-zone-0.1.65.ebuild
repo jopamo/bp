@@ -3,8 +3,8 @@ EAPI=8
 MERGE_MANIFEST_MODE="tree-blake3-v1"
 
 CRATE_NAME="iana-time-zone"
-CRATE_VERSION="0.1.63"
-CRATE_CHECKSUM="b0c919e5debc312ad217002b8048a17b7d83f80703865bbfcfebb0458b0b27d8"
+CRATE_VERSION="0.1.65"
+CRATE_CHECKSUM="e31bc9ad994ba00e440a8aa5c9ef0ec67d5cb5e5cb0cc7f8b744a35b389cc470"
 CRATE_SOURCE="registry+https://github.com/rust-lang/crates.io-index"
 CRATE_SOURCE_KIND="registry"
 

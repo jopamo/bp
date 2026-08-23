@@ -15,8 +15,8 @@ LICENSE="metapackage"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-SRC_URI="https://files.pythonhosted.org/packages/15/ef/63270118de5af8f45ba417946290b63f86b0b2a7d07d739d5dc619462711/uv_dynamic_versioning-0.14.0.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/uv_dynamic_versioning-0.14.0"
+SRC_URI="https://files.pythonhosted.org/packages/6f/c8/fa500ee29af69cfeeea5ff6d6597919f1989b2e3f1a236c3006bdb21d320/uv_dynamic_versioning-0.14.1.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/uv_dynamic_versioning-0.14.1"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="

@@ -3,8 +3,8 @@ EAPI=8
 MERGE_MANIFEST_MODE="tree-blake3-v1"
 
 CRATE_NAME="ra_ap_base_db"
-CRATE_VERSION="0.0.301"
-CRATE_CHECKSUM="e876bb2c3e52a8d4e6684526a2d4e81f9d028b939ee4dc5dc775fe10deb44d59"
+CRATE_VERSION="0.0.328"
+CRATE_CHECKSUM="b1567168e7c7b50acf2ffb87bde8937986d4f41c777a2c308298ede9d555c96c"
 CRATE_SOURCE="registry+https://github.com/rust-lang/crates.io-index"
 CRATE_SOURCE_KIND="registry"
 
@@ -15,3 +15,8 @@ HOMEPAGE="https://github.com/rust-lang/rust-analyzer"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="${PV}"
 KEYWORDS="amd64 arm64"
+
+CARGO_CRATE_FEATURES=(
+	"default"
+	"in-rust-tree"
+)

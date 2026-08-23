@@ -3,8 +3,8 @@ EAPI=8
 MERGE_MANIFEST_MODE="tree-blake3-v1"
 
 CRATE_NAME="darling_macro"
-CRATE_VERSION="0.21.3"
-CRATE_CHECKSUM="d38308df82d1080de0afee5d069fa14b0326a88c14f15c5ccda35b4a6c414c81"
+CRATE_VERSION="0.23.0"
+CRATE_CHECKSUM="ac3984ec7bd6cfa798e62b4a642426a5be0e68f9401cfc2a01e3fa9ea2fcdb8d"
 CRATE_SOURCE="registry+https://github.com/rust-lang/crates.io-index"
 CRATE_SOURCE_KIND="registry"
 

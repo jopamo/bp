@@ -2,7 +2,7 @@
 
 DESCRIPTION="MP4Box can mux, demux, analyze and manipulate MP4 files like no other tool"
 HOMEPAGE="https://gpac.wp.imt.fr/mp4box/"
-SNAPSHOT=12177a199999c96086a8b2ea55f7c2964cc3c68d
+SNAPSHOT=2fd5a06ab226767900fd86edb5a1e8bfc1010640
 SRC_URI="https://github.com/gpac/gpac/archive/${SNAPSHOT}.tar.gz -> gpac-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/gpac-${SNAPSHOT}"
 

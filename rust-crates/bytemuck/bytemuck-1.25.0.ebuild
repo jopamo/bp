@@ -3,8 +3,8 @@ EAPI=8
 MERGE_MANIFEST_MODE="tree-blake3-v1"
 
 CRATE_NAME="bytemuck"
-CRATE_VERSION="1.23.2"
-CRATE_CHECKSUM="3995eaeebcdf32f91f980d360f78732ddc061097ab4e39991ae7a6ace9194677"
+CRATE_VERSION="1.25.0"
+CRATE_CHECKSUM="c8efb64bd706a16a1bdde310ae86b351e4d21550d98d056f22f8a7f7a2183fec"
 CRATE_SOURCE="registry+https://github.com/rust-lang/crates.io-index"
 CRATE_SOURCE_KIND="registry"
 

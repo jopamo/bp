@@ -3,8 +3,8 @@ EAPI=8
 MERGE_MANIFEST_MODE="tree-blake3-v1"
 
 CRATE_NAME="serde_with"
-CRATE_VERSION="3.14.1"
-CRATE_CHECKSUM="c522100790450cf78eeac1507263d0a350d4d5b30df0c8e1fe051a10c22b376e"
+CRATE_VERSION="3.20.0"
+CRATE_CHECKSUM="e72c1c2cb7b223fafb600a619537a871c2818583d619401b785e7c0b746ccde2"
 CRATE_SOURCE="registry+https://github.com/rust-lang/crates.io-index"
 CRATE_SOURCE_KIND="registry"
 
@@ -18,6 +18,7 @@ KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
 	"alloc"
+	"base58"
 	"base64"
 	"chrono"
 	"chrono_0_4"
@@ -25,6 +26,8 @@ CARGO_CRATE_FEATURES=(
 	"guide"
 	"hashbrown_0_14"
 	"hashbrown_0_15"
+	"hashbrown_0_16"
+	"hashbrown_0_17"
 	"hex"
 	"indexmap"
 	"indexmap_1"
@@ -34,6 +37,7 @@ CARGO_CRATE_FEATURES=(
 	"schemars_0_8"
 	"schemars_0_9"
 	"schemars_1"
+	"smallvec_1"
 	"std"
 	"time_0_3"
 )

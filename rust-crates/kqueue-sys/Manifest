@@ -1,1 +1,2 @@
 DIST kqueue-sys-1.0.4.crate 7160 BLAKE3 d229ca7848d598d9138e73764628db69f741fb89d89ab4b13bca0db86f96a5fb
+DIST kqueue-sys-1.1.2.crate 8796 BLAKE3 c26cb519f9d54ea2c97212da741c8ee7affb69c864aabcea86b5d57ea30961a8

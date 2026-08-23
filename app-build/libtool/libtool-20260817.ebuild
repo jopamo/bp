@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-SNAPSHOT=161845b17e0ac2275c2278b4aa3c9f32f0992bd2
+SNAPSHOT=b9f13756ab2f32426630095ac1f0d049ce38e77d
 LIBTOOL_VERSION=2.6.0.14
 # Upstream generates .serial from `git log --pretty=oneline | wc -l` when
 # making a dist tarball. GitHub snapshots omit that file, so seed the snapshot

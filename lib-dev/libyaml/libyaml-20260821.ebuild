@@ -4,7 +4,7 @@ inherit autotools libtool qa-policy
 
 DESCRIPTION="YAML 1.1 parser and emitter written in C"
 HOMEPAGE="https://github.com/yaml/libyaml"
-SNAPSHOT=893682bb98d5ed663a3e314c46dceaf9b1c8802f
+SNAPSHOT=90a56d4500aa1a1798514c5cb55c3ad4cb095f94
 SRC_URI="https://github.com/yaml/${PN}/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

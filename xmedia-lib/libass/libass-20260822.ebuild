@@ -4,7 +4,7 @@ inherit autotools qa-policy
 
 DESCRIPTION="Library for SSA/ASS subtitles rendering"
 HOMEPAGE="https://github.com/libass/libass"
-SNAPSHOT=3087d2b2ffda76602a17f9b09d25cb8addc8d313
+SNAPSHOT=b2fe9d8770678a7b5271387d38c20657ebf3429a
 SRC_URI="https://github.com/libass/libass/archive/${SNAPSHOT}.tar.gz -> libass-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/libass-${SNAPSHOT}"
 

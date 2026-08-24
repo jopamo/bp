@@ -11,7 +11,7 @@ inherit distutils-r1
 
 DESCRIPTION="Run a subprocess in a pseudo terminal"
 HOMEPAGE="https://github.com/pexpect/ptyprocess"
-LICENSE="metapackage"
+LICENSE="ISC"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
@@ -21,3 +21,35 @@ S="${WORKDIR}/ptyprocess-0.7.0"
 BDEPEND="
 	dev-pypi/flit-core[${PYTHON_USEDEP}]
 "
+
+src_prepare() {
+	default
+
+	# ptyprocess predates PEP 621 and flit-core 4 removed the legacy table.
+	cat > pyproject.toml <<-EOF || die
+		[build-system]
+		requires = ["flit_core >=4"]
+		build-backend = "flit_core.buildapi"
+
+		[project]
+		name = "ptyprocess"
+		version = "${PV}"
+		description = "Run a subprocess in a pseudo terminal"
+		readme = "README.rst"
+		license = "ISC"
+		authors = [
+		    { name = "Thomas Kluyver", email = "thomas@kluyver.me.uk" },
+		]
+		classifiers = [
+		    "Development Status :: 5 - Production/Stable",
+		    "Environment :: Console",
+		    "Intended Audience :: Developers",
+		    "Intended Audience :: System Administrators",
+		    "Operating System :: POSIX",
+		    "Operating System :: MacOS :: MacOS X",
+		    "Programming Language :: Python",
+		    "Programming Language :: Python :: 3",
+		    "Topic :: Terminals",
+		]
+	EOF
+}

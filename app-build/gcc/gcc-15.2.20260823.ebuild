@@ -35,9 +35,7 @@ DEPEND="
 	isl? ( lib-core/isl )
 	zstd? ( app-compression/zstd )
 "
-RDEPEND="${DEPEND}
-	elibc_musl? ( lib-core/musl-bsd )
-"
+RDEPEND="${DEPEND}"
 BDEPEND="
 	app-build/bison
 	app-build/flex
@@ -188,28 +186,6 @@ src_install() {
 
 	dobin "${FILESDIR}"/c89
 	dobin "${FILESDIR}"/c99
-
-	if use elibc_musl; then
-		local gcc_specdir="${ED}/usr/lib/gcc/${CHOST}"
-		local gcc_verdir
-
-		gcc_verdir=$(find "${gcc_specdir}" -mindepth 1 -maxdepth 1 -type d | head -n1) || die
-		[[ -n ${gcc_verdir} ]] || die "failed to locate GCC version directory in ${gcc_specdir}"
-		[[ ! -e ${gcc_verdir}/specs ]] || die "unexpected existing specs file at ${gcc_verdir}/specs"
-
-		# Prepend the musl-bsd overlay so wrapper headers like <sys/mount.h>
-		# are visible without per-package CPPFLAGS or source patches, and
-		# auto-link the compat library so GNU/BSD replacement symbols resolve
-		# naturally. Avoid %rename here: GCC reads the installed specs file
-		# early enough that renaming built-ins is fragile on some targets.
-		cat > "${gcc_verdir}/specs" <<-EOF || die
-*cpp:
-%{posix:-D_POSIX_SOURCE} %{pthread:-D_REENTRANT} %{!nostdinc:-isystem =/usr/lib/musl-bsd/overlay/include}
-
-*lib:
-%{!mandroid|tno-android-ld:%{pthread:-lpthread} %{shared:-lc}    %{!shared:%{profile:-lc_p}%{!profile:-lc}} %{!nostdlib:%{!nodefaultlibs:%{!nolibc: --push-state --as-needed -lmusl-bsd-compat --pop-state}}};:%{shared:-lc}    %{!shared:%{profile:-lc_p}%{!profile:-lc}} %{!static: -ldl}}
-EOF
-	fi
 
 	if use go-bootstrap; then
 		exeinto /usr/lib/gccgo/bin

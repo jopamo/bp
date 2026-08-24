@@ -18,7 +18,10 @@ LICENSE="GPL-2 NVIDIA-r2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 IUSE+=" driver kernel-open kms primary-gpu static-libs uvm wayland X"
-REQUIRED_USE="kernel-open? ( driver )"
+REQUIRED_USE="
+    kernel-open? ( driver )
+    elibc_musl? ( amd64 )
+"
 
 S="${WORKDIR}"
 

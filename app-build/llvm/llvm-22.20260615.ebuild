@@ -22,7 +22,6 @@ COMMON_DEPEND="
 	lib-core/libedit
 	lib-core/libffi
 	lib-core/libxml2
-	elibc_musl? ( lib-core/musl-bsd )
 	lib-core/zlib
 	app-compression/zstd
 	virtual/curses
@@ -129,12 +128,6 @@ _llvm_export_gcc_fallback() {
 }
 
 src_prepare() {
-    # S points at the llvm subproject, but this driver integration patch
-    # touches the sibling clang tree in the llvm-project monorepo.
-    pushd "${WORKDIR}/llvm-project-${SNAPSHOT}" >/dev/null || die
-    eapply "${FILESDIR}/musl-bsd-driver-integration.patch"
-    popd >/dev/null || die
-
     sed -i \
         -e 's/^[[:space:]]*virtual[[:space:]]\+BufferKind getBufferKind() const[[:space:]]*{/    BufferKind getBufferKind() const override {/' \
         tools/llvm-mc-assemble-fuzzer/llvm-mc-assemble-fuzzer.cpp || die
@@ -698,15 +691,14 @@ EOF
 
 	if [[ ${cfg_contents} == "${old_cfg_contents}" ]]; then
 		if rm -f "${cfg}"; then
-			elog "Removed obsolete Clang config ${cfg}; musl-bsd integration is now built into the driver."
-			elog "Final musl executables use the exact private libmusl-bsd-core archive; qualified x86_64 executables that host glibc-targeted DSOs must opt into the shared runtime with -fmusl-bsd-load-compat."
+			elog "Removed obsolete ambient musl-bsd Clang config ${cfg}."
+			elog "Packages now opt into musl-bsd headers, source compatibility, or qualified glibc-host support through their own build systems."
 		else
 			ewarn "Failed to remove obsolete Clang config ${cfg}."
-			ewarn "That file keeps the old musl-bsd integration path active and overrides the new driver behavior."
+			ewarn "That file silently injects musl-bsd into every matching Clang compile and link."
 		fi
 	else
 		ewarn "Leaving ${cfg} in place because its contents differ from the old auto-generated musl-bsd config."
-		ewarn "If you no longer want external Clang config injection, remove or update that file manually."
-		ewarn "The built-in policy uses the exact private libmusl-bsd-core archive for ordinary final musl executables and reserves the shared runtime for explicit -fmusl-bsd-load-compat links."
+		ewarn "Review it manually: the compiler driver no longer owns musl-bsd compatibility policy."
 	fi
 }

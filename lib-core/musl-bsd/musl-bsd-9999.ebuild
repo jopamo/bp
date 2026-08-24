@@ -11,6 +11,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 RDEPEND="!lib-core/glibc"
+BDEPEND="virtual/pkgconfig"
 
 src_configure() {
 	local emesonargs=(
@@ -34,27 +35,48 @@ src_install() {
 
 	local core_dir="/usr/lib/musl-bsd"
 	local core_archive="${core_dir}/libmusl-bsd-core.a"
-	local core_runtime="${core_dir}/libmusl-bsd-core.so.2"
+	local host_runtime="/usr/lib/libmusl-bsd-glibc-host.so.2"
+	local pc_dir="/usr/lib/pkgconfig"
 
 	[[ -f "${ED}${core_archive}" ]] ||
 		die "missing link-safe musl-bsd archive: ${core_archive}"
+	[[ -f "${ED}${pc_dir}/musl-bsd-headers.pc" ]] ||
+		die "missing musl-bsd headers interface"
+	[[ -f "${ED}${pc_dir}/musl-bsd-source.pc" ]] ||
+		die "missing musl-bsd source interface"
+	grep -Fq 'Cflags: -I${overlayincludedir}' \
+		"${ED}${pc_dir}/musl-bsd-headers.pc" ||
+		die "invalid musl-bsd headers interface"
+	grep -Fq 'Requires: musl-bsd-headers' \
+		"${ED}${pc_dir}/musl-bsd-source.pc" ||
+		die "musl-bsd source interface does not require its headers"
+	grep -Fq 'Libs: -L${libdir}/musl-bsd -l:libmusl-bsd-core.a' \
+		"${ED}${pc_dir}/musl-bsd-source.pc" ||
+		die "musl-bsd source interface does not select the exact archive"
+	[[ ! -e "${ED}/usr/lib/libmusl-bsd-glibc-host.so" ]] ||
+		die "unversioned musl-bsd host linker name must not be installed"
 
 	if use amd64; then
-		[[ -e "${ED}${core_runtime}" ]] ||
-			die "missing qualified musl-bsd runtime: ${core_runtime}"
+		[[ -e "${ED}${host_runtime}" ]] ||
+			die "missing qualified musl-bsd runtime: ${host_runtime}"
+		[[ -f "${ED}${pc_dir}/musl-bsd-glibc-host.pc" ]] ||
+			die "missing qualified musl-bsd host interface"
+		grep -Fq 'Libs: -L${libdir} -Wl,--push-state,--no-as-needed -l:libmusl-bsd-glibc-host.so.2 -Wl,--pop-state' \
+			"${ED}${pc_dir}/musl-bsd-glibc-host.pc" ||
+			die "invalid qualified musl-bsd host interface"
 
-		local core_soname
-		core_soname=$(
-			"$(tc-getREADELF)" -d "${ED}${core_runtime}" |
+		local host_soname
+		host_soname=$(
+			"$(tc-getREADELF)" -d "${ED}${host_runtime}" |
 				sed -n 's/.*(SONAME).*\[\(.*\)\].*/\1/p'
 		) || die "failed to inspect musl-bsd runtime SONAME"
-		[[ ${core_soname} == libmusl-bsd-core.so.2 ]] ||
-			die "invalid musl-bsd runtime SONAME: ${core_soname:-missing}"
-
-		# Runtime discovery exposes only the versioned SONAME. The development
-		# linker name and archive remain private to the compiler driver's exact
-		# sysroot-relative paths.
-		dosym -r "${core_runtime}" /usr/lib/libmusl-bsd-core.so.2
+		[[ ${host_soname} == libmusl-bsd-glibc-host.so.2 ]] ||
+			die "invalid musl-bsd runtime SONAME: ${host_soname:-missing}"
+	else
+		[[ ! -e "${ED}${host_runtime}" ]] ||
+			die "unqualified ABI installed musl-bsd host runtime"
+		[[ ! -e "${ED}${pc_dir}/musl-bsd-glibc-host.pc" ]] ||
+			die "unqualified ABI installed musl-bsd host interface"
 	fi
 
 	qa-policy-install

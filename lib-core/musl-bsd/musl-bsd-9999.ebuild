@@ -11,7 +11,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 RDEPEND="!lib-core/glibc"
-BDEPEND="virtual/pkgconfig"
+BDEPEND="app-dev/pkgconf"
 
 src_configure() {
 	local emesonargs=(

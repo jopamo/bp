@@ -2,22 +2,13 @@ diff --git a/arch/x86_64/reloc.h b/arch/x86_64/reloc.h
 index fac0c0ae..67d6cf98 100644
 --- a/arch/x86_64/reloc.h
 +++ b/arch/x86_64/reloc.h
-@@ -5,6 +5,7 @@
- #define REL_GOT         R_X86_64_GLOB_DAT
- #define REL_PLT         R_X86_64_JUMP_SLOT
- #define REL_RELATIVE    R_X86_64_RELATIVE
+@@ -7,0 +8 @@
 +#define REL_IRELATIVE   R_X86_64_IRELATIVE
- #define REL_COPY        R_X86_64_COPY
- #define REL_DTPMOD      R_X86_64_DTPMOD64
- #define REL_DTPOFF      R_X86_64_DTPOFF64
 diff --git a/include/limits.h b/include/limits.h
 index 53a27b9d..409cfa33 100644
 --- a/include/limits.h
 +++ b/include/limits.h
-@@ -63,7 +63,12 @@
- 
- /* Implementation choices... */
- 
+@@ -66 +66,6 @@
 -#define PTHREAD_KEYS_MAX 128
 +/*
 + * Keep the glibc-compatible runtime key limit.  The NVIDIA/Mesa EGL stack
@@ -25,93 +16,151 @@ index 53a27b9d..409cfa33 100644
 + * loading, and glibc exposes 1024.
 + */
 +#define PTHREAD_KEYS_MAX 1024
- #define PTHREAD_STACK_MIN 2048
- #define PTHREAD_DESTRUCTOR_ITERATIONS 4
- #define SEM_VALUE_MAX 0x7fffffff
 diff --git a/ldso/dynlink.c b/ldso/dynlink.c
-index 10471b23..9a7efe6d 100644
+index 10471b23..48d017f0 100644
 --- a/ldso/dynlink.c
 +++ b/ldso/dynlink.c
-@@ -94,6 +94,7 @@ struct dso {
- 	char mark;
- 	char bfs_built;
- 	char runtime_loaded;
+@@ -96,0 +97,3 @@ struct dso {
++	char relocs_done;
++	char irelative_done;
 +	char relocating;
- 	struct dso **deps, *needed_by;
- 	size_t ndeps_direct;
- 	size_t next_dep;
-@@ -479,6 +480,18 @@ static void do_relocs(struct dso *dso, size_t *rel, size_t rel_size, size_t stri
- 		case REL_RELATIVE:
- 			*reloc_addr = (size_t)base + addend;
- 			break;
+@@ -383 +386,6 @@ nomatch:
+-static void do_relocs(struct dso *dso, size_t *rel, size_t rel_size, size_t stride)
++enum {
++	RELOC_NORMAL,
++	RELOC_IRELATIVE,
++};
++
++static void do_relocs(struct dso *dso, size_t *rel, size_t rel_size, size_t stride, int phase)
+@@ -410,0 +419,6 @@ static void do_relocs(struct dso *dso, size_t *rel, size_t rel_size, size_t stri
++#ifdef REL_IRELATIVE
++		if ((type == REL_IRELATIVE) != (phase == RELOC_IRELATIVE))
++			continue;
++#else
++		if (phase == RELOC_IRELATIVE) continue;
++#endif
+@@ -428,0 +443,8 @@ static void do_relocs(struct dso *dso, size_t *rel, size_t rel_size, size_t stri
++#ifdef REL_IRELATIVE
++		if (type == REL_IRELATIVE && sym_index) {
++			error("Error relocating %s: invalid IRELATIVE symbol index",
++				dso->name);
++			if (runtime) longjmp(*rtld_fail, 1);
++			continue;
++		}
++#endif
+@@ -481,0 +504,12 @@ static void do_relocs(struct dso *dso, size_t *rel, size_t rel_size, size_t stri
 +#ifdef REL_IRELATIVE
 +		case REL_IRELATIVE:
 +			/*
 +			 * IRELATIVE stores the address of an IFUNC resolver in
 +			 * the addend and expects the resolver's return value at
-+			 * the relocation target.  Unlike REL_RELATIVE, the
-+			 * resolver must run after this object's dependencies have
-+			 * been relocated.
++			 * the relocation target. Resolver execution is deferred
++			 * until ordinary relocations are complete across the load
++			 * set.
 +			 */
 +			*reloc_addr = ((size_t (*)(void))laddr(dso, addend))();
 +			break;
 +#endif
- 		case REL_SYM_OR_REL:
- 			if (sym) *reloc_addr = sym_val + addend;
- 			else *reloc_addr = (size_t)base + addend;
-@@ -1409,11 +1422,16 @@ static void do_mips_relocs(struct dso *p, size_t *got)
- 	}
- }
- 
+@@ -589 +623 @@ static void redo_lazy_relocs()
+-		do_relocs(p, p->lazy, size, 3);
++		do_relocs(p, p->lazy, size, 3, RELOC_NORMAL);
+@@ -1408 +1442 @@ static void do_mips_relocs(struct dso *p, size_t *got)
+-		do_relocs(p, rel, sizeof rel, 2);
++		do_relocs(p, rel, sizeof rel, 2, RELOC_NORMAL);
+@@ -1412 +1446 @@ static void do_mips_relocs(struct dso *p, size_t *got)
 -static void reloc_all(struct dso *p)
-+static void reloc_all(struct dso *p, struct dso *stop)
- {
- 	size_t dyn[DYN_CNT];
++static void reloc_dso(struct dso *p, int phase)
+@@ -1415,22 +1449,32 @@ static void reloc_all(struct dso *p)
 -	for (; p; p=p->next) {
+-		if (p->relocated) continue;
+-		decode_vec(p->dynv, dyn, DYN_CNT);
+-		if (NEED_MIPS_GOT_RELOCS)
+-			do_mips_relocs(p, laddr(p, dyn[DT_PLTGOT]));
+-		do_relocs(p, laddr(p, dyn[DT_JMPREL]), dyn[DT_PLTRELSZ],
+-			2+(dyn[DT_PLTREL]==DT_RELA));
+-		do_relocs(p, laddr(p, dyn[DT_REL]), dyn[DT_RELSZ], 2);
+-		do_relocs(p, laddr(p, dyn[DT_RELA]), dyn[DT_RELASZ], 3);
+-		if (!DL_FDPIC)
+-			do_relr_relocs(p, laddr(p, dyn[DT_RELR]), dyn[DT_RELRSZ]);
+-
+-		if (head != &ldso && p->relro_start != p->relro_end) {
+-			long ret = __syscall(SYS_mprotect, laddr(p, p->relro_start),
+-				p->relro_end-p->relro_start, PROT_READ);
+-			if (ret != 0 && ret != -ENOSYS) {
+-				set_errno(-ret);
+-				error("Error relocating %s: RELRO protection failed: %m",
+-					p->name);
+-				if (runtime) longjmp(*rtld_fail, 1);
+-			}
+-		}
++	decode_vec(p->dynv, dyn, DYN_CNT);
++	if (phase == RELOC_NORMAL && NEED_MIPS_GOT_RELOCS)
++		do_mips_relocs(p, laddr(p, dyn[DT_PLTGOT]));
++	do_relocs(p, laddr(p, dyn[DT_JMPREL]), dyn[DT_PLTRELSZ],
++		2+(dyn[DT_PLTREL]==DT_RELA), phase);
++	do_relocs(p, laddr(p, dyn[DT_REL]), dyn[DT_RELSZ], 2, phase);
++	do_relocs(p, laddr(p, dyn[DT_RELA]), dyn[DT_RELASZ], 3, phase);
++	if (phase == RELOC_NORMAL && !DL_FDPIC)
++		do_relr_relocs(p, laddr(p, dyn[DT_RELR]), dyn[DT_RELRSZ]);
++}
++
++static void reloc_regular(struct dso *p)
++{
++	if (p->relocated || p->relocs_done) return;
++	reloc_dso(p, RELOC_NORMAL);
++	p->relocs_done = 1;
++}
++
++static void reloc_irelative(struct dso *p)
++{
 +	size_t i;
-+	for (; p && p != stop; p=p->next) {
- 		if (p->relocated) continue;
-+		if (p->relocating) continue;
-+		p->relocating = 1;
-+		for (i=0; p->deps && p->deps[i]; i++)
-+			reloc_all(p->deps[i], p->deps[i]->next);
- 		decode_vec(p->dynv, dyn, DYN_CNT);
- 		if (NEED_MIPS_GOT_RELOCS)
- 			do_mips_relocs(p, laddr(p, dyn[DT_PLTGOT]));
-@@ -1436,6 +1454,7 @@ static void reloc_all(struct dso *p)
- 		}
- 
- 		p->relocated = 1;
-+		p->relocating = 0;
- 	}
- }
- 
-@@ -1758,7 +1777,7 @@ hidden void __dls2(unsigned char *base, size_t *sp)
- 	saved_addends = addends;
- 
- 	head = &ldso;
--	reloc_all(&ldso);
-+	reloc_all(&ldso, 0);
- 
- 	ldso.relocated = 0;
- 
-@@ -2029,8 +2048,8 @@ void __dls3(size_t *sp, size_t *auxv)
- 
- 	/* The main program must be relocated LAST since it may contain
- 	 * copy relocations which depend on libraries' relocations. */
++	if (p->relocated || p->irelative_done || p->relocating) return;
++	reloc_regular(p);
++	p->relocating = 1;
++	for (i=0; p->deps && p->deps[i]; i++) {
++		reloc_regular(p->deps[i]);
++		reloc_irelative(p->deps[i]);
++	}
++	reloc_dso(p, RELOC_IRELATIVE);
++	p->irelative_done = 1;
++	p->relocating = 0;
++}
+@@ -1438 +1482,12 @@ static void reloc_all(struct dso *p)
+-		p->relocated = 1;
++static void reloc_finalize(struct dso *p)
++{
++	if (p->relocated) return;
++	if (head != &ldso && p->relro_start != p->relro_end) {
++		long ret = __syscall(SYS_mprotect, laddr(p, p->relro_start),
++			p->relro_end-p->relro_start, PROT_READ);
++		if (ret != 0 && ret != -ENOSYS) {
++			set_errno(-ret);
++			error("Error relocating %s: RELRO protection failed: %m",
++				p->name);
++			if (runtime) longjmp(*rtld_fail, 1);
++		}
+@@ -1439,0 +1495,10 @@ static void reloc_all(struct dso *p)
++	p->relocated = 1;
++}
++
++static void reloc_all(struct dso *p)
++{
++	struct dso *q;
++	for (q=p; q; q=q->next) reloc_regular(q);
++	if (!ldd_mode && head != &ldso)
++		for (q=p; q; q=q->next) reloc_irelative(q);
++	for (q=p; q; q=q->next) reloc_finalize(q);
+@@ -1763,0 +1829,2 @@ hidden void __dls2(unsigned char *base, size_t *sp)
++	ldso.relocs_done = 0;
++	ldso.irelative_done = 0;
+@@ -2032,2 +2099,8 @@ void __dls3(size_t *sp, size_t *auxv)
 -	reloc_all(app.next);
 -	reloc_all(&app);
-+	reloc_all(app.next, 0);
-+	reloc_all(&app, 0);
- 
- 	/* Actual copying to new TLS needs to happen after relocations,
- 	 * since the TLS images might have contained relocated addresses. */
-@@ -2197,7 +2216,7 @@ void *dlopen(const char *file, int mode)
- 			add_syms(p->deps[i]);
- 	}
- 	if (!p->relocated) {
--		reloc_all(p);
-+		reloc_all(p, 0);
- 	}
- 
- 	/* If RTLD_GLOBAL was not specified, undo any new additions
++	for (struct dso *p=app.next; p; p=p->next) reloc_regular(p);
++	reloc_regular(&app);
++	if (!ldd_mode) {
++		for (struct dso *p=app.next; p; p=p->next) reloc_irelative(p);
++		reloc_irelative(&app);
++	}
++	for (struct dso *p=app.next; p; p=p->next) reloc_finalize(p);
++	reloc_finalize(&app);

@@ -64,5 +64,6 @@ dev-pypi/httpx
 dev-pypi/paramiko
 dev-pypi/pexpect
 dev-pypi/pip
+dev-pypi/pytest
 virtual/rust
 "

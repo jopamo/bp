@@ -1,0 +1,34 @@
+diff --git a/meson.build b/meson.build
+index 943926cbf5..c7d87d76de 100644
+--- a/meson.build
++++ b/meson.build
+@@ -572,5 +572,19 @@ assert(long_max > 100000)
+ conf.set_quoted('LONG_MAX_STR', f'@long_max@')
+ 
++# musl does not provide libc wrappers for the new mount API. Downstream
++# compatibility headers may declare them and an executable link may satisfy
++# them from a static archive, but neither establishes a libc symbol that our
++# shared objects can use. Keep systemd's own raw-syscall wrappers authoritative
++# on musl.
++musl_missing_mount_api = [
++        'fsconfig',
++        'fsmount',
++        'fsopen',
++        'mount_setattr',
++        'move_mount',
++        'open_tree',
++]
++
+ foreach ident : [
+         ['renameat2',         '''#include <stdio.h>'''],        # since musl-1.2.6
+         ['set_mempolicy',     '''#include <sys/syscall.h>'''],  # declared at numaif.h provided by libnuma, which we do not use
+@@ -604,7 +618,8 @@ foreach ident : [
+         ['pivot_root',        '''#include <unistd.h>'''],       # no known header declares pivot_root
+ ]
+ 
+-        have = cc.has_function(ident[0], prefix : ident[1], args : '-D_GNU_SOURCE')
++        have = get_option('libc') != 'musl' or ident[0] not in musl_missing_mount_api
++        have = have and cc.has_function(ident[0], prefix : ident[1], args : '-D_GNU_SOURCE')
+         conf.set10('HAVE_' + ident[0].to_upper(), have)
+ endforeach
+ 

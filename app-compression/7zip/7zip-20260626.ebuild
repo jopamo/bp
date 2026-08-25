@@ -18,6 +18,10 @@ BDEPEND="
 	app-lang/uasm
 "
 
+PATCHES=(
+	"${FILESDIR}"/7zip-26.02-initialize-filter-group-index.patch
+)
+
 pkg_setup() {
 	mfile="cmpl"
 	if tc-is-clang; then
@@ -60,6 +64,13 @@ src_configure() {
 
 src_compile() {
 	append-ldflags -Wl,-z,noexecstack
+	if tc-is-clang; then
+		append-flags \
+			-Wno-cast-qual \
+			-Wno-disabled-macro-expansion \
+			-Wno-reserved-macro-identifier
+	fi
+
 	export G_CFLAGS=${CFLAGS}
 	export G_CXXFLAGS=${CXXFLAGS}
 	export G_LDFLAGS=${LDFLAGS}

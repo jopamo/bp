@@ -1,0 +1,14 @@
+Initialize GroupIndex before CFilterMode2 is copied into the filter vector.
+The index is replaced before it is used, but copying an indeterminate unsigned
+member triggers GCC's -Wmaybe-uninitialized and is not valid C++.
+
+--- a/CPP/7zip/Archive/7z/7zUpdate.cpp
++++ b/CPP/7zip/Archive/7z/7zUpdate.cpp
+@@ -434,6 +434,7 @@
+   {
+     ClearFilterMode();
+     Encrypted = false;
++    GroupIndex = 0;
+   }
+
+   int Compare(const CFilterMode2 &m) const

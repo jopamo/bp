@@ -3,158 +3,178 @@
 BRANCH_NAME="$(ver_cut 1-2).x"
 SNAPSHOT=76bac38b7dc859a6c38c195c98e146ab71df8361
 
-inherit linux-info user toolchain-funcs autotools flag-o-matic qa-policy
+inherit qa-policy toolchain-funcs user
 
 DESCRIPTION="The Common Unix Printing System"
-HOMEPAGE="https://www.cups.org/"
+HOMEPAGE="https://openprinting.github.io/cups/ https://github.com/OpenPrinting/cups"
 SRC_URI="https://github.com/OpenPrinting/cups/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
-S=${WORKDIR}/cups-${SNAPSHOT}
+S="${WORKDIR}/cups-${SNAPSHOT}"
 
-#KEYWORDS="amd64 arm64"
-
-LICENSE="GPL-2"
+LICENSE="Apache-2.0"
 SLOT="0"
-IUSE="acl dbus debug pam ssl static-libs systemd usb"
+KEYWORDS="amd64 arm64"
+IUSE="acl dbus debug +libpaper pam ssl static-libs systemd test usb X +zeroconf"
 
-DEPEND="
-	app-tex/libpaper
+RESTRICT="!test? ( test )"
+
+RDEPEND="
 	lib-core/zlib
-	lib-net/avahi
-	acl? (
-			app-core/acl
-			app-core/attr
-	)
+	acl? ( app-core/acl )
 	dbus? ( virtual/dbus )
+	libpaper? ( app-tex/libpaper )
 	pam? ( lib-core/pam )
 	ssl? ( virtual/gnutls )
 	systemd? ( app-core/systemd )
 	usb? ( lib-dev/libusb )
+	X? ( xgui-lib/xdg-utils )
+	zeroconf? ( lib-net/avahi )
 "
-
+DEPEND="${RDEPEND}"
 BDEPEND="app-dev/pkgconf"
 PDEPEND="lib-print/cups-filters"
 
 PATCHES=(
-	"${FILESDIR}/cups-2.2.6-fix-install-perms.patch"
+	"${FILESDIR}/cups-2.4.20-container-libs.patch"
+	"${FILESDIR}/cups-2.4.20-no-dnssd.patch"
 )
-
-RESTRICT="test"
 
 pkg_setup() {
 	enewgroup lp
 	enewuser lp -1 -1 -1 lp
 	enewgroup lpadmin 106
-
-	linux-info_pkg_setup
 }
 
 src_prepare() {
 	qa-policy-configure
-	filter-flags -flto*
 	default
 
-	# Remove ".SILENT" rule for verbose output (bug 524338).
-	sed 's#^.SILENT:##g' -i "${S}"/Makedefs.in || die "sed failed"
+	# Package-managed data and manual pages must remain owner-writable.
+	sed -i \
+		-e 's/-m 444 @INSTALL_GZIP@/-m 644 @INSTALL_GZIP@/' \
+		-e 's/-m 444$/-m 644/' \
+		Makedefs.in || die
 
-	# Fix install-sh, posix sh does not have 'function'.
-	sed 's#function gzipcp#gzipcp()#g' -i "${S}/install-sh"
+	# Keep all private executables in one non-multilib directory and leave
+	# stripping to Corepkg.
+	sed -i \
+		-e 's:CUPS_SERVERBIN="$exec_prefix/lib/cups":CUPS_SERVERBIN="$exec_prefix/libexec/cups":g' \
+		-e 's/INSTALL_STRIP="-s"/INSTALL_STRIP=""/' \
+		configure || die
 
-	eautoreconf
-
-	# from the top of the CUPS source tree
-	sed -i -E '
-		s/^[[:space:]]*INSTALL_STRIP[[:space:]]*=[[:space:]]*"[^"]*"/INSTALL_STRIP=""/;   # INSTALL_STRIP="-s"
-		s/^[[:space:]]*INSTALL_STRIP[[:space:]]*=.*/INSTALL_STRIP=/                       # INSTALL_STRIP=-s  or empty
-		' config-scripts/cups-compiler.m4 configure
+	if use elibc_musl; then
+		# musl iconv intentionally omits the legacy encodings testi18n requires.
+		sed -i '/^[[:space:]]*testi18n \\/d' cups/Makefile || die
+	fi
 }
 
 src_configure() {
 	export DSOFLAGS="${LDFLAGS}"
 
-	einfo LINGUAS=\"${LINGUAS}\"
-
-	local myconf=()
-
-	myconf+=(
+	local myeconfargs=(
+		AR="$(tc-getAR)"
 		CC="$(tc-getCC)"
 		CXX="$(tc-getCXX)"
+		RANLIB="$(tc-getRANLIB)"
 		OPTIM="${CFLAGS}"
-		--libdir="${EPREFIX}"/usr/lib
-		--localstatedir="${EPREFIX}"/var
-		--with-exe-file-perm=755
-		--with-rundir="${EPREFIX}"/run/cups
+		--libdir="${EPREFIX}/usr/lib"
+		--localstatedir="${EPREFIX}/var"
+		--with-dbusdir="${EPREFIX}/etc/dbus-1"
+		--with-docdir="${EPREFIX}/usr/share/cups/html"
+		--with-icondir="${EPREFIX}/usr/share/icons"
+		--with-menudir="${EPREFIX}/usr/share/applications"
+		--with-pkgconfpath="${EPREFIX}/usr/lib/pkgconfig"
+		--with-rundir="${EPREFIX}/run/cups"
+		--with-container=none
+		--with-rcdir=no
+		--without-xinetd
 		--with-cups-user=lp
 		--with-cups-group=lp
-		--with-docdir="${EPREFIX}"/usr/share/cups/html
-		--with-languages="${LINGUAS}"
-		--with-system-groups=lpadmin
+		--with-system-groups="root lpadmin"
+		--with-cupsd-file-perm=0755
+		--with-exe-file-perm=0755
+		--with-log-file-perm=0640
+		--with-error-policy=retry-job
+		--enable-sync-on-close
 		--disable-gssapi
-		--without-xinetd
 		$(use_enable acl)
 		$(use_enable dbus)
 		$(use_enable debug)
 		$(use_enable debug debug-guards)
 		$(use_enable debug debug-printfs)
+		$(use_enable libpaper)
 		$(use_enable pam)
 		$(use_enable static-libs static)
-		$(use_with systemd)
 		$(use_enable usb libusb)
-		--with-dnssd=avahi
-		--enable-libpaper
+		--with-tls="$(usex ssl gnutls no)"
+		--with-dnssd="$(usex zeroconf avahi no)"
 	)
 
-	if tc-is-static-only; then
-		myconf+=(
-			--disable-shared
+	if use systemd; then
+		myeconfargs+=(
+			--with-ondemand=systemd
+			--with-systemd="${EPREFIX}/usr/lib/systemd/system"
 		)
+	else
+		myeconfargs+=( --with-ondemand=no )
 	fi
 
-	econf "${myconf[@]}"
+	if [[ -n ${LINGUAS+x} ]]; then
+		myeconfargs+=( --with-languages="${LINGUAS}" )
+	fi
 
-	# install in /usr/libexec always, instead of using /usr/lib/cups
-	sed -i -e "s:SERVERBIN.*:SERVERBIN = \"\$\(BUILDROOT\)${EPREFIX}/usr/libexec/cups\":" Makedefs || die
-	sed -i -e "s:#define CUPS_SERVERBIN.*:#define CUPS_SERVERBIN \"${EPREFIX}/usr/libexec/cups\":" config.h || die
+	if tc-is-static-only; then
+		myeconfargs+=( --disable-shared )
+	fi
 
-	# additional path corrections needed for prefix
-	sed -i -e "s:ICONDIR.*:ICONDIR = ${EPREFIX}/usr/share/icons:" Makedefs || die
-	sed -i -e "s:INITDIR.*:INITDIR = ${EPREFIX}/etc:" Makedefs || die
-	sed -i -e "s:DBUSDIR.*:DBUSDIR = ${EPREFIX}/etc/dbus-1:" Makedefs || die
-	sed -i -e "s:MENUDIR.*:MENUDIR = ${EPREFIX}/usr/share/applications:" Makedefs || die
+	econf "${myeconfargs[@]}"
+}
+
+src_test() {
+	export CUPS_TESTBASE="${T}/cups-tests"
+	mkdir "${CUPS_TESTBASE}" || die
+
+	# The test target builds test-only programs before starting cupsd.
+	emake test
 }
 
 src_install() {
 	emake BUILDROOT="${D}" install
-	qa-policy-install
 
-	# move the default config file to docs
-	dodoc "${ED}"/etc/cups/cupsd.conf.default
-	rm "${ED}"/etc/cups/cupsd.conf.default || die
-
-	# clean out cups init scripts
-	rm -r "${ED}"/etc/{init.d/cups,rc*,pam.d/cups} || die
+	dodoc CHANGES.md CREDITS.md README.md
+	dodoc "${ED}/etc/cups/cupsd.conf.default"
+	rm "${ED}/etc/cups/cupsd.conf.default" || die
 
 	if use pam; then
-		insinto etc/pam.d
-		insopts -m0644
+		rm -f "${ED}/etc/pam.d/cups" || die
+		insinto /etc/pam.d
 		newins "${FILESDIR}/cups.pam" cups
+	else
+		rm -rf "${ED}/etc/pam.d" || die
 	fi
 
-	keepdir /usr/libexec/cups/driver /usr/share/cups/{model,profiles} \
-		/var/log/cups /var/spool/cups/tmp
+	keepdir \
+		/etc/cups/{interfaces,ppd,ssl} \
+		/usr/libexec/cups/driver \
+		/usr/share/cups/{model,profiles} \
+		/var/log/cups \
+		/var/spool/cups/tmp
 
-	keepdir /etc/cups/{interfaces,ppd,ssl}
+	printf 'ServerName %s/run/cups/cups.sock\n' "${EPREFIX}" > "${T}/client.conf" || die
+	insinto /etc/cups
+	doins "${T}/client.conf"
 
-	# create /etc/cups/client.conf
-	echo "ServerName ${EPREFIX}/run/cups/cups.sock" >> "${ED}"/etc/cups/client.conf
+	# cups-filters owns banners; runtime state is created by cupsd.
+	rm -rf \
+		"${ED}/usr/share/cups/banners" \
+		"${ED}/var/cache" \
+		"${ED}/run" || die
 
-	# the following file is now provided by cups-filters:
-	rm -r "${ED}"/usr/share/cups/banners || die
-	rm -r "${ED}"/var/cache || die
+	if ! use X; then
+		rm -rf \
+			"${ED}/usr/share/applications" \
+			"${ED}/usr/share/icons" || die
+	fi
 
 	cleanup_install
-
-	rm -r "${ED}"/usr/share/{applications,icons} || die
-	rm -r "${ED}"/run || die
-
-	find "${ED}"/ -xtype l -delete || die
+	qa-policy-install
 }

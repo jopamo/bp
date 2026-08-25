@@ -1,0 +1,27 @@
+Only probe for Snap confinement libraries when building a Snap container.
+
+The unconditional probe can silently add undeclared AppArmor, snapd-glib,
+GLib, and GIO dependencies to normal system builds.
+
+--- a/config-scripts/cups-container.m4
++++ b/config-scripts/cups-container.m4
+@@ -30,7 +30,7 @@
+ AC_SUBST([APPARMORLIBS])
+ AC_SUBST([SNAPDGLIBLIBS])
+ 
+-AS_IF([test "x$PKGCONFIG" != x], [
++AS_IF([test "x$CONTAINER" = xsnap -a "x$PKGCONFIG" != x], [
+     AC_MSG_CHECKING([for libapparmor])
+     AS_IF([$PKGCONFIG --exists libapparmor], [
+ 	AC_MSG_RESULT([yes])
+--- a/configure
++++ b/configure
+@@ -10986,7 +10986,7 @@
+ 
+ 
+ 
+-if test "x$PKGCONFIG" != x
++if test "x$CONTAINER" = xsnap -a "x$PKGCONFIG" != x
+ then :
+ 
+     { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for libapparmor" >&5

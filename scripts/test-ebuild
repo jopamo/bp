@@ -1,0 +1,172 @@
+#!/bin/sh
+#
+# Run ebuild phases against this checkout without root privileges or host
+# Corepkg configuration.
+
+set -eu
+
+usage() {
+	cat <<'EOF'
+usage: scripts/test-ebuild path/to/package-version.ebuild [phase ...]
+
+The default phases are:
+  clean unpack prepare configure compile test merge
+
+Environment:
+  BP_TEST_PROFILE  profile relative to profiles/ (auto-detected by default)
+  BP_TEST_ROOT     persistent test root (a temporary directory by default)
+  BP_TEST_USE      USE overrides, for example "-systemd -zeroconf"
+  BP_TEST_KEEP     set to 1 to retain the temporary test root
+EOF
+}
+
+if [ "$#" -lt 1 ]; then
+	usage >&2
+	exit 2
+fi
+
+repo=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd -P)
+ebuild_command=$repo/scripts/corepkg-ebuild-local
+case $1 in
+	/*) ebuild_path=$1 ;;
+	*) ebuild_path=$repo/$1 ;;
+esac
+shift
+
+if [ ! -f "$ebuild_path" ]; then
+	echo "test-ebuild: ebuild not found: $ebuild_path" >&2
+	exit 2
+fi
+
+case $ebuild_path in
+	"$repo"/*/*.ebuild) ;;
+	*)
+		echo "test-ebuild: ebuild must be inside $repo" >&2
+		exit 2
+		;;
+esac
+
+if [ "$#" -eq 0 ]; then
+	set -- clean unpack prepare configure compile test merge
+fi
+
+verify_merge=
+for phase do
+	case $phase in
+		merge|qmerge) verify_merge=1 ;;
+	esac
+done
+
+if [ -n "${BP_TEST_PROFILE:-}" ]; then
+	profile=$BP_TEST_PROFILE
+else
+	case $(uname -m) in
+		x86_64) arch=amd64 ;;
+		aarch64) arch=arm64 ;;
+		*)
+			echo "test-ebuild: unsupported host architecture: $(uname -m)" >&2
+			exit 2
+			;;
+	esac
+
+	if getconf GNU_LIBC_VERSION >/dev/null 2>&1; then
+		libc=glibc
+	else
+		libc=musl
+	fi
+	profile=core/$arch/$libc
+fi
+
+profile_path=$repo/profiles/$profile
+if [ ! -d "$profile_path" ]; then
+	echo "test-ebuild: profile not found: $profile_path" >&2
+	exit 2
+fi
+
+temporary_root=
+if [ -n "${BP_TEST_ROOT:-}" ]; then
+	test_root=$BP_TEST_ROOT
+	mkdir -p "$test_root"
+else
+	test_root=$(mktemp -d "${TMPDIR:-/tmp}/bp-ebuild-test.XXXXXX")
+	temporary_root=1
+fi
+
+cleanup() {
+	status=$?
+	trap - EXIT HUP INT TERM
+
+	if [ -d "$test_root" ] && [ "${BP_TEST_KEEP:-0}" != 1 ]; then
+		"$ebuild_command" "$ebuild_path" clean >/dev/null 2>&1 || true
+	fi
+
+	if [ -n "$temporary_root" ] && [ "${BP_TEST_KEEP:-0}" != 1 ]; then
+		rm -rf "$test_root"
+	else
+		echo "test-ebuild: retained test root: $test_root"
+	fi
+
+	exit "$status"
+}
+trap cleanup EXIT HUP INT TERM
+
+mkdir -p \
+	"$test_root/etc/corepkg/repos.conf" \
+	"$test_root/root" \
+	"$test_root/tmp" \
+	"$test_root/distfiles" \
+	"$test_root/packages"
+
+rm -f "$test_root/etc/corepkg/make.profile"
+ln -s "$profile_path" "$test_root/etc/corepkg/make.profile"
+
+cat > "$test_root/etc/corepkg/repos.conf/bp.conf" <<EOF
+[DEFAULT]
+main-repo = bp
+
+[bp]
+location = $repo
+masters =
+auto-sync = no
+EOF
+
+cat > "$test_root/etc/corepkg/make.conf" <<EOF
+PORTAGE_TMPDIR="$test_root/tmp"
+DISTDIR="$test_root/distfiles"
+PKGDIR="$test_root/packages"
+PORTAGE_USERNAME="$(id -un)"
+PORTAGE_GRPNAME="$(id -gn)"
+MAKEOPTS="-j$(getconf _NPROCESSORS_ONLN 2>/dev/null || printf 1)"
+FEATURES="unprivileged sandbox -buildpkg -userpriv -usersandbox -network-sandbox -pid-sandbox -ipc-sandbox -mount-sandbox"
+USE="${BP_TEST_USE:-}"
+ACCEPT_LICENSE="*"
+EOF
+
+: > "$test_root/gitconfig"
+
+export PORTAGE_CONFIGROOT="$test_root"
+export ROOT="$test_root/root/"
+export SYSROOT="$test_root/root/"
+export PORTAGE_USERNAME="$(id -un)"
+export PORTAGE_GRPNAME="$(id -gn)"
+export GIT_CONFIG_SYSTEM="$test_root/gitconfig"
+
+echo "test-ebuild: repo=$repo"
+echo "test-ebuild: profile=$profile"
+echo "test-ebuild: root=$test_root"
+echo "test-ebuild: phases=$*"
+
+"$ebuild_command" "$ebuild_path" "$@"
+
+if [ -n "$verify_merge" ]; then
+	category=$(basename -- "$(dirname -- "$(dirname -- "$ebuild_path")")")
+	pf=$(basename -- "$ebuild_path" .ebuild)
+	vdb=${ROOT%/}/var/db/pkg/$category/$pf
+
+	if [ ! -s "$vdb/CONTENTS" ]; then
+		echo "test-ebuild: merge completed without VDB contents: $vdb" >&2
+		exit 1
+	fi
+
+	echo "test-ebuild: verified merged package: $vdb"
+fi

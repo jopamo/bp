@@ -2,6 +2,8 @@
 
 inherit meson
 
+PROPERTIES+=" source-payload"
+
 DESCRIPTION="X.Org combined protocol headers"
 HOMEPAGE="https://www.x.org"
 SNAPSHOT=fcb7e9a1a0b593a44740d83b0babddd331fea830

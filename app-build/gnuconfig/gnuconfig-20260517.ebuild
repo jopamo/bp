@@ -1,5 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
+PROPERTIES+=" source-payload"
+
 DESCRIPTION="Updated config.sub and config.guess file from GNU"
 HOMEPAGE="https://savannah.gnu.org/projects/config"
 SNAPSHOT=428664896cf9e92d264976a960c76660938dffce

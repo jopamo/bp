@@ -9,6 +9,8 @@ ETYPE="headers"
 
 inherit kernel-2
 
+PROPERTIES+=" source-payload"
+
 DESCRIPTION="Linux kernel headers"
 HOMEPAGE="https://kernel.org/"
 SRC_URI="https://gitlab.com/pjo/kone/-/archive/${SNAPSHOT}/kone-${SNAPSHOT}.tar.bz2"

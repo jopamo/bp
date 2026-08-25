@@ -2,6 +2,8 @@
 
 inherit cmake
 
+PROPERTIES+=" source-payload"
+
 DESCRIPTION="Vulkan Header files and API registry"
 HOMEPAGE="https://github.com/KhronosGroup/Vulkan-Headers"
 SNAPSHOT=b51f6b865c18fc5b33990d12f75e8dfd672cede6

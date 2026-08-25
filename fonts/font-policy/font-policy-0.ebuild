@@ -1,5 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
+PROPERTIES+=" source-payload"
+
 DESCRIPTION="Official bp font policy and curated font stack"
 HOMEPAGE="https://github.com/rsms/inter"
 SRC_URI=""

@@ -2,6 +2,8 @@
 
 inherit xdg
 
+PROPERTIES+=" source-payload"
+
 DESCRIPTION="Papirus icons theme"
 HOMEPAGE="https://github.com/PapirusDevelopmentTeam/papirus-icon-theme"
 SNAPSHOT=5f8b701d7521e27b4859d7e4f9b0da4c423c036c

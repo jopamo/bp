@@ -1,5 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
+PROPERTIES+=" source-payload"
+
 DESCRIPTION="GNU Autoconf Macro Archive"
 HOMEPAGE="
 	https://www.gnu.org/software/autoconf-archive/

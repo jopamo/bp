@@ -2,6 +2,8 @@
 
 inherit prefix
 
+PROPERTIES+=" source-payload"
+
 DESCRIPTION="User land tool for cleaning up old perl installs"
 HOMEPAGE="https://wiki.gentoo.org/wiki/Project:Perl"
 SRC_URI="https://dev.gentoo.org/~dilfridge/distfiles/${PN}-2.31.tar.bz2"

@@ -2,6 +2,8 @@
 
 inherit autotools
 
+PROPERTIES+=" source-payload"
+
 DESCRIPTION="X.Org bitmaps data"
 HOMEPAGE="https://www.x.org/wiki/"
 SNAPSHOT=433634f36f791c2779af974ab444c4b521b4a4d8

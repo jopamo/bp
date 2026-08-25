@@ -2,6 +2,8 @@
 
 inherit meson xdg
 
+PROPERTIES+=" source-payload"
+
 DESCRIPTION="freedesktop default icon theme"
 HOMEPAGE="https://gitlab.freedesktop.org/xdg/default-icon-theme.git"
 SNAPSHOT=08d2acf17aefdb1b3760102ff5df8b95c1ef8884

@@ -2,6 +2,8 @@
 
 inherit qa-policy
 
+PROPERTIES+=" source-payload"
+
 DESCRIPTION="The most popular spellchecking library dictionaries"
 HOMEPAGE="http://hunspell.github.io/"
 

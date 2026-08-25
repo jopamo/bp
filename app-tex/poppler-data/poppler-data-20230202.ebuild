@@ -2,6 +2,8 @@
 
 inherit cmake
 
+PROPERTIES+=" source-payload"
+
 DESCRIPTION="Data files for poppler to support uncommon encodings without xpdfrc"
 HOMEPAGE="https://poppler.freedesktop.org/"
 

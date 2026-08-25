@@ -2,7 +2,7 @@
 
 #BRANCH_NAME="maint-$(ver_cut 1).0"
 
-inherit meson flag-o-matic
+inherit meson flag-o-matic toolchain-funcs
 
 DESCRIPTION="implementation of the X Window System display server"
 HOMEPAGE="https://www.x.org/wiki/"
@@ -14,7 +14,8 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="glamor ipv6 minimal systemd suid_wrapper udev wayland xcsecurity +xephyr +xvfb X"
+IUSE="glamor ipv6 minimal nvidia systemd udev wayland xcsecurity +xephyr +xvfb X"
+REQUIRED_USE="nvidia? ( amd64 X )"
 
 DEPEND="
 	virtual/ssl
@@ -49,8 +50,15 @@ DEPEND="
 	systemd? (
 		virtual/dbus
 		app-core/systemd
+	)
+	nvidia? (
+		elibc_musl? (
+			bin/nvidia-drivers[X]
+			lib-core/musl-bsd
+		)
 	)"
 BDEPEND="
+	app-dev/pkgconf
 	app-build/flex
 	xgui-tools/xorgproto
 "
@@ -61,6 +69,7 @@ src_prepare() {
 	default
 
 	eapply "${FILESDIR}"/${PN}-backtrace-execinfo.patch
+	eapply "${FILESDIR}"/${PN}-nvidia-musl-startup.patch
 
 	sed -i -E \
 		'/^[[:space:]]*static[[:space:]]+inline[[:space:]]+int[[:space:]]+pci_device_is_boot_display[[:space:]]*\(/,/^[[:space:]]*}\s*$/d' \
@@ -71,9 +80,15 @@ src_configure() {
   # avoid forcing immediate binding which can break nvidia GL stubs at link time
   filter-flags -Wl,-z,defs -Wl,-z,now
 
+  local nvidia_musl_startup=disabled
+  if use nvidia && use elibc_musl; then
+    nvidia_musl_startup=enabled
+  fi
+
   local emesonargs=(
     # core servers and backends
     $(meson_use X xorg)          # build the xorg server
+    -Dsuid_wrapper=false         # no legacy privilege or launch wrapper
     $(meson_use xvfb)            # virtual framebuffer server
     $(meson_use xephyr)          # no nested xephyr
     -Dxnest=false                # no legacy Xnest
@@ -119,6 +134,8 @@ src_configure() {
     # crypto and misc
     -Dsha1=libcrypto             # use openssl for sha1
     -Dlibunwind=false            # keep unwinder off unless debugging
+    -Dlegacy_nvidia_340x=false   # do not export obsolete 340xx driver entrypoints
+    -Dnvidia_musl_startup="${nvidia_musl_startup}"
     #-Dlegacy_nvidia_padding=false # keep default pixmap padding; set true only for very old nvidia blobs
 
     # features we explicitly keep off
@@ -140,4 +157,36 @@ src_configure() {
 src_install() {
         meson_src_install
 		dosym -r /usr/bin/Xorg /usr/bin/X
+
+	if use nvidia && use elibc_musl; then
+		local dynamic needed xorg_binary="${ED}/usr/bin/Xorg"
+		dynamic=$("$(tc-getREADELF)" -dW "${xorg_binary}") ||
+			die "failed to inspect installed Xorg"
+		needed=$(sed -n 's/.*(NEEDED).*\[\(.*\)\].*/\1/p' <<< "${dynamic}")
+
+		local required
+		for required in \
+			libmusl-bsd-glibc-host.so.2 \
+			libc.so.6 \
+			libdl.so.2 \
+			libm.so.6 \
+			libpthread.so.0 \
+			libresolv.so.2 \
+			librt.so.1 \
+			libutil.so.1 \
+			libnvidia-xorg-startup.so.1; do
+			grep -Fx "${required}" <<< "${needed}" >/dev/null ||
+				die "Xorg startup closure is missing ${required}"
+		done
+
+		local host_index libc_index
+		host_index=$(grep -Fnx 'libmusl-bsd-glibc-host.so.2' <<< "${needed}" |
+			cut -d: -f1)
+		libc_index=$(grep -Fnx 'libc.so' <<< "${needed}" | cut -d: -f1)
+		[[ -n ${host_index} && -n ${libc_index} && ${host_index} -lt ${libc_index} ]] ||
+			die "musl-bsd host must precede musl libc in Xorg DT_NEEDED order"
+
+		grep -F '/usr/lib/musl-bsd/glibc' <<< "${dynamic}" >/dev/null ||
+			die "Xorg startup closure is missing the private facade RUNPATH"
+	fi
 }

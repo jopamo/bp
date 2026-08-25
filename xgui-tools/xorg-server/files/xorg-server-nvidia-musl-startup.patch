@@ -19,7 +19,7 @@
 +if get_option('nvidia_musl_startup').enabled()
 +    xorg_exec_deps = [
 +        dependency('musl-bsd-glibc-startup', required: true),
-+        dependency('nvidia-xorg-startup', required: true),
++        dependency('nvidia-musl-startup', required: true),
 +    ] + xorg_exec_deps
 +endif
 +

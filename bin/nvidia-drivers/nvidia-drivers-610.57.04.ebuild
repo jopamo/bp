@@ -172,11 +172,11 @@ nvidia_source_install() {
     newexe "${binary}" "${component}"
 }
 
-nvidia_xorg_startup_build() {
-    use X && use elibc_musl || return 0
+nvidia_musl_startup_build() {
+    nvidia_use_graphics && use elibc_musl || return 0
 
-    local anchor="${T}/libnvidia-xorg-startup.so.1"
-    local object="${T}/nvidia-xorg-startup.o"
+    local anchor="${T}/libnvidia-musl-startup.so.1"
+    local object="${T}/nvidia-musl-startup.o"
     local tls="${NV_OBJ}/libnvidia-tls.so.${NV_SOVER}"
     local tls_dynamic tls_soname
 
@@ -195,48 +195,48 @@ nvidia_xorg_startup_build() {
     "$(tc-getCC)" ${CFLAGS} \
         -fPIC \
         -fvisibility=hidden \
-        -c "${FILESDIR}/nvidia-xorg-startup.c" \
+        -c "${FILESDIR}/nvidia-musl-startup.c" \
         -o "${object}" ||
-        die "failed to compile NVIDIA Xorg startup anchor"
+        die "failed to compile NVIDIA musl startup anchor"
 
     "$(tc-getCC)" ${LDFLAGS} \
         -nostdlib \
         -shared \
-        -Wl,-soname,libnvidia-xorg-startup.so.1 \
+        -Wl,-soname,libnvidia-musl-startup.so.1 \
         -Wl,-z,defs \
         -Wl,--push-state,--no-as-needed \
         "${tls}" \
         -Wl,--pop-state \
         "${object}" \
         -o "${anchor}" ||
-        die "failed to link NVIDIA Xorg startup anchor"
+        die "failed to link NVIDIA musl startup anchor"
 
     sed "s/@VERSION@/${PV}/g" \
-        "${FILESDIR}/nvidia-xorg-startup.pc.in" \
-        > "${T}/nvidia-xorg-startup.pc" ||
-        die "failed to generate NVIDIA Xorg startup interface"
+        "${FILESDIR}/nvidia-musl-startup.pc.in" \
+        > "${T}/nvidia-musl-startup.pc" ||
+        die "failed to generate NVIDIA musl startup interface"
 }
 
-nvidia_xorg_startup_validate() {
-    use X && use elibc_musl || return 0
+nvidia_musl_startup_validate() {
+    nvidia_use_graphics && use elibc_musl || return 0
 
     local anchor="${1}"
     local dynamic needed soname
 
-    [[ -f ${anchor} ]] || die "missing NVIDIA Xorg startup anchor: ${anchor}"
+    [[ -f ${anchor} ]] || die "missing NVIDIA musl startup anchor: ${anchor}"
     dynamic=$("$(tc-getREADELF)" -dW "${anchor}") ||
-        die "failed to inspect NVIDIA Xorg startup anchor"
+        die "failed to inspect NVIDIA musl startup anchor"
     soname=$(sed -n 's/.*(SONAME).*\[\(.*\)\].*/\1/p' <<< "${dynamic}")
     needed=$(sed -n 's/.*(NEEDED).*\[\(.*\)\].*/\1/p' <<< "${dynamic}")
 
-    [[ ${soname} == libnvidia-xorg-startup.so.1 ]] ||
-        die "invalid NVIDIA Xorg startup SONAME: ${soname:-missing}"
+    [[ ${soname} == libnvidia-musl-startup.so.1 ]] ||
+        die "invalid NVIDIA musl startup SONAME: ${soname:-missing}"
     [[ ${needed} == "libnvidia-tls.so.${PV}" ]] ||
-        die "NVIDIA Xorg startup anchor has invalid dependency closure: ${needed:-empty}"
+        die "NVIDIA musl startup anchor has invalid dependency closure: ${needed:-empty}"
     grep -Fx \
-        'Libs: -Wl,--push-state,--no-as-needed ${libdir}/libnvidia-xorg-startup.so.1 -Wl,--pop-state' \
-        "${T}/nvidia-xorg-startup.pc" >/dev/null ||
-        die "invalid NVIDIA Xorg startup pkg-config interface"
+        'Libs: -Wl,--push-state,--no-as-needed ${libdir}/libnvidia-musl-startup.so.1 -Wl,--pop-state' \
+        "${T}/nvidia-musl-startup.pc" >/dev/null ||
+        die "invalid NVIDIA musl startup pkg-config interface"
 }
 
 src_prepare() {
@@ -294,7 +294,7 @@ src_compile() {
     nvidia_source_build nvidia-modprobe
     nvidia_source_build nvidia-persistenced
     use X && nvidia_source_build nvidia-xconfig
-    nvidia_xorg_startup_build
+    nvidia_musl_startup_build
 
     if use driver; then
         local nv_src
@@ -467,13 +467,13 @@ EOF
 
     src_install-libs
 
-    if use X && use elibc_musl; then
-        nvidia_xorg_startup_validate "${T}/libnvidia-xorg-startup.so.1"
-        dolib.so "${T}/libnvidia-xorg-startup.so.1"
+    if nvidia_use_graphics && use elibc_musl; then
+        nvidia_musl_startup_validate "${T}/libnvidia-musl-startup.so.1"
+        dolib.so "${T}/libnvidia-musl-startup.so.1"
         insinto /usr/lib/pkgconfig
-        doins "${T}/nvidia-xorg-startup.pc"
-        [[ ! -e ${ED}/usr/lib/libnvidia-xorg-startup.so ]] ||
-            die "unversioned NVIDIA Xorg startup linker name must not be installed"
+        doins "${T}/nvidia-musl-startup.pc"
+        [[ ! -e ${ED}/usr/lib/libnvidia-musl-startup.so ]] ||
+            die "unversioned NVIDIA musl startup linker name must not be installed"
     fi
 
     insinto usr/share/nvidia/

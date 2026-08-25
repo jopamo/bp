@@ -2,7 +2,7 @@
 
 #BRANCH_NAME="maint-$(ver_cut 1).0"
 
-inherit meson flag-o-matic toolchain-funcs
+inherit meson flag-o-matic nvidia-musl-startup
 
 DESCRIPTION="implementation of the X Window System display server"
 HOMEPAGE="https://www.x.org/wiki/"
@@ -15,7 +15,10 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="glamor ipv6 minimal nvidia systemd udev wayland xcsecurity +xephyr +xvfb X"
-REQUIRED_USE="nvidia? ( amd64 X )"
+REQUIRED_USE="
+	nvidia? ( X )
+	${NVIDIA_MUSL_STARTUP_REQUIRED_USE}
+"
 
 DEPEND="
 	virtual/ssl
@@ -51,12 +54,9 @@ DEPEND="
 		virtual/dbus
 		app-core/systemd
 	)
-	nvidia? (
-		elibc_musl? (
-			bin/nvidia-drivers[X]
-			lib-core/musl-bsd
-		)
-	)"
+	${NVIDIA_MUSL_STARTUP_DEPEND}
+"
+RDEPEND="${DEPEND}"
 BDEPEND="
 	app-dev/pkgconf
 	app-build/flex
@@ -158,35 +158,5 @@ src_install() {
         meson_src_install
 		dosym -r /usr/bin/Xorg /usr/bin/X
 
-	if use nvidia && use elibc_musl; then
-		local dynamic needed xorg_binary="${ED}/usr/bin/Xorg"
-		dynamic=$("$(tc-getREADELF)" -dW "${xorg_binary}") ||
-			die "failed to inspect installed Xorg"
-		needed=$(sed -n 's/.*(NEEDED).*\[\(.*\)\].*/\1/p' <<< "${dynamic}")
-
-		local required
-		for required in \
-			libmusl-bsd-glibc-host.so.2 \
-			libc.so.6 \
-			libdl.so.2 \
-			libm.so.6 \
-			libpthread.so.0 \
-			libresolv.so.2 \
-			librt.so.1 \
-			libutil.so.1 \
-			libnvidia-xorg-startup.so.1; do
-			grep -Fx "${required}" <<< "${needed}" >/dev/null ||
-				die "Xorg startup closure is missing ${required}"
-		done
-
-		local host_index libc_index
-		host_index=$(grep -Fnx 'libmusl-bsd-glibc-host.so.2' <<< "${needed}" |
-			cut -d: -f1)
-		libc_index=$(grep -Fnx 'libc.so' <<< "${needed}" | cut -d: -f1)
-		[[ -n ${host_index} && -n ${libc_index} && ${host_index} -lt ${libc_index} ]] ||
-			die "musl-bsd host must precede musl libc in Xorg DT_NEEDED order"
-
-		grep -F '/usr/lib/musl-bsd/glibc' <<< "${dynamic}" >/dev/null ||
-			die "Xorg startup closure is missing the private facade RUNPATH"
-	fi
+	nvidia_musl_startup_verify /usr/bin/Xorg
 }

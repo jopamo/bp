@@ -1,0 +1,35 @@
+--- a/meson_options.txt
++++ b/meson_options.txt
+@@ -173,6 +173,8 @@
+ # legacy nvidia driver quirks
+ option('legacy_nvidia_padding', type: 'boolean', value: false,
+         description: 'EXPERT ONLY: Add a padding to ScreenRec to match an older ABI for legacy NVidia drivers')
++option('nvidia_musl_startup', type: 'feature', value: 'disabled',
++       description: 'Load the qualified musl-bsd and NVIDIA TLS closure at process startup')
+ option('legacy_nvidia_340x', type: 'boolean', value: true,
+         description: 'Extra entrypoints for old Nvidia 340x proprietary driver')
+ 
+--- a/hw/xfree86/meson.build
++++ b/hw/xfree86/meson.build
+@@ -100,12 +100,20 @@ else
+     xorg_install_dir = get_option('bindir')
+ endif
+ 
++xorg_exec_deps = xorg_deps
++if get_option('nvidia_musl_startup').enabled()
++    xorg_exec_deps = [
++        dependency('musl-bsd-glibc-startup', required: true),
++        dependency('nvidia-xorg-startup', required: true),
++    ] + xorg_exec_deps
++endif
++
+ xserver_exec = executable(
+     'Xorg',
+     srcs_xorg,
+     include_directories: [inc, xorg_inc],
+     link_whole: xorg_link,
+-    dependencies: xorg_deps,
++    dependencies: xorg_exec_deps,
+     link_args: linker_export_flags,
+     c_args: xorg_c_args,
+     install: true,

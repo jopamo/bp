@@ -58,7 +58,6 @@ RDEPEND+="
         xgui-lib/libXext
         xgui-lib/libpciaccess
         xgui-tools/mesa
-        xgui-tools/xorg-server
     )
     wayland? (
         xgui-lib/libdrm
@@ -173,6 +172,73 @@ nvidia_source_install() {
     newexe "${binary}" "${component}"
 }
 
+nvidia_xorg_startup_build() {
+    use X && use elibc_musl || return 0
+
+    local anchor="${T}/libnvidia-xorg-startup.so.1"
+    local object="${T}/nvidia-xorg-startup.o"
+    local tls="${NV_OBJ}/libnvidia-tls.so.${NV_SOVER}"
+    local tls_dynamic tls_soname
+
+    [[ -f ${tls} ]] || die "missing NVIDIA initial-exec TLS DSO: ${tls}"
+    tls_dynamic=$("$(tc-getREADELF)" -dW "${tls}") ||
+        die "failed to inspect NVIDIA TLS dynamic metadata"
+    tls_soname=$(sed -n 's/.*(SONAME).*\[\(.*\)\].*/\1/p' <<< "${tls_dynamic}")
+    [[ ${tls_soname} == "libnvidia-tls.so.${PV}" ]] ||
+        die "unexpected NVIDIA TLS SONAME: ${tls_soname:-missing}"
+    grep -E '\(FLAGS\).*STATIC_TLS' <<< "${tls_dynamic}" >/dev/null ||
+        die "NVIDIA TLS DSO no longer declares initial-exec static TLS"
+    "$(tc-getREADELF)" -lW "${tls}" |
+        grep -E '^[[:space:]]*TLS[[:space:]]' >/dev/null ||
+        die "NVIDIA TLS DSO has no PT_TLS segment"
+
+    "$(tc-getCC)" ${CFLAGS} \
+        -fPIC \
+        -fvisibility=hidden \
+        -c "${FILESDIR}/nvidia-xorg-startup.c" \
+        -o "${object}" ||
+        die "failed to compile NVIDIA Xorg startup anchor"
+
+    "$(tc-getCC)" ${LDFLAGS} \
+        -nostdlib \
+        -shared \
+        -Wl,-soname,libnvidia-xorg-startup.so.1 \
+        -Wl,-z,defs \
+        -Wl,--push-state,--no-as-needed \
+        "${tls}" \
+        -Wl,--pop-state \
+        "${object}" \
+        -o "${anchor}" ||
+        die "failed to link NVIDIA Xorg startup anchor"
+
+    sed "s/@VERSION@/${PV}/g" \
+        "${FILESDIR}/nvidia-xorg-startup.pc.in" \
+        > "${T}/nvidia-xorg-startup.pc" ||
+        die "failed to generate NVIDIA Xorg startup interface"
+}
+
+nvidia_xorg_startup_validate() {
+    use X && use elibc_musl || return 0
+
+    local anchor="${1}"
+    local dynamic needed soname
+
+    [[ -f ${anchor} ]] || die "missing NVIDIA Xorg startup anchor: ${anchor}"
+    dynamic=$("$(tc-getREADELF)" -dW "${anchor}") ||
+        die "failed to inspect NVIDIA Xorg startup anchor"
+    soname=$(sed -n 's/.*(SONAME).*\[\(.*\)\].*/\1/p' <<< "${dynamic}")
+    needed=$(sed -n 's/.*(NEEDED).*\[\(.*\)\].*/\1/p' <<< "${dynamic}")
+
+    [[ ${soname} == libnvidia-xorg-startup.so.1 ]] ||
+        die "invalid NVIDIA Xorg startup SONAME: ${soname:-missing}"
+    [[ ${needed} == "libnvidia-tls.so.${PV}" ]] ||
+        die "NVIDIA Xorg startup anchor has invalid dependency closure: ${needed:-empty}"
+    grep -Fx \
+        'Libs: -Wl,--push-state,--no-as-needed ${libdir}/libnvidia-xorg-startup.so.1 -Wl,--pop-state' \
+        "${T}/nvidia-xorg-startup.pc" >/dev/null ||
+        die "invalid NVIDIA Xorg startup pkg-config interface"
+}
+
 src_prepare() {
     NV_DOC="${S}"
     NV_OBJ="${S}"
@@ -228,6 +294,7 @@ src_compile() {
     nvidia_source_build nvidia-modprobe
     nvidia_source_build nvidia-persistenced
     use X && nvidia_source_build nvidia-xconfig
+    nvidia_xorg_startup_build
 
     if use driver; then
         local nv_src
@@ -399,6 +466,15 @@ EOF
     dobin ${NV_OBJ}/nvidia-bug-report.sh
 
     src_install-libs
+
+    if use X && use elibc_musl; then
+        nvidia_xorg_startup_validate "${T}/libnvidia-xorg-startup.so.1"
+        dolib.so "${T}/libnvidia-xorg-startup.so.1"
+        insinto /usr/lib/pkgconfig
+        doins "${T}/nvidia-xorg-startup.pc"
+        [[ ! -e ${ED}/usr/lib/libnvidia-xorg-startup.so ]] ||
+            die "unversioned NVIDIA Xorg startup linker name must not be installed"
+    fi
 
     insinto usr/share/nvidia/
     doins nvidia-application-profiles-${PV}-rc

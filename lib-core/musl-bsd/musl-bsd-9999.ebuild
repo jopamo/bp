@@ -37,6 +37,7 @@ src_install() {
 	local core_archive="${core_dir}/libmusl-bsd-core.a"
 	local host_runtime="/usr/lib/libmusl-bsd-glibc-host.so.2"
 	local pc_dir="/usr/lib/pkgconfig"
+	local startup_pc="${pc_dir}/musl-bsd-glibc-startup.pc"
 
 	[[ -f "${ED}${core_archive}" ]] ||
 		die "missing link-safe musl-bsd archive: ${core_archive}"
@@ -61,9 +62,14 @@ src_install() {
 			die "missing qualified musl-bsd runtime: ${host_runtime}"
 		[[ -f "${ED}${pc_dir}/musl-bsd-glibc-host.pc" ]] ||
 			die "missing qualified musl-bsd host interface"
+		[[ -f "${ED}${startup_pc}" ]] ||
+			die "missing qualified musl-bsd startup interface"
 		grep -Fq 'Libs: -L${libdir} -Wl,--push-state,--no-as-needed -l:libmusl-bsd-glibc-host.so.2 -Wl,--pop-state' \
 			"${ED}${pc_dir}/musl-bsd-glibc-host.pc" ||
 			die "invalid qualified musl-bsd host interface"
+		grep -F 'Libs: -Wl,--push-state,--no-as-needed ${libdir}/libmusl-bsd-glibc-host.so.2 ${facadelibdir}/libc.so.6 ${facadelibdir}/libdl.so.2 ${facadelibdir}/libm.so.6 ${facadelibdir}/libpthread.so.0 ${facadelibdir}/libresolv.so.2 ${facadelibdir}/librt.so.1 ${facadelibdir}/libutil.so.1 -Wl,--pop-state -Wl,-rpath,${facadelibdir}' \
+			"${ED}${startup_pc}" >/dev/null ||
+			die "invalid qualified musl-bsd startup interface"
 
 		local host_soname
 		host_soname=$(
@@ -77,6 +83,8 @@ src_install() {
 			die "unqualified ABI installed musl-bsd host runtime"
 		[[ ! -e "${ED}${pc_dir}/musl-bsd-glibc-host.pc" ]] ||
 			die "unqualified ABI installed musl-bsd host interface"
+		[[ ! -e "${ED}${startup_pc}" ]] ||
+			die "unqualified ABI installed musl-bsd startup interface"
 	fi
 
 	qa-policy-install

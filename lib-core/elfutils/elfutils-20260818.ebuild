@@ -48,6 +48,12 @@ src_prepare() {
 }
 
 src_configure() {
+	# The musl compiler driver historically injected libmusl-bsd-core.a into
+	# executable links, but not shared-library links.  An executable
+	# AC_CHECK_FUNC therefore finds error(3), then libdw.so cannot resolve it.
+	# Elfutils already carries a self-contained err.h-backed implementation.
+	use elibc_musl && export ac_cv_func_error=no
+
 	local myconf=(
 		$(use_enable demangler)
 		$(use_enable largefile)

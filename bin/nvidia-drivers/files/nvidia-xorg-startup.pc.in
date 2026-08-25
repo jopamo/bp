@@ -1,7 +1,0 @@
-prefix=/usr
-libdir=${prefix}/lib
-
-Name: nvidia-xorg-startup
-Description: Stable initial-process TLS edge for the proprietary NVIDIA Xorg driver
-Version: @VERSION@
-Libs: -Wl,--push-state,--no-as-needed ${libdir}/libnvidia-xorg-startup.so.1 -Wl,--pop-state

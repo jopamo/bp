@@ -1,0 +1,7 @@
+prefix=/usr
+libdir=${prefix}/lib
+
+Name: nvidia-musl-startup
+Description: Stable initial-process TLS edge for glibc-targeted NVIDIA DSOs hosted by musl processes
+Version: @VERSION@
+Libs: -Wl,--push-state,--no-as-needed ${libdir}/libnvidia-musl-startup.so.1 -Wl,--pop-state

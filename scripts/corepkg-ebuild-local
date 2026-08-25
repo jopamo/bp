@@ -1,0 +1,40 @@
+#!/usr/bin/env python3
+"""Run Corepkg's ebuild frontend with isolated-tree compatibility state."""
+
+import os
+from pathlib import Path
+import runpy
+import sys
+
+import corepkg
+
+
+def main() -> None:
+    config_root = os.environ.get("PORTAGE_CONFIGROOT")
+    target_root = os.environ.get("ROOT")
+    sysroot = os.environ.get("SYSROOT")
+    eprefix = os.environ.get("EPREFIX")
+
+    # Corepkg's direct ebuild frontend owns local runtime state, but parts of
+    # post-src_install and temporary-ROOT merge handling still read its legacy
+    # globals. Initialize that compatibility state before entering the
+    # frontend so install, merge, and VDB publication all use this test root.
+    trees = corepkg.create_trees(
+        config_root=config_root,
+        target_root=target_root,
+        sysroot=sysroot,
+        eprefix=eprefix,
+    )
+    corepkg._populate_legacy_globals(trees)
+
+    version = f"python{sys.version_info.major}.{sys.version_info.minor}"
+    frontend = Path("/usr/lib/python-exec") / version / "ebuild"
+    if not frontend.is_file():
+        raise SystemExit(f"Corepkg ebuild frontend not found: {frontend}")
+
+    sys.argv[0] = "ebuild"
+    runpy.run_path(str(frontend), run_name="__main__")
+
+
+if __name__ == "__main__":
+    main()

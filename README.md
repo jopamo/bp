@@ -21,3 +21,8 @@ bp is short for 'backpack' to denote it being easier to move around on various c
 
 To bump packages in `bp` with the local `lockstep` tool, see
 [`LOCKSTEP.md`](LOCKSTEP.md).
+
+## Development
+
+See [`HACKING.md`](HACKING.md) for the regular-user, local-tree ebuild testing
+workflow.

@@ -1,8 +1,9 @@
 # Distributed under the terms of the GNU General Public License v2
 
-inherit linux-info kernel-mod unpacker user-info qa-policy
+inherit linux-info kernel-mod toolchain-funcs unpacker user-info qa-policy
 
 NV_URI="https://us.download.nvidia.com/XFree86/"
+NV_SOURCE_URI="https://github.com/NVIDIA"
 
 AMD64_NV_PACKAGE="NVIDIA-Linux-x86_64-${PV}"
 ARM64_NV_PACKAGE="NVIDIA-Linux-aarch64-${PV}"
@@ -12,9 +13,17 @@ HOMEPAGE="http://www.nvidia.com/ http://www.nvidia.com/Download/Find.aspx"
 SRC_URI="
     arm64? ( ${NV_URI}aarch64/${PV}/${ARM64_NV_PACKAGE}.run )
     amd64? ( ${NV_URI}Linux-x86_64/${PV}/${AMD64_NV_PACKAGE}.run )
+    ${NV_SOURCE_URI}/nvidia-modprobe/archive/refs/tags/${PV}.tar.gz
+        -> nvidia-modprobe-${PV}.tar.gz
+    ${NV_SOURCE_URI}/nvidia-persistenced/archive/refs/tags/${PV}.tar.gz
+        -> nvidia-persistenced-${PV}.tar.gz
+    X? (
+        ${NV_SOURCE_URI}/nvidia-xconfig/archive/refs/tags/${PV}.tar.gz
+            -> nvidia-xconfig-${PV}.tar.gz
+    )
 "
 
-LICENSE="GPL-2 NVIDIA-r2"
+LICENSE="GPL-2 MIT NVIDIA-r2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 IUSE+=" driver kernel-open kms primary-gpu static-libs uvm wayland X"
@@ -29,12 +38,17 @@ RESTRICT="bindist mirror"
 
 DEPEND+="
     app-core/kmod
+    lib-net/libtirpc
     xgui-lib/libvdpau
+    X? ( xgui-lib/libpciaccess )
 "
-# NVIDIA ships glibc-linked userland tools (nvidia-smi, persistenced, etc).
-# On musl, pull in the musl-bsd glibc-compat runtime explicitly.
+BDEPEND+=" app-dev/pkgconf"
+# NVIDIA still ships proprietary glibc-linked userland tools such as
+# nvidia-smi and the CUDA MPS binaries.  Build every version-matched public
+# utility from source below, and retain musl-bsd only for the remaining blobs.
 RDEPEND+="
     elibc_musl? ( lib-core/musl-bsd )
+    lib-net/libtirpc
     virtual/ssl
     X? (
         lib-core/zlib
@@ -42,6 +56,7 @@ RDEPEND+="
         xgui-lib/libX11
         xgui-lib/libxcb
         xgui-lib/libXext
+        xgui-lib/libpciaccess
         xgui-tools/mesa
         xgui-tools/xorg-server
     )
@@ -55,10 +70,19 @@ RDEPEND+="
 "
 PDEPEND="
     xmedia-lib/nv-codec-headers
-    X? ( bin/nvidia-settings )
+    X? ( >=bin/nvidia-settings-20260803 )
 "
 
-QA_PREBUILT="opt/* usr/lib*"
+QA_PREBUILT="
+    opt/bin/nvidia-cuda-mps-control
+    opt/bin/nvidia-cuda-mps-server
+    opt/bin/nvidia-debugdump
+    opt/bin/nvidia-ngx-updater
+    opt/bin/nvidia-pcc
+    opt/bin/nvidia-powerd
+    opt/bin/nvidia-smi
+    usr/lib*
+"
 QA_PRESTRIPPED="usr/lib/firmware/nvidia/${PV}/gsp_ga10x.bin"
 QA_POLICY_PERMS_SUID_SGID_ALLOW="^/opt/bin/nvidia-modprobe$"
 
@@ -78,7 +102,7 @@ pkg_pretend() {
 
 pkg_setup() {
     nvidia_drivers_versions_check
-    kernel-mod_pkg_setup
+    use driver && kernel-mod_pkg_setup
 
     export DISTCC_DISABLE=1
     export CCACHE_DISABLE=1
@@ -94,6 +118,59 @@ nvidia_kernel_module_dir() {
     else
         echo "${S}/kernel"
     fi
+}
+
+nvidia_source_dir() {
+    echo "${WORKDIR}/${1}-${PV}"
+}
+
+nvidia_source_output_dir() {
+    echo "${T}/${1}-out"
+}
+
+nvidia_source_build() {
+    local component=${1}
+    local source_dir source_version output_dir
+
+    source_dir="$(nvidia_source_dir "${component}")"
+    output_dir="$(nvidia_source_output_dir "${component}")"
+
+    [[ -f ${source_dir}/version.mk ]] ||
+        die "missing ${component} source for ${PV}"
+    source_version=$(
+        sed -n 's/^NVIDIA_VERSION[[:space:]]*=[[:space:]]*//p' \
+            "${source_dir}/version.mk"
+    ) || die "cannot read ${component} source version"
+    [[ ${source_version} == "${PV}" ]] ||
+        die "${component} source version does not match driver ${PV}"
+
+    emake -C "${source_dir}" \
+        AR="$(tc-getAR)" \
+        CC="$(tc-getCC)" \
+        CXX="$(tc-getCXX)" \
+        DO_STRIP= \
+        LD="$(tc-getLD)" \
+        NV_VERBOSE=1 \
+        OUTPUTDIR="${output_dir}" \
+        OUTPUTDIR_ABSOLUTE="${output_dir}" \
+        "${output_dir}/${component}"
+}
+
+nvidia_source_install() {
+    local component=${1}
+    local binary interpreter
+
+    binary="$(nvidia_source_output_dir "${component}")/${component}"
+    [[ -x ${binary} ]] || die "missing source-built ${component}"
+
+    if use elibc_musl; then
+        interpreter=$(scanelf -qF'%i#F' "${binary}") ||
+            die "cannot inspect source-built ${component}"
+        [[ ${interpreter} == /lib/ld-musl-*.so.1 ]] ||
+            die "${component} is not musl-native: ${interpreter:-no interpreter}"
+    fi
+
+    newexe "${binary}" "${component}"
 }
 
 src_prepare() {
@@ -146,7 +223,11 @@ src_prepare() {
 
 src_compile() {
 	local QA_POLICY_LTO_FLAVOR=none
-	qa-policy-configure
+    qa-policy-configure
+
+    nvidia_source_build nvidia-modprobe
+    nvidia_source_build nvidia-persistenced
+    use X && nvidia_source_build nvidia-xconfig
 
     if use driver; then
         local nv_src
@@ -289,13 +370,13 @@ EOF
     exeinto /opt/bin/
 
     if use X; then
-        doexe ${NV_OBJ}/nvidia-xconfig
+        nvidia_source_install nvidia-xconfig
     fi
 
     doexe ${NV_OBJ}/nvidia-cuda-mps-control
     doexe ${NV_OBJ}/nvidia-cuda-mps-server
     doexe ${NV_OBJ}/nvidia-debugdump
-    doexe ${NV_OBJ}/nvidia-persistenced
+    nvidia_source_install nvidia-persistenced
     doexe ${NV_OBJ}/nvidia-smi
     doexe ${NV_OBJ}/nvidia-ngx-updater
     doexe ${NV_OBJ}/nvidia-powerd
@@ -304,7 +385,7 @@ EOF
         doexe ${NV_OBJ}/nvidia-pcc
     fi
 
-    doexe ${NV_OBJ}/nvidia-modprobe
+    nvidia_source_install nvidia-modprobe
     fowners root:video /opt/bin/nvidia-modprobe
     fperms 4710 /opt/bin/nvidia-modprobe
     dosym -r /opt/bin/nvidia-modprobe /usr/bin/nvidia-modprobe

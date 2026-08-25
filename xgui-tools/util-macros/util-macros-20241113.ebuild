@@ -2,6 +2,8 @@
 
 inherit autotools
 
+PROPERTIES+=" source-payload"
+
 DESCRIPTION="X.Org autotools utility macros"
 HOMEPAGE="https://www.x.org"
 

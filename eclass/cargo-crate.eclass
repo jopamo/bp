@@ -7,6 +7,8 @@
 if [[ -z ${_LOCKSTEP_CARGO_CRATE_ECLASS} ]]; then
 	_LOCKSTEP_CARGO_CRATE_ECLASS=1
 
+	PROPERTIES+=" source-payload"
+
 	inherit cargo
 
 	CRATE_VERSION=${CRATE_VERSION:-${PV}}

@@ -2,6 +2,8 @@
 
 inherit meson
 
+PROPERTIES+=" source-payload"
+
 DESCRIPTION="X keyboard configuration database"
 HOMEPAGE="https://www.freedesktop.org/wiki/Software/XKeyboardConfig"
 SNAPSHOT=582bb71b64c4a638a2aad63256b78508081c14e8

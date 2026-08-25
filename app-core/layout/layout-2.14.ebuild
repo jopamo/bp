@@ -2,6 +2,8 @@
 
 inherit doins
 
+PROPERTIES+=" source-payload"
+
 DESCRIPTION="Base Configuration and File Structure"
 HOMEPAGE="https://1g4.org"
 

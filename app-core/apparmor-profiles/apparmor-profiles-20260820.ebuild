@@ -1,5 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
+PROPERTIES+=" source-payload"
+
 DESCRIPTION="AppArmor security profiles"
 HOMEPAGE="https://gitlab.com/apparmor/apparmor/wikis/home"
 SNAPSHOT=bda75d45653f381c817d527c8a318a83a1820ba8

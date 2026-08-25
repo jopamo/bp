@@ -2,6 +2,8 @@
 
 inherit meson xdg
 
+PROPERTIES+=" source-payload"
+
 DESCRIPTION="Adwaita icon theme"
 HOMEPAGE="https://gitlab.gnome.org/GNOME/adwaita-icon-theme"
 SNAPSHOT=a98b2f7a8e3f344306485155d094ea0877520df6

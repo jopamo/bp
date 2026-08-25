@@ -2,6 +2,8 @@
 
 inherit python-utils-r1
 
+PROPERTIES+=" source-payload"
+
 DESCRIPTION="Automake files from gtk-doc"
 HOMEPAGE="https://www.gtk.org/gtk-doc/"
 SNAPSHOT=9ff8f8f9992643c8eb292fac3c1a0bc4db17ee91

@@ -4,6 +4,8 @@
 
 inherit meson
 
+PROPERTIES+=" source-payload"
+
 DESCRIPTION="Self-contained, header-only C JSON tokenizer"
 HOMEPAGE="https://github.com/jopamo/jstok"
 SNAPSHOT=2813e778b8cda082c2081edbf0fda5a6cabcedeb

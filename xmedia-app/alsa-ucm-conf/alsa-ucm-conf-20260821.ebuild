@@ -1,5 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
+PROPERTIES+=" source-payload"
+
 DESCRIPTION="ALSA Use Case Manager configuration"
 HOMEPAGE="http://www.alsa-project.org/"
 SNAPSHOT=00175aa645c482111d096c3d8230f182a875d286

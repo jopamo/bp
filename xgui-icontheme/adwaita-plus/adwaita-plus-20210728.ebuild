@@ -2,6 +2,8 @@
 
 inherit xdg
 
+PROPERTIES+=" source-payload"
+
 DESCRIPTION="icons theme based on GNOME 3.32's Adwaita"
 HOMEPAGE="https://github.com/Bonandry/adwaita-plus.git"
 

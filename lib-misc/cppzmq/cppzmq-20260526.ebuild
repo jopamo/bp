@@ -2,6 +2,8 @@
 
 inherit toolchain-funcs
 
+PROPERTIES+=" source-payload"
+
 DESCRIPTION="High-level CPP Binding for ZeroMQ"
 HOMEPAGE="https://github.com/zeromq/cppzmq"
 SNAPSHOT=7f0530688804c2b5b6b0d985773405593fd25ca8

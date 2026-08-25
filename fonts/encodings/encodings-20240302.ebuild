@@ -2,6 +2,8 @@
 
 inherit autotools
 
+PROPERTIES+=" source-payload"
+
 DESCRIPTION="X.Org font encodings"
 HOMEPAGE="https://www.x.org/wiki/"
 

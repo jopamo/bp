@@ -2,6 +2,8 @@
 
 inherit cmake
 
+PROPERTIES+=" source-payload"
+
 DESCRIPTION="Extra modules and scripts for CMake"
 HOMEPAGE="https://cgit.kde.org/extra-cmake-modules.git"
 SNAPSHOT=bbbaae0dbbbea3a283ba45b00dd10fb0d7b631d9

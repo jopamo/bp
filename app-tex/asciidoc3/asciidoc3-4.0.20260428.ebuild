@@ -3,6 +3,8 @@
 BRANCH_NAME=main
 SNAPSHOT=29b8400ddc6cafcbb58988acbb77e7a7ea47e735
 
+PROPERTIES+=" source-payload"
+
 DESCRIPTION="Text based document generation using Python"
 HOMEPAGE="https://asciidoc3.org/ https://gitlab.com/asciidoc3/asciidoc3/-/tree/${BRANCH_NAME}"
 SRC_URI="https://gitlab.com/asciidoc3/asciidoc3/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.gz"

@@ -1,5 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
+PROPERTIES+=" source-payload"
+
 DESCRIPTION="FFmpeg version of headers required to interface with Nvidias codec APIs"
 HOMEPAGE="https://git.videolan.org/?p=ffmpeg/nv-codec-headers.git"
 SNAPSHOT=eddcea9e27f6b772057c9b3f87de2cc1737faffc

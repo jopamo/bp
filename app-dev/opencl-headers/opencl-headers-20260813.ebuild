@@ -2,6 +2,8 @@
 
 inherit cmake
 
+PROPERTIES+=" source-payload"
+
 DESCRIPTION="Unified C language headers for the OpenCL API"
 HOMEPAGE="https://github.com/KhronosGroup/OpenCL-Headers"
 SNAPSHOT=15b536b7fbe1098cea462a27db496b287ac89b63

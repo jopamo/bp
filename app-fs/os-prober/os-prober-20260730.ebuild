@@ -1,5 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
+PROPERTIES+=" source-payload"
+
 DESCRIPTION="Utility to detect other OSs on a set of drives"
 HOMEPAGE="https://packages.debian.org/source/sid/os-prober"
 SNAPSHOT=9a94fb8c42043b0c9fe8fd3d3a20aa51a81fabbc

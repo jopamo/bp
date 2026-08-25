@@ -2,6 +2,8 @@
 
 inherit autotools
 
+PROPERTIES+=" source-payload"
+
 DESCRIPTION="X.Org font aliases"
 HOMEPAGE="https://www.x.org/wiki/"
 SNAPSHOT=ebeee85f070dc12197ad98d1c849786f8e3be124

@@ -2,6 +2,8 @@
 
 inherit autotools
 
+PROPERTIES+=" source-payload"
+
 DESCRIPTION="X.Org xtrans library"
 HOMEPAGE="https://www.x.org/wiki/"
 SNAPSHOT=79f6b0bfe2170496e8c37626043d009f4cd3f1e1

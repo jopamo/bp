@@ -24,7 +24,6 @@ RDEPEND="
 BDEPEND="app-compression/xz-utils"
 
 src_prepare() {
-	append-flags -lm
 	filter-flags -Wl,-z,defs -flto*
 
 	default
@@ -33,6 +32,14 @@ src_prepare() {
 
 src_configure() {
 	qa-policy-configure
+
+	# Older distro Clang builds exposed the musl-bsd error.h overlay to
+	# compile probes but injected its compatibility archive only into final
+	# executable links.  That makes configure find error(3), while shared
+	# libraries such as libtextstyle retain an unresolved reference that a
+	# hidden archive definition cannot satisfy later.  Gettext carries its
+	# own gnulib implementation, so select it explicitly on musl.
+	use elibc_musl && export ac_cv_func_error=no
 
 	# gettext's "working iconv" probe is overly strict for our glibc setup and
 	# can be tripped by toolchain/configuration details, which disables iconv in

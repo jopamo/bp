@@ -48,6 +48,8 @@ DEPEND="${RDEPEND}"
 
 PDEPEND="xmedia-lib/wireplumber"
 
+PATCHES=( "${FILESDIR}"/pipewire-malloc-trim-option.patch )
+
 python_check_deps() {
 	python_has_version "dev-pypi/docutils[${PYTHON_USEDEP}]"
 }
@@ -105,6 +107,7 @@ src_configure() {
 		-Dlibcanberra=disabled
 		-Dlv2=disabled
 		-Dman=disabled
+		-Dmalloc-trim=$(usex elibc_musl disabled auto)
 		-Dpipewire-alsa=disabled
 		-Dpipewire-jack=disabled
 		-Dsdl2=disabled

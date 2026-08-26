@@ -1,0 +1,27 @@
+--- a/meson.build
++++ b/meson.build
+@@ -546,10 +546,13 @@ check_functions = [
+   ['reallocarray', '#include <stdlib.h>', ['-D_GNU_SOURCE'], []],
+   ['sigabbrev_np', '#include <string.h>', ['-D_GNU_SOURCE'], []],
+   ['XSetIOErrorExitHandler', '#include <X11/Xlib.h>', [], [x11_dep]],
+-  ['malloc_trim', '#include <malloc.h>', [], []],
+   ['malloc_info', '#include <malloc.h>', [], []],
+ ]
+ 
++if not get_option('malloc-trim').disabled()
++  check_functions += [['malloc_trim', '#include <malloc.h>', [], []]]
++endif
++
+ foreach f : check_functions
+   cdata.set('HAVE_' + f.get(0).to_upper(),
+             cc.has_function(f.get(0),
+--- a/meson_options.txt
++++ b/meson_options.txt
+@@ -782,3 +782,7 @@ option('onnxruntime',
+        description: 'Enable code that depends on onnxruntime',
+        type: 'feature',
+        value: 'auto')
++option('malloc-trim',
++       description: 'Enable malloc_trim use',
++       type: 'feature',
++       value: 'auto')

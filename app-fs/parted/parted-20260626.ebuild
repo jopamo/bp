@@ -61,6 +61,14 @@ src_prepare() {
 
 src_configure() {
 	qa-policy-configure
+
+	# Older distro Clang builds expose musl-bsd's error.h overlay and satisfy
+	# executable configure probes from libmusl-bsd-core.a, but do not inject
+	# that archive while linking shared libraries.  Parted carries gnulib's
+	# own error(3), so select that implementation instead of leaving
+	# libparted.so with an unsatisfied compatibility-runtime reference.
+	use elibc_musl && export ac_cv_func_error=no
+
 	local myconf=(
 		$(use_enable debug)
 		--disable-device-mapper

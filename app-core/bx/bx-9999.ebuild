@@ -20,7 +20,7 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="+static test"
+IUSE="+static"
 
 RDEPEND="
 	static? ( app-net/mira[static(+)] )
@@ -32,7 +32,6 @@ src_configure() {
 	qa-policy-configure
 
 	local emesonargs=(
-		$(meson_use test tests)
 		-Dmira_embed=enabled
 		-Dstatic_binary=$(usex static enabled disabled)
 	)

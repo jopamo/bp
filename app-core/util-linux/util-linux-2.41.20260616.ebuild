@@ -39,6 +39,8 @@ DEPEND="
 	readline? ( lib-core/readline )
 "
 
+PATCHES=( "${FILESDIR}"/util-linux-libc-mount-api-option.patch )
+
 BDEPEND="
 	app-dev/pkgconf
 	test? ( app-core/bx )
@@ -187,6 +189,7 @@ src_configure() {
     -Dbuild-pam-lastlog2=disabled
     -Dbuild-liblastlog2=disabled
     -Dbuild-last=disabled
+    -Dlibc-mount-api=$(usex elibc_musl disabled auto)
     -Dlogin-lastlogin=false
     -Dtty-setgid=true
 	)

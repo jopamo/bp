@@ -1,0 +1,339 @@
+diff --git a/include/mount-api-utils.h b/include/mount-api-utils.h
+index a916f99..2375152 100644
+--- a/include/mount-api-utils.h
++++ b/include/mount-api-utils.h
+@@ -10,6 +10,9 @@
+ #include <linux/unistd.h>
+ #include <sys/syscall.h>
+ #include <inttypes.h>
++#ifdef HAVE_MUSL_BSD_MOUNT_API
++# include <sys/mount.h>
++#endif
+ 
+ /*
+  * File descritors based mount API
+@@ -29,7 +32,8 @@
+ # define OPEN_TREE_CLOEXEC O_CLOEXEC
+ #endif
+ 
+-#if !defined(HAVE_OPEN_TREE) && defined(SYS_open_tree)
++#if !defined(HAVE_OPEN_TREE) && \
++    !defined(HAVE_MUSL_BSD_MOUNT_API) && defined(SYS_open_tree)
+ static inline int open_tree(int dfd, const char *filename, unsigned int flags)
+ {
+ 	return syscall(SYS_open_tree, dfd, filename, flags);
+@@ -68,7 +72,8 @@ static inline int open_tree(int dfd, const char *filename, unsigned int flags)
+ # define MOVE_MOUNT__MASK 0x00000077
+ #endif
+ 
+-#if !defined(HAVE_MOVE_MOUNT) && defined(SYS_move_mount)
++#if !defined(HAVE_MOVE_MOUNT) && \
++    !defined(HAVE_MUSL_BSD_MOUNT_API) && defined(SYS_move_mount)
+ static inline int move_mount(int from_dfd, const char *from_pathname, int to_dfd,
+ 			     const char *to_pathname, unsigned int flags)
+ {
+@@ -133,7 +138,8 @@ struct mount_attr {
+ # endif
+ #endif
+ 
+-#if !defined(HAVE_MOUNT_SETATTR) && defined(SYS_mount_setattr)
++#if !defined(HAVE_MOUNT_SETATTR) && \
++    !defined(HAVE_MUSL_BSD_MOUNT_API) && defined(SYS_mount_setattr)
+ static inline int mount_setattr(int dfd, const char *path, unsigned int flags,
+ 				struct mount_attr *attr, size_t size)
+ {
+@@ -156,7 +162,8 @@ enum fsconfig_command {
+ # endif
+ #endif
+ 
+-#if !defined(HAVE_FSCONFIG) && defined(SYS_fsconfig)
++#if !defined(HAVE_FSCONFIG) && \
++    !defined(HAVE_MUSL_BSD_MOUNT_API) && defined(SYS_fsconfig)
+ static inline int fsconfig(int fd, unsigned int cmd, const char *key,
+                     const void *value, int aux)
+ {
+@@ -168,7 +175,8 @@ static inline int fsconfig(int fd, unsigned int cmd, const char *key,
+ # define FSOPEN_CLOEXEC          0x00000001
+ #endif
+ 
+-#if !defined(HAVE_FSOPEN) && defined(SYS_fsopen)
++#if !defined(HAVE_FSOPEN) && \
++    !defined(HAVE_MUSL_BSD_MOUNT_API) && defined(SYS_fsopen)
+ static inline int fsopen(const char *fsname, unsigned int flags)
+ {
+         return syscall(SYS_fsopen, fsname, flags);
+@@ -179,7 +187,8 @@ static inline int fsopen(const char *fsname, unsigned int flags)
+ # define FSMOUNT_CLOEXEC         0x00000001
+ #endif
+ 
+-#if !defined(HAVE_FSMOUNT) && defined(SYS_fsmount)
++#if !defined(HAVE_FSMOUNT) && \
++    !defined(HAVE_MUSL_BSD_MOUNT_API) && defined(SYS_fsmount)
+ static inline int fsmount(int fd, unsigned int flags, unsigned int mount_attrs)
+ {
+         return syscall(SYS_fsmount, fd, flags, mount_attrs);
+@@ -202,7 +211,8 @@ static inline int fsmount(int fd, unsigned int flags, unsigned int mount_attrs)
+ # define FSPICK_EMPTY_PATH       0x00000008
+ #endif
+ 
+-#if !defined(HAVE_FSPICK) && defined(SYS_fspick)
++#if !defined(HAVE_FSPICK) && \
++    !defined(HAVE_MUSL_BSD_MOUNT_API) && defined(SYS_fspick)
+ static inline int fspick(int dfd, const char *pathname, unsigned int flags)
+ {
+         return syscall(SYS_fspick, dfd, pathname, flags);
+diff --git a/include/pidfd-utils.h b/include/pidfd-utils.h
+index 08627ca..908a780 100644
+--- a/include/pidfd-utils.h
++++ b/include/pidfd-utils.h
+@@ -11,6 +11,9 @@
+ #ifdef HAVE_SYS_PIDFD_H
+ # include <sys/pidfd.h>
+ #endif
++#ifdef HAVE_MUSL_BSD_PIDFD_API
++# include <sys/pidfd.h>
++#endif
+ 
+ /*
+  * pidfd ioctls
+@@ -36,7 +39,8 @@
+ # include <sys/syscall.h>
+ # include <unistd.h>
+ 
+-# if !defined(HAVE_PIDFD_SEND_SIGNAL) && defined(SYS_pidfd_send_signal)
++# if !defined(HAVE_PIDFD_SEND_SIGNAL) && \
++     !defined(HAVE_MUSL_BSD_PIDFD_API) && defined(SYS_pidfd_send_signal)
+ static inline int pidfd_send_signal(int pidfd, int sig, siginfo_t *info,
+ 				    unsigned int flags)
+ {
+@@ -44,14 +48,16 @@ static inline int pidfd_send_signal(int pidfd, int sig, siginfo_t *info,
+ }
+ # endif
+ 
+-# if !defined(HAVE_PIDFD_OPEN) && defined(SYS_pidfd_open)
++# if !defined(HAVE_PIDFD_OPEN) && \
++     !defined(HAVE_MUSL_BSD_PIDFD_API) && defined(SYS_pidfd_open)
+ static inline int pidfd_open(pid_t pid, unsigned int flags)
+ {
+ 	return syscall(SYS_pidfd_open, pid, flags);
+ }
+ # endif
+ 
+-# if !defined(HAVE_PIDFD_GETFD) && defined(SYS_pidfd_getfd)
++# if !defined(HAVE_PIDFD_GETFD) && \
++     !defined(HAVE_MUSL_BSD_PIDFD_API) && defined(SYS_pidfd_getfd)
+ static inline int pidfd_getfd(int pidfd, int targetfd, unsigned int flags)
+ {
+ 	return syscall(SYS_pidfd_getfd, pidfd, targetfd, flags);
+@@ -64,7 +70,8 @@ static inline int pidfd_getfd(int pidfd, int targetfd, unsigned int flags)
+  * Dummy fallbacks for cases when #ifdef HAVE_PIDFD_* makes the code too complex.
+  */
+ 
+-#if !defined(HAVE_PIDFD_SEND_SIGNAL) && !defined(SYS_pidfd_send_signal)
++#if !defined(HAVE_PIDFD_SEND_SIGNAL) && \
++    !defined(HAVE_MUSL_BSD_PIDFD_API) && !defined(SYS_pidfd_send_signal)
+ static inline int pidfd_send_signal(int pidfd __attribute__((unused)),
+ 				    int sig __attribute__((unused)),
+ 				    siginfo_t *info __attribute__((unused)),
+@@ -75,7 +82,8 @@ static inline int pidfd_send_signal(int pidfd __attribute__((unused)),
+ }
+ #endif
+ 
+-#if !defined(HAVE_PIDFD_OPEN) && !defined(SYS_pidfd_open)
++#if !defined(HAVE_PIDFD_OPEN) && \
++    !defined(HAVE_MUSL_BSD_PIDFD_API) && !defined(SYS_pidfd_open)
+ static inline int pidfd_open(pid_t pid __attribute__((unused)),
+ 			     unsigned int flags __attribute__((unused)))
+ {
+@@ -84,7 +92,8 @@ static inline int pidfd_open(pid_t pid __attribute__((unused)),
+ }
+ #endif
+ 
+-# if !defined(HAVE_PIDFD_GETFD) && !defined(SYS_pidfd_getfd)
++# if !defined(HAVE_PIDFD_GETFD) && \
++     !defined(HAVE_MUSL_BSD_PIDFD_API) && !defined(SYS_pidfd_getfd)
+ static inline int pidfd_getfd(int pidfd __attribute__((unused)),
+ 			      int targetfd __attribute__((unused)),
+ 			      unsigned int flags __attribute__((unused)))
+diff --git a/libmount/meson.build b/libmount/meson.build
+index 29a43be..efd123b 100644
+--- a/libmount/meson.build
++++ b/libmount/meson.build
+@@ -79,21 +79,25 @@ lib__mount = static_library(
+   lib_mount_sources,
+   include_directories : [dir_include,
+                          dir_libmount],
+-  dependencies : [blkid_dep])
++  dependencies : [blkid_dep] + musl_bsd_source_deps,
++  c_args : musl_bsd_mount_c_args)
+ 
+ lib_mount_static = static_library(
+   'mount_static',
+   link_whole : lib__mount,
+   link_with : [lib_common],
+-  dependencies : [blkid_static_dep, realtime_libs],
++  dependencies : [blkid_static_dep, realtime_libs] + musl_bsd_source_deps,
+   install : false)
+-mount_static_dep = declare_dependency(link_with: lib_mount_static, include_directories: '.')
++mount_static_dep = declare_dependency(
++  link_with : lib_mount_static,
++  dependencies : musl_bsd_source_deps,
++  include_directories : '.')
+ 
+ lib__mount_deps = [
+   lib_selinux,
+   cryptsetup_dlopen ? lib_dl : lib_cryptsetup,
+   realtime_libs
+-]
++] + musl_bsd_source_deps
+ lib_mount = library(
+   'mount',
+   link_whole : lib__mount,
+diff --git a/meson.build b/meson.build
+index 1e16926..2765ba5 100644
+--- a/meson.build
++++ b/meson.build
+@@ -47,7 +47,20 @@ endif
+ 
+ cc = meson.get_compiler('c')
+ 
++musl_bsd_source = dependency(
++  'musl-bsd-source',
++  required : get_option('musl-bsd-source'))
++musl_bsd_source_deps = []
++musl_bsd_mount_c_args = []
++musl_bsd_pidfd_c_args = []
++if musl_bsd_source.found()
++  musl_bsd_source_deps += musl_bsd_source
++  musl_bsd_mount_c_args += '-DHAVE_MUSL_BSD_MOUNT_API=1'
++  musl_bsd_pidfd_c_args += '-DHAVE_MUSL_BSD_PIDFD_API=1'
++endif
++
+ conf = configuration_data()
++conf.set('HAVE_MUSL_BSD_SOURCE', musl_bsd_source.found() ? 1 : false)
+ conf.set_quoted('PACKAGE', meson.project_name())
+ conf.set_quoted('PACKAGE_VERSION', meson.project_version())
+ package_string = '@0@ @1@'.format(meson.project_name(), meson.project_version())
+@@ -1264,11 +1277,12 @@ if opt and not is_disabler(exe)
+   bashcompletions += ['bits']
+ endif
+ 
+-opt = not get_option('build-col').require(is_glibc).disabled()
++opt = not get_option('build-col').require(is_glibc or musl_bsd_source.found()).disabled()
+ exe = executable(
+   'col',
+   col_sources,
+   include_directories : includes,
++  dependencies : musl_bsd_source_deps,
+   link_with : lib_common,
+   install_dir : usrbin_exec_dir,
+   install : opt,
+@@ -3292,11 +3306,18 @@ if opt and not is_disabler(exe)
+   bashcompletions += ['fadvise']
+ endif
+ 
+-opt = get_option('build-waitpid').require(LINUX and conf.get('HAVE_PIDFD_OPEN').to_string() == '1').allowed()
++opt = get_option('build-waitpid').require(
++  LINUX and (
++    conf.get('HAVE_PIDFD_OPEN').to_string() == '1' or
++    musl_bsd_source.found()
++  )
++).allowed()
+ exe = executable(
+   'waitpid',
+   waitpid_sources,
+   include_directories : includes,
++  dependencies : musl_bsd_source_deps,
++  c_args : musl_bsd_pidfd_c_args,
+   link_with : [lib_common],
+   install_dir : usrbin_exec_dir,
+   install : opt,
+diff --git a/meson_options.txt b/meson_options.txt
+index 1ec9046..d630170 100644
+--- a/meson_options.txt
++++ b/meson_options.txt
+@@ -316,3 +316,8 @@ option('login-lastlogin', type : 'boolean',
+ option('tty-setgid', type : 'boolean',
+        value : true,
+        description : 'setgid tty group for wall and write programs')
++
++option('musl-bsd-source',
++       type : 'feature',
++       value : 'disabled',
++       description : 'use musl-bsd source compatibility')
+diff --git a/text-utils/col.c b/text-utils/col.c
+index 37654ea..ec66011 100644
+--- a/text-utils/col.c
++++ b/text-utils/col.c
+@@ -70,6 +70,11 @@
+ #include "widechar.h"
+ #include "xalloc.h"
+ 
++#ifdef HAVE_MUSL_BSD_SOURCE
++# include <musl-bsd/mb-reader.h>
++static struct musl_bsd_mb_reader input_reader;
++#endif
++
+ #define	SPACE	' '		/* space */
+ #define	BS	'\b'		/* backspace */
+ #define	NL	'\n'		/* newline */
+@@ -101,6 +106,17 @@ enum {
+ 	CS_ALTERNATE
+ };
+ 
++static wint_t read_character(int *invalid_byte)
++{
++#ifdef HAVE_MUSL_BSD_SOURCE
++	return musl_bsd_mb_reader_next(&input_reader, invalid_byte);
++#else
++	if (invalid_byte != NULL)
++		*invalid_byte = -1;
++	return getwchar();
++#endif
++}
++
+ struct col_char {
+ 	size_t		c_column;	/* column character is in */
+ 	wchar_t		c_char;		/* character in question */
+@@ -408,7 +424,7 @@ static int handle_not_graphic(struct col_ctl *ctl, struct col_lines *lns)
+ 		lns->cur_col = 0;
+ 		return 1;
+ 	case ESC:
+-		switch (getwchar()) {	/* just ignore EOF */
++		switch (read_character(NULL)) {	/* just ignore EOF */
+ 		case RLF:
+ 			lns->cur_line -= 2;
+ 			break;
+@@ -658,15 +674,20 @@ int main(int argc, char **argv)
+ 	bindtextdomain(PACKAGE, LOCALEDIR);
+ 	textdomain(PACKAGE);
+ 	close_stdout_atexit();
++#ifdef HAVE_MUSL_BSD_SOURCE
++	musl_bsd_mb_reader_init(&input_reader, stdin);
++#endif
+ 
+ 	ctl.lines = ctl.l = alloc_line(&ctl);
+ 
+ 	parse_options(&ctl, argc, argv);
+ 
+ 	while (feof(stdin) == 0) {
++		int invalid_byte;
++
+ 		errno = 0;
+ 		/* Get character */
+-		lns.ch = getwchar();
++		lns.ch = read_character(&invalid_byte);
+ 
+ 		if (lns.ch == WEOF) {
+ 			if (errno == EILSEQ) {
+@@ -675,7 +696,9 @@ int main(int argc, char **argv)
+ 				char buf[5];
+ 				size_t len, i;
+ 
+-				c = getchar();
++				c = invalid_byte;
++				if (c < 0)
++					c = getchar();
+ 				if (c == EOF)
+ 					break;
+ 				sprintf(buf, "\\x%02x", (unsigned char) c);

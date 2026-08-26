@@ -35,11 +35,12 @@ DEPEND="
 	app-fs/cryptsetup
 	lib-core/libcap-ng
 	cramfs? ( lib-core/zlib )
+	elibc_musl? ( lib-core/musl-bsd )
 	ncurses? ( virtual/curses )
 	readline? ( lib-core/readline )
 "
 
-PATCHES=( "${FILESDIR}"/util-linux-libc-mount-api-option.patch )
+PATCHES=( "${FILESDIR}"/util-linux-musl-bsd-source.patch )
 
 BDEPEND="
 	app-dev/pkgconf
@@ -189,7 +190,7 @@ src_configure() {
     -Dbuild-pam-lastlog2=disabled
     -Dbuild-liblastlog2=disabled
     -Dbuild-last=disabled
-    -Dlibc-mount-api=$(usex elibc_musl disabled auto)
+    -Dmusl-bsd-source=$(usex elibc_musl enabled disabled)
     -Dlogin-lastlogin=false
     -Dtty-setgid=true
 	)

@@ -52,6 +52,7 @@ src_prepare() {
 
 src_configure() {
 	qa-policy-configure
+	use elibc_musl && export ac_cv_func_dlvsym=no
 	local myconf=(
 		--disable-asciidoc
 		--disable-internal-argon2
@@ -86,6 +87,8 @@ src_test() {
 
 src_install() {
 	default
+	sed -i -E '/^Requires\.private:/ s/[[:space:]]+/, /2g' \
+		"${ED}"/usr/lib/pkgconfig/libcryptsetup.pc || die
 	qa-policy-install
 
 	if use static ; then

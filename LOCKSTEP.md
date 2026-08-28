@@ -100,3 +100,33 @@ start_rev="$(git -C bp rev-parse HEAD)"
 - Manifest regeneration may print repeated fetch warnings like
   `Couldn't download '.layout.conf.1g4.org'`. Judge success by the lockstep exit
   code and the final `mutated ...` / `committed ...` lines.
+
+## Haskell packages
+
+Source-built Haskell applications declare their direct non-boot dependencies
+in `HACKAGE_ROOTS` and keep the complete, immutable source closure between the
+`lockstep-hackage-deps` markers. Lockstep:
+
+- follows the latest minor snapshot in the declared LTS major
+- resolves the transitive closure from that snapshot
+- records each package's version, immutable Cabal revision, and Cabal SHA-256
+- rewrites `HACKAGE_SNAPSHOT` and `HACKAGE_DEPS` together
+- preserves an explicitly pinned root that is not shipped by the snapshot
+
+The `hackage` eclass fetches those exact source archives and revisioned Cabal
+files, verifies the metadata hashes, and exposes them to Cabal through a local
+no-index repository. No live Hackage index or unpinned dependency download is
+available during the build.
+
+`HACKAGE_VERSION_SOURCE` aligns a tool package's own version with one package
+in that closure. Cabal uses `cabal-install-solver`, preventing a generic Cabal
+release bump from getting ahead of the selected GHC/LTS combination.
+
+GHC uses the `lockstep-stackage-compiler` marker and `STACKAGE_SNAPSHOT`.
+Lockstep takes GHC's version from the snapshot's compiler field and advances
+the snapshot variable atomically. Thus GHC, Cabal, and application dependency
+closures cannot be independently bumped into an incompatible combination.
+
+The GHC and Cabal binary archives in their ebuilds are bootstrap seeds only.
+Installed GHC, Cabal, and ShellCheck outputs are built from their source
+archives; the bootstrap artifacts are not installed as package outputs.

@@ -71,6 +71,35 @@ ghc_bootstrap_dir() {
 		"${WORKDIR}/ghc-${GHC_BOOTSTRAP_VERSION}-${platform}"
 }
 
+ghc_bootstrap_terminfo_compat() {
+	local compat_dir="${T}/ghc-bootstrap-libs"
+	local target
+
+	# Upstream bootstrap distributions require the conventional
+	# libtinfo.so.6 SONAME. bp's threaded wide-character ncurses uses
+	# libtinfotw.so.6 instead; netbsd-curses provides libterminfo.so.
+	for target in \
+		"${EPREFIX}/usr/lib/libtinfo.so.6" \
+		"${EPREFIX}/usr/lib/libtinfotw.so.6" \
+		"${EPREFIX}/usr/lib/libtinfow.so.6" \
+		"${EPREFIX}/usr/lib/libterminfo.so" \
+		"${EPREFIX}/usr/lib/libncursestw.so.6" \
+		"${EPREFIX}/usr/lib/libncursesw.so.6" \
+		"${EPREFIX}/usr/lib/libncurses.so.6"
+	do
+		[[ -e ${target} ]] || continue
+		mkdir -p "${compat_dir}" || die
+		ln -sf "${target}" "${compat_dir}/libtinfo.so.6" || die
+		case :${LD_LIBRARY_PATH-}: in
+			*:"${compat_dir}":*) ;;
+			*) export LD_LIBRARY_PATH="${compat_dir}${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}" ;;
+		esac
+		return
+	done
+
+	die "failed to find a terminfo library for the GHC bootstrap compiler"
+}
+
 src_configure() {
 	local bootstrap_dir bootstrap_root bootstrap_sources
 
@@ -85,6 +114,9 @@ src_configure() {
 	popd >/dev/null || die
 
 	export PATH="${bootstrap_root}/bin:${PATH}"
+	ghc_bootstrap_terminfo_compat
+	"${bootstrap_root}/bin/ghc" --info >/dev/null ||
+		die "installed GHC bootstrap compiler is not executable"
 
 	# Upstream's prefetched 9.8.1 archive has the same external sources as the
 	# 9.8.2 plan. Replace only its boot-library plan so ARM64 musl can use the
@@ -120,6 +152,7 @@ src_configure() {
 src_compile() {
 	local -a jobs
 
+	ghc_bootstrap_terminfo_compat
 	read -r -a jobs <<< "$(get_makeopts_jobs)"
 	hadrian/bootstrap/_build/bin/hadrian \
 		--flavour="release+no_profiled_libs" \

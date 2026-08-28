@@ -1,0 +1,6 @@
+DIST ghc-9.10.3-src.tar.xz 32959164 BLAKE3 7288eae6e99d836bbb909fd2c66f8805f2f425ceffe3070e5accd5cfef12861b
+DIST ghc-9.8.2-aarch64-alpine3_18-linux.tar.xz 202945080 BLAKE3 5ba3dc371504bca84ab88874d734eb0e0e35537fa63a7f9b5f717fa085e38554
+DIST ghc-9.8.2-aarch64-deb11-linux.tar.xz 215056464 BLAKE3 f5fe6dc6ac9e19dae33ac388a75a3609eb4c013b0caa627ce43b8f3aa9aa3688
+DIST ghc-9.8.2-x86_64-alpine3_12-linux-static-int_native.tar.xz 217848916 BLAKE3 3f4b416e84960e4712d5e725b0ceb147e0e05c31c4867f4678afb75e9cefe06a
+DIST ghc-9.8.2-x86_64-deb12-linux.tar.xz 221210032 BLAKE3 7e32b1ca58c3581f89b064a74f128f1c5c009bcb124efb213be4a8b2a68b0174
+DIST hadrian-bootstrap-sources-9.8.1.tar.gz 1445160 BLAKE3 b245e6aab782cecd75d8e693ee3111baab6a87a543e60d3c46299aaafbd08873

@@ -8,7 +8,6 @@ Host *
   StrictHostKeyChecking ask
   UpdateHostkeys yes
   HashKnownHosts yes
-  IdentityAgent ${SSH_AUTH_SOCK}
 
 # GitHub over SSH on port 443 with PQ KEX preference
 Host github.com

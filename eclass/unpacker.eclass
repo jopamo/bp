@@ -464,7 +464,7 @@ unpacker_src_uri_depends() {
 			*.rar)               deps[rar]="app-compression/unrar" ;;
 			*.7z)                deps[7z]="app-compression/7zip" ;;
 			*.xz)                deps[xz]="app-compression/xz-utils" ;;
-			*.zip)               deps[zip]="app-compression/zip-utils" ;;
+			*.zip)               deps[zip]="app-core/bx" ;;
 			*.zst)               deps[zst]="app-compression/zstd" ;;
 			*.lha|*.lzh)         deps[lha]="app-compression/lha" ;;
 			*.lz4)               deps[lz4]="app-compression/lz4" ;;

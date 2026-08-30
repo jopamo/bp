@@ -23,6 +23,7 @@ DEPEND="
 RDEPEND="${DEPEND}"
 BDEPEND="
 	app-core/bx
+	app-net/bpftool
 	app-build/llvm:*[bpf]
 	app-build/m4
 "

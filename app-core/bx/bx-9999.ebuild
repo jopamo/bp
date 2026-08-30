@@ -16,13 +16,14 @@ else
 	S=${WORKDIR}/${PN}-${SNAPSHOT}
 fi
 
-LICENSE="MIT"
+LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="+static"
 
 RDEPEND="
+	!app-compression/zip-utils
 	static? ( app-net/mira[static(+)] )
 	!static? ( app-net/mira[-static] )
 "

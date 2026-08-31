@@ -15,8 +15,7 @@ LICENSE="|| ( GPL-2 GPL-3 LGPL-3 ) FDL-1.3"
 SLOT="$(ver_cut 1)"
 KEYWORDS="amd64 arm64"
 
-IUSE="gssapi keep-la mysql postgres sqlite systemd opengl vulkan xkbcommon"
-REQUIRED_USE="xkbcommon"
+IUSE="gssapi keep-la mysql postgres sqlite systemd opengl vulkan"
 
 DEPEND="
 	virtual/dbus
@@ -35,6 +34,7 @@ DEPEND="
 	xgui-lib/xcb-util-wm
 	xgui-lib/freetype
 	xgui-lib/harfbuzz
+	xgui-lib/libxkbcommon[X]
 	xmedia-lib/libjpeg-turbo
 	xmedia-lib/libpng
 	gssapi? ( app-crypto/mit-krb5 )
@@ -44,7 +44,6 @@ DEPEND="
 	sqlite? ( lib-core/sqlite )
 	systemd? ( app-core/systemd )
 	vulkan? ( xmedia-lib/vulkan-loader )
-	xkbcommon? ( xgui-lib/libxkbcommon[X] )
 "
 PDEPEND="
 	xgui-lib/qtsvg:$(ver_cut 1)
@@ -117,6 +116,7 @@ src_configure() {
 		-system-pcre
 		-system-zlib
 		-xcb
+		-xkbcommon
 		${reduce_relocations}
 		$(usex gssapi -feature-gssapi -no-feature-gssapi)
 		$(usex mysql -sql-mysql -no-sql-mysql)
@@ -126,7 +126,6 @@ src_configure() {
 		$(usex sqlite -system-sqlite -no-sqlite)
 		$(usex systemd -journald -no-journald)
 		$(usex vulkan -vulkan -no-vulkan)
-		$(usex xkbcommon -xkbcommon -no-xkbcommon)
     )
 	einfo "Using Qt platform spec: ${qtplatform}"
     einfo "Configuring with: ${myconf[@]}"

@@ -1,0 +1,60 @@
+--- a/config/acx.m4
++++ b/config/acx.m4
+@@ -395,14 +395,15 @@
+ AC_CHECK_TOOL(GNATMAKE, gnatmake, no)
+ AC_CACHE_CHECK([whether compiler driver understands Ada and is recent enough],
+ 		 acx_cv_cc_gcc_supports_ada,
+-[cat >conftest.adb <<EOF
++[acx_cv_cc_gcc_supports_ada=no
++if test "x$GNATBIND" != xno && test "x$GNATMAKE" != xno; then
++  cat >conftest.adb <<EOF
+ pragma Warnings (Off);
+ with System.CRTL;
+ pragma Warnings (On);
+ use type System.CRTL.int64;
+ procedure conftest is begin null; end conftest;
+ EOF
+-acx_cv_cc_gcc_supports_ada=no
+ # There is a bug in old released versions of GCC which causes the
+ # driver to exit successfully when the appropriate language module
+ # has not been installed.  This is fixed in 2.95.4, 3.0.2, and 3.1.
+@@ -415,7 +416,8 @@
+ if test x"$errors" = x && test -f conftest.$ac_objext; then
+   acx_cv_cc_gcc_supports_ada=yes
+ fi
+-rm -f conftest.*])
++  rm -f conftest.*
++fi])
+ 
+ if test "x$GNATBIND" != xno && test "x$GNATMAKE" != xno && test x$acx_cv_cc_gcc_supports_ada != xno; then
+   have_gnat=yes
+--- a/configure
++++ b/configure
+@@ -5662,6 +5662,8 @@
+ if ${acx_cv_cc_gcc_supports_ada+:} false; then :
+   $as_echo_n "(cached) " >&6
+ else
++  acx_cv_cc_gcc_supports_ada=no
++if test "x$GNATBIND" != xno && test "x$GNATMAKE" != xno; then
+   cat >conftest.adb <<EOF
+ pragma Warnings (Off);
+ with System.CRTL;
+@@ -5669,7 +5671,6 @@
+ use type System.CRTL.int64;
+ procedure conftest is begin null; end conftest;
+ EOF
+-acx_cv_cc_gcc_supports_ada=no
+ # There is a bug in old released versions of GCC which causes the
+ # driver to exit successfully when the appropriate language module
+ # has not been installed.  This is fixed in 2.95.4, 3.0.2, and 3.1.
+@@ -5682,7 +5683,9 @@
+ if test x"$errors" = x && test -f conftest.$ac_objext; then
+   acx_cv_cc_gcc_supports_ada=yes
+ fi
+-rm -f conftest.*
++  rm -f conftest.*
++fi
++
+ fi
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: $acx_cv_cc_gcc_supports_ada" >&5
+ $as_echo "$acx_cv_cc_gcc_supports_ada" >&6; }

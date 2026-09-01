@@ -57,7 +57,10 @@ BDEPEND="
 	)
 "
 
-PATCHES=( "${FILESDIR}"/gdb-17.20260304-flex-yyunput.patch )
+PATCHES=(
+	"${FILESDIR}"/gdb-17.20260304-flex-yyunput.patch
+	"${FILESDIR}"/gdb-17.20260806-skip-ada-probe-without-gnat.patch
+)
 
 GDB_BUILD_DIR="${WORKDIR}/${P}-build"
 

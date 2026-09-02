@@ -6,7 +6,7 @@ DESCRIPTION="Meta package installed by default but will auto purge if not kept"
 HOMEPAGE="https://1g4.org/"
 
 # This package intentionally installs no files.
-PORTAGE_ALLOW_EMPTY_INSTALL=1
+PROPERTIES="empty-install"
 
 LICENSE="metapackage"
 SLOT="6"

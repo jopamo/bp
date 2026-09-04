@@ -372,10 +372,26 @@ src_configure() {
 		-DOCAMLFIND=NO
 	)
 
+	if use elibc_musl; then
+		# musl has no mallinfo API. Compatibility overlays may declare it
+		# without making its implementation part of LLVM's link interface.
+		common+=(
+			-DHAVE_MALLINFO=OFF
+			-DHAVE_MALLINFO2=OFF
+		)
+	fi
+
 	local bootstrap_passthrough=(
 		CMAKE_INSTALL_PREFIX
 		CMAKE_VERBOSE_MAKEFILE
 	)
+
+	if use elibc_musl; then
+		bootstrap_passthrough+=(
+			HAVE_MALLINFO
+			HAVE_MALLINFO2
+		)
+	fi
 
 	if use syslibcxxabi; then
 		bootstrap_passthrough+=(

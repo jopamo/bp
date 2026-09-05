@@ -16,6 +16,10 @@ IUSE="static-libs test"
 
 RESTRICT="!test? ( test )"
 
+PATCHES=(
+	"${FILESDIR}/lexbor-static-library-name.patch"
+)
+
 src_configure() {
 	qa-policy-configure
 

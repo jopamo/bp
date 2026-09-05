@@ -26,7 +26,7 @@ RDEPEND="${DEPEND}
 		app-crypto/gnupg
 		|| (
 			app-net/curl
-			app-net/mira
+			app-core/bx
 			app-var/lynx
 			app-core/subversion
 		)

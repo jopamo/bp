@@ -49,7 +49,7 @@ RDEPEND="
 DEPEND="${RDEPEND}"
 BDEPEND="
 	app-dev/pkgconf
-	app-lang/python:3
+	app-lang/python
 "
 
 src_configure() {

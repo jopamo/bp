@@ -39,5 +39,27 @@ src_configure() {
 
 src_install() {
 	cmake_src_install
+
+	local QA_POLICY_ARCHIVE_DUPLICATE_MEMBER_ALLOW="
+		/usr/lib/liblexbor.a:attribute_steps.c.o
+		/usr/lib/liblexbor.a:document.c.o
+		/usr/lib/liblexbor.a:element.c.o
+		/usr/lib/liblexbor.a:element_steps.c.o
+		/usr/lib/liblexbor.a:encoding.c.o
+		/usr/lib/liblexbor.a:error.c.o
+		/usr/lib/liblexbor.a:interface.c.o
+		/usr/lib/liblexbor.a:node.c.o
+		/usr/lib/liblexbor.a:option_element.c.o
+		/usr/lib/liblexbor.a:parser.c.o
+		/usr/lib/liblexbor.a:selectors.c.o
+		/usr/lib/liblexbor.a:serialize.c.o
+		/usr/lib/liblexbor.a:state.c.o
+		/usr/lib/liblexbor.a:style_element.c.o
+		/usr/lib/liblexbor.a:tag.c.o
+		/usr/lib/liblexbor.a:text.c.o
+		/usr/lib/liblexbor.a:token.c.o
+		/usr/lib/liblexbor.a:tokenizer.c.o
+	"
+
 	qa-policy-install
 }

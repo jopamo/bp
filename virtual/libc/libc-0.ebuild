@@ -10,6 +10,6 @@ RDEPEND="elibc_musl? (
 )
 		!elibc_musl? (
 			lib-core/glibc
-			lib-core/libxcrypt
+			virtual/libcrypt
 			!lib-core/musl[elibc_musl]
 )"

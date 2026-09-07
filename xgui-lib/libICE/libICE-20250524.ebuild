@@ -16,12 +16,18 @@ KEYWORDS="amd64 arm64"
 IUSE="ipv6 static-libs"
 
 DEPEND="
+	elibc_musl? ( app-crypto/vesk )
 	xgui-lib/xtrans
 	xgui-tools/xorgproto
 "
+RDEPEND="elibc_musl? ( app-crypto/vesk )"
+BDEPEND="app-dev/pkgconf"
 
 src_prepare() {
 	qa-policy-configure
+	if use elibc_musl; then
+		eapply "${FILESDIR}/libICE-vesk-random.patch"
+	fi
 	default
 	eautoreconf
 }

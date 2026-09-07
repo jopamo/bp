@@ -16,15 +16,29 @@ IUSE="acl pam systemd xattr yescrypt"
 
 DEPEND="
 	app-compression/xz-utils
-	lib-dev/libbsd
+	elibc_musl? (
+		app-crypto/vesk
+		lib-core/musl-bsd
+	)
+	!elibc_musl? ( lib-dev/libbsd )
 	lib-core/libxcrypt
 	acl? ( app-core/acl )
 	pam? ( lib-core/pam )
 	xattr? ( app-core/attr )
 "
+RDEPEND="elibc_musl? ( app-crypto/vesk )"
+BDEPEND="app-dev/pkgconf"
 
 src_prepare() {
-	cp -rp "${FILESDIR}"/* "${S}"/
+	local file
+	for file in "${FILESDIR}"/*; do
+		[[ ${file} == *.patch ]] && continue
+		cp -rp "${file}" "${S}"/ || die
+	done
+
+	if use elibc_musl; then
+		eapply "${FILESDIR}/shadow-native-providers.patch"
+	fi
 
 	sed -i 's|/sbin|/bin|g' src/Makefile.am || die
 
@@ -48,7 +62,6 @@ src_configure() {
 		--disable-lastlog
 		--with-bcrypt
 		--with-btrfs
-		--with-libbsd
 		--without-audit
 		--without-group-name-max-length
 		--without-nscd
@@ -56,6 +69,7 @@ src_configure() {
 		--without-skey
 		--without-tcb
 	)
+	use elibc_musl || myconf+=( --with-libbsd )
 	econf ${myconf[@]}
 }
 

@@ -1,0 +1,332 @@
+Use native musl, musl-bsd source compatibility, and Vesk on musl.
+Vesk owns random generation and secure-free; musl owns explicit_bzero and
+reallocarray. Passphrase input links from the hidden PIC source archive,
+never the musl-bsd foreign-binary host. No libbsd or bundled fallback.
+
+diff --git a/configure.ac b/configure.ac
+index 686a13d..b934614 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -41,9 +41,7 @@ dnl Checks for libraries.
+ dnl shadow now uses the libc's shadow implementation
+ AC_CHECK_HEADER([shadow.h],[],[AC_MSG_ERROR([You need a libc with shadow.h])])
+ 
+-AC_CHECK_FUNCS([arc4random_buf \
+-	getentropy getrandom \
+-	lckpwdf lutimes \
++AC_CHECK_FUNCS([lckpwdf lutimes \
+ 	updwtmpx innetgr \
+ 	getspnam_r \
+ 	rpmatch \
+@@ -195,9 +193,6 @@ AC_ARG_WITH([group-name-max-length],
+ AC_ARG_WITH([su],
+ 	[AS_HELP_STRING([--with-su], [build and install su program and man page @<:@default=yes@:>@])],
+ 	[with_su=$withval], [with_su=yes])
+-AC_ARG_WITH([libbsd],
+-	[AS_HELP_STRING([--with-libbsd], [use libbsd support @<:@default=yes if found@:>@])],
+-	[with_libbsd=$withval], [with_libbsd=yes])
+ 
+ if test "X$with_group_name_max_length" = "Xno" ; then
+ 	with_group_name_max_length=0
+@@ -334,27 +329,29 @@ AC_CHECK_LIB([crypt], [crypt], [LIBCRYPT=-lcrypt],
+ 	[AC_MSG_ERROR([crypt() not found])])
+ AC_SUBST([LIBCRYPT])
+ 
+-AC_SUBST([LIBBSD])
+-if test "$with_libbsd" != "no"; then
+-	AC_SEARCH_LIBS([readpassphrase], [bsd], [], [
+-		AC_MSG_ERROR([readpassphrase() is missing, either from libc or libbsd])
+-	])
+-	AS_IF([test "X$ac_cv_search_readpassphrase" = "X-lbsd"], [
+-		PKG_CHECK_MODULES([LIBBSD], [libbsd-overlay])
+-	])
+-	dnl Make sure either the libc or libbsd provide the header.
+-	save_CFLAGS="$CFLAGS"
+-	CFLAGS="$CFLAGS $LIBBSD_CFLAGS"
+-	AC_CHECK_HEADERS([readpassphrase.h])
+-	AS_IF([test "$ac_cv_header_readpassphrase_h" != "yes"], [
+-		AC_MSG_ERROR([readpassphrase.h is missing])
+-	])
+-	CFLAGS="$save_CFLAGS"
+-	AC_DEFINE([WITH_LIBBSD], [1], [Build shadow with libbsd support])
+-else
+-	AC_DEFINE([WITH_LIBBSD], [0], [Build shadow without libbsd support])
+-fi
+-AM_CONDITIONAL([WITH_LIBBSD], [test x$with_libbsd = xyes])
++dnl Native source compatibility only: never use the foreign-binary host.
++PKG_CHECK_MODULES([MUSL_BSD], [musl-bsd-source])
++PKG_CHECK_MODULES([VESK], [vesk-crypto])
++save_CFLAGS="$CFLAGS"
++save_LIBS="$LIBS"
++CFLAGS="$CFLAGS $MUSL_BSD_CFLAGS $VESK_CFLAGS"
++LIBS="$MUSL_BSD_LIBS $VESK_LIBS $LIBS"
++AC_LINK_IFELSE([AC_LANG_PROGRAM([[
++	#include <stdlib.h>
++	#include <string.h>
++	#include <musl-bsd/readpassphrase.h>
++	#include <openssl/crypto.h>
++	#include <openssl/rand.h>
++]], [[
++	char buf[8];
++	void *p = reallocarray(NULL, 1, sizeof(buf));
++	explicit_bzero(buf, sizeof(buf));
++	OPENSSL_clear_free(p, sizeof(buf));
++	return readpassphrase("", buf, sizeof(buf), RPP_STDIN) == NULL ||
++	       RAND_bytes((unsigned char *)buf, sizeof(buf)) != 1;
++]])], [], [AC_MSG_ERROR([native musl, musl-bsd passphrase, and Vesk APIs are required])])
++CFLAGS="$save_CFLAGS"
++LIBS="$save_LIBS"
+ 
+ AC_SUBST([LIBACL])
+ if test "$with_acl" != "no"; then
+diff --git a/lib/Makefile.am b/lib/Makefile.am
+index d709345..b514fe0 100644
+--- a/lib/Makefile.am
++++ b/lib/Makefile.am
+@@ -19,8 +19,8 @@ libshadow_la_CPPFLAGS += -DVENDORDIR=\"$(VENDORDIR)\"
+ endif
+ 
+ libshadow_la_CPPFLAGS += -I$(top_srcdir)
+-libshadow_la_CFLAGS = $(LIBBSD_CFLAGS) $(LIBCRYPT_PAM) $(LIBSYSTEMD)
+-libshadow_la_LIBADD = $(LIBADD_DLOPEN)
++libshadow_la_CFLAGS = $(MUSL_BSD_CFLAGS) $(VESK_CFLAGS) $(LIBCRYPT_PAM) $(LIBSYSTEMD)
++libshadow_la_LIBADD = $(LIBADD_DLOPEN) $(MUSL_BSD_LIBS) $(VESK_LIBS)
+ 
+ libshadow_la_SOURCES = \
+ 	addgrps.c \
+@@ -297,14 +297,6 @@ else
+ libshadow_la_SOURCES += utmp.c
+ endif
+ 
+-if !WITH_LIBBSD
+-libshadow_la_SOURCES += \
+-	freezero.h \
+-	freezero.c \
+-	readpassphrase.h \
+-	readpassphrase.c
+-endif
+-
+ # These files are unneeded for some reason, listed in
+ # order of appearance:
+ #
+diff --git a/lib/agetpass.c b/lib/agetpass.c
+index a0d5714..8f07992 100644
+--- a/lib/agetpass.c
++++ b/lib/agetpass.c
+@@ -10,7 +10,8 @@
+ #include "agetpass.h"
+ 
+ #include <limits.h>
+-#include <readpassphrase.h>
++#include <musl-bsd/readpassphrase.h>
++#include <openssl/crypto.h>
+ #include <stdlib.h>
+ #include <string.h>
+ 
+@@ -18,10 +19,6 @@
+ 
+ #include "alloc/malloc.h"
+ 
+-#if WITH_LIBBSD == 0
+-#include "freezero.h"
+-#endif /* WITH_LIBBSD */
+-
+ 
+ /*
+  * SYNOPSIS
+@@ -122,7 +119,7 @@ agetpass_internal(const char *prompt, int flags)
+ 	return pass;
+ 
+ fail:
+-	freezero(pass, PASS_MAX + 2);
++	OPENSSL_clear_free(pass, PASS_MAX + 2);
+ 	return NULL;
+ }
+ 
+@@ -141,5 +138,5 @@ agetpass_stdin()
+ void
+ erase_pass(char *pass)
+ {
+-	freezero(pass, PASS_MAX + 2);
++	OPENSSL_clear_free(pass, PASS_MAX + 2);
+ }
+diff --git a/lib/csrand.c b/lib/csrand.c
+index 27ca1b8..c8c1ae6 100644
+--- a/lib/csrand.c
++++ b/lib/csrand.c
+@@ -5,14 +5,10 @@
+ 
+ #ident "$Id$"
+ 
+-#include <fcntl.h>
+ #include <limits.h>
+ #include <stdint.h>
+ #include <stdlib.h>
+-#include <unistd.h>
+-#if __has_include(<sys/random.h>)
+-# include <sys/random.h>
+-#endif
++#include <openssl/rand.h>
+ 
+ #include "bit.h"
+ #include "defines.h"
+@@ -32,41 +28,11 @@ static unsigned long csrand_uniform_slow(unsigned long n);
+ unsigned long
+ csrand(void)
+ {
+-	int            fd;
+ 	unsigned long  r;
+ 
+-#ifdef HAVE_GETENTROPY
+-	/* getentropy may exist but lack kernel support.  */
+-	if (getentropy(&r, sizeof(r)) == 0)
++	if (RAND_bytes((unsigned char *)&r, sizeof(r)) == 1)
+ 		return r;
+-#endif
+ 
+-#ifdef HAVE_GETRANDOM
+-	/* Likewise getrandom.  */
+-	if (getrandom(&r, sizeof(r), 0) == sizeof(r))
+-		return r;
+-#endif
+-
+-#ifdef HAVE_ARC4RANDOM_BUF
+-	/* arc4random_buf can never fail.  */
+-	arc4random_buf(&r, sizeof(r));
+-	return r;
+-#endif
+-
+-	/* Use /dev/urandom as a last resort.  */
+-	fd = open("/dev/urandom", O_RDONLY);
+-	if (fd == -1)
+-		goto fail;
+-
+-	if (read(fd, &r, sizeof(r)) != sizeof(r)) {
+-		close(fd);
+-		goto fail;
+-	}
+-
+-	close(fd);
+-	return r;
+-
+-fail:
+ 	fprintf(log_get_logfd(), _("Unable to obtain random bytes.\n"));
+ 	exit(1);
+ }
+diff --git a/src/Makefile.am b/src/Makefile.am
+index c935e05..6db13a8 100644
+--- a/src/Makefile.am
++++ b/src/Makefile.am
+@@ -13,7 +13,7 @@ AM_CPPFLAGS = \
+ 	-DLOCALEDIR=\"$(datadir)/locale\" \
+ 	$(ECONF_CPPFLAGS)
+ 
+-AM_CFLAGS = $(LIBBSD_CFLAGS)
++AM_CFLAGS = $(MUSL_BSD_CFLAGS) $(VESK_CFLAGS)
+ 
+ # XXX why are login and su in /bin anyway (other than for
+ # historical reasons)?
+diff --git a/tests/unit/Makefile.am b/tests/unit/Makefile.am
+index 270de85..e035aff 100644
+--- a/tests/unit/Makefile.am
++++ b/tests/unit/Makefile.am
+@@ -2,10 +2,15 @@ AM_CPPFLAGS = -I$(top_srcdir)/lib -I$(top_srcdir)
+ 
+ LIBSHADOW = $(top_builddir)/lib/libshadow.la
+ 
+-if HAVE_CMOCKA
++check_PROGRAMS = test_native_providers
+ TESTS = $(check_PROGRAMS)
+ 
+-check_PROGRAMS = \
++test_native_providers_CFLAGS = $(MUSL_BSD_CFLAGS) $(VESK_CFLAGS)
++test_native_providers_LDADD = $(LIBSHADOW)
++test_native_providers_LDFLAGS = -Wl,--wrap=OPENSSL_clear_free
++
++if HAVE_CMOCKA
++check_PROGRAMS += \
+     test_adds \
+     test_atoi_strtoi \
+     test_chkhash \
+diff --git a/tests/unit/test_native_providers.c b/tests/unit/test_native_providers.c
+new file mode 100644
+index 0000000..185dfc2
+--- /dev/null
++++ b/tests/unit/test_native_providers.c
+@@ -0,0 +1,76 @@
++#include "config.h"
++
++#include <errno.h>
++#include <openssl/crypto.h>
++#include <openssl/rand.h>
++#include <stdlib.h>
++#include <string.h>
++#include <sys/wait.h>
++#include <unistd.h>
++
++#include "agetpass.h"
++#include "defines.h"
++#include "prototypes.h"
++
++static int rng_result = 1;
++static int erased;
++
++void __real_OPENSSL_clear_free(void *, size_t);
++void __wrap_OPENSSL_clear_free(void *, size_t);
++
++void
++__wrap_OPENSSL_clear_free(void *ptr, size_t len)
++{
++    if (len != PASS_MAX + 2)
++        _exit(98);
++    erased++;
++    __real_OPENSSL_clear_free(ptr, len);
++}
++
++int
++RAND_bytes(unsigned char *buf, int len)
++{
++    memset(buf, 0xa5, len);
++    return rng_result;
++}
++
++int
++main(void)
++{
++    unsigned long expected;
++    char *pass;
++    int status, pipefd[2];
++    pid_t pid;
++
++    memset(&expected, 0xa5, sizeof(expected));
++    if (csrand() != expected)
++        return 1;
++    for (rng_result = 0; rng_result >= -1; rng_result--) {
++        pid = fork();
++        if (pid == -1)
++            return 1;
++        if (pid == 0) {
++            (void)csrand();
++            _exit(99);
++        }
++        if (waitpid(pid, &status, 0) != pid ||
++            !WIFEXITED(status) || WEXITSTATUS(status) != 1)
++            return 1;
++    }
++
++    if (pipe(pipefd) != 0)
++        return 1;
++    if (write(pipefd[1], "Secret42\n", 9) != 9)
++        return 1;
++    close(pipefd[1]);
++    if (dup2(pipefd[0], STDIN_FILENO) == -1)
++        return 1;
++    close(pipefd[0]);
++    pass = agetpass_stdin();
++    if (!pass || strcmp(pass, "Secret42") != 0)
++        return 1;
++    erase_pass(pass);
++    if (erased != 1)
++        return 1;
++    return 0;
++}

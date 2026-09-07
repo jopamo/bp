@@ -14,7 +14,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 RDEPEND="
-	lib-core/libxcrypt
+	virtual/libcrypt
 "
 DEPEND="${RDEPEND}"
 

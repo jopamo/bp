@@ -44,7 +44,7 @@ lib-core/gmp static-libs
 lib-core/jansson static-libs
 lib-core/libffi static-libs
 lib-core/libseccomp static-libs
-lib-core/libxcrypt static-libs
+virtual/libcrypt static-libs
 lib-core/libxcrypt-compat static-libs
 lib-core/mpfr static-libs
 lib-core/ncurses static-libs

@@ -1,0 +1,3 @@
+# Vesk owns the native crypt.h and libcrypt.a, not musl's bundled crypt API.
+# Keep the historical external-provider flag until a separate USE migration.
+lib-core/musl libxcrypt

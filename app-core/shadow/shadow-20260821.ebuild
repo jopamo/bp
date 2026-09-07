@@ -20,12 +20,15 @@ DEPEND="
 		app-crypto/vesk
 		lib-core/musl-bsd
 	)
-	lib-core/libxcrypt
+	virtual/libcrypt
 	acl? ( app-core/acl )
 	pam? ( lib-core/pam )
 	xattr? ( app-core/attr )
 "
-RDEPEND="elibc_musl? ( app-crypto/vesk )"
+RDEPEND="
+	virtual/libcrypt
+	elibc_musl? ( app-crypto/vesk )
+"
 BDEPEND="app-dev/pkgconf"
 
 src_prepare() {

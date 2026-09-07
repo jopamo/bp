@@ -19,7 +19,11 @@ BDEPEND="
 	app-tex/docbookz
 "
 
-DEPEND="lib-net/libtirpc"
+DEPEND="
+	lib-net/libtirpc
+	virtual/libcrypt
+"
+RDEPEND="${DEPEND}"
 PDEPEND="app-core/pambase"
 
 src_configure() {

@@ -6,7 +6,7 @@ DESCRIPTION="A standalone library to implement GNU libc's obstack and others"
 HOMEPAGE="https://github.com/jopamo/musl-bsd"
 EGIT_REPO_URI="https://github.com/jopamo/musl-bsd.git"
 
-LICENSE="GPL-2"
+LICENSE="GPL-2 ISC"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 

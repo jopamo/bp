@@ -1,0 +1,225 @@
+Use Vesk for authentication randomness on musl.
+Remove libbsd autodetection and weak fallback paths; reject negative lengths
+and clear/free failed candidate cookies before returning NULL.
+
+diff --git a/configure.ac b/configure.ac
+index dda41f9..79ac57c 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -36,19 +36,11 @@ PKG_CHECK_MODULES(ICE, [xproto >= 7.0.25 xtrans])
+ # Checks for typedefs, structures, and compiler characteristics.
+ AC_SYS_LARGEFILE
+ 
+-# Checks for non-standard functions and fallback to libbsd if we can
+-# We only check for arc4random_buf, because if we have that, we don't
+-# need/use getentropy.
+-AC_LINK_IFELSE([AC_LANG_CALL([], [arc4random_buf])],
+-               [TRY_LIBBSD="no"], [TRY_LIBBSD="yes"])
+-AS_IF([test "x$TRY_LIBBSD" = "xyes"],
+-      [PKG_CHECK_MODULES([LIBBSD], [libbsd-overlay], [
+-	CFLAGS="$CFLAGS $LIBBSD_CFLAGS"
+-	LIBS="$LIBS $LIBBSD_LIBS"
+-], [:])])
++# Authentication randomness has one provider, with no weak fallback.
++PKG_CHECK_MODULES([VESK], [vesk-crypto])
+ 
+ # Checks for library functions.
+-AC_CHECK_FUNCS([asprintf arc4random_buf getentropy])
++AC_CHECK_FUNCS([asprintf])
+ 
+ # Transport selection macro from xtrans.m4
+ XTRANS_CONNECTION_FLAGS
+diff --git a/ice.pc.in b/ice.pc.in
+index 4825eba..019e933 100644
+--- a/ice.pc.in
++++ b/ice.pc.in
+@@ -7,6 +7,6 @@ Name: ICE
+ Description: X Inter Client Exchange Library
+ Version: @PACKAGE_VERSION@
+ Requires: xproto
++Requires.private: vesk-crypto
+ Cflags: -I${includedir}
+ Libs: -L${libdir} -lICE
+-Libs.private: @LIBBSD_LIBS@
+diff --git a/src/Makefile.am b/src/Makefile.am
+index c69ee55..636bcf8 100644
+--- a/src/Makefile.am
++++ b/src/Makefile.am
+@@ -3,12 +3,17 @@ lib_LTLIBRARIES=libICE.la
+ AM_CPPFLAGS = -I${top_srcdir}/include
+ 
+ AM_CFLAGS = \
++	$(VESK_CFLAGS) \
+ 	$(ICE_CFLAGS) \
+ 	$(CWARNFLAGS)
+ 
+ libICE_la_LDFLAGS = -version-number 6:3:0 -no-undefined
+ 
+-libICE_la_LIBADD = $(ICE_LIBS)
++libICE_la_LIBADD = $(ICE_LIBS) $(VESK_LIBS)
++
++check_PROGRAMS = test-random
++TESTS = $(check_PROGRAMS)
++test_random_LDADD = libICE.la $(VESK_LIBS)
+ 
+ libICE_la_SOURCES = \
+ 	ICElibint.h \
+diff --git a/src/iceauth.c b/src/iceauth.c
+index 5a4d400..d7f6265 100644
+--- a/src/iceauth.c
++++ b/src/iceauth.c
+@@ -33,72 +33,13 @@ Author: Ralph Mor, X Consortium
+ #include "ICElibint.h"
+ #include <X11/ICE/ICEutil.h>
+ 
+-#include <time.h>
+-
+-#ifdef HAVE_ARC4RANDOM_BUF
+-#include <stdlib.h>	/* for arc4random_buf() */
+-#endif
+-
+-#include <unistd.h>
++#include <errno.h>
++#include <stdlib.h>
++#include <openssl/crypto.h>
++#include <openssl/rand.h>
+ 
+ static int was_called_state;
+ 
+-#ifndef HAVE_ARC4RANDOM_BUF
+-
+-static void
+-emulate_getrandom_buf (
+-	char *auth,
+-	int len
+-)
+-{
+-    long    ldata[2];
+-    int	    seed;
+-    int	    value;
+-    int	    i;
+-
+-#ifdef ITIMER_REAL
+-    {
+-	struct timeval  now;
+-	X_GETTIMEOFDAY (&now);
+-	ldata[0] = now.tv_sec;
+-	ldata[1] = now.tv_usec;
+-    }
+-#else /* ITIMER_REAL */
+-    {
+-	long    time ();
+-	ldata[0] = time ((long *) 0);
+-	ldata[1] = getpid ();
+-    }
+-#endif /* ITIMER_REAL */
+-    seed = (ldata[0]) + (ldata[1] << 16);
+-    srand (seed);
+-    for (i = 0; i < len; i++)
+-    {
+-	value = rand ();
+-	auth[i] = value & 0xff;
+-    }
+-}
+-
+-static void
+-arc4random_buf (
+-	char *auth,
+-	int len
+-)
+-{
+-#if HAVE_GETENTROPY
+-    int	    ret;
+-
+-    /* weak emulation of arc4random through the entropy libc */
+-    ret = getentropy (auth, len);
+-    if (ret == 0)
+-	return;
+-#endif /* HAVE_GETENTROPY */
+-
+-    emulate_getrandom_buf (auth, len);
+-}
+-
+-#endif /* !defined(HAVE_ARC4RANDOM_BUF) */
+-
+ /*
+  * MIT-MAGIC-COOKIE-1 is a sample authentication method implemented by
+  * the SI.  It is not part of standard ICElib.
+@@ -112,10 +53,18 @@ IceGenerateMagicCookie (
+ {
+     char    *auth;
+ 
+-    if ((auth = malloc (len + 1)) == NULL)
++    if (len < 0) {
++	errno = EINVAL;
++	return NULL;
++    }
++    if ((auth = malloc ((size_t)len + 1)) == NULL)
+ 	return (NULL);
+ 
+-    arc4random_buf (auth, len);
++    if (RAND_bytes((unsigned char *)auth, len) != 1) {
++	OPENSSL_clear_free(auth, (size_t)len + 1);
++	errno = EIO;
++	return NULL;
++    }
+ 
+     auth[len] = '\0';
+     return (auth);
+diff --git a/src/test-random.c b/src/test-random.c
+new file mode 100644
+index 0000000..ea58e5b
+--- /dev/null
++++ b/src/test-random.c
+@@ -0,0 +1,51 @@
++#include <X11/ICE/ICElib.h>
++#include <X11/ICE/ICEutil.h>
++#include <openssl/rand.h>
++#include <errno.h>
++#include <stdlib.h>
++#include <string.h>
++
++static int rng_result = 1;
++static int calls;
++
++int
++RAND_bytes(unsigned char *buf, int len)
++{
++    calls++;
++    memset(buf, 0xa5, len);
++    return rng_result;
++}
++
++int
++main(void)
++{
++    char *cookie;
++    int i, before;
++
++    cookie = IceGenerateMagicCookie(16);
++    if (!cookie)
++        return 1;
++    for (i = 0; i < 16; i++)
++        if ((unsigned char)cookie[i] != 0xa5)
++            return 1;
++    if (cookie[16] != '\0' || calls != 1)
++        return 1;
++    free(cookie);
++
++    cookie = IceGenerateMagicCookie(0);
++    if (!cookie || *cookie != '\0')
++        return 1;
++    free(cookie);
++    before = calls;
++    errno = 0;
++    if (IceGenerateMagicCookie(-1) != NULL ||
++        errno != EINVAL || calls != before)
++        return 1;
++
++    for (rng_result = 0; rng_result >= -1; rng_result--) {
++        errno = 0;
++        if (IceGenerateMagicCookie(16) != NULL || errno != EIO)
++            return 1;
++    }
++    return 0;
++}

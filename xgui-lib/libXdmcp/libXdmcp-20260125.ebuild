@@ -15,11 +15,20 @@ KEYWORDS="amd64 arm64"
 IUSE="static-libs"
 
 DEPEND="
-	lib-dev/libbsd
+	elibc_musl? ( app-crypto/vesk )
+	!elibc_musl? ( lib-dev/libbsd )
 	xgui-tools/xorgproto
 	xgui-tools/util-macros"
+RDEPEND="
+	elibc_musl? ( app-crypto/vesk )
+	!elibc_musl? ( lib-dev/libbsd )
+"
+BDEPEND="app-dev/pkgconf"
 
 src_prepare() {
+	if use elibc_musl; then
+		eapply "${FILESDIR}/libXdmcp-vesk-random.patch"
+	fi
 	default
 	eautoreconf
 }
@@ -27,6 +36,7 @@ src_prepare() {
 src_configure() {
 	qa-policy-configure
 	local myconf=(
+		$(use_enable static-libs static)
 		--disable-docs
 		--without-fop
 	)

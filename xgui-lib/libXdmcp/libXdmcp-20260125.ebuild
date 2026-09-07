@@ -16,12 +16,10 @@ IUSE="static-libs"
 
 DEPEND="
 	elibc_musl? ( app-crypto/vesk )
-	!elibc_musl? ( lib-dev/libbsd )
 	xgui-tools/xorgproto
 	xgui-tools/util-macros"
 RDEPEND="
 	elibc_musl? ( app-crypto/vesk )
-	!elibc_musl? ( lib-dev/libbsd )
 "
 BDEPEND="app-dev/pkgconf"
 

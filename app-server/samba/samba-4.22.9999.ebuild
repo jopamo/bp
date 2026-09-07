@@ -22,7 +22,6 @@ zeroconf"
 CDEPEND="
 	app-compression/libarchive
 	app-lang/perl
-	lib-dev/libbsd
 	lib-core/iniparser
 	lib-core/popt
 	lib-net/libnsl
@@ -66,6 +65,8 @@ REQUIRED_USE="
 RESTRICT="test"
 
 WAF_BINARY="${S}/buildtools/bin/waf"
+
+PATCHES=( "${FILESDIR}/samba-no-libbsd.patch" )
 
 src_prepare() {
 	filter-flags -Wl,-z,defs

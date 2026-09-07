@@ -20,7 +20,6 @@ DEPEND="
 		app-crypto/vesk
 		lib-core/musl-bsd
 	)
-	!elibc_musl? ( lib-dev/libbsd )
 	lib-core/libxcrypt
 	acl? ( app-core/acl )
 	pam? ( lib-core/pam )
@@ -69,7 +68,7 @@ src_configure() {
 		--without-skey
 		--without-tcb
 	)
-	use elibc_musl || myconf+=( --with-libbsd )
+	use elibc_musl || myconf+=( --without-libbsd )
 	econf ${myconf[@]}
 }
 

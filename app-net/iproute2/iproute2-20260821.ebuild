@@ -26,7 +26,6 @@ DEPEND="
 	lib-net/libmnl
 	caps? ( lib-core/libcap )
 	elf? ( virtual/libelf )
-	elibc_glibc? ( lib-dev/libbsd )
 	iptables? ( app-net/iptables )
 "
 RDEPEND="${DEPEND}"
@@ -81,6 +80,9 @@ src_prepare() {
 	fi
 
 	default
+
+	# Use libc strlcpy or the upstream replacement, never a host libbsd.
+	sed -i 's/if ${PKG_CONFIG} libbsd --exists; then/if false; then/' configure || die
 
 	# echo -n is not posix compliant
 	sed -i 's@echo -n@printf@' configure || die

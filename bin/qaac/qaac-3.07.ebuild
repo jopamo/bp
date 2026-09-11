@@ -17,6 +17,6 @@ src_unpack() {
 }
 
 src_install() {
-	mkdir -p "${ED}"/opt/qaac/
-	cp -rp ${S}/* "${ED}"/opt/qaac/
+	dodir /opt/qaac
+	cp -pR "${S}/." "${ED}/opt/qaac/" || die
 }

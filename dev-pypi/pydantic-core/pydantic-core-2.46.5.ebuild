@@ -1,5 +1,6 @@
 # lockstep-managed: dependency-ebuild
 # lockstep-pypi-managed: true
+EAPI=8
 # lockstep-cargo-managed: true
 # lockstep-cargo-deps: begin
 CARGO_DEPS="
@@ -108,7 +109,6 @@ CARGO_DEPS="
 	rust-crates/zmij-1.0.6
 "
 # lockstep-cargo-deps: end
-EAPI=8
 MERGE_MANIFEST_MODE="tree-blake3-v1"
 
 PYTHON_COMPAT=( python3_{11..14} )
@@ -123,8 +123,8 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-SRC_URI="https://files.pythonhosted.org/packages/9d/56/921726b776ace8d8f5db44c4ef961006580d91dc52b803c489fafd1aa249/pydantic_core-2.46.4.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/pydantic_core-2.46.4"
+SRC_URI="https://files.pythonhosted.org/packages/af/f9/8a06bea35ef8daf588f707784c973a7046e0034c8d8cfb08828eeffb8b75/pydantic_core-2.46.5.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/pydantic_core-2.46.5"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="

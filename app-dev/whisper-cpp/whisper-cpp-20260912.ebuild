@@ -4,7 +4,7 @@ inherit cmake user
 
 DESCRIPTION="High-performance inference of large language models (llama.cpp)"
 HOMEPAGE="https://github.com/ggml-org/llama.cpp"
-SNAPSHOT=70adb1b4cea5ee39f867792c78dc59320921eda7
+SNAPSHOT=56381e407c0ccfb3a6f71e668a27a901001d22ce
 SRC_URI="https://github.com/ggml-org/llama.cpp/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/llama.cpp-${SNAPSHOT}"
 

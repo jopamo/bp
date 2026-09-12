@@ -3,8 +3,8 @@ EAPI=8
 MERGE_MANIFEST_MODE="tree-blake3-v1"
 
 CRATE_NAME="xwin"
-CRATE_VERSION="0.9.0"
-CRATE_CHECKSUM="c337699251ad0c38cf87ee63944de38c2201d017cfbb768e5a3897ae835aacc7"
+CRATE_VERSION="0.10.0"
+CRATE_CHECKSUM="e3ae2ef8d627ac8d97b3aeb67e4b711520154edca5cc80fbec551415c7b671ef"
 CRATE_SOURCE="registry+https://github.com/rust-lang/crates.io-index"
 CRATE_SOURCE_KIND="registry"
 

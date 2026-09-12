@@ -4,7 +4,7 @@ inherit autotools
 
 DESCRIPTION="Program matching and transformation engine for C code"
 HOMEPAGE="https://coccinelle.gitlabpages.inria.fr/website/ https://github.com/coccinelle/coccinelle"
-SNAPSHOT=ab0c6c4900a981db7bca4e1323408dd46cdf56a2
+SNAPSHOT=11b93adb6516a358a6687051e5762136666626e0
 SRC_URI="https://github.com/coccinelle/coccinelle/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

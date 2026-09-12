@@ -6,7 +6,7 @@ inherit flag-o-matic meson
 
 DESCRIPTION="System and service manager for Linux"
 HOMEPAGE="https://www.freedesktop.org/wiki/Software/systemd"
-SNAPSHOT=ade6e7a2a3ee5ebaa6c8a23c63e49eb88c94148b
+SNAPSHOT=84ff4f0dff41c26472cd48c4c4955c2d77f5ac08
 SRC_URI="https://github.com/systemd/systemd/archive/${SNAPSHOT}.tar.gz -> systemd-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/systemd-${SNAPSHOT}"
 

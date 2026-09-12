@@ -1,0 +1,45 @@
+#!/bin/bash
+set -eu
+
+repo=$(cd -- "$(dirname -- "$0")/.." && pwd -P)
+inherit() { :; }
+source "${repo}/eclass/qa-pkgconfig.eclass"
+
+QA_POLICY_PKGCONFIG_MODE=warn
+QA_POLICY_PKGCONFIG_ALLOW_MISSING_REQUIRES=1
+_qa-report-record-mode() { reports+=("$*"); }
+
+check_requires() {
+	local expected=$1 value=$2
+	local -a reports=()
+	_qa-pkgconfig-check-requires-line /usr/lib/pkgconfig/test.pc Requires "${value}"
+	if [[ ${expected} == valid && ${#reports[@]} != 0 ]] ||
+		[[ ${expected} == invalid && ${#reports[@]} == 0 ]]; then
+		printf 'FAIL: expected %s requirement list: %q\n' "${expected}" "${value}" >&2
+		exit 1
+	fi
+}
+
+for value in \
+	'' \
+	'libelf' \
+	'libelf zlib' \
+	'libelf, zlib' \
+	'libelf >= 0.8 zlib' \
+	'libelf>=0.8 zlib <= 2.0' \
+	'libelf >= 0.8, zlib >= 1.2' \
+	$' libelf\tzlib '; do
+	check_requires valid "${value}"
+done
+
+for value in \
+	'libelf >=' \
+	'libelf => 1' \
+	'>= 1' \
+	'libelf,,zlib' \
+	'libelf >= 1 < 2' \
+	'libelf#zlib'; do
+	check_requires invalid "${value}"
+done
+
+echo 'PASS: pkg-config requirement lists'

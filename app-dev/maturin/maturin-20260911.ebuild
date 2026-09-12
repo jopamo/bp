@@ -37,8 +37,8 @@ CARGO_DEPS="
 	rust-crates/cargo-options-0.8.1
 	rust-crates/cargo-platform-0.1.9
 	rust-crates/cargo-platform-0.3.2
-	rust-crates/cargo-xwin-0.23.0
-	rust-crates/cargo-zigbuild-0.23.0
+	rust-crates/cargo-xwin-0.23.1
+	rust-crates/cargo-zigbuild-0.23.1
 	rust-crates/cargo_metadata-0.18.1
 	rust-crates/cargo_metadata-0.23.1
 	rust-crates/cbindgen-0.29.2
@@ -170,7 +170,7 @@ CARGO_DEPS="
 	rust-crates/lddtree-0.5.0
 	rust-crates/leb128fmt-0.1.0
 	rust-crates/libbz2-rs-sys-0.2.3
-	rust-crates/libc-0.2.185
+	rust-crates/libc-0.2.189
 	rust-crates/libmimalloc-sys-0.1.46
 	rust-crates/libredox-0.1.16
 	rust-crates/linux-keyutils-0.2.5
@@ -294,7 +294,7 @@ CARGO_DEPS="
 	rust-crates/serde_core-1.0.228
 	rust-crates/serde_derive-1.0.228
 	rust-crates/serde_derive_internals-0.29.1
-	rust-crates/serde_json-1.0.149
+	rust-crates/serde_json-1.0.151
 	rust-crates/serde_spanned-0.6.9
 	rust-crates/serde_spanned-1.1.1
 	rust-crates/serial_test-3.4.0
@@ -456,7 +456,7 @@ CARGO_DEPS="
 	rust-crates/writeable-0.6.3
 	rust-crates/xattr-1.6.1
 	rust-crates/xml-rs-0.8.28
-	rust-crates/xwin-0.9.0
+	rust-crates/xwin-0.10.0
 	rust-crates/xz2-0.1.7
 	rust-crates/yansi-1.0.1
 	rust-crates/yoke-0.8.2
@@ -467,7 +467,6 @@ CARGO_DEPS="
 	rust-crates/zerotrie-0.2.4
 	rust-crates/zerovec-0.11.6
 	rust-crates/zerovec-derive-0.11.3
-	rust-crates/zip-7.2.0
 	rust-crates/zip-8.5.1
 	rust-crates/zlib-rs-0.6.3
 	rust-crates/zmij-1.0.21
@@ -488,7 +487,7 @@ RDEPEND=""
 # lockstep-pypi-deps: end
 DESCRIPTION="Build and publish crates with pyo3, rust-cpython and cffi bindings"
 HOMEPAGE="https://www.maturin.rs/"
-SNAPSHOT=a6743cd75a19fc2515c00b83f09adafb1b4f6176
+SNAPSHOT=316d5130972efba3082e0977781a36bc7aedcae8
 SRC_URI="https://github.com/PyO3/maturin/archive/${SNAPSHOT}.tar.gz -> maturin-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/maturin-${SNAPSHOT}"
 

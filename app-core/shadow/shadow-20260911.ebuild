@@ -32,6 +32,8 @@ RDEPEND="
 BDEPEND="app-dev/pkgconf"
 
 src_prepare() {
+	eapply "${FILESDIR}/shadow-nscd-stub-type.patch"
+
 	local file
 	for file in "${FILESDIR}"/*; do
 		[[ ${file} == *.patch ]] && continue

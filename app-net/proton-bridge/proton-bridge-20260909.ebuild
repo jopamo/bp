@@ -4,7 +4,7 @@ inherit go-module
 
 DESCRIPTION="Proton Mail Bridge application (CLI only)"
 HOMEPAGE="https://github.com/ProtonMail/proton-bridge"
-SNAPSHOT=5bccf64dd5118bbb220c25e924a63d7e1243d70b
+SNAPSHOT=87b5832e4fdaf30638c91a3b19f84c96e3f6a466
 SRC_URI="https://github.com/ProtonMail/proton-bridge/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 # lockstep-go-managed: true
 # lockstep-go-deps: begin
@@ -38,10 +38,8 @@ EGO_SUM=(
 	"github.com/ProtonMail/bcrypt v0.0.0-20210511135022-227b4adcab57/go.mod"
 	"github.com/ProtonMail/bcrypt v0.0.0-20211005172633-e235017c1baf"
 	"github.com/ProtonMail/bcrypt v0.0.0-20211005172633-e235017c1baf/go.mod"
-	"github.com/ProtonMail/gluon v0.17.1-0.20260723104534-947a6b43dac2"
-	"github.com/ProtonMail/gluon v0.17.1-0.20260723104534-947a6b43dac2/go.mod"
-	"github.com/ProtonMail/gluon v0.17.1-0.20260804145626-5e16fef13166"
-	"github.com/ProtonMail/gluon v0.17.1-0.20260804145626-5e16fef13166/go.mod"
+	"github.com/ProtonMail/gluon v0.17.1-0.20260901104218-7e800978ab4a"
+	"github.com/ProtonMail/gluon v0.17.1-0.20260901104218-7e800978ab4a/go.mod"
 	"github.com/ProtonMail/go-autostart v0.0.0-20260210134425-40a9013f5ef4"
 	"github.com/ProtonMail/go-autostart v0.0.0-20260210134425-40a9013f5ef4/go.mod"
 	"github.com/ProtonMail/go-crypto v0.0.0-20230321155629-9a39f2531310/go.mod"
@@ -55,10 +53,8 @@ EGO_SUM=(
 	"github.com/ProtonMail/go-message v0.13.1-0.20240919135104-3bc88e6a9423/go.mod"
 	"github.com/ProtonMail/go-mime v0.0.0-20230322103455-7d82a3887f2f"
 	"github.com/ProtonMail/go-mime v0.0.0-20230322103455-7d82a3887f2f/go.mod"
-	"github.com/ProtonMail/go-proton-api v0.4.1-0.20260804081550-9d4d4fb3e8c8"
-	"github.com/ProtonMail/go-proton-api v0.4.1-0.20260804081550-9d4d4fb3e8c8/go.mod"
-	"github.com/ProtonMail/go-proton-api v0.4.1-0.20260805144911-aa74ef400fcd"
-	"github.com/ProtonMail/go-proton-api v0.4.1-0.20260805144911-aa74ef400fcd/go.mod"
+	"github.com/ProtonMail/go-proton-api v0.4.1-0.20260901104215-8a62023d3e38"
+	"github.com/ProtonMail/go-proton-api v0.4.1-0.20260901104215-8a62023d3e38/go.mod"
 	"github.com/ProtonMail/go-smtp v0.0.0-20231109081432-2b3d50599865"
 	"github.com/ProtonMail/go-smtp v0.0.0-20231109081432-2b3d50599865/go.mod"
 	"github.com/ProtonMail/go-srp v0.0.7"

@@ -15,8 +15,8 @@ LICENSE="MIT PSF-2.0"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-SRC_URI="https://files.pythonhosted.org/packages/e2/f1/fbbfef6af0bad0548f09bc28948ea3c275b4edb19e17fc5ca9900a6a634d/greenlet-3.5.3.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/greenlet-3.5.3"
+SRC_URI="https://files.pythonhosted.org/packages/0b/d8/7cc97c142388aef03f622e001c572c4f84e9252a439549d483f555771970/greenlet-3.5.5.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/greenlet-3.5.5"
 
 BDEPEND="
 	dev-pypi/gpep517[${PYTHON_USEDEP}]

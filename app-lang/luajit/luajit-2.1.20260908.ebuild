@@ -6,7 +6,7 @@ inherit toolchain-funcs qa-policy
 
 DESCRIPTION="Just-In-Time Compiler for the Lua programming language"
 HOMEPAGE="http://luajit.org/"
-SNAPSHOT=1ee778a4e37122d8ca7d5733c590a47dafd6b15c
+SNAPSHOT=c6ffc141a8762b41703f9287d63d93622a13dd8f
 SRC_URI="https://github.com/LuaJIT/LuaJIT/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/LuaJIT-${SNAPSHOT}
 

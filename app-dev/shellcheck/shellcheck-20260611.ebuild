@@ -40,9 +40,9 @@ HACKAGE_ROOTS=(
 
 # lockstep-hackage-managed: true
 # lockstep-hackage-deps: begin
-HACKAGE_SNAPSHOT="lts-24.56"
+HACKAGE_SNAPSHOT="lts-24.58"
 HACKAGE_DEPS=(
-	"aeson 2.2.5.0 0 adeba3289a7d47a09c45c094c6b28dd0ebd35ffaf1f3cbde12541dadd49974bc"
+	"aeson 2.2.5.1 0 a89fd54b802351ebf57a6be451db25c167c3ccb35583b4a9d2bb54d7d1c43de2"
 	"ansi-terminal 1.1.5 0 408d9232e5304efead718f96138d6d7eb2da608c6121c5c0dc6a71a833b14320"
 	"ansi-terminal-types 1.1.3 0 1d6061eceaf35a9ed269b81177dd4c8c60403a499526f7f68fdffa4ec7842e7f"
 	"assoc 1.1.1 2 766b1040eda5255bfcf10e1a9859c06d0ed6ad0e2ac87ed915bb035574d10ae4"
@@ -91,7 +91,7 @@ HACKAGE_DEPS=(
 	"tasty-inspection-testing 0.2.1 3 dbe49b066f9ca40811ddb70232a129b53c4bfc201763608cb7722d20309a7cbf"
 	"tasty-quickcheck 0.11.1 5 12ea6b6fecccc146b69aac3c4810fd5d135564245e9c0708df9b24071a8b0588"
 	"temporary 1.3 0 3a66c136f700dbf42f3c5000ca93e80b26dead51e54322c83272b236c1ec8ef1"
-	"text-iso8601 0.1.1.1 0 962ea0c5d84580df13bfa50ea940046b9a5f0e4c53afc65267906fa2bc096b96"
+	"text-iso8601 0.1.1.2 0 8da5b74d6c79eba657ec5f8fd289f1b0aad2463538928c96c6035c52d03ac9ab"
 	"text-short 0.1.6.1 0 330b037a4f74c069e1ecfe0908baf8fb526526ef35f47922bd67ae2b3d886864"
 	"th-abstraction 0.7.2.0 0 380819d6e14645bf66af99b6ea3d3d4309c523c7d0ee376e0678042622f1c272"
 	"th-compat 0.1.7 0 449be09a4e3f46ea4645700c026624c4b6f066f508187326c284dbdea8884bc9"

@@ -210,6 +210,8 @@ _qa-pkgconfig-check-requires-line() {
 	local label=$2
 	local value=$3
 	local chunk trimmed
+	local requirement_re='[A-Za-z0-9_.+-]+([[:space:]]*(=|>=|<=|<|>)[[:space:]]*[A-Za-z0-9_.:+-]+)?'
+	local requires_re="^${requirement_re}([[:space:]]+${requirement_re})*$"
 	local -a search_dirs=()
 
 	[[ -n ${value} ]] || return 0
@@ -222,7 +224,7 @@ _qa-pkgconfig-check-requires-line() {
 			continue
 		fi
 
-		if [[ ! ${trimmed} =~ ^[A-Za-z0-9_.+-]+([[:space:]]*(=|>=|<=|<|>)[[:space:]]*[A-Za-z0-9_.:+-]+)?$ ]]; then
+		if [[ ! ${trimmed} =~ ${requires_re} ]]; then
 			_qa-report-record-mode pkgconfig "${QA_POLICY_PKGCONFIG_MODE}" malformed-requires "${rel}" "${label} contains malformed token ${trimmed}"
 			continue
 		fi

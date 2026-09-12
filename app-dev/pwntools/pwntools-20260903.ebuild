@@ -9,6 +9,7 @@ RDEPEND+="
 	app-dev/ropgadget
 	app-emu/capstone
 	app-emu/unicorn
+	dev-pypi/backports-zstd
 	dev-pypi/colored-traceback
 	dev-pypi/intervaltree
 	dev-pypi/mako
@@ -23,12 +24,11 @@ RDEPEND+="
 	dev-pypi/rpyc
 	dev-pypi/sortedcontainers
 	dev-pypi/unix-ar
-	dev-pypi/zstandard
 "
 # lockstep-pypi-deps: end
 DESCRIPTION="CTF framework and exploit development library"
 HOMEPAGE="https://github.com/Gallopsled/pwntools"
-SNAPSHOT=b22998ab12d3153ccbeb0fc99d66d34166f167c5
+SNAPSHOT=1429a134ecf88eb9af70e05bf6c912f45dfde224
 SRC_URI="https://github.com/Gallopsled/pwntools/archive/${SNAPSHOT}.tar.gz -> pwntools-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/pwntools-${SNAPSHOT}"
 

@@ -4,7 +4,7 @@ inherit cmake multibuild flag-o-matic qa-policy
 
 DESCRIPTION="Library for manipulating zip archives"
 HOMEPAGE="https://nih.at/libzip/"
-SNAPSHOT=31eefd70f27d33a442466914f5919c84784eafd8
+SNAPSHOT=3be8f33658839d25506a82836868f277aa3660f7
 SRC_URI="https://github.com/nih-at/libzip/archive/${SNAPSHOT}.tar.gz -> libzip-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/libzip-${SNAPSHOT}
 

@@ -4,7 +4,7 @@ PROPERTIES+=" source-payload"
 
 DESCRIPTION="hwdata files"
 HOMEPAGE="https://github.com/vcrhonek/hwdata"
-SNAPSHOT=8bb6c48dc2e683777e625d1c9ef02c1b25b741cd
+SNAPSHOT=7fc63d411377e40aab66bfbf77dce6a439c3fe87
 SRC_URI="https://github.com/vcrhonek/hwdata/archive/${SNAPSHOT}.tar.gz -> hwdata-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/hwdata-${SNAPSHOT}
 

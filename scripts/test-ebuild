@@ -146,7 +146,8 @@ EOF
 
 export PORTAGE_CONFIGROOT="$test_root"
 export ROOT="$test_root/root/"
-export SYSROOT="$test_root/root/"
+# Dependencies come from the host; only installation belongs in the test root.
+export SYSROOT=/
 export PORTAGE_USERNAME="$(id -un)"
 export PORTAGE_GRPNAME="$(id -gn)"
 export GIT_CONFIG_SYSTEM="$test_root/gitconfig"

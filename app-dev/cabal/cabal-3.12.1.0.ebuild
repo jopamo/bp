@@ -73,7 +73,7 @@ HACKAGE_VERSION_SOURCE="cabal-install-solver"
 
 # lockstep-hackage-managed: true
 # lockstep-hackage-deps: begin
-HACKAGE_SNAPSHOT="lts-24.56"
+HACKAGE_SNAPSHOT="lts-24.58"
 HACKAGE_DEPS=(
 	"async 2.2.6 0 45d5587d8a348a7e2b3f04de963fe633db49b49cde10ca1e6f834bef3baecee9"
 	"atomic-counter 0.1.2.4 0 51c0178c727ef4ccd694514c0a44369eb8593ae83dde42bc5fb5c89d5b4c60b5"

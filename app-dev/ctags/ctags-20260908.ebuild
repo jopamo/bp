@@ -4,7 +4,7 @@ inherit autotools
 
 DESCRIPTION="A maintained ctags implementation"
 HOMEPAGE="https://ctags.io/"
-SNAPSHOT=f25245f010f206c251005614c6c41be3b49c6cab
+SNAPSHOT=96eb456f522bbc72ef947798a137455b6802c5d2
 SRC_URI="https://github.com/universal-ctags/ctags/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

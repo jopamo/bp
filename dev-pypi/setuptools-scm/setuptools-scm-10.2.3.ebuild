@@ -15,8 +15,8 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-SRC_URI="https://files.pythonhosted.org/packages/5d/b1/d0b97ffd2856a7d19c63024a89fb84813cb9d2ed7fa8fdbedf9e2f13a9ab/setuptools_scm-10.2.1.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/setuptools_scm-10.2.1"
+SRC_URI="https://files.pythonhosted.org/packages/3c/87/1ff7adcf6e03021ae58ce401565be3c9b8c739a44d14a8253d38b3754117/setuptools_scm-10.2.3.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/setuptools_scm-10.2.3"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="

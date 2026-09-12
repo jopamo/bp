@@ -15,8 +15,8 @@ LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-SRC_URI="https://files.pythonhosted.org/packages/a1/96/06e01a7b38dce6fe1db213e061a4602dd6032a8a97ef6c1a862537732421/prompt_toolkit-3.0.52.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/prompt_toolkit-3.0.52"
+SRC_URI="https://files.pythonhosted.org/packages/7d/ea/39b988c938f75cb75d7045b5c69f8bfed47ee2152c8837fb403de29d6fb8/prompt_toolkit-3.0.53.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/prompt_toolkit-3.0.53"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="

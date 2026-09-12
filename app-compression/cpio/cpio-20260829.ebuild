@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-SNAPSHOT=b5c7d6ee27520c3bf94fe29b3ceed86421759cb0
+SNAPSHOT=e5bb73f8c2f32a999bdec31cdcaea8068875677c
 PAXUTILS_SNAPSHOT=3af8e42a57e5ca12b2813122e60bfdc4ea48c648
 
 inherit qa-policy gl

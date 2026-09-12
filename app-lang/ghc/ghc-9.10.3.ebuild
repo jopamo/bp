@@ -9,7 +9,7 @@ GHC_BOOTSTRAP_VERSION=9.8.2
 HADRIAN_BOOTSTRAP_SOURCES_VERSION=9.8.1
 # Keep GHC aligned with the LTS used by Cabal and source-built Hackage closures.
 # lockstep-stackage-compiler: true
-STACKAGE_SNAPSHOT="lts-24.56"
+STACKAGE_SNAPSHOT="lts-24.58"
 SRC_URI="
 	https://downloads.haskell.org/~ghc/${PV}/${P}-src.tar.xz
 	https://downloads.haskell.org/~ghc/${PV}/hadrian-bootstrap-sources/hadrian-bootstrap-sources-${HADRIAN_BOOTSTRAP_SOURCES_VERSION}.tar.gz

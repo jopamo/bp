@@ -4,7 +4,7 @@ inherit meson
 
 DESCRIPTION="gnome libsecret"
 HOMEPAGE="https://github.com/GNOME/libsecret"
-SNAPSHOT=98fc993200bedc925b6779a2998de1c3e58f0cad
+SNAPSHOT=257547ed7a541fc63400f91578216d3b53721c57
 SRC_URI="https://github.com/GNOME/libsecret/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

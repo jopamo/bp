@@ -4,7 +4,7 @@ inherit flag-o-matic toolchain-funcs qa-policy
 
 DESCRIPTION="Standard EXT2/EXT3/EXT4 filesystem utilities"
 HOMEPAGE="http://ext4.wiki.kernel.org/"
-SNAPSHOT=43643a57fb2d3368fbacd181a8cd713102d52a1a
+SNAPSHOT=8fd79523d051d5ea881237f27eb1c664486e0078
 SRC_URI="https://github.com/tytso/e2fsprogs/archive/${SNAPSHOT}.tar.gz -> e2fsprogs-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/e2fsprogs-${SNAPSHOT}"
 

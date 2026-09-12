@@ -1,5 +1,6 @@
 # lockstep-managed: dependency-ebuild
 # lockstep-pypi-managed: true
+EAPI=8
 # lockstep-cargo-managed: true
 # lockstep-cargo-deps: begin
 CARGO_DEPS="
@@ -47,7 +48,6 @@ CARGO_DEPS="
 	rust-crates/zeroize-1.8.1
 "
 # lockstep-cargo-deps: end
-EAPI=8
 MERGE_MANIFEST_MODE="tree-blake3-v1"
 
 PYTHON_COMPAT=( python3_{11..14} )

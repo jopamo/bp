@@ -4,7 +4,7 @@ inherit cmake
 
 DESCRIPTION="Unicode routines (UTF8, UTF16, UTF32) and Base64: billions of characters per second"
 HOMEPAGE="https://github.com/simdutf/simdutf"
-SNAPSHOT=d3bac9a2307949f3212746e8f10cad43fe7362c9
+SNAPSHOT=be33cbe34b2d222566fd88f1084f86771ed8ae4a
 SRC_URI="https://github.com/simdutf/simdutf/archive/${SNAPSHOT}.tar.gz -> simdutf-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/simdutf-${SNAPSHOT}"
 

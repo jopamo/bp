@@ -25,6 +25,9 @@ src_prepare() {
 	default
 
 	sed -i -e 's/-Werror//g' Makefile || die
+
+	# MAKEOVERRIDES is cleared before recursion; retain the exported libdir.
+	sed -i -e 's/^libdir =/libdir ?=/' Makefile || die
 }
 
 libbpf_emake() {

@@ -15,12 +15,13 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-SRC_URI="https://files.pythonhosted.org/packages/61/cc/a381afa6efea9f496eff839d4a6a1aed3bfafc7b3ab4b0d1b243a12573dd/anyio-4.14.2.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/anyio-4.14.2"
+SRC_URI="https://files.pythonhosted.org/packages/a9/d2/f4d173e22df740bc37b1db102b386ba719b66e95b0f0d751f556b387e6d2/anyio-4.15.1.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/anyio-4.15.1"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="
 	dev-pypi/idna
+	dev-pypi/typing-extensions
 "
 # lockstep-pypi-deps: end
 

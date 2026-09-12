@@ -4,7 +4,7 @@ inherit autotools flag-o-matic
 
 DESCRIPTION="An open-source memory debugger for GNU/Linux"
 HOMEPAGE="http://www.valgrind.org"
-SNAPSHOT=c5a73fa478343772e7316d40b49c8540de822156
+SNAPSHOT=8d7fb56ed35c4cfa6a0af6a6e698bda9d5091a33
 SRC_URI="https://github.com/1g4-mirror/valgrind/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 

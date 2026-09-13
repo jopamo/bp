@@ -1,0 +1,27 @@
+Git snapshots omit the distributed images. Generate missing images even when
+maintainer mode is disabled, without enabling unrelated maintainer targets.
+
+--- a/doc/doc.am
++++ b/doc/doc.am
+@@ -888,7 +888,6 @@
+   $(DOC_LINE_LAYOUT_EPS) \
+   $(DOC_LINE_LAYOUT_PNG)
+ 
+-if MAINTAINER_MODE
+ $(DOC_GNU_EPS): doc/gnu.xpm
+ 	$(AM_V_GEN)$(MKDIR_P) `dirname $@` \
+ 	&& if test "$(XPMTOPPM)" != found; then \
+@@ -938,13 +937,6 @@
+ $(DOC_LINE_LAYOUT_PNG): $(DOC_LINE_LAYOUT_EPS)
+ 	$(AM_V_GEN)$(MKDIR_P) `dirname $@` \
+ 	&& convert -density 300 $< PNG24:$@
+-else
+-$(DOC_GNU_EPS) \
+-  $(DOC_GNU_PNG) \
+-  $(DOC_LINE_LAYOUT_EPS) \
+-  $(DOC_LINE_LAYOUT_PNG):
+-	@:
+-endif # MAINTAINER_MODE
+ 
+ MAINTAINERCLEANFILES += \
+   $(DOC_GNU_EPS) \

@@ -46,10 +46,12 @@ BDEPEND="
 	app-build/bison
 	app-compression/xz-utils
 	app-core/git
+	app-core/help2man
 "
 
 _gettext_prepare_gnulib() {
 	gl_stage_gnulib
+	eapply "${FILESDIR}/gettext-gnulib-counted-by.patch"
 }
 
 _gettext_patch_tree_sitter_source() {
@@ -148,6 +150,24 @@ src_prepare() {
 	_gettext_prepare_gnulib
 	_gettext_stage_tree_sitter_sources
 
+	# The bundled help2man unconditionally needs Locale::gettext; use the
+	# configured system tool, which also supports builds without Perl NLS.
+	local help2man
+	help2man=$(type -P help2man) || die "help2man is required to generate manual pages"
+	sed -i "s|^HELP2MAN =.*|HELP2MAN = ${help2man}|" \
+		gettext-runtime/man/Makefile.am gettext-tools/man/Makefile.am || die
+
+	# Examples only install under docdir, which Corepkg strips. Rebuilding
+	# their catalogs also requires unrelated compilers such as Free Pascal.
+	sed -i '/^SUBDIRS =/s/ examples / /' gettext-tools/Makefile.am || die
+
+	# Keep man and Info pages, but do not build or install HTML under docdir.
+	sed -i \
+		-e 's/^all-local: html-local$/all-local:/' \
+		-e 's/^install-data-local: install-html$/install-data-local:/' \
+		gettext-runtime/man/Makefile.am gettext-tools/man/Makefile.am \
+		gettext-tools/doc/Makefile.am libtextstyle/doc/Makefile.am || die
+
 	echo "${PV}" > .tarball-version || die
 
 	./autogen.sh || die
@@ -181,6 +201,9 @@ src_configure() {
 		--with-included-libunistring
 		--with-xz
 		--disable-xattr
+		# Go integration downloads modules outside SRC_URI. This does not
+		# disable Go source extraction or format-string checks.
+		--disable-go
 		--without-emacs
 		--without-included-libxml
 		--without-lispdir
@@ -202,7 +225,6 @@ src_install() {
 	emake DESTDIR="${ED}" install
 
 	dosym -r /usr/bin/msgfmt /usr/bin/gmsgfmt
-	dobin gettext-tools/misc/gettextize
 
 	rm -f "${ED}/usr/share/locale/locale.alias" \
 		"${ED}/usr/lib/charset.alias" \

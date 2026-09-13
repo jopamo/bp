@@ -14,6 +14,7 @@ HOMEPAGE="https://www.gnu.org/software/libtool/"
 SRC_URI="
 	https://github.com/1g4-mirror/libtool/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz
 	https://github.com/gnulib-modules/bootstrap/archive/${LIBTOOL_BOOTSTRAP_SNAPSHOT}.tar.gz -> ${PN}-bootstrap-${LIBTOOL_BOOTSTRAP_SNAPSHOT}.tar.gz
+	https://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt -> ${PN}-COPYING.LESSERv2
 "
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 S_BOOTSTRAP="${WORKDIR}/bootstrap-${LIBTOOL_BOOTSTRAP_SNAPSHOT}"
@@ -40,6 +41,8 @@ BDEPEND="
 
 _libtool_prepare_gnulib() {
 	gl_stage_gnulib
+	# The filtered gnulib tree omits the license distributed by libtoolize.
+	cp "${DISTDIR}/${PN}-COPYING.LESSERv2" gnulib/doc/COPYING.LESSERv2 || die
 }
 
 _libtool_prepare_bootstrap() {
@@ -71,6 +74,9 @@ src_prepare() {
 	_libtool_prepare_bootstrap
 	_libtool_write_version_texi
 
+	eapply "${FILESDIR}/libtool-subproject-macro-path.patch"
+	eapply "${FILESDIR}/libtool-test-fixtures.patch"
+
 	sed -i '/^AM_INIT_AUTOMAKE/a AM_MAINTAINER_MODE([disable])' configure.ac || die
 	sed -i '/^AM_INIT_AUTOMAKE/a AM_MAINTAINER_MODE([disable])' libltdl/configure.ac || die
 
@@ -92,7 +98,10 @@ src_configure() {
 }
 
 src_test() {
-	emake check
+	# bx ash is still under development. Test the supported host shell.
+	export GL_ALL_SHELLS=bash
+	# The gnulib shell tests share conftest.* during tool detection.
+	emake -j1 check
 }
 
 src_install() {

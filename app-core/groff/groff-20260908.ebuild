@@ -1,6 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 SNAPSHOT=1ac680b43365021deb6ebe76617dfc10374fe37a
+EPSF_COMMIT=9b87a88f3842b91d8141d60e8ec0e66bf3f554bc
 
 inherit flag-o-matic qa-policy gl
 
@@ -17,16 +18,27 @@ else
 	S="${WORKDIR}/${PN}-${SNAPSHOT}"
 fi
 
-SRC_URI+=" ${GL_SRC_URI}"
+SRC_URI+="
+	${GL_SRC_URI}
+	https://raw.githubusercontent.com/coreutils/gnulib/${EPSF_COMMIT}/build-aux/epsf.tex -> ${PN}-epsf-${EPSF_COMMIT}.tex
+"
 
 LICENSE="GPL-2"
 SLOT="0"
 #KEYWORDS="amd64 arm64"
 
 DEPEND="core-perl/libintl-perl"
+BDEPEND="
+	app-tex/ghostscript-gpl
+	xmedia-app/imagemagick
+"
 
 src_prepare() {
 	gl_stage_gnulib
+	# Bootstrap needs this Texinfo input, which the filtered gnulib tree omits.
+	cp "${DISTDIR}/${PN}-epsf-${EPSF_COMMIT}.tex" gnulib/build-aux/epsf.tex || die
+	eapply "${FILESDIR}/groff-snapshot-images.patch"
+	eapply "${FILESDIR}/groff-import-test-image-encoding.patch"
 
 	./bootstrap --copy --skip-po --no-git --gnulib-srcdir="${S}"/gnulib || die
 
@@ -34,17 +46,21 @@ src_prepare() {
 	sed -i -e "s/UNKNOWN/1.24.0/g" configure || die
 	export SHORT_VERSION="1.24.0"
 
-	if [[ ! -f doc/gnu.eps ]]; then
+	if [[ ! -f doc/gnu.eps || ! -f doc/gnu.png ]]; then
 		if command -v convert >/dev/null 2>&1; then
 			convert doc/gnu.xpm -compress none eps3:doc/gnu.eps || die
+			convert doc/gnu.xpm doc/gnu.png || die
 		elif command -v magick >/dev/null 2>&1; then
 			magick doc/gnu.xpm -compress none eps3:doc/gnu.eps || die
+			magick doc/gnu.xpm doc/gnu.png || die
 		elif command -v xpmtoppm >/dev/null 2>&1 \
 			&& command -v pnmdepth >/dev/null 2>&1 \
+			&& command -v pnmtopng >/dev/null 2>&1 \
 			&& command -v pnmtops >/dev/null 2>&1; then
 			xpmtoppm doc/gnu.xpm \
 				| pnmdepth 15 \
 				| pnmtops -nosetpage -noturn -rle > doc/gnu.eps || die
+			xpmtoppm doc/gnu.xpm | pnmtopng > doc/gnu.png || die
 		else
 			die "cannot generate doc/gnu.eps (need ImageMagick or netpbm tools)"
 		fi

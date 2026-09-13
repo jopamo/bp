@@ -1,0 +1,20 @@
+Verify the imported EPS contents instead of requiring Netpbm's colorimage
+encoding. Snapshot builds can generate this image with ImageMagick instead.
+
+--- a/src/devices/grops/tests/device-extension-command-import-works.sh
++++ b/src/devices/grops/tests/device-extension-command-import-works.sh
+@@ -71,6 +71,13 @@
+ output=$(printf '%s\n' "$input" \
+     | "$grops" -F font -F "$srcdir"/font)
+ echo "$output"
+-echo "$output" | grep -qx "colorimage"
++expected=$(cat "$gnu_eps") || exit 1
++imported=$(printf '%s\n' "$output" | sed -n '
++    /^%%BeginDocument:/,/^%%EndDocument$/ {
++        /^%%BeginDocument:/d
++        /^%%EndDocument$/d
++        p
++    }')
++test -n "$imported" && test "$imported" = "$expected"
+ 
+ # vim:set autoindent expandtab shiftwidth=4 tabstop=4 textwidth=72:

@@ -1,0 +1,47 @@
+Give tests that require static archives their own libtool configuration,
+without changing the installed tool's static-libs setting. Keep platform
+library-maintenance commands out of the shell tracing test.
+
+--- a/tests/runpath-in-lalib.at
++++ b/tests/runpath-in-lalib.at
+@@ -23,6 +23,11 @@
+ AT_SETUP([Runpath in libtool library files])
+ AT_KEYWORDS([libtool])
+ 
++# Shared-only builds hardcode the runpath instead of recording it in
++# dependency_libs. Exercise archive dependency metadata explicitly.
++$SED 's|^build_old_libs=.*$|build_old_libs=yes|' $LIBTOOL > ./libtool
++LIBTOOL="$SHELL ./libtool"
++
+ AT_DATA([a.c],
+ [[int a () { return 0; }
+ ]])
+--- a/tests/need_lib_prefix.at
++++ b/tests/need_lib_prefix.at
+@@ -158,8 +158,10 @@
+ eval libname=\"$libname_spec\"
+ AT_CHECK([test lib = "$libname" || exit 77])
+ 
+-# Create our own libtool, forcing need_lib_prefix setting
+-$SED 's|^\(need_lib_prefix\)=.*$|\1=unknown|' $LIBTOOL > ./libtool
++# Preopening must use the archive symbol table, including its remapped
++# module prefixes, rather than reopening the shared object.
++$SED -e 's|^\(need_lib_prefix\)=.*$|\1=unknown|' \
++     -e 's|^build_old_libs=.*$|build_old_libs=yes|' $LIBTOOL > ./libtool
+ LIBTOOL="$SHELL ./libtool"
+ 
+ # Installation directory:
+--- a/tests/help.at
++++ b/tests/help.at
+@@ -93,6 +93,11 @@
+ 
+ AT_SETUP([debug tracing])
+ 
++# Test libtool's tracing without invoking platform library-maintenance
++# tools, which may be unavailable in an unprivileged build sandbox.
++$SED 's|^finish_cmds=.*$|finish_cmds=:|' $LIBTOOL > ./libtool
++LIBTOOL="$SHELL ./libtool"
++
+ AT_DATA([a.c],
+ [[int a () { return 0; }
+ ]])

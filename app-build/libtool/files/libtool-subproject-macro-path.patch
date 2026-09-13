@@ -1,0 +1,14 @@
+Include the separator after $(top_srcdir) when relocating macro dependencies
+in the copied libltdl Makefile.in.
+
+--- a/libtoolize.in
++++ b/libtoolize.in
+@@ -1685,7 +1685,7 @@
+                 $func_make_relative_ltdl_filter_result
+               }"
+         }
+-        func_make_relative_ltdl_filter "$ltdl_am_macro_dir" "$macro_dir" 'dir)'
++        func_make_relative_ltdl_filter "$ltdl_am_macro_dir" "$macro_dir" 'dir)/'
+         func_append filter_Makefile_am "$func_make_relative_ltdl_filter_result"
+ 
+         # Adjust default relative aux_dir paths.

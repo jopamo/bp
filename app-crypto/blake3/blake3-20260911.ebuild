@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-inherit meson python-any-r1
+inherit meson python-single-r1
 
 DESCRIPTION="a fast cryptographic hash function"
 HOMEPAGE="https://github.com/BLAKE3-team/BLAKE3"
@@ -14,13 +14,19 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="static_lib shared static_bin test"
+REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
 RESTRICT="!test? ( test )"
 
-BDEPEND="test? ( ${PYTHON_DEPS} )"
+DEPEND="${PYTHON_DEPS}"
+RDEPEND="${PYTHON_DEPS}"
+BDEPEND="
+	${PYTHON_DEPS}
+	$(python_gen_cond_dep '>=dev-pypi/cython-3.0[${PYTHON_USEDEP}]')
+"
 
 pkg_setup() {
-	use test && python-any-r1_pkg_setup
+	python-single-r1_pkg_setup
 }
 
 src_prepare() {
@@ -30,6 +36,14 @@ src_prepare() {
     sed -i "s/VERSION/${PV}/g" "${S}/meson.build" || die "Failed to replace VERSION in meson.build"
 
     default
+}
+
+src_configure() {
+	export CYTHON="${PYTHON} -m cython"
+	local emesonargs=(
+		-Dpython_bindings=true
+	)
+	meson_src_configure
 }
 
 src_install() {

@@ -32,6 +32,9 @@ PDEPEND="lib-core/tzdb"
 # glibc installs crtn.o already stripped.
 QA_PRESTRIPPED="usr/lib/crtn.o"
 
+# gconv modules load sibling libJIS/libKSC libraries through this runpath.
+QA_POLICY_RPATH_ALLOW='^\$ORIGIN$'
+
 # glibc 2.34+ ships these as intentionally empty compatibility archives
 # because libpthread/libdl/librt/libutil/libanl were merged into libc.
 # Keep asserting archive shape: these paths are expected to be empty.
@@ -126,6 +129,8 @@ src_configure() {
 	filter-flags -fassociative-math
 	filter-flags -fno-semantic-interposition
 	filter-flags -Wl,--gc-sections
+	# glibc selects exception handling per source and tests both cleanup ABIs.
+	filter-flags -fexceptions
 
 	use debug && append-flags -fno-builtin-strlen
 

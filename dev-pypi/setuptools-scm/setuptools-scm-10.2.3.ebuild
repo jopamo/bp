@@ -26,8 +26,15 @@ RDEPEND+="
 "
 # lockstep-pypi-deps: end
 
+# Private vcs-versioning APIs require a matching 2.x release for each Python.
+RDEPEND+="
+	>=dev-pypi/vcs-versioning-2.3.2[${PYTHON_USEDEP}]
+	<dev-pypi/vcs-versioning-3[${PYTHON_USEDEP}]
+"
+
 BDEPEND="
 	dev-pypi/gpep517[${PYTHON_USEDEP}]
 	dev-pypi/setuptools[${PYTHON_USEDEP}]
-	dev-pypi/vcs-versioning[${PYTHON_USEDEP}]
+	>=dev-pypi/vcs-versioning-2.3.2[${PYTHON_USEDEP}]
+	<dev-pypi/vcs-versioning-3[${PYTHON_USEDEP}]
 "

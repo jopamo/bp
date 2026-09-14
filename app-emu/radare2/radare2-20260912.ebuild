@@ -32,6 +32,7 @@ DEPEND="
 	app-compression/libzip
 	lib-misc/xxhash
 "
+BDEPEND="app-dev/gperf"
 
 src_prepare() {
 	default
@@ -43,6 +44,8 @@ src_prepare() {
 	mv "${WORKDIR}/vector35-arch-arm64-${V35ARM64_SNAPSHOT}" subprojects/v35arm64 || die
 	mv "${WORKDIR}/quickjs-${QJS_SNAPSHOT}" subprojects/qjs || die
 	mv "${WORKDIR}/capstone-${CAPSTONE_SNAPSHOT}" subprojects/capstone-v5 || die
+
+	eapply "${FILESDIR}/${PN}-20260912-sdb-c-output.patch"
 
 	cp -a subprojects/packagefiles/qjs/. subprojects/qjs/ || die
 	cp -a subprojects/packagefiles/capstone-v5/. subprojects/capstone-v5/ || die

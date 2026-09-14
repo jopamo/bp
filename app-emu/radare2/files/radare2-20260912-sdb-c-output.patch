@@ -1,0 +1,31 @@
+sdb's recursive generator emits C tables even with COMPILE_GPERF=0.
+Replacing only the final byte of ".sdb" names them ".sdc", so radare2
+cannot build its embedded syscall objects. Replace the whole suffix,
+both in-place and with SDB_OUTPUT_DIR, without changing generator mode.
+
+--- a/subprojects/sdb/src/tool.c
++++ b/subprojects/sdb/src/tool.c
+@@ -391,8 +391,9 @@
+ 		}
+ 		snprintf(file_c, len, "%s/%s", output_dir, base_name);
+ 		size_t len_c = strlen(file_c);
+-		if (len_c >= 3) {
+-			file_c[len_c - 1] = 'c';
++		if (len_c >= 4) {
++			file_c[len_c - 3] = 'c';
++			file_c[len_c - 2] = '\0';
+ 		}
+ 	} else {
+ 		file_c = sdb_strdup (file_sdb);
+@@ -401,8 +402,9 @@
+ 			return false;
+ 		}
+ 		size_t len_c = strlen(file_c);
+-		if (len_c >= 3) {
+-			file_c[len_c - 1] = 'c';
++		if (len_c >= 4) {
++			file_c[len_c - 3] = 'c';
++			file_c[len_c - 2] = '\0';
+ 		}
+ 	}
+ 

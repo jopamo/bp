@@ -331,7 +331,7 @@ _unpacker_get_decompressor() {
 			if [[ -n ${UNPACKER_BZ2:-} ]]; then
 				bz=${UNPACKER_BZ2}
 			else
-				bz=${PORTAGE_BUNZIP2_COMMAND:-${PORTAGE_BZIP2_COMMAND:-}}
+				bz=${COREPKG_BUNZIP2_COMMAND:-${COREPKG_BZIP2_COMMAND:-}}
 				if [[ -z ${bz} ]]; then
 					bz=$(type -P lbzip2 || type -P pbzip2 || echo bzip2)
 				fi

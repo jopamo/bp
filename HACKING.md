@@ -20,7 +20,7 @@ deliberately built to run as the invoking user.
 
 The helper:
 
-- points Corepkg at this checkout through an isolated `PORTAGE_CONFIGROOT`
+- points Corepkg at this checkout through an isolated `COREPKG_CONFIGROOT`
 - selects `profiles/core/<host-arch>/<host-libc>`
 - uses a user-owned temporary `ROOT`, build directory, distfiles directory,
   and package directory

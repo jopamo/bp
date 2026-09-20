@@ -62,9 +62,9 @@ src_compile() {
 			eerror "tools/ui/dist contents:"
 			find "${BUILD_DIR}"/tools/ui/dist -maxdepth 3 -type f | sort >&2 || true
 		fi
-		if [[ -n ${PORTAGE_LOG_FILE} && -f ${PORTAGE_LOG_FILE} ]]; then
+		if [[ -n ${COREPKG_LOG_FILE} && -f ${COREPKG_LOG_FILE} ]]; then
 			eerror "Recent UI provisioning lines from build log:"
-			grep -nE '(^-- UI:|stderr:|npm|llama-ui-embed|tools/ui/dist)' "${PORTAGE_LOG_FILE}" | tail -n 160 >&2 || true
+			grep -nE '(^-- UI:|stderr:|npm|llama-ui-embed|tools/ui/dist)' "${COREPKG_LOG_FILE}" | tail -n 160 >&2 || true
 		fi
 		die "llama-server built without embedded Web UI assets"
 	fi

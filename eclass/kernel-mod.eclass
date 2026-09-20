@@ -209,8 +209,8 @@ _modules_check_function() {
 _modules_ensure_build_dirs() {
 	[[ -d ${T} ]] || mkdir -p "${T}" || die "failed recreating temp dir: ${T}"
 	[[ -d ${T}/logging ]] || mkdir -p "${T}/logging" || die "failed recreating logging dir: ${T}/logging"
-	[[ -z ${PORTAGE_BUILDDIR-} || -d ${PORTAGE_BUILDDIR}/.ipc ]] || \
-		mkdir -p "${PORTAGE_BUILDDIR}/.ipc" || die "failed recreating ipc dir: ${PORTAGE_BUILDDIR}/.ipc"
+	[[ -z ${COREPKG_BUILDDIR-} || -d ${COREPKG_BUILDDIR}/.ipc ]] || \
+		mkdir -p "${COREPKG_BUILDDIR}/.ipc" || die "failed recreating ipc dir: ${COREPKG_BUILDDIR}/.ipc"
 }
 
 # @FUNCTION: _modules_check_migration

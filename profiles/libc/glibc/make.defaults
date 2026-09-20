@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-PORTAGE_LIBC="glibc"
+COREPKG_LIBC="glibc"
 ELIBC="glibc"
 
 # Keep the pre-LLVM GCC/libstdc++ hardening profile on glibc. This avoids

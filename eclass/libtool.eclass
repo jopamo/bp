@@ -34,7 +34,7 @@ if [[ -z ${_LIBTOOL_ECLASS:-} ]]; then
 	# @USAGE: [directories] [--flags]
 	# @DESCRIPTION:
 	# Patch any libtool files in the specified directories (or in $S by default)
-	# using `eltpatch`. The optional flags (e.g. --shallow, --portage, etc.)
+	# using `eltpatch`. The optional flags (e.g. --shallow, --corepkg, etc.)
 	# modify which patches or how deeply they’re applied.
 	elibtoolize() {
 		type -P eltpatch &>/dev/null \

@@ -14,11 +14,11 @@ QUIET=0
 USER_EXCL=()
 USER_INCL=()
 S_KERNEL=0
-HAS_PORTAGEQ=0
+HAS_COREPKGQ=0
 
-if command -v portageq &>/dev/null
+if command -v corepkgq &>/dev/null
 then
-	HAS_PORTAGEQ=1
+	HAS_COREPKGQ=1
 fi
 
 USAGE="usage:\n\
@@ -151,7 +151,8 @@ EXCLUDES=(
 	"--exclude=${TARGET}var/lib/docker/*"
 )
 
-EXCLUDES_DEFAULT_PORTAGE=(
+EXCLUDES_DEFAULT_COREPKG=(
+	"--exclude=${TARGET}var/db/repos/bp/*"
 	"--exclude=${TARGET}var/db/repos/gentoo/*"
 	"--exclude=${TARGET}var/cache/distfiles/*"
 	"--exclude=${TARGET}usr/portage/*"
@@ -164,18 +165,38 @@ INCLUDES=(
 
 INCLUDES+=("${USER_INCL[@]}")
 
+# Never turn an empty or failed query into --exclude=/*.
+add_corepkg_exclude() {
+	local path
+	path=$(corepkgq "$@") || return 1
+	if [[ "$path" != /* || "$path" == *$'\n'* ]]; then
+		echo "mkimg: invalid Corepkg exclusion path: $path" >&2
+		return 1
+	fi
+	path=$(realpath -m -- "$path") || return 1
+	if [[ "$path" == / ]]; then
+		echo "mkimg: refusing to exclude the entire root" >&2
+		return 1
+	fi
+	EXCLUDES+=("--exclude=${path}/*")
+}
+
 if [ "$TARGET" == '/' ]
 then
 	EXCLUDES+=("--exclude=$(realpath "$STAGE4_FILENAME")")
-	if ((HAS_PORTAGEQ))
+	if ((HAS_COREPKGQ))
 	then
-		EXCLUDES+=("--exclude=$(portageq get_repo_path / gentoo)/*")
-		EXCLUDES+=("--exclude=$(portageq distdir)/*")
+		REPOS_OUTPUT=$(corepkgq get_repos /) || exit 1
+		IFS=$' \t\n' read -r -a REPOS <<< "${REPOS_OUTPUT//$'\n'/ }"
+		for repo in "${REPOS[@]}"; do
+			add_corepkg_exclude get_repo_path / "$repo" || exit 1
+		done
+		add_corepkg_exclude distdir || exit 1
 	else
-		EXCLUDES+=("${EXCLUDES_DEFAULT_PORTAGE[@]}")
+		EXCLUDES+=("${EXCLUDES_DEFAULT_COREPKG[@]}")
 	fi
 else
-	EXCLUDES+=("${EXCLUDES_DEFAULT_PORTAGE[@]}")
+	EXCLUDES+=("${EXCLUDES_DEFAULT_COREPKG[@]}")
 fi
 
 if ((EXCLUDE_CONFIDENTIAL))

@@ -9,7 +9,14 @@ S=${WORKDIR}
 
 KEYWORDS="amd64 arm64"
 
-IUSE="video"
+IUSE="test video"
+
+BDEPEND="test? ( app-lang/python )"
+RESTRICT="!test? ( test )"
+
+src_test() {
+	python3 "${FILESDIR}/test_mkimg.py" || die "mkimg tests failed"
+}
 
 src_install() {
 	# Optional bash helper fragments

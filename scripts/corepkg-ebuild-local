@@ -7,10 +7,13 @@ import runpy
 import sys
 
 import corepkg
+from corepkg import const, installation
 
 
 def main() -> None:
-    config_root = os.environ.get("PORTAGE_CONFIGROOT")
+    if "COREPKG_BIN_PATH" not in corepkg.config._constant_keys:
+        raise SystemExit("test-ebuild requires Corepkg with the COREPKG_* environment contract")
+    config_root = os.environ.get("COREPKG_CONFIGROOT")
     target_root = os.environ.get("ROOT")
     sysroot = os.environ.get("SYSROOT")
     eprefix = os.environ.get("EPREFIX")
@@ -27,8 +30,11 @@ def main() -> None:
     )
     corepkg._populate_legacy_globals(trees)
 
-    version = f"python{sys.version_info.major}.{sys.version_info.minor}"
-    frontend = Path("/usr/lib/python-exec") / version / "ebuild"
+    if installation.TYPE == installation.TYPES.SOURCE:
+        frontend = Path(const.COREPKG_BASE_PATH) / "bin" / "ebuild"
+    else:
+        version = f"python{sys.version_info.major}.{sys.version_info.minor}"
+        frontend = Path("/usr/lib/python-exec") / version / "ebuild"
     if not frontend.is_file():
         raise SystemExit(f"Corepkg ebuild frontend not found: {frontend}")
 

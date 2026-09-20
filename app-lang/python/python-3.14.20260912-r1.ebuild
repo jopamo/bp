@@ -49,6 +49,8 @@ PYVER=${SLOT%/*}
 
 SETUPTOOLS_USE_DISTUTILS=local
 
+PATCHES=( "${FILESDIR}/python-vesk-identity.patch" )
+
 src_prepare() {
 	filter-flags -Wl,-z,defs
 

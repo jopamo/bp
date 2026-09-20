@@ -159,13 +159,12 @@ diff --git a/libmount/meson.build b/libmount/meson.build
 index 29a43be..efd123b 100644
 --- a/libmount/meson.build
 +++ b/libmount/meson.build
-@@ -79,21 +79,25 @@ lib__mount = static_library(
+@@ -79,21 +79,24 @@ lib__mount = static_library(
    lib_mount_sources,
    include_directories : [dir_include,
                           dir_libmount],
 -  dependencies : [blkid_dep])
-+  dependencies : [blkid_dep] + musl_bsd_source_deps,
-+  c_args : musl_bsd_mount_c_args)
++  dependencies : [blkid_dep] + musl_bsd_source_deps)
  
  lib_mount_static = static_library(
    'mount_static',
@@ -193,7 +192,7 @@ diff --git a/meson.build b/meson.build
 index 1e16926..2765ba5 100644
 --- a/meson.build
 +++ b/meson.build
-@@ -47,7 +47,20 @@ endif
+@@ -47,7 +47,16 @@ endif
  
  cc = meson.get_compiler('c')
  
@@ -201,12 +200,8 @@ index 1e16926..2765ba5 100644
 +  'musl-bsd-source',
 +  required : get_option('musl-bsd-source'))
 +musl_bsd_source_deps = []
-+musl_bsd_mount_c_args = []
-+musl_bsd_pidfd_c_args = []
 +if musl_bsd_source.found()
 +  musl_bsd_source_deps += musl_bsd_source
-+  musl_bsd_mount_c_args += '-DHAVE_MUSL_BSD_MOUNT_API=1'
-+  musl_bsd_pidfd_c_args += '-DHAVE_MUSL_BSD_PIDFD_API=1'
 +endif
 +
  conf = configuration_data()
@@ -214,7 +209,7 @@ index 1e16926..2765ba5 100644
  conf.set_quoted('PACKAGE', meson.project_name())
  conf.set_quoted('PACKAGE_VERSION', meson.project_version())
  package_string = '@0@ @1@'.format(meson.project_name(), meson.project_version())
-@@ -1264,11 +1277,12 @@ if opt and not is_disabler(exe)
+@@ -1264,11 +1273,12 @@ if opt and not is_disabler(exe)
    bashcompletions += ['bits']
  endif
  
@@ -228,7 +223,7 @@ index 1e16926..2765ba5 100644
    link_with : lib_common,
    install_dir : usrbin_exec_dir,
    install : opt,
-@@ -3292,11 +3306,18 @@ if opt and not is_disabler(exe)
+@@ -3292,11 +3302,17 @@ if opt and not is_disabler(exe)
    bashcompletions += ['fadvise']
  endif
  
@@ -244,7 +239,6 @@ index 1e16926..2765ba5 100644
    waitpid_sources,
    include_directories : includes,
 +  dependencies : musl_bsd_source_deps,
-+  c_args : musl_bsd_pidfd_c_args,
    link_with : [lib_common],
    install_dir : usrbin_exec_dir,
    install : opt,

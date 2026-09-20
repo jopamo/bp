@@ -2,6 +2,7 @@
 Host *
   AddKeysToAgent yes
   IdentitiesOnly yes
+  KexAlgorithms mlkem768x25519-sha256,sntrup761x25519-sha512,sntrup761x25519-sha512@openssh.com
   ServerAliveInterval 30
   ServerAliveCountMax 3
   TCPKeepAlive yes
@@ -16,7 +17,6 @@ Host github.com
   User git
   IdentityFile ~/.ssh/github
   PreferredAuthentications publickey
-  KexAlgorithms sntrup761x25519-sha512@openssh.com,sntrup761x25519-sha512,curve25519-sha256
 
 # GitLab over SSH on port 443
 Host gitlab.com
@@ -25,4 +25,3 @@ Host gitlab.com
   User git
   IdentityFile ~/.ssh/gitlab
   PreferredAuthentications publickey
-  KexAlgorithms sntrup761x25519-sha512@openssh.com,sntrup761x25519-sha512,curve25519-sha256

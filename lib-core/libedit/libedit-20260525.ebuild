@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-inherit qa-policy
+inherit flag-o-matic qa-policy
 
 DESCRIPTION="BSD replacement for libreadline"
 HOMEPAGE="https://thrysoee.dk/editline/"
@@ -22,6 +22,8 @@ src_prepare() {
 }
 
 src_configure() {
+	use elibc_musl && append-cppflags -include stdc-predef.h
+
 	local myconf=(
 		$(use_enable static-libs static)
 		--enable-fast-install

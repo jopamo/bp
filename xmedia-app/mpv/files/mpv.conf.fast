@@ -21,9 +21,6 @@ af=lavfi=[firequalizer=gain='if(lt(f,400), -30, 0)',acompressor=threshold=-20dB:
 
 ytdl=yes
 script-opts-append=ytdl_hook-ytdl_path=/usr/bin/yt-dlp
-ytdl-format="721+251/721+140/399+251/303+251/299+140/best"
-
-ytdl-raw-options=cookies=~/youtube.cookies.txt
 
 osc=yes
 term-osd-bar=yes

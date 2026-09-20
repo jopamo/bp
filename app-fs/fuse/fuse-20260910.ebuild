@@ -13,7 +13,10 @@ SLOT="3"
 KEYWORDS="amd64 arm64"
 DEPEND="elibc_musl? ( lib-core/musl-bsd )"
 BDEPEND="app-dev/pkgconf"
-PATCHES=( "${FILESDIR}"/${PN}-clang-compat.patch )
+PATCHES=(
+	"${FILESDIR}"/${PN}-clang-compat.patch
+	"${FILESDIR}"/${PN}-mount-service-syscall-wrappers.patch
+)
 
 src_prepare() {
 	if use elibc_musl; then

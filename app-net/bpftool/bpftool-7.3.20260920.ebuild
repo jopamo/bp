@@ -5,7 +5,7 @@ inherit toolchain-funcs
 DESCRIPTION="Tool for inspection and simple manipulation of eBPF programs and maps"
 HOMEPAGE="https://github.com/libbpf/bpftool"
 BRANCH_NAME="snapshot"
-SNAPSHOT=d7e5db215839a5ed41f0c4412e79d407786e2595
+SNAPSHOT=0c77e3f27a131b6cdf475b4455eaddf155caab53
 SRC_URI="https://gitlab.com/pjo/kone/-/archive/${SNAPSHOT}/kone-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/kone-${SNAPSHOT}"
 

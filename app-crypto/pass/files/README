@@ -4,7 +4,7 @@ by Jason Donenfeld
    Jason@zx2c4.com
 ======================
 
-This is a very simple password store that encrypts passwords using gpg and
+This Linux-only bp fork encrypts passwords using gpg and
 places the encrypted password in a directory. It can generate new passwords
 and keep track of old ones.
 
@@ -17,16 +17,18 @@ Depends on:
   http://www.gnu.org/software/bash/
 - GnuPG2
   http://www.gnupg.org/
-- git
+- git (optional)
   http://www.git-scm.com/
-- xclip (for X11 environments)
+- xclip (optional, for X11 environments)
   http://sourceforge.net/projects/xclip/
-- wl-clipboard (for wlroots Wayland-based environments)
+- wl-clipboard (optional, installed separately for Wayland environments)
   https://github.com/bugaevc/wl-clipboard
-- tree >= 1.7.0
-  http://mama.indstate.edu/users/ice/tree/
+- bx, diffutils, findutils, sed, and procps
+  (directory listings are built in; tree is not required)
 - GNU getopt
   http://www.kernel.org/pub/linux/utils/util-linux/
   http://software.frodo.looijaard.name/getopt/
-- qrencode
+- qrencode (optional)
   https://fukuchi.org/works/qrencode/
+
+See ../README.md for bp packaging and test instructions.

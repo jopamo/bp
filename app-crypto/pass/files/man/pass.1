@@ -77,9 +77,7 @@ unspecified) is removed.
 \fBls\fP \fIsubfolder\fP
 List names of passwords inside the tree at
 .I subfolder
-by using the
-.BR tree (1)
-program. This command is alternatively named \fBlist\fP.
+using the built-in directory listing. This command is alternatively named \fBlist\fP.
 .TP
 \fBgrep\fP [\fIGREPOPTIONS\fP] \fIsearch-string\fP
 Searches inside each decrypted password file for \fIsearch-string\fP, and displays line
@@ -90,9 +88,9 @@ for matching. \fIGREPOPTIONS\fP are passed to
 as-is. (Note: the \fIGREP_OPTIONS\fP environment variable functions as well.)
 .TP
 \fBfind\fP \fIpass-names\fP...
-List names of passwords inside the tree that match \fIpass-names\fP by using the
-.BR tree (1)
-program. This command is alternatively named \fBsearch\fP.
+List names of passwords inside the tree whose paths contain any of
+\fIpass-names\fP, ignoring case. Search terms are literal substrings, not shell
+patterns or regular expressions. This command is alternatively named \fBsearch\fP.
 .TP
 \fBshow\fP [ \fI--clip\fP[=\fIline-number\fP], \fI-c\fP[\fIline-number\fP] ] [ \fI--qrcode\fP[=\fIline-number\fP], \fI-q\fP[\fIline-number\fP] ] \fIpass-name\fP
 Decrypt and print a password named \fIpass-name\fP. If \fI--clip\fP or \fI-c\fP

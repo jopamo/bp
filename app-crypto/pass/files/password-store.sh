@@ -121,13 +121,15 @@ encrypt_atomic_from_file() {
 		return 1
 	fi
 }
-encrypt_atomic_from_stdin() {
+encrypt_atomic_from_command() {
 	local dst="$1" dir tmp
+	shift
 	reject_symlink_target "$dst"
 	assert_no_symlink_components "$dst" 1
 	dir="${dst%/*}"
 	tmp="$(make_temp_file_in_dir "$dir" "${dst##*/}")" || return 1
-	if gpg_encrypt_stream_to_file "$tmp"; then
+	# pipefail must cover the producer before we publish the new ciphertext.
+	if "$@" | gpg_encrypt_stream_to_file "$tmp"; then
 		mv -f -- "$tmp" "$dst" || {
 			rm -f -- "$tmp"
 			return 1
@@ -136,6 +138,13 @@ encrypt_atomic_from_stdin() {
 		rm -f -- "$tmp"
 		return 1
 	fi
+}
+encrypt_atomic_from_stdin() {
+	encrypt_atomic_from_command "$1" cat
+}
+replace_first_line() {
+	printf '%s\n' "$1"
+	gpg_decrypt "$2" | tail -n +2
 }
 store_path() {
 	local rel="$1"
@@ -225,7 +234,7 @@ reencrypt_path() {
 
 		if [[ $gpg_keys != "$current_keys" ]]; then
 			echo "$passfile_display: reencrypting to ${gpg_keys//$'\n'/ }"
-			gpg_decrypt "$passfile" | encrypt_atomic_from_stdin "$passfile" || die "Could not reencrypt $passfile_display."
+			encrypt_atomic_from_command "$passfile" gpg_decrypt "$passfile" || die "Could not reencrypt $passfile_display."
 		fi
 		prev_gpg_recipients="${GPG_RECIPIENTS[*]}"
 	done < <(find "$1" -path '*/.git' -prune -o -path '*/.extensions' -prune -o -iname '*.gpg' -print0)
@@ -321,7 +330,7 @@ print_store_tree() {
 #
 
 #
-# BEGIN platform definable
+# BEGIN Linux helpers
 #
 
 clip() {
@@ -370,17 +379,17 @@ clip() {
 qrcode() {
 	if [[ -n $DISPLAY || -n $WAYLAND_DISPLAY ]]; then
 		if type feh >/dev/null 2>&1; then
-			echo -n "$1" | qrencode --size 10 -o - | feh -x --title "pass: $2" -g +200+200 -
+			printf %s "$1" | qrencode --size 10 -o - | feh -x --title "pass: $2" -g +200+200 -
 			return
 		elif type gm >/dev/null 2>&1; then
-			echo -n "$1" | qrencode --size 10 -o - | gm display -title "pass: $2" -geometry +200+200 -
+			printf %s "$1" | qrencode --size 10 -o - | gm display -title "pass: $2" -geometry +200+200 -
 			return
 		elif type display >/dev/null 2>&1; then
-			echo -n "$1" | qrencode --size 10 -o - | display -title "pass: $2" -geometry +200+200 -
+			printf %s "$1" | qrencode --size 10 -o - | display -title "pass: $2" -geometry +200+200 -
 			return
 		fi
 	fi
-	echo -n "$1" | qrencode -t utf8
+	printf %s "$1" | qrencode -t utf8
 }
 
 tmpdir() {
@@ -389,7 +398,7 @@ tmpdir() {
 	[[ $1 == "nowarn" ]] && warn=0
 	local template="$PROGRAM.XXXXXXXXXXXXX"
 	if [[ -d /dev/shm && -w /dev/shm && -x /dev/shm ]]; then
-		SECURE_TMPDIR="$(mktemp -d "/dev/shm/$template")"
+		SECURE_TMPDIR="$(mktemp -d "/dev/shm/$template")" || die "Could not create temporary directory."
 		remove_tmpfile() {
 			rm -rf "$SECURE_TMPDIR"
 		}
@@ -403,7 +412,7 @@ tmpdir() {
 		Are you sure you would like to continue?
 		_EOF
 		)"
-		SECURE_TMPDIR="$(mktemp -d "${TMPDIR:-/tmp}/$template")"
+		SECURE_TMPDIR="$(mktemp -d "${TMPDIR:-/tmp}/$template")" || die "Could not create temporary directory."
 		shred_tmpfile() {
 			find "$SECURE_TMPDIR" -type f -exec $SHRED {} +
 			rm -rf "$SECURE_TMPDIR"
@@ -416,10 +425,8 @@ GETOPT="getopt"
 SHRED="shred -f -z"
 BASE64="base64"
 
-source "$(dirname "$0")/platform/$(uname | cut -d _ -f 1 | tr '[:upper:]' '[:lower:]').sh" 2>/dev/null # PLATFORM_FUNCTION_FILE
-
 #
-# END platform definable
+# END Linux helpers
 #
 
 
@@ -506,6 +513,8 @@ cmd_init() {
 	[[ -n $id_path && ! -d $id_dir && -e $id_dir ]] && die "Error: $id_dir exists but is not a directory."
 
 	local gpg_id="$id_dir/.gpg-id"
+	reject_symlink_target "$gpg_id"
+	[[ -z $PASSWORD_STORE_SIGNING_KEY ]] || reject_symlink_target "$gpg_id.sig"
 	set_git "$gpg_id"
 
 	if [[ $# -eq 1 && -z $1 ]]; then
@@ -698,10 +707,11 @@ cmd_edit() {
 		gpg_decrypt_to_file "$tmp_file" "$passfile" || exit 1
 		action="Edit"
 	fi
-	EDITOR="${EDITOR:-vi}" sh -c '${EDITOR} "$1"' sh "$tmp_file"
+	EDITOR="${EDITOR:-vi}" sh -c '${EDITOR} "$1"' sh "$tmp_file" || die "Editor failed; password unchanged."
 	[[ -f $tmp_file ]] || die "New password not saved."
 	gpg_decrypt "$passfile" 2>/dev/null | diff - "$tmp_file" &>/dev/null && die "Password unchanged."
 	while ! encrypt_atomic_from_file "$passfile" "$tmp_file"; do
+		[[ -t 0 ]] || die "Password encryption aborted."
 		yesno "GPG encryption failed. Would you like to try again?"
 	done
 	git_add_file "$passfile" "$action password for $path using ${EDITOR:-vi}."
@@ -741,7 +751,7 @@ cmd_generate() {
 	if [[ $inplace -eq 0 ]]; then
 		printf '%s\n' "$pass" | encrypt_atomic_from_stdin "$passfile" || die "Password encryption aborted."
 	else
-		{ printf '%s\n' "$pass"; gpg_decrypt "$passfile" | tail -n +2; } | encrypt_atomic_from_stdin "$passfile" || die "Could not reencrypt new password."
+		encrypt_atomic_from_command "$passfile" replace_first_line "$pass" "$passfile" || die "Could not reencrypt new password."
 	fi
 	local verb="Add"
 	[[ $inplace -eq 1 ]] && verb="Replace"

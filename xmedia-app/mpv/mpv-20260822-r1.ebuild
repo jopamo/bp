@@ -67,6 +67,10 @@ DEPEND="
 	zlib? ( lib-core/zlib )
 "
 
+RDEPEND="${DEPEND}
+	lua? ( xmedia-app/yt-dlp )
+"
+
 src_prepare() {
 	default
 

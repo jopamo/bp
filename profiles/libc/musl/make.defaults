@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-PORTAGE_LIBC="musl"
+COREPKG_LIBC="musl"
 ELIBC="musl"
 
 # Keep the LLVM/libc++ hardening profile on musl. This is the active baseline

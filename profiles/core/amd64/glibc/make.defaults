@@ -1,2 +1,2 @@
 CHOST="x86_64-pc-linux-gnu"
-PORTAGE_BINHOST="https://1g4.org/1g4-glibc-amd64/"
+COREPKG_BINHOST="https://1g4.org/1g4-glibc-amd64/"

@@ -131,11 +131,11 @@ auto-sync = no
 EOF
 
 cat > "$test_root/etc/corepkg/make.conf" <<EOF
-PORTAGE_TMPDIR="$test_root/tmp"
+COREPKG_TMPDIR="$test_root/tmp"
 DISTDIR="$test_root/distfiles"
 PKGDIR="$test_root/packages"
-PORTAGE_USERNAME="$(id -un)"
-PORTAGE_GRPNAME="$(id -gn)"
+COREPKG_USERNAME="$(id -un)"
+COREPKG_GRPNAME="$(id -gn)"
 MAKEOPTS="-j$(getconf _NPROCESSORS_ONLN 2>/dev/null || printf 1)"
 FEATURES="unprivileged sandbox -buildpkg -userpriv -usersandbox -network-sandbox -pid-sandbox -ipc-sandbox -mount-sandbox"
 USE="${BP_TEST_USE:-}"
@@ -144,12 +144,12 @@ EOF
 
 : > "$test_root/gitconfig"
 
-export PORTAGE_CONFIGROOT="$test_root"
+export COREPKG_CONFIGROOT="$test_root"
 export ROOT="$test_root/root/"
 # Dependencies come from the host; only installation belongs in the test root.
 export SYSROOT=/
-export PORTAGE_USERNAME="$(id -un)"
-export PORTAGE_GRPNAME="$(id -gn)"
+export COREPKG_USERNAME="$(id -un)"
+export COREPKG_GRPNAME="$(id -gn)"
 export GIT_CONFIG_SYSTEM="$test_root/gitconfig"
 
 echo "test-ebuild: repo=$repo"

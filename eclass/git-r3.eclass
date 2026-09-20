@@ -359,7 +359,7 @@ _git-r3_set_gitdir() {
 	# now replace all the slashes
 	repo_name=${repo_name//\//_}
 
-	local distdir=${PORTAGE_ACTUAL_DISTDIR:-${DISTDIR}}
+	local distdir=${COREPKG_ACTUAL_DISTDIR:-${DISTDIR}}
 	: "${EGIT3_STORE_DIR:=${distdir}/git3-src}"
 
 	GIT_DIR=${EGIT3_STORE_DIR}/${repo_name}

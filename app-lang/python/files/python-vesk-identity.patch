@@ -1,0 +1,33 @@
+Expose Vesk runtime identity without changing OpenSSL compatibility metadata.
+
+--- a/Modules/_ssl.c
++++ b/Modules/_ssl.c
+@@ -6681,6 +6681,16 @@
+     if (PyModule_Add(m, "_OPENSSL_API_VERSION", r) < 0)
+         return -1;
+
++#ifdef VESK_VERSION_NUMBER
++    /* Native runtime identity is separate from the compatibility API version. */
++    r = PyUnicode_FromString(VESK_version_text());
++    if (PyModule_Add(m, "VESK_VERSION", r) < 0)
++        return -1;
++    r = PyLong_FromUnsignedLong(VESK_version_num());
++    if (PyModule_Add(m, "VESK_VERSION_NUMBER", r) < 0)
++        return -1;
++#endif
++
+     return 0;
+ }
+
+--- a/Lib/ssl.py
++++ b/Lib/ssl.py
+@@ -100,6 +100,9 @@
+ import _ssl             # if we can't import it, let the error propagate
+
+ from _ssl import OPENSSL_VERSION_NUMBER, OPENSSL_VERSION_INFO, OPENSSL_VERSION
++if hasattr(_ssl, 'VESK_VERSION_NUMBER'):
++    from _ssl import VESK_VERSION, VESK_VERSION_NUMBER
++
+ from _ssl import _SSLContext, MemoryBIO, SSLSession
+ from _ssl import (
+     SSLError, SSLZeroReturnError, SSLWantReadError, SSLWantWriteError,

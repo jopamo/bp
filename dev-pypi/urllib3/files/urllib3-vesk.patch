@@ -1,0 +1,27 @@
+Recognize native Vesk metadata; retain conservative hostname verification.
+
+--- a/src/urllib3/__init__.py
++++ b/src/urllib3/__init__.py
+@@ -23,7 +23,7 @@
+ from .util.retry import Retry
+ from .util.timeout import Timeout
+
+-# Ensure that Python is compiled with OpenSSL 1.1.1+
++# Ensure that Python is compiled with OpenSSL 1.1.1+ or Vesk 4.3.1+.
+ # If the 'ssl' module isn't available at all that's
+ # fine, we only care if the module is available.
+ try:
+@@ -31,7 +31,12 @@
+ except ImportError:
+     pass
+ else:
+-    if not ssl.OPENSSL_VERSION.startswith("OpenSSL "):  # Defensive:
++    if hasattr(ssl, "VESK_VERSION_NUMBER"):
++        # CPython obtains this from VESK_version_num(), not a compatibility
++        # banner. Never compare Vesk's release number with OpenSSL versions.
++        if ssl.VESK_VERSION_NUMBER < 0x04030100:
++            raise ImportError("urllib3 v2 requires Vesk 4.3.1+")
++    elif not ssl.OPENSSL_VERSION.startswith("OpenSSL "):  # Defensive:
+         warnings.warn(
+             "urllib3 v2 only supports OpenSSL 1.1.1+, currently "
+             f"the 'ssl' module is compiled with {ssl.OPENSSL_VERSION!r}. "

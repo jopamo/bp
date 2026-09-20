@@ -1,0 +1,160 @@
+--- a/lib/mount_fsmount.c
++++ b/lib/mount_fsmount.c
+@@ -24,58 +24,6 @@
+ #include <sys/mount.h>
+ #include <sys/syscall.h>
+ 
+-#ifdef NEED_NEW_MOUNT_API_SYSCALL_WRAPPERS
+-/*
+- * Kernel supports the new mount API (fsopen/fsconfig/fsmount/move_mount)
+- * but libc doesn't provide the wrapper functions yet (e.g. glibc added
+- * these only in 2.36) - call the syscalls directly. Numbers are
+- * identical across x86_64, i386, arm and arm64. fuse_-prefixed so the
+- * fallback never clashes with a libc extern declaration; where libc has
+- * them the #else aliases map straight to the libc wrappers.
+- */
+-#ifndef __NR_fsopen
+-#define __NR_fsopen 430
+-#endif
+-#ifndef __NR_fsconfig
+-#define __NR_fsconfig 431
+-#endif
+-#ifndef __NR_fsmount
+-#define __NR_fsmount 432
+-#endif
+-#ifndef __NR_move_mount
+-#define __NR_move_mount 429
+-#endif
+-
+-static inline int fuse_fsopen(const char *fsname, unsigned int flags)
+-{
+-	return syscall(__NR_fsopen, fsname, flags);
+-}
+-
+-static inline int fuse_fsconfig(int fd, unsigned int cmd, const char *key,
+-				const void *value, int aux)
+-{
+-	return syscall(__NR_fsconfig, fd, cmd, key, value, aux);
+-}
+-
+-static inline int fuse_fsmount(int fd, unsigned int flags, unsigned int ms_flags)
+-{
+-	return syscall(__NR_fsmount, fd, flags, ms_flags);
+-}
+-
+-static inline int fuse_move_mount(int from_dfd, const char *from_pathname,
+-				  int to_dfd, const char *to_pathname,
+-				  unsigned int flags)
+-{
+-	return syscall(__NR_move_mount, from_dfd, from_pathname,
+-		       to_dfd, to_pathname, flags);
+-}
+-#else
+-#define fuse_fsopen fsopen
+-#define fuse_fsconfig fsconfig
+-#define fuse_fsmount fsmount
+-#define fuse_move_mount move_mount
+-#endif /* NEED_NEW_MOUNT_API_SYSCALL_WRAPPERS */
+-
+ /*
+  * New mount API constants come from <linux/mount.h>. Define the ones an
+  * older or partial uapi header omits so this file still builds - values are
+--- a/lib/mount_i_linux.h
++++ b/lib/mount_i_linux.h
+@@ -12,9 +12,63 @@
+ #include <sys/mount.h>
+ #include <linux/mount.h>
+ #include <stdint.h>
++#include <sys/syscall.h>
++#include <unistd.h>
+ 
+ struct fuse_args;
+ 
++#ifdef NEED_NEW_MOUNT_API_SYSCALL_WRAPPERS
++/*
++ * Kernel supports the new mount API (fsopen/fsconfig/fsmount/move_mount)
++ * but libc doesn't provide the wrapper functions yet (e.g. glibc added
++ * these only in 2.36) - call the syscalls directly. Numbers are
++ * identical across x86_64, i386, arm and arm64. fuse_-prefixed so the
++ * fallback never clashes with a libc extern declaration; where libc has
++ * them the #else aliases map straight to the libc wrappers.
++ */
++#ifndef __NR_fsopen
++#define __NR_fsopen 430
++#endif
++#ifndef __NR_fsconfig
++#define __NR_fsconfig 431
++#endif
++#ifndef __NR_fsmount
++#define __NR_fsmount 432
++#endif
++#ifndef __NR_move_mount
++#define __NR_move_mount 429
++#endif
++
++static inline int fuse_fsopen(const char *fsname, unsigned int flags)
++{
++	return syscall(__NR_fsopen, fsname, flags);
++}
++
++static inline int fuse_fsconfig(int fd, unsigned int cmd, const char *key,
++				const void *value, int aux)
++{
++	return syscall(__NR_fsconfig, fd, cmd, key, value, aux);
++}
++
++static inline int fuse_fsmount(int fd, unsigned int flags, unsigned int ms_flags)
++{
++	return syscall(__NR_fsmount, fd, flags, ms_flags);
++}
++
++static inline int fuse_move_mount(int from_dfd, const char *from_pathname,
++				  int to_dfd, const char *to_pathname,
++				  unsigned int flags)
++{
++	return syscall(__NR_move_mount, from_dfd, from_pathname,
++		       to_dfd, to_pathname, flags);
++}
++#else
++#define fuse_fsopen fsopen
++#define fuse_fsconfig fsconfig
++#define fuse_fsmount fsmount
++#define fuse_move_mount move_mount
++#endif /* NEED_NEW_MOUNT_API_SYSCALL_WRAPPERS */
++
+ #define FUSERMOUNT_FEATURE_NEW_MOUNT_API (UINT64_C(1) << 0)
+ #define FUSERMOUNT_FEATURE_SYNC_INIT     (UINT64_C(1) << 1)
+ 
+--- a/util/mount_service.c
++++ b/util/mount_service.c
+@@ -1470,7 +1470,8 @@
+ 		goto fail_fsconfig;
+ 	}
+ 
+-	ret = fsconfig(mo->fsopenfd, FSCONFIG_CMD_CREATE, NULL, NULL, 0);
++	ret = fuse_fsconfig(mo->fsopenfd, FSCONFIG_CMD_CREATE, NULL, NULL,
++			    0);
+ 	if (ret) {
+ 		error = errno;
+ 		fprintf(stderr, "%s: creating filesystem: %s\n",
+@@ -1478,7 +1479,7 @@
+ 		goto fail_fsconfig;
+ 	}
+ 
+-	mfd = fsmount(mo->fsopenfd, FSMOUNT_CLOEXEC, attr_flags);
++	mfd = fuse_fsmount(mo->fsopenfd, FSMOUNT_CLOEXEC, attr_flags);
+ 	if (mfd < 0) {
+ 		error = errno;
+ 		fprintf(stderr, "%s: fsmount: %s\n",
+@@ -1486,8 +1487,9 @@
+ 		goto fail_fsconfig;
+ 	}
+ 
+-	ret = move_mount(mfd, "", mo->mountfd, "",
+-			 MOVE_MOUNT_F_EMPTY_PATH | MOVE_MOUNT_T_EMPTY_PATH);
++	ret = fuse_move_mount(mfd, "", mo->mountfd, "",
++			      MOVE_MOUNT_F_EMPTY_PATH |
++			      MOVE_MOUNT_T_EMPTY_PATH);
+ 	close(mfd);
+ 	if (ret) {
+ 		error = errno;

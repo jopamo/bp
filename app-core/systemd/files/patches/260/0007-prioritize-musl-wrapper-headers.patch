@@ -1,0 +1,55 @@
+Subject: [PATCH] build: keep musl wrapper headers ahead of dependency includes
+
+libmount can expose musl-bsd's overlay through its private pkg-config
+dependencies. Dependency -I flags outrank our -isystem wrappers, bypassing
+the missing mount syscall aliases and the musl libc-version stub.
+
+Use ordinary include directories for our wrappers on musl so Meson puts
+them before dependency includes. Keep custom preprocessor commands aligned.
+
+diff --git a/meson.build b/meson.build
+--- a/meson.build
++++ b/meson.build
+@@ -2062,31 +2062,28 @@ boot_stubs = []
+
+ # This is similar to system_includes below, but for passing custom_target().
++wrapper_system_includes = get_option('libc') != 'musl'
++wrapper_include_flag = wrapper_system_includes ? '-isystem' : '-I'
+ system_include_args = [
+-        '-isystem', meson.project_build_root()  / 'src/include/override',
+-        '-isystem', meson.project_source_root() / 'src/include/override',
++        wrapper_include_flag, meson.project_build_root()  / 'src/include/override',
++        wrapper_include_flag, meson.project_source_root() / 'src/include/override',
+         '-isystem', meson.project_build_root()  / 'src/include/uapi',
+         '-isystem', meson.project_source_root() / 'src/include/uapi',
+ ]
+
+ system_includes = [
+-        include_directories(
+-                # gcc(1) says
+-                # "Directories specified with -isystem options are scanned in left-to-right order",
+-                # and meson puts the directories in the reversed order. Hence, a directory with a lower
+-                # priority must be listed earlier.
+-                'src/include/uapi',
+-                'src/include/override',
+-                is_system : true,
+-        ),
++        # On musl, wrappers must precede dependency -I paths. Keep the kernel
++        # headers as system includes, after the wrappers that use include_next.
++        include_directories('src/include/uapi', is_system : true),
++        include_directories('src/include/override', is_system : wrapper_system_includes),
+ ]
+
+ if get_option('libc') == 'musl'
+         system_include_args = [
+-                '-isystem', meson.project_build_root()  / 'src/include/musl',
+-                '-isystem', meson.project_source_root() / 'src/include/musl',
++                wrapper_include_flag, meson.project_build_root()  / 'src/include/musl',
++                wrapper_include_flag, meson.project_source_root() / 'src/include/musl',
+         ] + system_include_args
+
+-        system_includes += include_directories('src/include/musl', is_system : true)
++        system_includes = [include_directories('src/include/musl')] + system_includes
+ endif
+
+ basic_includes = [

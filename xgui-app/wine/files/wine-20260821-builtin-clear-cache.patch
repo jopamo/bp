@@ -1,0 +1,36 @@
+Use the compiler's cache-flush builtin in both the probe and its caller.
+The __clear_cache runtime helper has no portable declaration and its
+implicit declaration makes the old probe fail with modern compilers.
+
+--- a/configure.ac
++++ b/configure.ac
+@@ -2377,9 +2377,9 @@
+-AC_CACHE_CHECK([for __clear_cache], ac_cv_have___clear_cache,
+-               AC_LINK_IFELSE([AC_LANG_PROGRAM(,[[__clear_cache((void*)0, (void*)0); return 0;]])],
+-               [ac_cv_have___clear_cache="yes"], [ac_cv_have___clear_cache="no"]))
+-if test "$ac_cv_have___clear_cache" = "yes"
++AC_CACHE_CHECK([for __builtin___clear_cache], ac_cv_have___builtin___clear_cache,
++               AC_LINK_IFELSE([AC_LANG_PROGRAM(,[[__builtin___clear_cache((void*)0, (void*)0); return 0;]])],
++               [ac_cv_have___builtin___clear_cache="yes"], [ac_cv_have___builtin___clear_cache="no"]))
++if test "$ac_cv_have___builtin___clear_cache" = "yes"
+ then
+-    AC_DEFINE(HAVE___CLEAR_CACHE, 1, [Define to 1 if you have the '__clear_cache' (potentially built-in) function.])
++    AC_DEFINE(HAVE___BUILTIN___CLEAR_CACHE, 1, [Define to 1 if you have the '__builtin___clear_cache' built-in function.])
+ fi
+ 
+ dnl *** check for the need to define platform-specific symbols
+--- a/dlls/ntdll/unix/virtual.c
++++ b/dlls/ntdll/unix/virtual.c
+@@ -7033,10 +7033,10 @@
+ {
+ #if defined(__x86_64__) || defined(__i386__)
+     /* no-op */
+-#elif defined(HAVE___CLEAR_CACHE)
++#elif defined(HAVE___BUILTIN___CLEAR_CACHE)
+     if (handle == GetCurrentProcess())
+     {
+-        __clear_cache( (char *)addr, (char *)addr + size );
++        __builtin___clear_cache( (char *)addr, (char *)addr + size );
+     }
+     else
+     {

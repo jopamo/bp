@@ -1,0 +1,11 @@
+--- a/tests/Makefile.am
++++ b/tests/Makefile.am
+@@ -948,7 +948,7 @@ eu_search_macros_LDFLAGS = -pthread $(AM_LDFLAGS)
+ eu_search_lines_LDFLAGS = -pthread $(AM_LDFLAGS)
+ eu_search_die_LDFLAGS = -pthread $(AM_LDFLAGS)
+ eu_search_cfi_LDADD = $(libeu) $(libelf) $(libdw)
+-eu_search_macros_LDADD = $(libdw)
++eu_search_macros_LDADD = $(libeu) $(libdw)
+ eu_search_lines_LDADD = $(libdw) $(libelf)
+ eu_search_die_LDADD = $(libdw)
+ 

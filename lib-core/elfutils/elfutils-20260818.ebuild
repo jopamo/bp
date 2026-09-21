@@ -29,6 +29,7 @@ DEPEND="
 	app-build/flex
 	app-build/m4
 "
+BDEPEND="app-dev/pkgconf"
 
 src_prepare() {
 	filter-flags -flto*
@@ -39,6 +40,7 @@ src_prepare() {
 
 	if use elibc_musl; then
 		eapply "${FILESDIR}"/fix-aarch64_fregs.patch
+		eapply "${FILESDIR}"/fix-musl-test-error-link.patch
 	fi
 
 	# https://sourceware.org/PR23914
@@ -48,6 +50,13 @@ src_prepare() {
 }
 
 src_configure() {
+	if use elibc_musl; then
+		local musl_bsd_cppflags
+		musl_bsd_cppflags=$("$(tc-getPKG_CONFIG)" --cflags musl-bsd-headers) ||
+			die "failed to query musl-bsd headers"
+		append-cppflags "${musl_bsd_cppflags}"
+	fi
+
 	# The musl compiler driver historically injected libmusl-bsd-core.a into
 	# executable links, but not shared-library links.  An executable
 	# AC_CHECK_FUNC therefore finds error(3), then libdw.so cannot resolve it.

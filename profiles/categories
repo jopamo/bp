@@ -16,15 +16,13 @@ bin
 core-perl
 dev-pypi
 dev-rust
-rust-crates
-distfiles
-eclass
 fonts
 lib-core
 lib-dev
 lib-misc
 lib-net
 lib-print
+rust-crates
 virtual
 xgui-app
 xgui-desktop

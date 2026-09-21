@@ -2,17 +2,12 @@ virtual/dbus user-session
 app-core/1g4-system-defaults -server
 app-net/bluez user-session
 app-core/systemd logind sleep
-app-kernel/kernel-bin desktop
-xgui-app/qbittorrent qt5
-#xgui-lib/gtk3 wayland
+xgui-app/wine opencl
 xgui-lib/gtk4 vulkan
 xgui-lib/qtbase vulkan
-xgui-live-app/wine opencl
 xgui-tools/alsa-utils alsamixer
 xmedia-app/ffmpeg -vulkan
 xmedia-lib/libplacebo -vulkan
-#xmedia-lib/vulkan-loader wayland
 xmedia-lib/x264 opencl
-xmedia-live-app/avidemux qt5
 xmedia-app/mpv -vulkan
 app-emu/qemu gtk

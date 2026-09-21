@@ -14,9 +14,15 @@ KEYWORDS="amd64 arm64"
 
 IUSE="bzip2 debuginfod debugpred demangler gcov gnu-ld gprof helgrind largefile
 libdebuginfod lzma rpath sanitize-address sanitize-memory sanitize-undefined
-stacktrace static-libs symbol-versioning test tests-rpath textrelcheck +utils
+static-libs symbol-versioning test tests-rpath textrelcheck +utils
 valgrind with_valgrind year2038 zlib zstd
 "
+
+QA_CONFIG_IMPL_DECL_SKIP=(
+	# Autoconf deliberately references undeclared strchr while determining
+	# whether the compiler diagnoses undeclared functions.
+	strchr
+)
 
 DEPEND="
 	lib-core/zlib
@@ -77,7 +83,6 @@ src_configure() {
 		$(use_enable sanitize-address)
 		$(use_enable sanitize-memory)
 		$(use_enable sanitize-undefined)
-		$(use_enable stacktrace)
 		$(use_enable tests-rpath tests-rpath)
 		$(use_enable valgrind valgrind-annotations)
 		$(use_enable valgrind)

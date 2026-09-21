@@ -13,7 +13,7 @@ KEYWORDS="amd64 arm64"
 IUSE="autotype test"
 
 DEPEND="
-	app-crypto/argon2
+	app-crypto/vesk
 	app-crypto/botan
 	lib-core/libgcrypt
 	lib-core/zlib

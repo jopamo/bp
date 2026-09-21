@@ -8,7 +8,7 @@ DESCRIPTION="Vesk SSL/TLS, crypto, and native password-hashing libraries"
 HOMEPAGE="https://gitlab.com/pjo/vesk"
 EGIT_REPO_URI="https://gitlab.com/pjo/vesk"
 
-LICENSE="ISC LGPL-2.1+ LGPL-3+"
+LICENSE="ISC LGPL-2.1+ LGPL-3+ || ( Apache-2.0 CC0-1.0 )"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
@@ -21,6 +21,7 @@ DEPEND="
 "
 RDEPEND="
 	${DEPEND}
+	!app-crypto/argon2
 	!lib-core/libxcrypt
 "
 BDEPEND="app-lang/perl"

@@ -21,7 +21,7 @@ LIB_DEPEND="
 	lib-core/popt[static-libs(+)]
 	lib-dev/json-c[static-libs(+)]
 	virtual/ssl[static-libs(+)]
-	argon2? ( app-crypto/argon2[static-libs(+)] )
+	argon2? ( app-crypto/vesk[static-libs(+)] )
 	udev? ( app-core/systemd[static-libs(+)] )"
 
 RDEPEND="static-libs? ( ${LIB_DEPEND} )

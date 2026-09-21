@@ -21,6 +21,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="jack +ladspa +lv2 test +vst X"
 
+PATCHES=( "${FILESDIR}"/${P}-musl-dlmopen.patch )
 
 REQUIRED_USE="
 	test? ( jack )

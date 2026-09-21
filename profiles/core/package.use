@@ -3,8 +3,6 @@ app-core/util-linux agetty bits blkdiscard blkzone blockdev btrfs cal chcpu chfn
 
 app-core/util-linux -audit -bash-completion -blkpr nls -selinux -slang -sysvinit -test -translate-docs -libuser -libutempter -econf -raw -minix -bfs -cramfs
 
-
-
 app-build/llvm -assertions bootstrap bpf -debug -libfuzzer -lto orc sanitizers static_analyzer sysclang
 app-compression/bzip2 static-libs
 app-compression/libarchive static-libs
@@ -59,8 +57,6 @@ lib-net/nghttp2 static-libs
 lib-dev/tree-sitter-bash python
 lib-misc/xxhash static-libs
 lib-net/c-ares static-libs
-lib-net/nodejs icu
-lib-net/openssl static-libs
 lib-print/cups-filters foomatic
 virtual/curses static-libs
 virtual/gnutls static-libs

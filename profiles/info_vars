@@ -1,7 +1,4 @@
-##
-## These variables are printed with a standard 'emerge info' in
-## portage as of 2.0.51-r5. They are sorted regardless of order here.
-##
+# Variables printed by 'emerge --info'; output is sorted by Corepkg.
 ACCEPT_KEYWORDS
 CC
 CXX

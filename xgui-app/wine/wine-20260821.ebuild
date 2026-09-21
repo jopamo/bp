@@ -19,9 +19,9 @@ LICENSE="LGPL-2.1"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="alsa cups custom-cflags fontconfig jpeg ldap mp3 netapi nls odbc openal opencl
- +opengl perl pcap +png prelink pulseaudio samba +staging test +X +xcomposite
- xinerama +xml unwind usb"
+IUSE="alsa cups custom-cflags fontconfig netapi nls odbc opencl
+ +opengl perl pcap prelink pulseaudio samba +staging test +X +xcomposite
+ xinerama usb"
 
 RESTRICT="test"
 
@@ -37,42 +37,41 @@ DEPEND="
 	alsa? ( xgui-tools/alsa-lib )
 	cups? ( lib-print/cups )
 	fontconfig? ( fonts/fontconfig )
-	jpeg? ( xmedia-lib/libjpeg-turbo )
-	ldap? ( app-net/openldap )
-	mp3? ( xgui-app/mpg123 )
 	netapi? ( app-server/samba )
-	openal? ( xmedia-live-lib/openal )
 	opengl? (
 		xmedia-lib/glu
 		xgui-tools/mesa
 	)
 	pcap? ( lib-net/libpcap )
 	perl? (	app-lang/perl )
-	png? ( xmedia-lib/libpng )
 	pulseaudio? ( xmedia-lib/pulseaudio )
 	samba? ( app-server/samba[winbind] )
 	xcomposite? ( xgui-lib/libXcomposite )
 	xinerama? ( xgui-lib/libXinerama )
-	xml? (
-		lib-core/libxml2
-		lib-core/libxslt
-	)
-	unwind? (	lib-dev/libunwind )
 	usb? (	lib-dev/libusb )
 "
 BDEPEND="
+	app-build/autoconf
 	app-build/flex
 	app-dev/pkgconf
 	app-build/bison
 	X? ( xgui-tools/xorgproto )
 "
 
+PATCHES=(
+	"${FILESDIR}/wine-20260821-builtin-clear-cache.patch"
+)
+
 src_prepare() {
 	filter-flags -flto* -Wl,-z,defs
 
 	default
 
-	"${WORKDIR}/wine-staging-${SNAPSHOT2}/staging/patchinstall.py" DESTDIR="${S}" --all
+	"${WORKDIR}/wine-staging-${SNAPSHOT2}/staging/patchinstall.py" \
+		DESTDIR="${S}" --all --no-autoconf || die
+	# Regenerate for both local and staging patches, and check for failures.
+	autoreconf -f || die
+	./tools/make_requests || die
 }
 
 src_configure() {
@@ -80,20 +79,24 @@ src_configure() {
 		--enable-win64
 		$(use_with cups)
 		$(use_with fontconfig)
-		$(use_with jpeg)
-		$(use_with ldap)
-		$(use_with mp3 mpg123)
 		$(use_with netapi)
-		$(use_with openal)
 		$(use_with opengl)
 		$(use_with pcap)
-		$(use_with png)
 		$(use_with pulseaudio pulse)
-		$(use_with unwind)
 		$(use_with usb)
 		$(use_with xcomposite)
 		$(use_with xinerama)
-		$(use_with xml)
 	)
-	econf ${myconf[@]}
+	econf "${myconf[@]}"
+}
+
+src_install() {
+	default
+
+	# Host ELF strip cannot process Wine's PE/COFF libraries.
+	local dir
+	for dir in "${ED}"/usr/lib/wine/*-windows; do
+		[[ -d ${dir} ]] || continue
+		dostrip -x "${dir#"${ED}"}"
+	done
 }

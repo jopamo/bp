@@ -1,0 +1,47 @@
+Subject: [PATCH] Core: fix cached block offset when shrinking mraw allocations
+
+The non-tail shrink path locates the free-block header using the released
+size instead of the retained, aligned payload size. This can make the
+cached block overlap live memory or extend beyond the original allocation.
+
+Compute the header address before reusing new_size for the free-block
+payload size. Extend the existing shrink test to check the cached payload
+address as well as its size.
+
+All 144 CTest tests pass with AddressSanitizer and UndefinedBehaviorSanitizer.
+Leak detection was disabled because LeakSanitizer cannot run under the
+sandbox's tracing.
+
+---
+ source/lexbor/core/mraw.c | 2 +-
+ test/lexbor/core/mraw.c   | 3 +++
+ 2 files changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/source/lexbor/core/mraw.c b/source/lexbor/core/mraw.c
+index c990405..2e629fb 100644
+--- a/source/lexbor/core/mraw.c
++++ b/source/lexbor/core/mraw.c
+@@ -352,8 +352,8 @@ lexbor_mraw_realloc(lexbor_mraw_t *mraw, void *data, size_t new_size)
+         if (diff > lexbor_mraw_meta_size()) {
+             memcpy(begin, &new_size, sizeof(size_t));
+ 
++            begin = &((uint8_t *) data)[new_size];
+             new_size = diff - lexbor_mraw_meta_size();
+-            begin = &((uint8_t *) data)[diff];
+ 
+             lexbor_mraw_meta_set(begin, &new_size);
+ 
+diff --git a/test/lexbor/core/mraw.c b/test/lexbor/core/mraw.c
+index 03906d0..42a575a 100644
+--- a/test/lexbor/core/mraw.c
++++ b/test/lexbor/core/mraw.c
+@@ -438,6 +438,9 @@ TEST_BEGIN(mraw_realloc_n_less)
+                  - (lexbor_mem_align(51) + lexbor_mraw_meta_size())
+                  - lexbor_mraw_meta_size());
+ 
++    test_eq(mraw.cache->root->value,
++            one + lexbor_mem_align(51) + lexbor_mraw_meta_size());
++
+     test_eq_size(mraw.mem->chunk_length, 1UL);
+     test_eq_size(mraw.mem->chunk->size, 1024UL + lexbor_mraw_meta_size());
+     test_eq_size(mraw.mem->chunk->length, 128UL + lexbor_mraw_meta_size()

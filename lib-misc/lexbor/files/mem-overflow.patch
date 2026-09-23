@@ -1,0 +1,254 @@
+Subject: [PATCH] Core: check allocator size arithmetic before use
+
+Reject nonzero sizes that cannot be aligned, and check mraw metadata
+additions before accessing the allocation cache or changing metadata.
+Reject unrepresentable append offsets before recycling chunk space.
+Compare requests against remaining chunk capacity and check tail growth
+before changing sanitizer state or calling realloc.
+
+Preserve existing zero-size behavior and document the alignment helper's
+zero return for unrepresentable results. Allocation entry points must
+recognize that result as failure for a nonzero request. Add arithmetic-only
+coverage for normal alignment and the representable size boundary,
+including the non-inline wrapper.
+
+This patch contains only the overflow fix; the mraw shrink-offset fix is
+separate. With both fixes present, all 145 registered CTest tests passed
+with AddressSanitizer and UndefinedBehaviorSanitizer, including optional
+C++ coverage. Leak detection was disabled due to the sandbox's tracing.
+The reporter's standalone reproducer was not run during this validation.
+
+---
+diff --git a/source/lexbor/core/mem.h b/source/lexbor/core/mem.h
+--- a/source/lexbor/core/mem.h
++++ b/source/lexbor/core/mem.h
+@@ -99,12 +99,23 @@
+     return mem->chunk_length;
+ }
+ 
++/* Returns zero for zero size or an unrepresentable aligned size. */
+ lxb_inline size_t
+ lexbor_mem_align(size_t size)
+ {
+-    return ((size % LEXBOR_MEM_ALIGN_STEP) != 0)
+-           ? size + (LEXBOR_MEM_ALIGN_STEP - (size % LEXBOR_MEM_ALIGN_STEP))
+-           : size;
++    size_t padding;
++    size_t remainder = size % LEXBOR_MEM_ALIGN_STEP;
++
++    if (remainder == 0) {
++        return size;
++    }
++
++    padding = LEXBOR_MEM_ALIGN_STEP - remainder;
++    if (size > SIZE_MAX - padding) {
++        return 0;
++    }
++
++    return size + padding;
+ }
+ 
+ lxb_inline size_t
+diff --git a/source/lexbor/core/mem.c b/source/lexbor/core/mem.c
+--- a/source/lexbor/core/mem.c
++++ b/source/lexbor/core/mem.c
+@@ -24,7 +24,12 @@
+         return LXB_STATUS_ERROR_WRONG_ARGS;
+     }
+ 
+-    mem->chunk_min_size = lexbor_mem_align(min_chunk_size);
++    min_chunk_size = lexbor_mem_align(min_chunk_size);
++    if (min_chunk_size == 0) {
++        return LXB_STATUS_ERROR_MEMORY_ALLOCATION;
++    }
++
++    mem->chunk_min_size = min_chunk_size;
+ 
+     /* Create first chunk */
+     mem->chunk = lexbor_mem_chunk_make(mem, mem->chunk_min_size);
+@@ -98,7 +103,13 @@
+ lexbor_mem_chunk_init(lexbor_mem_t *mem,
+                       lexbor_mem_chunk_t *chunk, size_t length)
+ {
+-    length = lexbor_mem_align(length);
++    size_t aligned_length = lexbor_mem_align(length);
++
++    if (length != 0 && aligned_length == 0) {
++        return NULL;
++    }
++
++    length = aligned_length;
+ 
+     if (length > mem->chunk_min_size) {
+         if (mem->chunk_min_size > (SIZE_MAX - length)) {
+@@ -156,13 +167,17 @@
+ void *
+ lexbor_mem_alloc(lexbor_mem_t *mem, size_t length)
+ {
++    length = lexbor_mem_align(length);
++
+     if (length == 0) {
+         return NULL;
+     }
+ 
+-    length = lexbor_mem_align(length);
+-
+-    if ((mem->chunk->length + length) > mem->chunk->size) {
++    if (length > SIZE_MAX - mem->chunk->length) {
++        return NULL;
++    }
++
++    if (length > mem->chunk->size - mem->chunk->length) {
+         if ((SIZE_MAX - mem->chunk_length) == 0) {
+             return NULL;
+         }
+diff --git a/source/lexbor/core/mraw.c b/source/lexbor/core/mraw.c
+--- a/source/lexbor/core/mraw.c
++++ b/source/lexbor/core/mraw.c
+@@ -47,10 +47,19 @@
+         return LXB_STATUS_ERROR_WRONG_ARGS;
+     }
+ 
++    if (chunk_size > SIZE_MAX - lexbor_mraw_meta_size()) {
++        return LXB_STATUS_ERROR_MEMORY_ALLOCATION;
++    }
++
++    chunk_size = lexbor_mem_align(chunk_size + lexbor_mraw_meta_size());
++    if (chunk_size == 0) {
++        return LXB_STATUS_ERROR_MEMORY_ALLOCATION;
++    }
++
+     /* Init memory */
+     mraw->mem = lexbor_mem_create();
+ 
+-    status = lexbor_mem_init(mraw->mem, chunk_size + lexbor_mraw_meta_size());
++    status = lexbor_mem_init(mraw->mem, chunk_size);
+     if (status) {
+         return status;
+     }
+@@ -110,7 +119,11 @@
+         return NULL;
+     }
+ 
+-    if ((mem->chunk->length + length) > mem->chunk->size) {
++    if (length > SIZE_MAX - mem->chunk->length) {
++        return NULL;
++    }
++
++    if (length > mem->chunk->size - mem->chunk->length) {
+         lexbor_mem_chunk_t *chunk = mem->chunk;
+ 
+         if ((SIZE_MAX - mem->chunk_length) == 0) {
+@@ -180,8 +193,15 @@
+ lexbor_mraw_alloc(lexbor_mraw_t *mraw, size_t size)
+ {
+     void *data;
+-
+-    size = lexbor_mem_align(size);
++    size_t aligned_size = lexbor_mem_align(size);
++
++    if ((size != 0 && aligned_size == 0)
++        || aligned_size > SIZE_MAX - lexbor_mraw_meta_size())
++    {
++        return NULL;
++    }
++
++    size = aligned_size;
+ 
+     if (mraw->cache->tree_length != 0) {
+         data = lexbor_bst_remove_close(mraw->cache,
+@@ -247,7 +267,12 @@
+     uint8_t *tmp;
+     lexbor_mem_chunk_t *chunk = mraw->mem->chunk;
+ 
+-    if (chunk->size > (begin_len + new_size)) {
++    if (new_size > SIZE_MAX - begin_len) {
++        *is_valid = true;
++        return NULL;
++    }
++
++    if (new_size < chunk->size - begin_len) {
+         *is_valid = true;
+ 
+         if (new_size == 0) {
+@@ -269,13 +294,18 @@
+      * If the tail is short then we increase the current data.
+      */
+     if (begin_len == lexbor_mraw_meta_size()) {
++        *is_valid = true;
++
++        length = new_size + lexbor_mraw_meta_size();
++        if (length > SIZE_MAX - mraw->mem->chunk_min_size) {
++            return NULL;
++        }
++
++        length += mraw->mem->chunk_min_size;
++
+ #if defined(LEXBOR_HAVE_ADDRESS_SANITIZER)
+         ASAN_UNPOISON_MEMORY_REGION(chunk->data, chunk->size);
+ #endif
+-        *is_valid = true;
+-
+-        length = lexbor_mem_align(new_size + lexbor_mraw_meta_size()
+-                                  + mraw->mem->chunk_min_size);
+ 
+         tmp = lexbor_realloc(chunk->data, length);
+         if (tmp == NULL) {
+@@ -309,12 +339,19 @@
+ {
+     void *begin;
+     size_t size, begin_len;
++    size_t aligned_size = lexbor_mem_align(new_size);
+     lexbor_mem_chunk_t *chunk = mraw->mem->chunk;
++
++    if ((new_size != 0 && aligned_size == 0)
++        || aligned_size > SIZE_MAX - lexbor_mraw_meta_size())
++    {
++        return NULL;
++    }
+ 
+     begin = ((uint8_t *) data) - lexbor_mraw_meta_size();
+     memcpy(&size, begin, sizeof(size_t));
+ 
+-    new_size = lexbor_mem_align(new_size);
++    new_size = aligned_size;
+ 
+     /*
+      * Look, whether there is an opportunity
+diff --git a/test/lexbor/core/mem.c b/test/lexbor/core/mem.c
+--- a/test/lexbor/core/mem.c
++++ b/test/lexbor/core/mem.c
+@@ -9,6 +9,25 @@
+ #include <lexbor/core/mem.h>
+ 
+ 
++TEST_BEGIN(align)
++{
++    size_t limit = lexbor_mem_align_floor(SIZE_MAX);
++
++    test_eq_size(lexbor_mem_align(0), 0UL);
++    test_eq_size(lexbor_mem_align(1), LEXBOR_MEM_ALIGN_STEP);
++    test_eq_size(lexbor_mem_align(LEXBOR_MEM_ALIGN_STEP),
++                 LEXBOR_MEM_ALIGN_STEP);
++    test_eq_size(lexbor_mem_align(LEXBOR_MEM_ALIGN_STEP + 1),
++                 2 * LEXBOR_MEM_ALIGN_STEP);
++    test_eq_size(lexbor_mem_align(limit), limit);
++
++    for (size_t i = 1; i <= SIZE_MAX - limit; i++) {
++        test_eq_size(lexbor_mem_align(limit + i), 0UL);
++        test_eq_size(lexbor_mem_align_noi(limit + i), 0UL);
++    }
++}
++TEST_END
++
+ TEST_BEGIN(init)
+ {
+     lexbor_mem_t *mem = lexbor_mem_create();
+@@ -308,6 +327,7 @@
+ {
+     TEST_INIT();
+ 
++    TEST_ADD(align);
+     TEST_ADD(init);
+     TEST_ADD(init_null);
+     TEST_ADD(init_stack);

@@ -18,6 +18,8 @@ RESTRICT="!test? ( test )"
 
 PATCHES=(
 	"${FILESDIR}/lexbor-static-library-name.patch"
+	"${FILESDIR}/mem-overflow.patch"
+	"${FILESDIR}/mraw-shrink.patch"
 )
 
 src_configure() {

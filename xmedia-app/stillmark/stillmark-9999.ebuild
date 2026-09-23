@@ -1,12 +1,10 @@
 # Distributed under the terms of the GNU General Public License v2
 
-inherit meson qa-policy xdg
+inherit meson qa-policy xdg git-r3
 
 DESCRIPTION="Capture and annotate screenshots on X11"
 HOMEPAGE="https://gitlab.com/pjo/stillmark"
-SNAPSHOT=6102758e373259b628059a02aca6f429351810e3
-SRC_URI="https://gitlab.com/pjo/stillmark/-/archive/${SNAPSHOT}/stillmark-${SNAPSHOT}.tar.gz"
-S="${WORKDIR}/stillmark-${SNAPSHOT}"
+EGIT_REPO_URI="https://gitlab.com/pjo/stillmark.git"
 
 LICENSE="GPL-3"
 SLOT="0"

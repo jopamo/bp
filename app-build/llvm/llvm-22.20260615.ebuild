@@ -15,7 +15,7 @@ LICENSE="Apache-2.0-with-LLVM-exceptions UoI-NCSA rc BSD public-domain"
 SLOT=0
 KEYWORDS="amd64 arm64"
 
-IUSE="amdgpu assertions bootstrap +clang-tools-extra bpf cuda debug libcxx libcxxabi libfuzzer lto nvptx orc sanitizers static_analyzer -sysclang syslibcxxabi test wasm xcore"
+IUSE="amdgpu assertions bootstrap +clang-tools-extra bpf cuda debug libcxx libcxxabi +libfuzzer lto nvptx orc sanitizers static_analyzer -sysclang syslibcxxabi test wasm xcore"
 
 COMMON_DEPEND="
 	app-net/curl
@@ -196,9 +196,6 @@ src_configure() {
 	local compiler_rt_default_target_only=OFF
 	local compiler_rt_sanitizers_to_build=all
 	if use elibc_musl; then
-		# Keep the base musl bootstrap narrow for now
-		compiler_rt_build_libfuzzer=OFF
-
 		# Avoid unsupported musl multilib sanitizer probes
 		compiler_rt_default_target_only=ON
 		compiler_rt_sanitizers_to_build="asan;msan;tsan;safestack;cfi;scudo_standalone;ubsan_minimal;gwp_asan;asan_abi"

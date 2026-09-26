@@ -97,6 +97,7 @@ src_configure() {
     -Dxpbproxy=false             # no proxy
 
     # rendering and dri paths
+    $(meson_use glamor)          # GL acceleration for modesetting and Xephyr
     -Dglx=true                   # GLX needed for nvidia proprietary
     -Ddri1=false                 # dri1 is obsolete
     -Ddri2=true                  # dri2 required by nvidia GLX
@@ -105,8 +106,8 @@ src_configure() {
 
     # device and session management
     $(meson_use udev)            # input hotplug via libudev
-    -Dsystemd_logind=true        # vt/session handoff through logind
-    -Dsystemd_notify=true        # sd_notify integration
+    $(meson_use systemd systemd_logind) # vt/session handoff through logind
+    $(meson_use systemd systemd_notify) # sd_notify integration
     -Dvgahw=auto                 # vgahw module auto
     -Dpciaccess=true             # libpciaccess for probing
 
@@ -136,7 +137,7 @@ src_configure() {
     -Dlibunwind=false            # keep unwinder off unless debugging
     -Dlegacy_nvidia_340x=false   # do not export obsolete 340xx driver entrypoints
     -Dnvidia_musl_startup="${nvidia_musl_startup}"
-    #-Dlegacy_nvidia_padding=false # keep default pixmap padding; set true only for very old nvidia blobs
+    -Dlegacy_nvidia_padding=false # old ScreenRec ABI padding, not MIT-SHM pixmap support
 
     # features we explicitly keep off
     -Dxdmcp=false                # no xdmcp

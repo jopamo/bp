@@ -254,7 +254,10 @@ src_prepare() {
 
     default
 
-    if ! use primary-gpu; then
+    if use primary-gpu; then
+        sed -i '/^[[:space:]]*EndSection[[:space:]]*$/i\    Option "PrimaryGPU" "true"' \
+            nvidia-drm-outputclass.conf || die
+    else
         sed -i '/^[[:space:]]*Option "PrimaryGPU" "true"[[:space:]]*$/d' \
             nvidia-drm-outputclass.conf || die
     fi

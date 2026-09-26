@@ -3,7 +3,7 @@ app-core/util-linux agetty bits blkdiscard blkzone blockdev btrfs cal chcpu chfn
 
 app-core/util-linux -audit -bash-completion -blkpr nls -selinux -slang -sysvinit -test -translate-docs -libuser -libutempter -econf -raw -minix -bfs -cramfs
 
-app-build/llvm -assertions bootstrap bpf -debug -libfuzzer -lto orc sanitizers static_analyzer sysclang
+app-build/llvm -assertions bootstrap bpf -debug -lto orc sanitizers static_analyzer sysclang
 app-compression/bzip2 static-libs
 app-compression/libarchive static-libs
 app-compression/lz4 static-libs

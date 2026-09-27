@@ -4,7 +4,7 @@ inherit autotools qa-policy
 
 DESCRIPTION="Contains error handling functions used by GnuPG software"
 HOMEPAGE="http://www.gnupg.org/related_software/libgpg-error"
-SNAPSHOT=9cc750a816554e46d3e1496533f927b17ef3fcef
+SNAPSHOT=b973e43d0be8839990cc56d86e3ba575fd7efbb7
 SRC_URI="https://github.com/gpg/libgpg-error/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 

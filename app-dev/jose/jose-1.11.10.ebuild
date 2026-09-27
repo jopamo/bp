@@ -16,7 +16,7 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64"
 
-DEPEND=">=dev-lang/erlang-19.0"
+DEPEND=">=app-lang/erlang-19.0"
 RDEPEND="${DEPEND}"
 
 DOCS=( ALGORITHMS.md CHANGELOG.md README.md examples/KEY-GENERATION.md )

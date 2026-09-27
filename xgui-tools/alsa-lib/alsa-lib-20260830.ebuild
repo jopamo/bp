@@ -4,7 +4,7 @@ inherit flag-o-matic autotools
 
 DESCRIPTION="Advanced Linux Sound Architecture Library"
 HOMEPAGE="http://www.alsa-project.org/"
-SNAPSHOT=a48bbb2322fefc7eff9dca061517e935e98cb6a5
+SNAPSHOT=f84cd4ced7b36fddb8e4ee24404cf7c091d27020
 SRC_URI="https://github.com/alsa-project/alsa-lib/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/alsa-lib-${SNAPSHOT}
 

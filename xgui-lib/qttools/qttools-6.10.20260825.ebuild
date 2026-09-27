@@ -7,8 +7,8 @@ inherit cmake flag-o-matic
 DESCRIPTION="Qt Tools collection (Assistant, Designer, Linguist, etc.)"
 HOMEPAGE="https://www.qt.io/"
 
-SNAPSHOT=4b1a5798e42d9ca737cda924cceddd9db0cf1e01
-QLITEHTML_SNAPSHOT=3fe5821dad98747d6e41c9ed54b86c3d0eee9daf
+SNAPSHOT=58c8df45d28ef2cd08f9a9e69bc86c103e1c693b
+QLITEHTML_SNAPSHOT=c47c490ce9f58183ec0f1bf881a419496853685b
 QTTOOLS_LITEHTML_SNAPSHOT=6ca1ab0419e770e6d35a1ef690238773a1dafcee
 SRC_URI="
 	https://invent.kde.org/qt/qt/${PN}/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2

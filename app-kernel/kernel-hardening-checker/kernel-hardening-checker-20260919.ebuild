@@ -9,7 +9,7 @@ DISTUTILS_USE_PEP517=setuptools
 
 DESCRIPTION="A script for checking the hardening options in the Linux kernel config"
 HOMEPAGE="https://github.com/a13xp0p0v/kernel-hardening-checker"
-SNAPSHOT=27f7bdad8a324b6c7f5b3f2b29945cd941b0b683
+SNAPSHOT=b2acfd4f8fba4e91996224b29c992cf83be30904
 SRC_URI="https://github.com/a13xp0p0v/kernel-hardening-checker/archive/${SNAPSHOT}.tar.gz -> kernel-hardening-checker-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/kernel-hardening-checker-${SNAPSHOT}"
 

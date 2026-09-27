@@ -1,12 +1,11 @@
 # Distributed under the terms of the GNU General Public License v2
 
-inherit meson qa-policy
+inherit git-r3 meson qa-policy
 
 DESCRIPTION="Native C HTML, DOM, and CSS libraries"
 HOMEPAGE="https://gitlab.com/pjo/liblexa"
-SNAPSHOT=3965bfd4cb399050dc0eb0c0423b07a5ef97f473
-SRC_URI="https://gitlab.com/pjo/liblexa/-/archive/${SNAPSHOT}/liblexa-${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
-S="${WORKDIR}/${PN}-${SNAPSHOT}/src/liblexa"
+EGIT_REPO_URI="https://gitlab.com/pjo/liblexa"
+S="${WORKDIR}/${P}/src/liblexa"
 
 LICENSE="MIT BSD-3"
 SLOT="0"

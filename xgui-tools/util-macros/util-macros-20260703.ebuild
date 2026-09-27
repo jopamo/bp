@@ -7,7 +7,7 @@ PROPERTIES+=" source-payload"
 DESCRIPTION="X.Org autotools utility macros"
 HOMEPAGE="https://www.x.org"
 
-SNAPSHOT=a9d71e3fd8e6758b70be31c586921bbbcd2a8449
+SNAPSHOT=ea1e15a4909ac8b03b2c5a08ac3810b385985157
 SRC_URI="https://gitlab.freedesktop.org/xorg/util/macros/-/archive/${SNAPSHOT}/macros-${SNAPSHOT}.tar.bz2 -> macros-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/macros-${SNAPSHOT}"
 

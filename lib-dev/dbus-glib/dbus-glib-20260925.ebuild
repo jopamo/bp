@@ -5,7 +5,7 @@ inherit autotools qa-policy
 DESCRIPTION="D-Bus bindings for glib"
 HOMEPAGE="https://dbus.freedesktop.org/"
 
-SNAPSHOT=6c42458fc17e2e218d9a9c3dcc69223795c85aa5
+SNAPSHOT=ef9b78ca396e12bc29869c5adb53d5f727249608
 SRC_URI="https://gitlab.freedesktop.org/dbus/dbus-glib/-/archive/${SNAPSHOT}/dbus-glib-${SNAPSHOT}.tar.bz2 -> dbus-glib-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/dbus-glib-${SNAPSHOT}"
 

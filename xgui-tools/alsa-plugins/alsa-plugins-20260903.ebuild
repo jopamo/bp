@@ -15,7 +15,7 @@ KEYWORDS="amd64 arm64"
 IUSE="debug ffmpeg libsamplerate pulseaudio"
 
 DEPEND="
-	>=xgui-tools/alsa-lib-${PV}
+	>=xgui-tools/alsa-lib-1.1.6
 	xmedia-lib/speexdsp
 	ffmpeg? ( xmedia-app/ffmpeg )
 	libsamplerate? ( xmedia-lib/libsamplerate )

@@ -7,7 +7,7 @@ inherit cmake
 DESCRIPTION="Shader tools module for the Qt framework"
 HOMEPAGE="https://www.qt.io/"
 
-SNAPSHOT=ca9cfbf57544f4b47e2372c95f1bfe614df41aed
+SNAPSHOT=6a1ee4da02d5db00bfd4d19bcfa5a2e4ff7494a2
 SRC_URI="https://invent.kde.org/qt/qt/${PN}/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 

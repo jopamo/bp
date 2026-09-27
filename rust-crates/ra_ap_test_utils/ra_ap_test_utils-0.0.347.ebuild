@@ -3,8 +3,8 @@ EAPI=8
 MERGE_MANIFEST_MODE="tree-blake3-v1"
 
 CRATE_NAME="ra_ap_test_utils"
-CRATE_VERSION="0.0.328"
-CRATE_CHECKSUM="57d10cbb0402abee7034de5d90ddf7e380d1e21ad0e1dcd2db92c3c87df78723"
+CRATE_VERSION="0.0.347"
+CRATE_CHECKSUM="fdfcc378493db43a2b837d9cd62c4c91c5d33302ae639b3dbf6d56ed97df6e63"
 CRATE_SOURCE="registry+https://github.com/rust-lang/crates.io-index"
 CRATE_SOURCE_KIND="registry"
 

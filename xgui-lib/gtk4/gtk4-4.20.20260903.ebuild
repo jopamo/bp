@@ -6,7 +6,7 @@ inherit meson xdg python-any-r1 flag-o-matic
 
 DESCRIPTION="Multi-platform toolkit for creating graphical user interfaces"
 HOMEPAGE="https://www.gtk.org/"
-SNAPSHOT=9b758ff3e29fc4ea564203f3a303aaf0370debcd
+SNAPSHOT=34dc3af563f767348ca575827f414a50c0458b0e
 SRC_URI="https://github.com/GNOME/gtk/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/gtk-${SNAPSHOT}"
 

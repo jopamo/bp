@@ -1,2 +1,4 @@
 DIST ref-cast-impl-1.0.22.crate 9306 BLAKE3 c273e0f544372259e8097982ff937ff8c573ca5ea1dcfb4d9f530a7cb18c8db1
 DIST ref-cast-impl-1.0.25.crate 10167 BLAKE3 b68f8f8baae895d58a39a8c13cf4b3c1052ee3b8deedeebbc257e3d786c8af7b
+DIST ref-cast-impl-1.0.26.crate 10232 BLAKE3 faf4b2ebbeb2138a830d7d4f3b21342e50f01ed13f482e642d8f6a58859246bf
+DIST ref-cast-impl-1.0.27.crate 10194 BLAKE3 dd5d27bfc9b8c631f02962509e5bf92f6e05dd1133040dd4bb8ddbd11ec0d090

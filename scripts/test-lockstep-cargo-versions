@@ -1,0 +1,42 @@
+#!/usr/bin/env python3
+"""Check that the Cargo consumer addresses lockstep's generated ebuilds."""
+
+from pathlib import Path
+import re
+import subprocess
+
+
+repo = Path(__file__).resolve().parents[1]
+crates = []
+for path in sorted((repo / "rust-crates").glob("*/*.ebuild")):
+    text = path.read_text()
+    name = re.search(r'^CRATE_NAME="([^"]+)"$', text, re.M)
+    version = re.search(r'^CRATE_VERSION="([^"]+)"$', text, re.M)
+    if name and version:
+        crates.append((path, name[1], version[1]))
+assert crates, "no generated crates found"
+
+result = subprocess.run(
+    ["bash", "-c", """
+        set -e
+        inherit() { :; }
+        EXPORT_FUNCTIONS() { :; }
+        die() { echo "$*" >&2; exit 1; }
+        CARGO_DEPS=
+        source "$1/eclass/lockstep-cargo.eclass"
+        while IFS=$'\\t' read -r name version; do
+            package=$(_lockstep_cargo_portage_package_name "$name")
+            pv=$(_lockstep_cargo_portage_version "$version")
+            printf '%s/%s-%s.ebuild\\n' "$package" "$package" "$pv"
+        done
+    """, "test-lockstep-cargo-versions", str(repo)],
+    input="".join(f"{name}\t{version}\n" for _, name, version in crates),
+    text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True,
+    env={"PATH": "/usr/bin:/bin", "LC_ALL": "C"},
+)
+actual = result.stdout.splitlines()
+assert len(actual) == len(crates), result.stderr
+for (path, name, version), rendered in zip(crates, actual):
+    expected = path.relative_to(repo / "rust-crates").as_posix()
+    assert rendered == expected, f"{name}@{version}: {rendered} != {expected}"
+print(f"PASS: consumer version encoding matches {len(crates)} generated crate ebuilds")

@@ -3,8 +3,8 @@ EAPI=8
 MERGE_MANIFEST_MODE="tree-blake3-v1"
 
 CRATE_NAME="arrayvec"
-CRATE_VERSION="0.7.7"
-CRATE_CHECKSUM="f02882884d3e1bc524fb12c79f107f6ad0e1cfd498c536ffb494301740995dfe"
+CRATE_VERSION="0.7.8"
+CRATE_CHECKSUM="d3fb67a6e08acf24fdeccbac2cb6ac4305825bd1f117462e0e6f2f193345ad56"
 CRATE_SOURCE="registry+https://github.com/rust-lang/crates.io-index"
 CRATE_SOURCE_KIND="registry"
 

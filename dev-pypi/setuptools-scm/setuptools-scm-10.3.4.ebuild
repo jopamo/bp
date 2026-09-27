@@ -15,8 +15,8 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-SRC_URI="https://files.pythonhosted.org/packages/3c/87/1ff7adcf6e03021ae58ce401565be3c9b8c739a44d14a8253d38b3754117/setuptools_scm-10.2.3.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/setuptools_scm-10.2.3"
+SRC_URI="https://files.pythonhosted.org/packages/85/d8/fc143f88819ccf10ba2388ba86732ee2de193e578234e25a783f6cc14bf7/setuptools_scm-10.3.4.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/setuptools_scm-10.3.4"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="
@@ -26,15 +26,8 @@ RDEPEND+="
 "
 # lockstep-pypi-deps: end
 
-# Private vcs-versioning APIs require a matching 2.x release for each Python.
-RDEPEND+="
-	>=dev-pypi/vcs-versioning-2.3.2[${PYTHON_USEDEP}]
-	<dev-pypi/vcs-versioning-3[${PYTHON_USEDEP}]
-"
-
 BDEPEND="
 	dev-pypi/gpep517[${PYTHON_USEDEP}]
 	dev-pypi/setuptools[${PYTHON_USEDEP}]
-	>=dev-pypi/vcs-versioning-2.3.2[${PYTHON_USEDEP}]
-	<dev-pypi/vcs-versioning-3[${PYTHON_USEDEP}]
+	dev-pypi/vcs-versioning[${PYTHON_USEDEP}]
 "

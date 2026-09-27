@@ -3,8 +3,8 @@ EAPI=8
 MERGE_MANIFEST_MODE="tree-blake3-v1"
 
 CRATE_NAME="bitflags"
-CRATE_VERSION="2.13.0"
-CRATE_CHECKSUM="b4388bee8683e3d04af747c73422af53102d2bd24d9eadb6cbc100baef4b43f8"
+CRATE_VERSION="2.13.1"
+CRATE_CHECKSUM="b588b76d00fde79687d7646a9b5bdf3cc0f655e0bbd080335a95d7e96f3587da"
 CRATE_SOURCE="registry+https://github.com/rust-lang/crates.io-index"
 CRATE_SOURCE_KIND="registry"
 

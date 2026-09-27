@@ -3,8 +3,8 @@ EAPI=8
 MERGE_MANIFEST_MODE="tree-blake3-v1"
 
 CRATE_NAME="rustls-webpki"
-CRATE_VERSION="0.103.13"
-CRATE_CHECKSUM="61c429a8649f110dddef65e2a5ad240f747e85f7758a6bccc7e5777bd33f756e"
+CRATE_VERSION="0.103.15"
+CRATE_CHECKSUM="f3c3cf1d8b1e7d4927e2d154c3fcb02979afb9939629c62cd9048d4f07b60ac2"
 CRATE_SOURCE="registry+https://github.com/rust-lang/crates.io-index"
 CRATE_SOURCE_KIND="registry"
 

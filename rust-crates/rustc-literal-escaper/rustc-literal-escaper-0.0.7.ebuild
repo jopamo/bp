@@ -3,8 +3,8 @@ EAPI=8
 MERGE_MANIFEST_MODE="tree-blake3-v1"
 
 CRATE_NAME="rustc-literal-escaper"
-CRATE_VERSION="0.0.4"
-CRATE_CHECKSUM="ab03008eb631b703dd16978282ae36c73282e7922fe101a4bd072a40ecea7b8b"
+CRATE_VERSION="0.0.7"
+CRATE_CHECKSUM="8be87abb9e40db7466e0681dc8ecd9dcfd40360cb10b4c8fe24a7c4c3669b198"
 CRATE_SOURCE="registry+https://github.com/rust-lang/crates.io-index"
 CRATE_SOURCE_KIND="registry"
 

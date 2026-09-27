@@ -15,8 +15,8 @@ LICENSE="BSD-3-Clause"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-SRC_URI="https://files.pythonhosted.org/packages/7f/f8/579a8b51e42e38ee32647df9f08aa25643ae788e275cc625b199829c4671/httpx2-2.12.0.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/httpx2-2.12.0"
+SRC_URI="https://files.pythonhosted.org/packages/d5/44/474bef2a0e9d90f1715d32cb98b0738695ca17ba324095fb2497ed7fbd59/httpx2-2.13.1.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/httpx2-2.13.1"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="

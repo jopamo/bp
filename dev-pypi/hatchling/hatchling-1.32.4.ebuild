@@ -15,8 +15,8 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-SRC_URI="https://files.pythonhosted.org/packages/69/08/33331757185504aae48b8d9bd78cec03a76e3aecfb52e549d05a2347c0dd/hatchling-1.32.0.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/hatchling-1.32.0"
+SRC_URI="https://files.pythonhosted.org/packages/f6/97/b5312f01a8c6daf729a9d272dd442e0c546dbcc630495788786c4b567ed0/hatchling-1.32.4.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/hatchling-1.32.4"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="

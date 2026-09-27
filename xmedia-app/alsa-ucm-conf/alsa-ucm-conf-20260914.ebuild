@@ -4,7 +4,7 @@ PROPERTIES+=" source-payload"
 
 DESCRIPTION="ALSA Use Case Manager configuration"
 HOMEPAGE="http://www.alsa-project.org/"
-SNAPSHOT=00175aa645c482111d096c3d8230f182a875d286
+SNAPSHOT=18d142f3bfc9f59cecb4e6d65013da8c8cdccb65
 SRC_URI="https://github.com/alsa-project/alsa-ucm-conf/archive/${SNAPSHOT}.tar.gz -> alsa-ucm-conf-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/alsa-ucm-conf-${SNAPSHOT}"
 

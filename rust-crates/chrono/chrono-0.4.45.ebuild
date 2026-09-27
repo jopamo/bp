@@ -3,8 +3,8 @@ EAPI=8
 MERGE_MANIFEST_MODE="tree-blake3-v1"
 
 CRATE_NAME="chrono"
-CRATE_VERSION="0.4.44"
-CRATE_CHECKSUM="c673075a2e0e5f4a1dde27ce9dee1ea4558c7ffe648f576438a20ca1d2acc4b0"
+CRATE_VERSION="0.4.45"
+CRATE_CHECKSUM="1aa79e62e7697b8e29b513a68abacf485adcd1fe8284a4316c5ae868e6633327"
 CRATE_SOURCE="registry+https://github.com/rust-lang/crates.io-index"
 CRATE_SOURCE_KIND="registry"
 

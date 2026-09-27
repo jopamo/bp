@@ -3,8 +3,8 @@ EAPI=8
 MERGE_MANIFEST_MODE="tree-blake3-v1"
 
 CRATE_NAME="intrusive-collections"
-CRATE_VERSION="0.9.7"
-CRATE_CHECKSUM="189d0897e4cbe8c75efedf3502c18c887b05046e59d28404d4d8e46cbc4d1e86"
+CRATE_VERSION="0.10.3"
+CRATE_CHECKSUM="4275b20e6057cd7733fd8df8a5a31701e4fe44497dad0f3fa0e1c4fb971506be"
 CRATE_SOURCE="registry+https://github.com/rust-lang/crates.io-index"
 CRATE_SOURCE_KIND="registry"
 
@@ -12,7 +12,7 @@ inherit cargo-crate
 
 DESCRIPTION="Intrusive collections for Rust (linked list and red-black tree)"
 HOMEPAGE="https://github.com/Amanieu/intrusive-rs"
-LICENSE="|| ( Apache-2.0 MIT )"
+LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 

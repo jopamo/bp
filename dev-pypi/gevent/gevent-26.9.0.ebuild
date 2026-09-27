@@ -15,8 +15,8 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-SRC_URI="https://files.pythonhosted.org/packages/b8/eb/5f2db8013f1a4a6df2c23201f384a066f13ff5764a9f62a608c8a50ac8cc/gevent-26.8.0.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/gevent-26.8.0"
+SRC_URI="https://files.pythonhosted.org/packages/2b/ac/dd3137ae695aef399373088c84c66398f3eac597fba542f0a22280bc21d6/gevent-26.9.0.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/gevent-26.9.0"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="

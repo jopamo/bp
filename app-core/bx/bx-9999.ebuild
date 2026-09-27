@@ -32,7 +32,7 @@ RDEPEND="
 		app-net/curl[static-libs(+)]
 		lib-core/libpcre2[static-libs(+)]
 		lib-core/zlib[static-libs(+)]
-		lib-misc/lexbor[static-libs(+)]
+		lib-misc/liblexa[static-libs(+)]
 		virtual/curses[static-libs]
 	)
 	!static? (
@@ -42,7 +42,7 @@ RDEPEND="
 		app-net/curl[shared]
 		lib-core/libpcre2
 		lib-core/zlib
-		lib-misc/lexbor
+		lib-misc/liblexa
 		virtual/curses
 	)
 "

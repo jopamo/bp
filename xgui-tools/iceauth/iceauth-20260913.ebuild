@@ -4,7 +4,7 @@ inherit autotools
 
 DESCRIPTION="ICE authority file utility"
 HOMEPAGE="https://www.x.org/wiki/"
-SNAPSHOT=dd8a8dbe100d6427c01605da0a69a74fa36ddc87
+SNAPSHOT=6270ed05ebe46c3da0c6e99ed2b14d0a5ff15637
 SRC_URI="https://gitlab.freedesktop.org/xorg/app/iceauth/-/archive/${SNAPSHOT}/iceauth-${SNAPSHOT}.tar.bz2 -> iceauth-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/iceauth-${SNAPSHOT}"
 

@@ -4,7 +4,7 @@ inherit hackage
 
 DESCRIPTION="Shell script analysis tool"
 HOMEPAGE="https://www.shellcheck.net https://github.com/koalaman/shellcheck"
-SNAPSHOT=9af7ee28ce587baadd950b85dd6826a16b9c068d
+SNAPSHOT=4549614bc0bba15231f9fc20cb7146c91a8758aa
 SRC_URI="https://github.com/koalaman/shellcheck/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
@@ -40,7 +40,7 @@ HACKAGE_ROOTS=(
 
 # lockstep-hackage-managed: true
 # lockstep-hackage-deps: begin
-HACKAGE_SNAPSHOT="lts-24.58"
+HACKAGE_SNAPSHOT="lts-24.60"
 HACKAGE_DEPS=(
 	"aeson 2.2.5.1 0 a89fd54b802351ebf57a6be451db25c167c3ccb35583b4a9d2bb54d7d1c43de2"
 	"ansi-terminal 1.1.5 0 408d9232e5304efead718f96138d6d7eb2da608c6121c5c0dc6a71a833b14320"
@@ -89,7 +89,7 @@ HACKAGE_DEPS=(
 	"tasty-bench 0.4.1 1 c38a77747f14e8d26ca99869b879ee56099b04e5381a74a62255dcbab85aab84"
 	"tasty-hunit 0.10.2 0 22bc1122e8256664d7cb1e44c6bcace95676c523179947bf2403db71af43dc6d"
 	"tasty-inspection-testing 0.2.1 3 dbe49b066f9ca40811ddb70232a129b53c4bfc201763608cb7722d20309a7cbf"
-	"tasty-quickcheck 0.11.1 5 12ea6b6fecccc146b69aac3c4810fd5d135564245e9c0708df9b24071a8b0588"
+	"tasty-quickcheck 0.11.1 6 daf940fd14a401c4ca6c847b0a8583cf4ed4b048a07367efc6a2b3913f9683b3"
 	"temporary 1.3 0 3a66c136f700dbf42f3c5000ca93e80b26dead51e54322c83272b236c1ec8ef1"
 	"text-iso8601 0.1.1.2 0 8da5b74d6c79eba657ec5f8fd289f1b0aad2463538928c96c6035c52d03ac9ab"
 	"text-short 0.1.6.1 0 330b037a4f74c069e1ecfe0908baf8fb526526ef35f47922bd67ae2b3d886864"

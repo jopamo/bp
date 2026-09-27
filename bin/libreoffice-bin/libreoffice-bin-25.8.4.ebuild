@@ -27,7 +27,7 @@ IUSE="java l10n_en offlinehelp python"
 
 RDEPEND="
 	bin/openjdk11
-	lib-core/libxcrypt-compat
+	>=virtual/libcrypt-0-r1
 	lib-core/libxml2
 "
 

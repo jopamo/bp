@@ -1,0 +1,151 @@
+From 6590b0f1d59cc2e5ffd2998e49d2764920c1c781 Mon Sep 17 00:00:00 2001
+From: Paul Moses <p@1g4.org>
+Date: Sun, 27 Sep 2026 03:47:16 -0500
+Subject: [PATCH] libcrypt: provide the legacy libcrypt.so.1 ABI alongside the
+ native library
+
+Reuse the native hash selection and Vesk entropy provider, with upstream symbol maps and obsolete DES entry points at each supported LP64 target ABI floor. Keep the development symlink on libcrypt.so.2 and provide the compatibility static archive without changing native exports. Verified all 21 exports against the packaged libxcrypt-compat and passed 41 libcrypt tests, including versioned legacy links and differential API checks.
+---
+ compat/libcrypt/legacy/config.h.in |  6 +++
+ compat/libcrypt/legacy/meson.build | 73 ++++++++++++++++++++++++++++++
+ compat/libcrypt/meson.build        |  3 ++
+ meson.build                        |  3 ++
+ meson_options.txt                  |  1 +
+ 5 files changed, 86 insertions(+)
+ create mode 100644 compat/libcrypt/legacy/config.h.in
+ create mode 100644 compat/libcrypt/legacy/meson.build
+
+diff --git a/compat/libcrypt/legacy/config.h.in b/compat/libcrypt/legacy/config.h.in
+new file mode 100644
+index 0000000..f6cae64
+--- /dev/null
++++ b/compat/libcrypt/legacy/config.h.in
+@@ -0,0 +1,6 @@
++/* Keep hash selection and entropy policy identical to the native provider. */
++#include "../bootstrap/config.h"
++#undef ENABLE_OBSOLETE_API
++#define ENABLE_OBSOLETE_API 1
++#undef SYMVER_FLOOR
++#define SYMVER_FLOOR @LIBCRYPT_COMPAT_FLOOR@
+diff --git a/compat/libcrypt/legacy/meson.build b/compat/libcrypt/legacy/meson.build
+new file mode 100644
+index 0000000..e099489
+--- /dev/null
++++ b/compat/libcrypt/legacy/meson.build
+@@ -0,0 +1,73 @@
++# These are the Linux LP64 ABI floors from libxcrypt's libcrypt.minver.
++if cc.sizeof('void *') != 8
++  error('libcrypt compatibility requires an LP64 target')
++endif
++if host_machine.cpu_family() == 'x86_64'
++  libcrypt_compat_floor = 'GLIBC_2.2.5'
++elif host_machine.cpu_family() == 'aarch64'
++  libcrypt_compat_floor = 'GLIBC_2.17'
++else
++  error('unsupported libcrypt compatibility target')
++endif
++libcrypt_compat_config_data = configuration_data()
++libcrypt_compat_config_data.set('LIBCRYPT_COMPAT_FLOOR', libcrypt_compat_floor)
++configure_file(
++  input: 'config.h.in',
++  output: 'config.h',
++  configuration: libcrypt_compat_config_data,
++)
++libcrypt_compat_inc = [include_directories('.')] + libcrypt_bootstrap_inc
++libcrypt_compat_args = libcrypt_bootstrap_args + [
++  '-include', meson.current_build_dir() / 'config.h',
++]
++libcrypt_compat_policy = [
++  'SYMVER_MIN=GLIBC_2.0',
++  'SYMVER_FLOOR=' + libcrypt_compat_floor,
++  'COMPAT_ABI=glibc',
++]
++libcrypt_compat_map = configure_file(
++  input: '../../../vendor/libxcrypt/lib/libcrypt.map.in',
++  output: 'libcrypt.map',
++  command: [libcrypt_perl, files('../../../vendor/libxcrypt/scripts/gen-libcrypt-map'),
++            libcrypt_compat_policy, '@INPUT@'],
++  capture: true,
++)
++configure_file(
++  input: '../../../vendor/libxcrypt/lib/libcrypt.map.in',
++  output: 'crypt-symbol-vers.h',
++  command: [libcrypt_perl, files('../../../vendor/libxcrypt/scripts/gen-crypt-symbol-vers-h'),
++            'yes', libcrypt_compat_policy, '@INPUT@'],
++  capture: true,
++)
++if build_shared_libs
++  libcrypt_compat_sources = libcrypt_sources + files('../../../vendor/libxcrypt/lib/crypt-des-obsolete.c')
++  # The musl hash profile omits DES hashing, but the old encrypt/setkey ABI
++  # still needs the DES primitive. Do not enable additional password hashes.
++  if not libcrypt_glibc
++    libcrypt_compat_sources += files(
++      '../../../vendor/libxcrypt/lib/alg-des.c',
++      '../../../vendor/libxcrypt/lib/alg-des-tables.c',
++    )
++  endif
++  # A suffix, rather than soversion, avoids installing a competing libcrypt.so
++  # development symlink. New links must continue to select the native .so.2.
++  libcrypt_compat_shared = shared_library(
++    'crypt', libcrypt_compat_sources,
++    name_suffix: 'so.1',
++    include_directories: libcrypt_compat_inc,
++    c_args: libcrypt_compat_args + ['-DPIC=1'],
++    override_options: libcrypt_bootstrap_options,
++    link_with: libcrypto_shared,
++    link_args: ['-Wl,--version-script=' + meson.current_build_dir() / 'libcrypt.map'],
++    link_depends: libcrypt_compat_map,
++    install: true,
++  )
++endif
++if build_static_libs
++  # Upstream excludes compatibility-only symbols from static archives.
++  libcrypt_compat_static = static_library(
++    'crypt-compat',
++    objects: libcrypt_static_bootstrap.extract_all_objects(recursive: false),
++    install: true,
++  )
++endif
+diff --git a/compat/libcrypt/meson.build b/compat/libcrypt/meson.build
+index 44d5651..18e8c82 100644
+--- a/compat/libcrypt/meson.build
++++ b/compat/libcrypt/meson.build
+@@ -38,6 +38,9 @@ libcrypt_dep = declare_dependency(
+   include_directories: libcrypt_public_inc,
+   dependencies: libcrypt_dependencies,
+ )
++if get_option('libcrypt-compat').enabled()
++  subdir('legacy')
++endif
+ install_headers(libcrypt_header)
+ 
+ libcrypt_pkg = import('pkgconfig')
+diff --git a/meson.build b/meson.build
+index 76e14b1..c50ec47 100644
+--- a/meson.build
++++ b/meson.build
+@@ -488,6 +488,9 @@ subdir('tls')
+ subdir('argon2')
+ subdir('compat/libgcrypt')
+ 
++if get_option('libcrypt-compat').enabled() and not get_option('libcrypt').enabled()
++  error('-Dlibcrypt-compat=enabled requires -Dlibcrypt=enabled')
++endif
+ if get_option('libcrypt').enabled()
+   subdir('compat/libcrypt')
+ endif
+diff --git a/meson_options.txt b/meson_options.txt
+index c6dd3dc..42cf51e 100644
+--- a/meson_options.txt
++++ b/meson_options.txt
+@@ -9,6 +9,7 @@ option('libtasn1', type: 'feature', value: 'enabled', description: 'Build the li
+ option('libtasn1-bootstrap', type: 'feature', value: 'enabled', description: 'Deletion gate for the temporary imported libtasn1 bootstrap implementation')
+ option('libgcrypt-bootstrap', type: 'feature', value: 'enabled', description: 'Deletion gate for the temporary imported libgcrypt bootstrap implementation')
+ option('libcrypt', type: 'feature', value: 'disabled', description: 'Build the native libcrypt.so.2 password-hashing personality (musl: strong; glibc: strong,glibc)')
++option('libcrypt-compat', type: 'feature', value: 'disabled', description: 'Also provide the libcrypt.so.1 ABI for existing binaries')
+ option('libcrypt-bootstrap', type: 'feature', value: 'enabled', description: 'Deletion gate for the temporary imported libcrypt bootstrap implementation')
+ option('manpages', type: 'boolean', value: true, description: 'Install manpages')
+ option('openssldir', type: 'string', value: '/etc/ssl', description: 'Default OpenSSL configuration directory')
+-- 
+2.56.0-rc0
+

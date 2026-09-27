@@ -41,7 +41,7 @@ app-dev/opencl-headers
 app-net/curl
 app-server/postgresql
 lib-core/glib
-lib-core/libxcrypt-compat
+>=virtual/libcrypt-0-r1
 lib-net/avahi
 lib-dev/icu
 app-build/libtool

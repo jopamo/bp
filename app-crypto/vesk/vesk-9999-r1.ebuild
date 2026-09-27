@@ -23,8 +23,11 @@ RDEPEND="
 	${DEPEND}
 	!app-crypto/argon2
 	!lib-core/libxcrypt
+	!lib-core/libxcrypt-compat
 "
 BDEPEND="app-lang/perl"
+
+PATCHES=( "${FILESDIR}/vesk-libcrypt-compat.patch" )
 
 src_configure() {
 	qa-policy-configure
@@ -34,6 +37,7 @@ src_configure() {
 		-Ddefault_ca_file=/etc/ssl/certs/ca-certificates.crt
 		-Dgnutls=$(usex gnutls enabled disabled)
 		-Dlibcrypt=enabled
+		-Dlibcrypt-compat=enabled
 		-Dopenssldir=/etc/ssl
 	)
 

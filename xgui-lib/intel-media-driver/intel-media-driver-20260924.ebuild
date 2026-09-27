@@ -4,7 +4,7 @@ inherit cmake qa-policy
 
 DESCRIPTION="Intel VA-API media driver"
 HOMEPAGE="https://github.com/intel/media-driver"
-SNAPSHOT=950ba8f8ced0806f9cefa8a7067bacc712eb492d
+SNAPSHOT=1606716211bfd89c475f6024cae2bcfc31f5304d
 SRC_URI="https://github.com/intel/media-driver/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/media-driver-${SNAPSHOT}"
 

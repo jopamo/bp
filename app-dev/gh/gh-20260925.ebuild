@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-SNAPSHOT=ba51bb47799e308109a980fca846a90d164f5811
+SNAPSHOT=9b031151a825bda919203c5202876a725d637368
 SHORT=${SNAPSHOT:0:9}
 
 inherit flag-o-matic go-module
@@ -159,8 +159,8 @@ EGO_SUM=(
 	"github.com/cli/browser v1.0.0/go.mod"
 	"github.com/cli/browser v1.3.0"
 	"github.com/cli/browser v1.3.0/go.mod"
-	"github.com/cli/go-gh/v2 v2.16.0"
-	"github.com/cli/go-gh/v2 v2.16.0/go.mod"
+	"github.com/cli/go-gh/v2 v2.16.1"
+	"github.com/cli/go-gh/v2 v2.16.1/go.mod"
 	"github.com/cli/go-internal v0.0.0-20241025142207-6c48bcd5ce24"
 	"github.com/cli/go-internal v0.0.0-20241025142207-6c48bcd5ce24/go.mod"
 	"github.com/cli/oauth v1.2.2"
@@ -575,12 +575,12 @@ EGO_SUM=(
 	"go.yaml.in/yaml/v3 v3.0.5/go.mod"
 	"golang.org/x/crypto v0.0.0-20190308221718-c2843e01d9a2/go.mod"
 	"golang.org/x/crypto v0.0.0-20210921155107-089bfa567519/go.mod"
-	"golang.org/x/crypto v0.56.0"
-	"golang.org/x/crypto v0.56.0/go.mod"
+	"golang.org/x/crypto v0.57.0"
+	"golang.org/x/crypto v0.57.0/go.mod"
 	"golang.org/x/exp v0.0.0-20251023183803-a4bb9ffd2546"
 	"golang.org/x/exp v0.0.0-20251023183803-a4bb9ffd2546/go.mod"
-	"golang.org/x/mod v0.39.0"
-	"golang.org/x/mod v0.39.0/go.mod"
+	"golang.org/x/mod v0.41.0"
+	"golang.org/x/mod v0.41.0/go.mod"
 	"golang.org/x/mod v0.6.0-dev.0.20220419223038-86c51ed26bb4/go.mod"
 	"golang.org/x/mod v0.8.0/go.mod"
 	"golang.org/x/net v0.0.0-20190620200207-3b0461eec859/go.mod"
@@ -608,16 +608,16 @@ EGO_SUM=(
 	"golang.org/x/sys v0.5.0/go.mod"
 	"golang.org/x/term v0.0.0-20201126162022-7de9c90e9dd1/go.mod"
 	"golang.org/x/term v0.0.0-20210927222741-03fcf44c2211/go.mod"
-	"golang.org/x/term v0.45.0"
-	"golang.org/x/term v0.45.0/go.mod"
+	"golang.org/x/term v0.46.0"
+	"golang.org/x/term v0.46.0/go.mod"
 	"golang.org/x/term v0.5.0/go.mod"
 	"golang.org/x/text v0.14.0/go.mod"
 	"golang.org/x/text v0.3.0/go.mod"
 	"golang.org/x/text v0.3.3/go.mod"
 	"golang.org/x/text v0.3.7/go.mod"
 	"golang.org/x/text v0.4.0/go.mod"
-	"golang.org/x/text v0.41.0"
-	"golang.org/x/text v0.41.0/go.mod"
+	"golang.org/x/text v0.42.0"
+	"golang.org/x/text v0.42.0/go.mod"
 	"golang.org/x/text v0.7.0/go.mod"
 	"golang.org/x/time v0.15.0"
 	"golang.org/x/time v0.15.0/go.mod"

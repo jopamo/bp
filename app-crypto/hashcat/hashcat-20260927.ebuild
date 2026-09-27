@@ -4,7 +4,7 @@ inherit flag-o-matic
 
 DESCRIPTION="World's fastest and most advanced password recovery utility"
 HOMEPAGE="https://github.com/hashcat/hashcat"
-SNAPSHOT=357f5a813be5408a232fc38ee3d0d772c61b14f2
+SNAPSHOT=19e4112c79d4b5fafa94fa612299090ca7a065e2
 SRC_URI="https://github.com/hashcat/hashcat/archive/${SNAPSHOT}.tar.gz -> hashcat-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/hashcat-${SNAPSHOT}"
 

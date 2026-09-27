@@ -3,8 +3,8 @@ EAPI=8
 MERGE_MANIFEST_MODE="tree-blake3-v1"
 
 CRATE_NAME="ra_ap_proc_macro_api"
-CRATE_VERSION="0.0.328"
-CRATE_CHECKSUM="18e0229d5c7daa016a8f4f735194e68baf34ca18b73982ae036a8217874f32e9"
+CRATE_VERSION="0.0.347"
+CRATE_CHECKSUM="3c56d7dacb79f01f5d9ab0a25b232acf37d3104d176e67d2985e9e389834c553"
 CRATE_SOURCE="registry+https://github.com/rust-lang/crates.io-index"
 CRATE_SOURCE_KIND="registry"
 
@@ -19,5 +19,4 @@ KEYWORDS="amd64 arm64"
 CARGO_CRATE_FEATURES=(
 	"default"
 	"in-rust-tree"
-	"sysroot-abi"
 )

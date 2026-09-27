@@ -2,11 +2,11 @@
 
 EAPI=8
 
-DESCRIPTION="Native Unix password-hashing provider"
+DESCRIPTION="Unix password-hashing provider with the libcrypt.so.1 compatibility ABI"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 IUSE="static-libs"
 
 RDEPEND="
-	app-crypto/vesk[shared,static-libs?]
+	>=app-crypto/vesk-9999-r1[shared,static-libs?]
 "

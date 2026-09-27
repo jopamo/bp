@@ -27,7 +27,7 @@ RDEPEND="${DEPEND}
 	fonts/fontconfig
 	lib-core/expat
 	lib-core/libffi
-	lib-core/libxcrypt-compat
+	>=virtual/libcrypt-0-r1
 	lib-core/ncurses5-compat
 	xgui-lib/libX11
 	xgui-lib/freetype

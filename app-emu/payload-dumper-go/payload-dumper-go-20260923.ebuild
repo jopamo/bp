@@ -4,7 +4,7 @@ inherit go-module
 
 DESCRIPTION="an android OTA payload dumper"
 HOMEPAGE="https://github.com/ssut/payload-dumper-go"
-SNAPSHOT=05fe59e21c9f271fba38398c7c040993313ecd04
+SNAPSHOT=c3a50ba8d784764c06143c1f82971cd81a77f9d6
 SRC_URI="https://github.com/ssut/payload-dumper-go/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 # lockstep-go-managed: true
 # lockstep-go-deps: begin

@@ -4,7 +4,7 @@ inherit autotools qa-policy
 
 DESCRIPTION="Shared memory fences using futexes"
 HOMEPAGE="https://cgit.freedesktop.org/xorg/lib/libXshmfence/"
-SNAPSHOT=c8acc32ffec83765c8388ba75f172bcd7892c3f9
+SNAPSHOT=50146c659fc5fbd43599e513b5cba0eea4b6dde1
 SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libxshmfence/-/archive/${SNAPSHOT}/libxshmfence-${SNAPSHOT}.tar.bz2 -> ${PN}-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

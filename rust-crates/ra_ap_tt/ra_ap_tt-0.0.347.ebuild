@@ -3,8 +3,8 @@ EAPI=8
 MERGE_MANIFEST_MODE="tree-blake3-v1"
 
 CRATE_NAME="ra_ap_tt"
-CRATE_VERSION="0.0.328"
-CRATE_CHECKSUM="96dfc20add2675d38240a7815755b54f514d91b9dc0336cb3d024901af4faeef"
+CRATE_VERSION="0.0.347"
+CRATE_CHECKSUM="babe00307d454b585a66e51f1fe6ccdfd1f82a200ef75374c80e843520cb3f7f"
 CRATE_SOURCE="registry+https://github.com/rust-lang/crates.io-index"
 CRATE_SOURCE_KIND="registry"
 
@@ -17,6 +17,5 @@ SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
-	"default"
 	"in-rust-tree"
 )

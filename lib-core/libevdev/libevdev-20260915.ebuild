@@ -4,7 +4,7 @@ inherit autotools flag-o-matic qa-policy
 
 DESCRIPTION="Handler library for evdev events"
 HOMEPAGE="https://www.freedesktop.org/wiki/Software/libevdev/"
-SNAPSHOT=a158f468affb059669189454a52b0d78c563618b
+SNAPSHOT=b4d411a1d629d6dfdbd183d8e28cd8d35ebea25e
 SRC_URI="https://gitlab.freedesktop.org/libevdev/libevdev/-/archive/${SNAPSHOT}/libevdev-${SNAPSHOT}.tar.bz2 -> libevdev-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/libevdev-${SNAPSHOT}"
 

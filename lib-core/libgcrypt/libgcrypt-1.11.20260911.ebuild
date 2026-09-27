@@ -1,7 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 BRANCH_NAME="LIBGCRYPT-$(ver_cut 1-2)-BRANCH"
-SNAPSHOT=b253a3f12334cdd8d7f064d862537b512d2790ce
+SNAPSHOT=b5d879b1012eec8059d79ae7f29675d598ffd8e2
 
 inherit flag-o-matic autotools qa-policy
 

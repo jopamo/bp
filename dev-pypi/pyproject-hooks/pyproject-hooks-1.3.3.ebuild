@@ -15,8 +15,8 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-SRC_URI="https://files.pythonhosted.org/packages/e7/82/28175b2414effca1cdac8dc99f76d660e7a4fb0ceefa4b4ab8f5f6742925/pyproject_hooks-1.2.0.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/pyproject_hooks-1.2.0"
+SRC_URI="https://files.pythonhosted.org/packages/6d/5d/f2ddeef4a855a102aaae5e97826a0260007522ab504421b75addfdb1517c/pyproject_hooks-1.3.3.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/pyproject_hooks-1.3.3"
 
 BDEPEND="
 	dev-pypi/flit-core[${PYTHON_USEDEP}]

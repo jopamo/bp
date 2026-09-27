@@ -1,2 +1,3 @@
 DIST tokio-stream-0.1.16.crate 38312 BLAKE3 a43eaf71cb47b402e75d280adf7776fe9edbcedcc4de60a264856c4ceece17da
 DIST tokio-stream-0.1.18.crate 44366 BLAKE3 f2d02951d279869354f62bcdb4db377b29b501ebe638854f76cbc2c36be1e5e3
+DIST tokio-stream-0.1.19.crate 48088 BLAKE3 5d58be66da9c97ff0d4b6289d1e80c87ff67663e43e3c2e6c49c8df52471d305

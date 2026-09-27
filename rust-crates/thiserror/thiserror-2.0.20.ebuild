@@ -1,0 +1,22 @@
+# lockstep-managed: cargo-crate
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
+
+CRATE_NAME="thiserror"
+CRATE_VERSION="2.0.20"
+CRATE_CHECKSUM="ec86235f5fcc2a73650310756d2ac5b138a5780bbbdfae3eeccec992c435ba4f"
+CRATE_SOURCE="registry+https://github.com/rust-lang/crates.io-index"
+CRATE_SOURCE_KIND="registry"
+
+inherit cargo-crate
+
+DESCRIPTION="derive(Error)"
+HOMEPAGE="https://github.com/dtolnay/thiserror"
+LICENSE="|| ( MIT Apache-2.0 )"
+SLOT="${PV}"
+KEYWORDS="amd64 arm64"
+
+CARGO_CRATE_FEATURES=(
+	"default"
+	"std"
+)

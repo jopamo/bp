@@ -1,2 +1,3 @@
+DIST thread_local-1.1.10.crate 16361 BLAKE3 325d6e328f2fe0a1409cc5c531d059a4b68ead100f27ed5cfc257f2b14bee677
 DIST thread_local-1.1.8.crate 13962 BLAKE3 f915aaf7fb6de12d562c0cce670b98fa11a418324fa7dcdb8c9ffcef69837301
 DIST thread_local-1.1.9.crate 19315 BLAKE3 5a749fc45c32ec9e5698b7bd73fb47a629d7609672edb257e07ef15c0ac3e164

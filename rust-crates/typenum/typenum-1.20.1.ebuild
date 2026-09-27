@@ -1,0 +1,24 @@
+# lockstep-managed: cargo-crate
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
+
+CRATE_NAME="typenum"
+CRATE_VERSION="1.20.1"
+CRATE_CHECKSUM="b6f5e870be6c3b371b77fe0ee0bafb859fa4964b4404c27de1d380043c4dda20"
+CRATE_SOURCE="registry+https://github.com/rust-lang/crates.io-index"
+CRATE_SOURCE_KIND="registry"
+
+inherit cargo-crate
+
+DESCRIPTION="Typenum is a Rust library for type-level numbers evaluated at compile time. It currently supports bits, unsigned integers, and signed integers. It also provides a type-level array of type-level numbers, but its implementation is incomplete."
+HOMEPAGE="https://github.com/paholg/typenum"
+LICENSE="|| ( MIT Apache-2.0 )"
+SLOT="${PV}"
+KEYWORDS="amd64 arm64"
+
+CARGO_CRATE_FEATURES=(
+	"const-generics"
+	"i128"
+	"scale_info"
+	"strict"
+)

@@ -102,15 +102,18 @@ src_install() {
 	local build_dir="${WORKDIR}/build"
 	emake -C "${build_dir}" DESTDIR="${D}" install
 
-	local lib
+	local lib link_libs
 	for lib in ncurses "ncurses++" form panel menu tinfo; do
-		printf '/* GNU ld script */\nINPUT(-l%stw)\n' "${lib}" > "${ED}"/usr/lib/lib${lib}.so
-		printf '/* GNU ld script */\nINPUT(-l%stw)\n' "${lib}" > "${ED}"/usr/lib/lib${lib}w.so
+		link_libs="-l${lib}tw"
+		# The split termlib also provides public curses symbols.
+		[[ ${lib} == ncurses ]] && link_libs+=" -ltinfotw"
+		printf '/* GNU ld script */\nINPUT(%s)\n' "${link_libs}" > "${ED}"/usr/lib/lib${lib}.so
+		printf '/* GNU ld script */\nINPUT(%s)\n' "${link_libs}" > "${ED}"/usr/lib/lib${lib}w.so
 		dosym -r /usr/lib/pkgconfig/${lib}tw.pc /usr/lib/pkgconfig/${lib}.pc
 		dosym -r /usr/lib/pkgconfig/${lib}tw.pc /usr/lib/pkgconfig/${lib}w.pc
 	done
 
-	printf '/* GNU ld script */\nINPUT(-lncursestw)\n' > "${ED}"/usr/lib/libcurses.so
+	printf '/* GNU ld script */\nINPUT(-lncursestw -ltinfotw)\n' > "${ED}"/usr/lib/libcurses.so
 
 	use static-libs || find "${ED}"/usr -name '*.a' -delete
 	use static-libs || find "${ED}" -name '*.la' -delete

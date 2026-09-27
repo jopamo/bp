@@ -15,7 +15,7 @@ IUSE="debug kerberos numa profiling static systemd test"
 
 DEPEND="
 	lib-core/libxml2
-	lib-core/libpcre
+	lib-core/libpcre2
 	app-build/bison
 	static? ( virtual/curses[static-libs] )
 "

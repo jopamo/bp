@@ -3,8 +3,8 @@ EAPI=8
 MERGE_MANIFEST_MODE="tree-blake3-v1"
 
 CRATE_NAME="salsa-macros"
-CRATE_VERSION="0.25.2"
-CRATE_CHECKSUM="3d844c1aa34946da46af683b5c27ec1088a3d9d84a2b837a108223fd830220e1"
+CRATE_VERSION="0.28.2"
+CRATE_CHECKSUM="445be2bfbb2f67cb663225ecd7bc5a25370c0250fca30f9d8cbad9a913650370"
 CRATE_SOURCE="registry+https://github.com/rust-lang/crates.io-index"
 CRATE_SOURCE_KIND="registry"
 

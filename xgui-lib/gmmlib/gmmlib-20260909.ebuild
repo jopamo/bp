@@ -4,7 +4,7 @@ inherit cmake qa-policy
 
 DESCRIPTION="Intel Graphics Memory Management Library"
 HOMEPAGE="https://github.com/intel/gmmlib"
-SNAPSHOT=757922744cc32f247ab4ac31416c32edb57624c7
+SNAPSHOT=733c91a19baa65c40f4b1cf95a3991cc8c84d866
 SRC_URI="https://github.com/intel/gmmlib/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/gmmlib-${SNAPSHOT}"
 

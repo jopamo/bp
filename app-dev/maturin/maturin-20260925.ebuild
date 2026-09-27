@@ -269,12 +269,12 @@ CARGO_DEPS="
 	rust-crates/rustc_version-0.4.1
 	rust-crates/rustflags-0.1.7
 	rust-crates/rustix-1.1.4
-	rust-crates/rustls-0.23.38
+	rust-crates/rustls-0.23.45
 	rust-crates/rustls-native-certs-0.8.3
 	rust-crates/rustls-pki-types-1.14.0
 	rust-crates/rustls-platform-verifier-0.6.2
 	rust-crates/rustls-platform-verifier-android-0.1.1
-	rust-crates/rustls-webpki-0.103.13
+	rust-crates/rustls-webpki-0.103.15
 	rust-crates/rustversion-1.0.22
 	rust-crates/ruzstd-0.8.2
 	rust-crates/same-file-1.0.6
@@ -487,7 +487,7 @@ RDEPEND=""
 # lockstep-pypi-deps: end
 DESCRIPTION="Build and publish crates with pyo3, rust-cpython and cffi bindings"
 HOMEPAGE="https://www.maturin.rs/"
-SNAPSHOT=316d5130972efba3082e0977781a36bc7aedcae8
+SNAPSHOT=4c4d695109ef2799d6331681f9cafbccc4722bac
 SRC_URI="https://github.com/PyO3/maturin/archive/${SNAPSHOT}.tar.gz -> maturin-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/maturin-${SNAPSHOT}"
 

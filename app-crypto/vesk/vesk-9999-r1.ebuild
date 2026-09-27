@@ -27,11 +27,6 @@ RDEPEND="
 "
 BDEPEND="app-lang/perl"
 
-PATCHES=(
-	"${FILESDIR}/vesk-libcrypt-compat.patch"
-	"${FILESDIR}/vesk-libcrypt-compat-musl.patch"
-)
-
 src_configure() {
 	qa-policy-configure
 

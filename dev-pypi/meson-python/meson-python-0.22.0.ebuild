@@ -9,14 +9,14 @@ DISTUTILS_USE_PEP517="standalone"
 
 inherit distutils-r1
 
-DESCRIPTION="Meson Python build backend (PEP 517)"
+DESCRIPTION="The Python build backend for Meson projects"
 HOMEPAGE="https://github.com/mesonbuild/meson-python"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-SRC_URI="https://files.pythonhosted.org/packages/8b/f0/d794d7ed8a843a8a8947768f3b329d1e8601222dc95d930f4a5f9706cd6c/meson_python-0.20.0.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/meson_python-0.20.0"
+SRC_URI="https://files.pythonhosted.org/packages/82/14/1bafca9db7691ff05767570686cd775bddec57c7358e78504cbfd35ec996/meson_python-0.22.0.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/meson_python-0.22.0"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="

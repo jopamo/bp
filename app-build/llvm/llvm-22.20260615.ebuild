@@ -15,7 +15,7 @@ LICENSE="Apache-2.0-with-LLVM-exceptions UoI-NCSA rc BSD public-domain"
 SLOT=0
 KEYWORDS="amd64 arm64"
 
-IUSE="amdgpu +assertions bootstrap +bolt +clang-tools-extra bpf cuda debug libcxx libcxxabi +libfuzzer +lldb lto nvptx orc +polly sanitizers static_analyzer -sysclang syslibcxxabi test wasm xcore"
+IUSE="amdgpu +assertions bootstrap +bolt +clang-tools-extra bpf cuda debug libcxx libcxxabi +libfuzzer +lldb lto nvptx orc +polly sanitizers static_analyzer -sysclang syslibcxxabi test wasm xcore +z3"
 
 COMMON_DEPEND="
 	app-net/curl
@@ -25,13 +25,13 @@ COMMON_DEPEND="
 	lib-core/zlib
 	app-compression/zstd
 	lib-misc/libpfm
-	lib-misc/z3
 	virtual/curses
 	bolt? ( virtual/libelf )
 	lldb? (
 		app-compression/xz-utils
 		app-lang/lua
 	)
+	z3? ( lib-misc/z3 )
 "
 
 RDEPEND="${COMMON_DEPEND}"
@@ -370,7 +370,7 @@ src_configure() {
 		-DLLVM_ENABLE_THREADS=ON
 		-DLLVM_ENABLE_ZLIB=FORCE_ON
 		-DLLVM_ENABLE_ZSTD=FORCE_ON
-		-DLLVM_ENABLE_Z3_SOLVER=ON
+		-DLLVM_ENABLE_Z3_SOLVER=$(usex z3)
 		-DLLVM_HOST_TRIPLE=${TUPLE}
 		-DLLVM_INCLUDE_BENCHMARKS=OFF
 		-DLLVM_INCLUDE_DOCS=OFF

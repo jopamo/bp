@@ -2,7 +2,7 @@
 
 DESCRIPTION="Linux firmware files"
 HOMEPAGE="https://git.kernel.org/?p=linux/kernel/git/firmware/linux-firmware.git"
-SNAPSHOT=168b642a2a5cdfaa3baeb6f6cb400ffdbecb1a4c
+SNAPSHOT=9b858e5bb58d7bf1fc4d8818cb9100aed6d46f6a
 SRC_URI="https://gitlab.com/kernel-firmware/linux-firmware/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2 -> ${PN}-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/linux-firmware-${SNAPSHOT}"
 

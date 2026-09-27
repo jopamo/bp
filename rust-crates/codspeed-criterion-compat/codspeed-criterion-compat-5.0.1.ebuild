@@ -3,8 +3,8 @@ EAPI=8
 MERGE_MANIFEST_MODE="tree-blake3-v1"
 
 CRATE_NAME="codspeed-criterion-compat"
-CRATE_VERSION="2.10.1"
-CRATE_CHECKSUM="c3c23d880a28a2aab52d38ca8481dd7a3187157d0a952196b6db1db3c8499725"
+CRATE_VERSION="5.0.1"
+CRATE_CHECKSUM="d9f24251445188c69d50f10179d795424bd71b533b7e3f84fc03f26893b01af0"
 CRATE_SOURCE="registry+https://github.com/rust-lang/crates.io-index"
 CRATE_SOURCE_KIND="registry"
 

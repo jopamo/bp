@@ -21,5 +21,4 @@ RESTRICT="test"
 DEPEND="
 	xgui-lib/qttools
 	xgui-tools/extra-cmake-modules
-	xgui-tools/plasma-wayland-protocols
 "

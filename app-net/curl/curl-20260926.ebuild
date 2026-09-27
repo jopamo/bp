@@ -9,7 +9,7 @@ if [[ ${PV} == *9999 ]] ; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/curl/curl.git"
 else
-	SNAPSHOT=04bfe8fbbf552a3baf38c629bf9dd59916b3c559
+	SNAPSHOT=49eaaddd263c2ab181c40c9878f50ded517f99f3
 	SRC_URI="https://github.com/curl/curl/archive/${SNAPSHOT}.tar.gz -> curl-${SNAPSHOT}.tar.gz"
 	S=${WORKDIR}/curl-${SNAPSHOT}
 	KEYWORDS="amd64 arm64"

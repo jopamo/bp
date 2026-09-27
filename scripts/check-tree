@@ -1,0 +1,213 @@
+#!/usr/bin/env python3
+"""Resolve each selected ebuild independently, without fetching or building."""
+
+import argparse
+from concurrent.futures import ThreadPoolExecutor, as_completed
+import csv
+import grp
+import os
+from pathlib import Path
+import platform
+import pwd
+import shlex
+import shutil
+import signal
+import subprocess
+import tempfile
+import threading
+import time
+
+
+def positive_int(value):
+    number = int(value)
+    if number < 1:
+        raise argparse.ArgumentTypeError("must be positive")
+    return number
+
+
+def stop_process(process):
+    try:
+        os.killpg(process.pid, signal.SIGKILL)
+    except ProcessLookupError:
+        pass
+
+
+def default_profile():
+    arch = {"x86_64": "amd64", "aarch64": "arm64"}.get(platform.machine())
+    if arch is None:
+        raise ValueError("unsupported host architecture; specify --profile")
+    glibc = subprocess.run(
+        ["getconf", "GNU_LIBC_VERSION"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
+    ).returncode == 0
+    return f"core/{arch}/{'glibc' if glibc else 'musl'}"
+
+
+def select_ebuilds(repo, selectors):
+    ebuilds = sorted(repo.glob("*/*/*.ebuild"))
+    if not selectors:
+        return ebuilds
+    selected = set()
+    for selector in selectors:
+        matches = [
+            path for path in ebuilds
+            if selector in (
+                path.relative_to(repo).as_posix(),
+                path.parent.relative_to(repo).as_posix(),
+            )
+        ]
+        if not matches:
+            raise ValueError(f"no ebuilds match {selector!r}; use category/package or an ebuild path")
+        selected.update(matches)
+    return sorted(selected)
+
+
+def prepare_environment(repo, profile, output, cache_dir=None):
+    config = output / "config"
+    for path in ("etc/corepkg/repos.conf", "tmp", "cache", "distfiles", "packages", "home", "logs"):
+        (config / path).mkdir(parents=True)
+    (config / "etc/corepkg/make.profile").symlink_to(profile)
+    (config / "etc/corepkg/repos.conf/bp.conf").write_text(
+        f"[DEFAULT]\nmain-repo = bp\n\n[bp]\nlocation = {repo}\nmasters =\nauto-sync = no\n"
+    )
+    settings = {
+        "COREPKG_TMPDIR": str(config / "tmp"),
+        "COREPKG_DEPCACHEDIR": str(cache_dir or config / "cache"),
+        "DISTDIR": str(config / "distfiles"),
+        "PKGDIR": str(config / "packages"),
+        "EMERGE_LOG_DIR": str(config / "logs"),
+        "COREPKG_USERNAME": pwd.getpwuid(os.getuid()).pw_name,
+        "COREPKG_GRPNAME": grp.getgrgid(os.getgid()).gr_name,
+        "FEATURES": "unprivileged -userpriv -usersandbox -sandbox -buildpkg -getbinpkg",
+        "ACCEPT_LICENSE": "*",
+        "USE": os.environ.get("BP_TEST_USE", ""),
+    }
+    (config / "etc/corepkg/make.conf").write_text(
+        "".join(f"{key}={shlex.quote(value)}\n" for key, value in settings.items())
+    )
+    env = os.environ.copy()
+    for key in (
+        "COREPKG_REPOSITORIES", "PORTDIR", "PORTDIR_OVERLAY",
+        "ACCEPT_KEYWORDS", "ACCEPT_PROPERTIES", "ACCEPT_RESTRICT",
+    ):
+        env.pop(key, None)
+    env.update(settings)
+    # An alternate ROOT also loads the host's build-root profile. Use a
+    # private configuration and --emptytree instead; package moves are off.
+    env.update(
+        COREPKG_CONFIGROOT=str(config), ROOT="/", SYSROOT="/", EPREFIX="",
+        HOME=str(config / "home"), EMERGE_DEFAULT_OPTS="",
+    )
+    return env
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("packages", nargs="*", help="category/package or relative ebuild path (default: every ebuild)")
+    parser.add_argument("--profile", default=os.environ.get("BP_TEST_PROFILE"))
+    parser.add_argument("--jobs", type=positive_int, default=4)
+    parser.add_argument("--timeout", type=positive_int, default=180, help="seconds per ebuild (default: 180)")
+    parser.add_argument("--output", type=Path, help="new directory for config, logs and summary.tsv")
+    parser.add_argument("--cache-dir", type=Path, help="reuse a user-owned metadata cache")
+    args = parser.parse_args()
+    if shutil.which("emerge") is None:
+        parser.error("emerge is not installed or not on PATH")
+    repo = Path(__file__).resolve().parents[1]
+    try:
+        profile = (repo / "profiles" / (args.profile or default_profile())).resolve()
+        if not profile.is_relative_to(repo / "profiles") or not profile.is_dir():
+            raise ValueError("profile must be a directory under this repository's profiles/")
+        ebuilds = select_ebuilds(repo, args.packages)
+        if not ebuilds:
+            raise ValueError("no ebuilds selected")
+    except ValueError as error:
+        parser.error(str(error))
+    if args.output:
+        output = args.output.resolve()
+        try:
+            output.mkdir(parents=True, exist_ok=False)
+        except FileExistsError:
+            parser.error(f"output directory already exists: {output}")
+    else:
+        output = Path(tempfile.mkdtemp(prefix="bp-check-tree."))
+    cache_dir = args.cache_dir.resolve() if args.cache_dir else None
+    if cache_dir:
+        cache_dir.mkdir(parents=True, exist_ok=True)
+    env = prepare_environment(repo, profile, output, cache_dir)
+    command = [
+        "emerge", "--ignore-default-opts", "--pretend", "--emptytree",
+        "--with-bdeps=y", "--usepkg=n", "--getbinpkg=n",
+        "--autounmask=n", "--autounmask-write=n", "--package-moves=n",
+        "--ignore-world=y", "--complete-graph-if-new-use=n", "--complete-graph-if-new-ver=n",
+        "--color=n", "--nospinner", "--quiet",
+    ]
+    (output / "invocation.txt").write_text(
+        f"profile: {profile}\nUSE: {env['USE']}\ntargets: {len(ebuilds)}\n"
+        f"command: {shlex.join(command)} <exact-atom>\n"
+    )
+    print(f"check-tree: {len(ebuilds)} ebuilds; profile={profile.relative_to(repo)}", flush=True)
+    print(f"check-tree: results={output}", flush=True)
+    active = set()
+    lock = threading.Lock()
+    stopped = threading.Event()
+
+    def check(path):
+        relative = path.relative_to(repo)
+        atom = f"={relative.parts[0]}/{path.stem}::bp"
+        log = output / "logs" / relative.with_suffix(".log")
+        log.parent.mkdir(parents=True, exist_ok=True)
+        started = time.monotonic()
+        with log.open("w") as stream:
+            stream.write(shlex.join([*command, atom]) + "\n")
+            stream.flush()
+            with lock:
+                if stopped.is_set():
+                    return atom, "CANCELLED", "", "0", str(log.relative_to(output))
+                process = subprocess.Popen(
+                    [*command, atom], env=env, cwd=repo, stdout=stream,
+                    stderr=subprocess.STDOUT, start_new_session=True,
+                )
+                active.add(process)
+            try:
+                code = process.wait(timeout=args.timeout)
+                status = "PASS" if code == 0 else "FAIL"
+            except subprocess.TimeoutExpired:
+                stop_process(process)
+                process.wait()
+                code, status = 124, "TIMEOUT"
+                stream.write(f"\ncheck-tree: exceeded {args.timeout} seconds\n")
+            finally:
+                with lock:
+                    active.discard(process)
+        return atom, status, code, f"{time.monotonic() - started:.1f}", str(log.relative_to(output))
+
+    results = []
+    executor = ThreadPoolExecutor(max_workers=args.jobs)
+    try:
+        futures = [executor.submit(check, path) for path in ebuilds]
+        with (output / "summary.tsv").open("w") as stream:
+            writer = csv.writer(stream, delimiter="\t")
+            writer.writerow(("atom", "status", "exit_code", "seconds", "log"))
+            for future in as_completed(futures):
+                result = future.result()
+                results.append(result)
+                writer.writerow(result)
+                stream.flush()
+                if result[1] != "PASS" or len(results) % 100 == 0 or len(results) == len(ebuilds):
+                    print(f"[{len(results)}/{len(ebuilds)}] {result[1]} {result[0]}", flush=True)
+    finally:
+        stopped.set()
+        with lock:
+            for process in active:
+                if process.poll() is None:
+                    stop_process(process)
+        executor.shutdown(wait=True, cancel_futures=True)
+    failed = sum(result[1] != "PASS" for result in results)
+    print(f"check-tree: {len(results) - failed} passed, {failed} failed/timed out; {output / 'summary.tsv'}")
+    return 1 if failed else 0
+
+
+if __name__ == "__main__":
+    try:
+        raise SystemExit(main())
+    except KeyboardInterrupt:
+        raise SystemExit(130)

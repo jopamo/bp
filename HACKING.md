@@ -3,6 +3,32 @@
 `bp` is a Corepkg package repository. Run package commands from this repository,
 and never edit generated build directories.
 
+## Checking dependency resolution without privileges
+
+From inside `bp`, run:
+
+```sh
+scripts/check-tree --jobs 8 --cache-dir "$HOME/.cache/bp-resolver"
+```
+
+The helper runs an independent `emerge --pretend --emptytree` check for every
+ebuild version and retains a per-target log and `summary.tsv`. It uses a
+private profile configuration, disables package moves and automatic unmasking,
+and never fetches or builds. Do not use `sudo`.
+
+To check fewer packages:
+
+```sh
+scripts/check-tree dev-pypi/uv-build app-core/1g4-tools
+```
+
+Use `--profile` (or `BP_TEST_PROFILE`) and `BP_TEST_USE` to check other profile
+and USE configurations. A nonzero exit means at least one failure or timeout;
+an interrupted run is incomplete. Read the logs rather than treating every
+failure as a missing dependency: masks, USE constraints and slot conflicts
+also fail resolution. See [README.md](README.md) for direct regular-user
+emerge usage and the limits of a resolver-only check.
+
 ## Testing an ebuild without privileges
 
 Do not run `ebuild` directly against the host configuration. The host

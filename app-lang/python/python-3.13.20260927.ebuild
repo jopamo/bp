@@ -1,7 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 BRANCH_NAME="$(ver_cut 1-2)"
-SNAPSHOT=b9f6d5a67b37abd75a27c040af7cd5efcc9c08fd
+SNAPSHOT=c23ef5cd24e7dfe7de1a2d39e7530c8f30d6893c
 
 WANT_LIBTOOL="none"
 
@@ -21,11 +21,16 @@ fi
 
 LICENSE="PSF-2"
 SLOT="$(ver_cut 1-2)"
-#KEYWORDS="amd64 arm64"
+KEYWORDS="amd64 arm64"
 
 IUSE="bluetooth debug libedit ncurses perf pgo readline sqlite ssl static test tk valgrind xml"
 
 RESTRICT="perf? ( strip ) test"
+
+QA_CONFIG_IMPL_DECL_SKIP=(
+	chflags
+	lchflags
+)
 
 DEPEND="
 	app-build/gettext

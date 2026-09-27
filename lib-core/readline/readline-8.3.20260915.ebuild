@@ -1,7 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 BRANCH_NAME="master"
-SNAPSHOT=553d6bb272f26400d6d4d1cac7c1df84c447449b
+SNAPSHOT=f95e81428a77b37d83e56c0c7099956e8a7adfc8
 
 inherit toolchain-funcs flag-o-matic qa-policy
 

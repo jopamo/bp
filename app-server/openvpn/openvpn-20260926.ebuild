@@ -4,7 +4,7 @@ inherit user autotools
 
 DESCRIPTION="Robust and highly flexible tunneling application compatible with many OSes"
 HOMEPAGE="https://openvpn.net/"
-SNAPSHOT=28ec0f90fd5e4da73d9a0246fcb43d20150943ab
+SNAPSHOT=48939c9cd29b3bd857da10452aae854bc670c04f
 SRC_URI="https://github.com/OpenVPN/openvpn/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 	S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

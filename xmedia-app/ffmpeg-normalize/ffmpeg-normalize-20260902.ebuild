@@ -1,5 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
+DISTUTILS_USE_PEP517="uv-build"
+
 inherit distutils-r1
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
@@ -21,7 +23,6 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 DEPEND="
-	dev-pypi/setuptools[${PYTHON_USEDEP}]
 	dev-pypi/tqdm[${PYTHON_USEDEP}]
-	dev-py/ffmpeg-progress-yield[${PYTHON_USEDEP}]
+	dev-pypi/ffmpeg-progress-yield[${PYTHON_USEDEP}]
 "

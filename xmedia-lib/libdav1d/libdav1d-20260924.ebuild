@@ -4,7 +4,7 @@ inherit meson flag-o-matic
 
 DESCRIPTION="dav1d is the fastest AV1 decoder on all platforms"
 HOMEPAGE="https://code.videolan.org/videolan/dav1d.git"
-SNAPSHOT=5fa003d0785b54b88525a58dd8f504ed8d316d4d
+SNAPSHOT=bf5a8792744ee78c977dfb16503f9156dde6401d
 SRC_URI="https://code.videolan.org/videolan/dav1d/-/archive/${SNAPSHOT}/dav1d-${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/dav1d-${SNAPSHOT}"
 

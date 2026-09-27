@@ -15,7 +15,7 @@ LICENSE="Apache-2.0-with-LLVM-exceptions UoI-NCSA rc BSD public-domain"
 SLOT=0
 KEYWORDS="amd64 arm64"
 
-IUSE="amdgpu assertions bootstrap +clang-tools-extra bpf cuda debug libcxx libcxxabi +libfuzzer lto nvptx orc sanitizers static_analyzer -sysclang syslibcxxabi test wasm xcore"
+IUSE="amdgpu +assertions bootstrap +bolt +clang-tools-extra bpf cuda debug libcxx libcxxabi +libfuzzer +lldb lto nvptx orc +polly sanitizers static_analyzer -sysclang syslibcxxabi test wasm xcore"
 
 COMMON_DEPEND="
 	app-net/curl
@@ -24,12 +24,22 @@ COMMON_DEPEND="
 	lib-core/libxml2
 	lib-core/zlib
 	app-compression/zstd
+	lib-misc/libpfm
+	lib-misc/z3
 	virtual/curses
+	bolt? ( virtual/libelf )
+	lldb? (
+		app-compression/xz-utils
+		app-lang/lua
+	)
 "
 
 RDEPEND="${COMMON_DEPEND}"
 DEPEND="${COMMON_DEPEND}"
-BDEPEND="app-lang/python"
+BDEPEND="
+	app-lang/python
+	lldb? ( app-lang/swig )
+"
 
 RESTRICT="!test? ( test )"
 
@@ -198,10 +208,10 @@ src_configure() {
 	if use elibc_musl; then
 		# Avoid unsupported musl multilib sanitizer probes
 		compiler_rt_default_target_only=ON
-		compiler_rt_sanitizers_to_build="asan;msan;tsan;safestack;cfi;scudo_standalone;ubsan_minimal;gwp_asan;asan_abi"
+		compiler_rt_sanitizers_to_build="asan;msan;tsan;tysan;safestack;cfi;scudo_standalone;ubsan_minimal;gwp_asan;asan_abi"
 	fi
 
-	local LLVM_TARGETS=""
+	local LLVM_TARGETS="X86;AArch64;RISCV"
 	local LLVM_RUNTIMES
 
 	if use syslibcxxabi; then
@@ -215,8 +225,7 @@ src_configure() {
 	fi
 
 	case "${CHOST}" in
-		*aarch64*) LLVM_TARGETS+="AArch64" ;;
-		*x86_64*)  LLVM_TARGETS+="X86" ;;
+		*aarch64*|*x86_64*) ;;
 		*)         die "Unsupported host architecture: ${CHOST}" ;;
 	esac
 
@@ -231,6 +240,9 @@ src_configure() {
 
 	local LLVM_PROJECTS="llvm;clang;lld"
 	use clang-tools-extra && LLVM_PROJECTS+=";clang-tools-extra"
+	use lldb && LLVM_PROJECTS+=";lldb"
+	use bolt && LLVM_PROJECTS+=";bolt"
+	use polly && LLVM_PROJECTS+=";polly"
 
 	local runtimes_cmake_args=()
 	if use elibc_musl; then
@@ -345,16 +357,20 @@ src_configure() {
 		-DLLVM_ENABLE_EH=ON
 		-DLLVM_ENABLE_FFI=ON
 		-DLLVM_ENABLE_LIBEDIT=ON
-		-DLLVM_ENABLE_LIBPFM=OFF
-		-DLLVM_ENABLE_LIBXML2=ON
+		-DLLVM_ENABLE_LIBPFM=ON
+		-DLLVM_ENABLE_LIBXML2=FORCE_ON
 		-DLLVM_ENABLE_OCAMLDOC=OFF
 		-DLLVM_ENABLE_PER_TARGET_RUNTIME_DIR=ON
+		-DLLVM_ENABLE_PIC=ON
 		-DLLVM_ENABLE_PROJECTS="${LLVM_PROJECTS}"
 		-DLLVM_ENABLE_RTTI=ON
 		-DLLVM_ENABLE_RUNTIMES="${LLVM_RUNTIMES}"
 		-DLLVM_ENABLE_SPHINX=OFF
-		-DLLVM_ENABLE_ZLIB=ON
+		-DLLVM_ENABLE_TERMINFO=ON
+		-DLLVM_ENABLE_THREADS=ON
+		-DLLVM_ENABLE_ZLIB=FORCE_ON
 		-DLLVM_ENABLE_ZSTD=FORCE_ON
+		-DLLVM_ENABLE_Z3_SOLVER=ON
 		-DLLVM_HOST_TRIPLE=${TUPLE}
 		-DLLVM_INCLUDE_BENCHMARKS=OFF
 		-DLLVM_INCLUDE_DOCS=OFF
@@ -380,8 +396,48 @@ src_configure() {
 
 	local bootstrap_passthrough=(
 		CMAKE_INSTALL_PREFIX
+		CMAKE_INSTALL_LIBDIR
 		CMAKE_VERBOSE_MAKEFILE
+		CLANG_DEFAULT_LINKER
+		CLANG_DEFAULT_RTLIB
+		CLANG_DEFAULT_UNWINDLIB
+		COMPILER_RT_BUILD_LIBFUZZER
+		COMPILER_RT_BUILD_PROFILE
+		COMPILER_RT_BUILD_SANITIZERS
+		COMPILER_RT_DEFAULT_TARGET_ONLY
+		COMPILER_RT_DEFAULT_TARGET_TRIPLE
+		COMPILER_RT_SANITIZERS_TO_BUILD
+		LLVM_BUILD_TOOLS
+		LLVM_ENABLE_ASSERTIONS
+		LLVM_ENABLE_CURL
+		LLVM_ENABLE_EH
+		LLVM_ENABLE_LIBEDIT
+		LLVM_ENABLE_LIBPFM
+		LLVM_ENABLE_LIBXML2
+		LLVM_ENABLE_PER_TARGET_RUNTIME_DIR
+		LLVM_ENABLE_PIC
+		LLVM_ENABLE_RTTI
+		LLVM_ENABLE_TERMINFO
+		LLVM_ENABLE_THREADS
+		LLVM_ENABLE_Z3_SOLVER
+		LLVM_ENABLE_ZLIB
+		LLVM_ENABLE_ZSTD
+		LLVM_INSTALL_UTILS
+		LLVM_TARGETS_TO_BUILD
+		RUNTIMES_CMAKE_ARGS
 	)
+
+	if use lldb; then
+		bootstrap_passthrough+=(
+			LLDB_ENABLE_CURSES
+			LLDB_ENABLE_LIBEDIT
+			LLDB_ENABLE_LIBXML2
+			LLDB_ENABLE_LUA
+			LLDB_ENABLE_LZMA
+			LLDB_ENABLE_PYTHON
+			LLDB_ENABLE_SWIG
+		)
+	fi
 
 	if use elibc_musl; then
 		bootstrap_passthrough+=(
@@ -532,6 +588,18 @@ src_configure() {
 		mycmakeargs+=("${libcxx[@]}" "${cxxabi[@]}")
 	fi
 
+	if use lldb; then
+		mycmakeargs+=(
+			-DLLDB_ENABLE_CURSES=ON
+			-DLLDB_ENABLE_LIBEDIT=ON
+			-DLLDB_ENABLE_LIBXML2=ON
+			-DLLDB_ENABLE_LUA=ON
+			-DLLDB_ENABLE_LZMA=ON
+			-DLLDB_ENABLE_PYTHON=ON
+			-DLLDB_ENABLE_SWIG=ON
+		)
+	fi
+
 	if use bootstrap; then
 		use syslibcxxabi && mycmakeargs+=( -DBOOTSTRAP_LLVM_ENABLE_LIBCXX=ON )
 		mycmakeargs+=("${bootstrap[@]}")
@@ -549,6 +617,9 @@ src_configure() {
 	fi
 
 	cmake_src_configure
+
+	grep -q '^#define HAVE_LIBPFM 1$' "${BUILD_DIR}/include/llvm/Config/config.h" \
+		|| die "LLVM did not detect libpfm; llvm-exegesis would lack hardware counter support"
 }
 
 src_compile() {

@@ -24,7 +24,7 @@ DEPEND="${COMMON_DEPEND}"
 RDEPEND="${COMMON_DEPEND}"
 BDEPEND="
 	${PYTHON_DEPS}
-	virtual/pkgconfig
+	app-dev/pkgconf
 "
 
 PATCHES=(

@@ -15,8 +15,8 @@ LICENSE="metapackage"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-SRC_URI="https://files.pythonhosted.org/packages/bf/94/037d6ece08470a678f1b8fe0ecf7466d4cda8c63f000b4ac6abc2ca735bd/gpep517-22.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/gpep517-22"
+SRC_URI="https://files.pythonhosted.org/packages/6b/c7/0db99e2a001e2a7cc1a01b67b276d3a233e0a791122f84e618739929a07c/gpep517-23.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/gpep517-23"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="

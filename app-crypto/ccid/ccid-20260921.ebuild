@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-inherit autotools doins flag-o-matic
+inherit meson doins
 
 DESCRIPTION="CCID free software driver"
 HOMEPAGE="https://ccid.apdu.fr https://github.com/LudovicRousseau/CCID"
@@ -12,32 +12,37 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="twinserial usb"
+IUSE="twinserial"
 
 RDEPEND="
 	app-crypto/pcsc-lite
-	twinserial? ( app-lang/perl )
-	usb? ( lib-dev/libusb )
+	lib-dev/libusb
 "
-DEPEND="${RDEPEND}"
-BDEPEND="virtual/pkgconfig"
+DEPEND="${RDEPEND}
+	lib-core/zlib
+"
+BDEPEND="
+	app-build/flex
+	app-dev/pkgconf
+	app-lang/perl
+"
 
 src_prepare() {
 	filter-flags -Wl,-z,defs
 
 	default
-	eautoreconf
 }
 
 src_configure() {
-	econf \
-		LEX=: \
-		$(use_enable twinserial) \
-		$(use_enable usb libusb)
+	local emesonargs=(
+		$(meson_use twinserial serial)
+		-Dudev-rules=false
+	)
+	meson_src_configure
 }
 
 src_install() {
-	default
+	meson_src_install
 	udev_newrules src/92_pcscd_ccid.rules 92-pcsc-ccid.rules
 }
 

@@ -2,16 +2,13 @@
 
 BRANCH_NAME="PHP-$(ver_cut 1-2)"
 
-inherit flag-o-matic git-r3 autotools doins
+inherit flag-o-matic autotools doins
 
 DESCRIPTION="The PHP language runtime engine"
 HOMEPAGE="https://secure.php.net/"
 SNAPSHOT=e23dc68f1199bf69524fb84e3e1b0e295c0fb863
 SRC_URI="https://github.com/php/php-src/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/php-src-${SNAPSHOT}"
-
-EGIT_REPO_URI="https://github.com/php/php-src.git"
-EGIT_BRANCH="PHP-$(ver_cut 1).$(ver_cut 2)"
 
 LICENSE="PHP-3.01 BSD-2 LGPL-2.1"
 SLOT="0"
@@ -33,7 +30,6 @@ DEPEND="
 	lib-core/gdbm
 	lib-core/gmp
 	lib-core/libedit
-	lib-core/libpcre
 	virtual/ssl
 "
 

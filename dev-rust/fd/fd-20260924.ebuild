@@ -2,7 +2,7 @@
 # lockstep-cargo-managed: true
 # lockstep-cargo-deps: begin
 CARGO_DEPS="
-	rust-crates/aho-corasick-1.1.4
+	rust-crates/aho-corasick-1.1.5
 	rust-crates/anstream-1.0.0
 	rust-crates/anstyle-1.0.13
 	rust-crates/anstyle-parse-1.0.0
@@ -19,7 +19,7 @@ CARGO_DEPS="
 	rust-crates/cfg_aliases-0.2.1
 	rust-crates/clap-4.6.1
 	rust-crates/clap_builder-4.6.0
-	rust-crates/clap_complete-4.6.5
+	rust-crates/clap_complete-4.6.9
 	rust-crates/clap_derive-4.6.1
 	rust-crates/clap_lex-1.0.0
 	rust-crates/colorchoice-1.0.4
@@ -47,12 +47,13 @@ CARGO_DEPS="
 	rust-crates/hashbrown-0.16.1
 	rust-crates/heck-0.5.0
 	rust-crates/id-arena-2.3.0
-	rust-crates/ignore-0.4.31
+	rust-crates/ignore-0.4.33
 	rust-crates/indexmap-2.13.0
 	rust-crates/is_terminal_polyfill-1.70.2
 	rust-crates/itoa-1.0.17
-	rust-crates/jiff-0.2.29
-	rust-crates/jiff-static-0.2.29
+	rust-crates/jiff-0.2.35
+	rust-crates/jiff-core-0.1.0
+	rust-crates/jiff-static-0.2.35
 	rust-crates/jiff-tzdb-0.1.6
 	rust-crates/jiff-tzdb-platform-0.1.3
 	rust-crates/leb128fmt-0.1.0
@@ -77,8 +78,8 @@ CARGO_DEPS="
 	rust-crates/proc-macro2-1.0.106
 	rust-crates/quote-1.0.45
 	rust-crates/r-efi-6.0.0
-	rust-crates/regex-1.12.4
-	rust-crates/regex-automata-0.4.14
+	rust-crates/regex-1.13.1
+	rust-crates/regex-automata-0.4.18
 	rust-crates/regex-syntax-0.8.11
 	rust-crates/rustix-1.1.4
 	rust-crates/same-file-1.0.6
@@ -137,7 +138,7 @@ inherit cargo lockstep-cargo
 
 DESCRIPTION="A simple, fast and user-friendly alternative to gnu find"
 HOMEPAGE="https://github.com/sharkdp/fd"
-SNAPSHOT=ee20f426ddf338ac7ead5c5f00ea49258005caaf
+SNAPSHOT=ce97e473ebaec49697c07daa50a7bc2b32f713d2
 SRC_URI="https://github.com/sharkdp/fd/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

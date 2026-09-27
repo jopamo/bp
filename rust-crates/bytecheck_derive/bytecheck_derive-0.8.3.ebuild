@@ -3,8 +3,8 @@ EAPI=8
 MERGE_MANIFEST_MODE="tree-blake3-v1"
 
 CRATE_NAME="bytecheck_derive"
-CRATE_VERSION="0.8.2"
-CRATE_CHECKSUM="89385e82b5d1821d2219e0b095efa2cc1f246cbf99080f3be46a1a85c0d392d9"
+CRATE_VERSION="0.8.3"
+CRATE_CHECKSUM="46d07918caa9eeaaf06b7873925c53a61daac173539b4f7715090745e44e4e69"
 CRATE_SOURCE="registry+https://github.com/rust-lang/crates.io-index"
 CRATE_SOURCE_KIND="registry"
 

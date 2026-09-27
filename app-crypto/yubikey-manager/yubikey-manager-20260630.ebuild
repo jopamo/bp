@@ -37,7 +37,8 @@ RDEPEND="
 	app-crypto/ccid
 	>=dev-pypi/click-8.0[${PYTHON_USEDEP}]
 	app-crypto/cryptography[${PYTHON_USEDEP}]
-	dev-pypi/fido2:0/1.0[${PYTHON_USEDEP}]
+	>=dev-pypi/fido2-2.0[${PYTHON_USEDEP}]
+	<dev-pypi/fido2-3[${PYTHON_USEDEP}]
 	dev-pypi/keyring[${PYTHON_USEDEP}]
 	dev-pypi/pyscard[${PYTHON_USEDEP}]
 	ssl? ( >=dev-pypi/pyopenssl-0.15.1[${PYTHON_USEDEP}] )"

@@ -1,0 +1,74 @@
+#!/usr/bin/env python3
+"""Exercise check-tree's invocation, reporting and timeout without Corepkg."""
+
+import csv
+import os
+from pathlib import Path
+import shutil
+import subprocess
+import tempfile
+
+
+with tempfile.TemporaryDirectory(prefix="bp-check-tree-test.") as tmp:
+    root = Path(tmp)
+    repo = root / "repo"
+    (repo / "scripts").mkdir(parents=True)
+    (repo / "profiles/core/amd64/glibc").mkdir(parents=True)
+    helper = repo / "scripts/check-tree"
+    shutil.copy2(Path(__file__).with_name("check-tree"), helper)
+    for package in ("good", "bad", "slow"):
+        path = repo / f"cat/{package}/{package}-1.ebuild"
+        path.parent.mkdir(parents=True)
+        path.write_text("EAPI=8\n")
+    fakebin = root / "bin"
+    fakebin.mkdir()
+    emerge = fakebin / "emerge"
+    emerge.write_text(
+        '#!/usr/bin/env python3\n'
+        'import os, pathlib, sys, time\n'
+        'assert "--pretend" in sys.argv and "--emptytree" in sys.argv\n'
+        'for flag in ("--ignore-default-opts", "--package-moves=n", "--usepkg=n",\n'
+        '             "--getbinpkg=n", "--autounmask=n", "--autounmask-write=n",\n'
+        '             "--with-bdeps=y", "--ignore-world=y"):\n'
+        '    assert flag in sys.argv\n'
+        'assert os.environ["EMERGE_DEFAULT_OPTS"] == ""\n'
+        'assert os.environ["ROOT"] == os.environ["SYSROOT"] == "/"\n'
+        'config = pathlib.Path(os.environ["COREPKG_CONFIGROOT"])\n'
+        'assert (config / "etc/corepkg/make.profile").is_symlink()\n'
+        'assert os.environ["COREPKG_DEPCACHEDIR"].startswith(str(config))\n'
+        'if "slow" in sys.argv[-1]: time.sleep(30)\n'
+        'print("fixture: missing dependency" if "bad" in sys.argv[-1] else "fixture: resolved")\n'
+        'sys.exit(1 if "bad" in sys.argv[-1] else 0)\n'
+    )
+    emerge.chmod(0o755)
+    env = dict(os.environ, PATH=f"{fakebin}:{os.environ['PATH']}", EMERGE_DEFAULT_OPTS="--sync")
+    output = root / "results"
+    result = subprocess.run(
+        [helper, "--profile", "core/amd64/glibc", "--jobs", "3",
+         "--timeout", "2", "--output", output],
+        env=env, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, timeout=15,
+    )
+    assert result.returncode == 1, result.stdout
+    with (output / "summary.tsv").open() as stream:
+        rows = {row["atom"]: row for row in csv.DictReader(stream, delimiter="\t")}
+    assert {atom: row["status"] for atom, row in rows.items()} == {
+        "=cat/good-1::bp": "PASS", "=cat/bad-1::bp": "FAIL", "=cat/slow-1::bp": "TIMEOUT",
+    }, rows
+    assert rows["=cat/slow-1::bp"]["exit_code"] == "124"
+    assert "fixture: missing dependency" in (output / rows["=cat/bad-1::bp"]["log"]).read_text()
+    selected = root / "selected"
+    result = subprocess.run(
+        [helper, "--profile", "core/amd64/glibc", "--output", selected, "cat/good"],
+        env=env, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, timeout=15,
+    )
+    assert result.returncode == 0, result.stdout
+    with (selected / "summary.tsv").open() as stream:
+        assert len(list(csv.DictReader(stream, delimiter="\t"))) == 1
+    rejected = root / "rejected"
+    result = subprocess.run(
+        [helper, "--output", rejected, "--sync"],
+        env=env, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, timeout=15,
+    )
+    assert result.returncode == 2 and not rejected.exists(), result.stdout
+
+print("PASS: pretend-only commands, exact targets, failure logs, timeouts and selection")

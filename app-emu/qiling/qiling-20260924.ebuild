@@ -24,7 +24,7 @@ RDEPEND+="
 DESCRIPTION="Advanced Binary Emulation Framework"
 HOMEPAGE="https://github.com/qilingframework/qiling"
 
-SNAPSHOT=0a13c2438a112e548ef66086b3abee2d74d7997a
+SNAPSHOT=23ad4fd369a360ad7992d90cb7577f0241061c2b
 SRC_URI="https://github.com/qilingframework/qiling/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

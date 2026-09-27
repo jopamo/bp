@@ -1,95 +1,101 @@
 # lockstep-managed: dependency-ebuild
 # lockstep-pypi-managed: true
+EAPI=8
 # lockstep-cargo-managed: true
 # lockstep-cargo-deps: begin
 CARGO_DEPS="
 	rust-crates/adler2-2.0.1
 	rust-crates/aho-corasick-1.1.4
-	rust-crates/allocator-api2-0.2.21
+	rust-crates/ambient-authority-0.0.2
 	rust-crates/anstream-1.0.0
 	rust-crates/anstyle-1.0.14
 	rust-crates/anstyle-parse-1.0.0
 	rust-crates/anstyle-query-1.1.5
 	rust-crates/anstyle-wincon-3.0.11
-	rust-crates/anyhow-1.0.103
+	rust-crates/anyhow-1.0.104
+	rust-crates/archive-trait-0.0.14
 	rust-crates/arcstr-1.2.0
-	rust-crates/arrayvec-0.7.7
-	rust-crates/astral-tokio-tar-0.6.3
-	rust-crates/astral-version-ranges-0.2.0
+	rust-crates/arrayvec-0.7.8
+	rust-crates/astral-tokio-tar-0.7.0
+	rust-crates/astral-version-ranges-0.2.2
 	rust-crates/astral_async_zip-0.0.20
 	rust-crates/async-compression-0.4.19
 	rust-crates/autocfg-1.5.0
 	rust-crates/backon-1.6.0
 	rust-crates/base64-0.22.1
 	rust-crates/bitflags-1.3.2
-	rust-crates/bitflags-2.13.0
+	rust-crates/bitflags-2.13.1
 	rust-crates/block-buffer-0.10.4
+	rust-crates/block-buffer-0.12.1
 	rust-crates/boxcar-0.2.14
 	rust-crates/bstr-1.12.1
 	rust-crates/bumpalo-3.20.2
-	rust-crates/bytecheck-0.8.2
-	rust-crates/bytecheck_derive-0.8.2
-	rust-crates/bytes-1.12.0
-	rust-crates/bzip2-0.5.2
-	rust-crates/bzip2-sys-0.1.13+1.0.8
+	rust-crates/bytecheck-0.8.3
+	rust-crates/bytecheck_derive-0.8.3
+	rust-crates/bytes-1.12.1
+	rust-crates/cap-primitives-4.0.3
+	rust-crates/cap-std-4.0.3
 	rust-crates/cc-1.2.57
 	rust-crates/cfg-if-1.0.4
 	rust-crates/charset-0.1.5
-	rust-crates/clap-4.6.1
-	rust-crates/clap_builder-4.6.0
-	rust-crates/clap_derive-4.6.1
+	rust-crates/clap-4.6.6
+	rust-crates/clap_builder-4.6.6
+	rust-crates/clap_derive-4.6.4
 	rust-crates/clap_lex-1.1.0
 	rust-crates/colorchoice-1.0.5
-	rust-crates/console-0.16.3
+	rust-crates/console-0.16.4
 	rust-crates/cpufeatures-0.2.17
+	rust-crates/cpufeatures-0.3.0
 	rust-crates/crc32fast-1.5.0
 	rust-crates/crypto-common-0.1.7
+	rust-crates/crypto-common-0.2.2
 	rust-crates/csv-1.4.0
 	rust-crates/csv-core-0.1.13
-	rust-crates/data-encoding-2.11.0
+	rust-crates/data-encoding-2.11.1
 	rust-crates/defmt-1.1.0
 	rust-crates/defmt-macros-1.1.0
 	rust-crates/defmt-parser-1.0.0
 	rust-crates/digest-0.10.7
+	rust-crates/digest-0.11.3
 	rust-crates/displaydoc-0.2.5
 	rust-crates/dunce-1.0.5
 	rust-crates/dyn-clone-1.0.20
-	rust-crates/either-1.16.0
+	rust-crates/either-1.18.0
 	rust-crates/encode_unicode-1.0.0
 	rust-crates/encoding_rs-0.8.35
-	rust-crates/encoding_rs_io-0.1.7
+	rust-crates/encoding_rs_io-0.1.8
 	rust-crates/enumflags2-0.7.12
 	rust-crates/enumflags2_derive-0.7.12
 	rust-crates/equivalent-1.0.2
 	rust-crates/erased-serde-0.4.10
 	rust-crates/errno-0.3.14
-	rust-crates/fastrand-2.4.1
+	rust-crates/fastrand-2.5.0
 	rust-crates/find-msvc-tools-0.1.9
 	rust-crates/fixedbitset-0.5.7
 	rust-crates/flate2-1.1.9
 	rust-crates/foldhash-0.1.5
 	rust-crates/foldhash-0.2.0
 	rust-crates/form_urlencoded-1.2.2
-	rust-crates/fs-err-3.3.0
-	rust-crates/futures-0.3.32
-	rust-crates/futures-channel-0.3.32
-	rust-crates/futures-core-0.3.32
-	rust-crates/futures-executor-0.3.32
-	rust-crates/futures-io-0.3.32
+	rust-crates/fs-err-3.3.1
+	rust-crates/fs-set-times-0.20.3
+	rust-crates/futures-0.3.34
+	rust-crates/futures-channel-0.3.34
+	rust-crates/futures-core-0.3.34
+	rust-crates/futures-executor-0.3.34
+	rust-crates/futures-io-0.3.34
 	rust-crates/futures-lite-2.6.1
-	rust-crates/futures-macro-0.3.32
-	rust-crates/futures-sink-0.3.32
-	rust-crates/futures-task-0.3.32
-	rust-crates/futures-util-0.3.32
+	rust-crates/futures-macro-0.3.34
+	rust-crates/futures-sink-0.3.34
+	rust-crates/futures-task-0.3.34
+	rust-crates/futures-util-0.3.34
 	rust-crates/generic-array-0.14.7
-	rust-crates/getrandom-0.3.3
-	rust-crates/getrandom-0.4.1
-	rust-crates/globset-0.4.18
-	rust-crates/gloo-timers-0.3.0
+	rust-crates/getrandom-0.4.3
+	rust-crates/globset-0.4.20
 	rust-crates/hashbrown-0.15.5
 	rust-crates/hashbrown-0.17.1
 	rust-crates/heck-0.5.0
 	rust-crates/hex-0.4.3
+	rust-crates/hybrid-array-0.4.13
 	rust-crates/icu_collections-2.1.1
 	rust-crates/icu_locale_core-2.1.1
 	rust-crates/icu_normalizer-2.1.1
@@ -97,34 +103,36 @@ CARGO_DEPS="
 	rust-crates/icu_properties-2.1.2
 	rust-crates/icu_properties_data-2.1.2
 	rust-crates/icu_provider-2.1.1
-	rust-crates/id-arena-2.3.0
 	rust-crates/idna-1.1.0
 	rust-crates/idna_adapter-1.2.1
 	rust-crates/indexmap-2.14.0
 	rust-crates/indoc-2.0.7
 	rust-crates/insta-1.48.0
+	rust-crates/io-extras-0.19.0
+	rust-crates/io-lifetimes-2.0.4
+	rust-crates/io-lifetimes-3.0.1
+	rust-crates/ipnet-2.12.0
 	rust-crates/is_terminal_polyfill-1.70.2
 	rust-crates/itertools-0.14.0
 	rust-crates/itoa-1.0.17
-	rust-crates/jiff-0.2.29
-	rust-crates/jiff-static-0.2.29
-	rust-crates/jiff-tzdb-0.1.6
+	rust-crates/jiff-0.2.35
+	rust-crates/jiff-core-0.1.0
+	rust-crates/jiff-static-0.2.35
+	rust-crates/jiff-tzdb-0.1.8
 	rust-crates/jiff-tzdb-platform-0.1.3
-	rust-crates/jobserver-0.1.34
+	rust-crates/jobserver-0.1.35
 	rust-crates/js-sys-0.3.91
 	rust-crates/junction-2.0.0
 	rust-crates/lazy_static-1.5.0
-	rust-crates/leb128fmt-0.1.0
-	rust-crates/libc-0.2.186
+	rust-crates/libc-0.2.189
 	rust-crates/linux-raw-sys-0.12.1
-	rust-crates/linux-raw-sys-0.4.15
 	rust-crates/litemap-0.8.1
 	rust-crates/lock_api-0.4.14
 	rust-crates/log-0.4.29
-	rust-crates/lzma-sys-0.1.20
 	rust-crates/mailparse-0.16.1
 	rust-crates/matchers-0.2.0
-	rust-crates/memchr-2.8.2
+	rust-crates/maybe-owned-0.3.4
+	rust-crates/memchr-2.8.3
 	rust-crates/miniz_oxide-0.8.9
 	rust-crates/mio-1.2.0
 	rust-crates/munge-0.4.7
@@ -150,46 +158,45 @@ CARGO_DEPS="
 	rust-crates/portable-atomic-1.13.1
 	rust-crates/portable-atomic-util-0.2.6
 	rust-crates/potential_utf-0.1.4
-	rust-crates/prettyplease-0.2.37
 	rust-crates/proc-macro-error-attr2-2.0.0
 	rust-crates/proc-macro-error2-2.0.1
-	rust-crates/proc-macro2-1.0.106
+	rust-crates/proc-macro2-1.0.107
 	rust-crates/ptr_meta-0.3.1
 	rust-crates/ptr_meta_derive-0.3.1
-	rust-crates/quote-1.0.46
+	rust-crates/quote-1.0.47
 	rust-crates/quoted_printable-0.5.1
-	rust-crates/r-efi-5.3.0
+	rust-crates/r-efi-6.0.0
 	rust-crates/rancor-0.1.1
 	rust-crates/redox_syscall-0.5.15
-	rust-crates/ref-cast-1.0.25
-	rust-crates/ref-cast-impl-1.0.25
+	rust-crates/ref-cast-1.0.27
+	rust-crates/ref-cast-impl-1.0.27
 	rust-crates/reflink-copy-0.1.30
-	rust-crates/regex-1.12.4
-	rust-crates/regex-automata-0.4.14
+	rust-crates/regex-1.13.1
+	rust-crates/regex-automata-0.4.18
 	rust-crates/regex-syntax-0.8.11
 	rust-crates/rend-0.5.3
-	rust-crates/rkyv-0.8.16
-	rust-crates/rkyv_derive-0.8.16
-	rust-crates/rustc-hash-2.1.2
-	rust-crates/rustix-0.38.44
+	rust-crates/rkyv-0.8.18
+	rust-crates/rkyv_derive-0.8.18
+	rust-crates/rustc-hash-2.1.3
 	rust-crates/rustix-1.1.4
+	rust-crates/rustix-linux-procfs-0.1.1
 	rust-crates/rustversion-1.0.22
 	rust-crates/ryu-1.0.23
 	rust-crates/same-file-1.0.6
-	rust-crates/schemars-1.2.1
-	rust-crates/schemars_derive-1.2.1
+	rust-crates/schemars-1.2.2
+	rust-crates/schemars_derive-1.2.2
 	rust-crates/scopeguard-1.2.0
 	rust-crates/seahash-4.1.0
 	rust-crates/self-replace-1.5.0
-	rust-crates/semver-1.0.27
-	rust-crates/serde-1.0.228
+	rust-crates/serde-1.0.229
 	rust-crates/serde-untagged-0.1.9
-	rust-crates/serde_core-1.0.228
-	rust-crates/serde_derive-1.0.228
-	rust-crates/serde_derive_internals-0.29.1
-	rust-crates/serde_json-1.0.150
+	rust-crates/serde_core-1.0.229
+	rust-crates/serde_derive-1.0.229
+	rust-crates/serde_derive_internals-0.30.0
+	rust-crates/serde_json-1.0.151
 	rust-crates/serde_spanned-1.1.1
 	rust-crates/sha2-0.10.9
+	rust-crates/sha2-0.11.0
 	rust-crates/sharded-slab-0.1.7
 	rust-crates/shlex-1.3.0
 	rust-crates/signal-hook-registry-1.4.8
@@ -199,31 +206,34 @@ CARGO_DEPS="
 	rust-crates/slab-0.4.12
 	rust-crates/smallvec-1.15.2
 	rust-crates/smawk-0.3.2
-	rust-crates/spdx-0.13.4
+	rust-crates/socket2-0.6.3
+	rust-crates/spdx-0.13.5
 	rust-crates/stable_deref_trait-1.2.1
 	rust-crates/strip-ansi-escapes-0.2.1
 	rust-crates/strsim-0.11.1
 	rust-crates/syn-2.0.118
+	rust-crates/syn-3.0.3
 	rust-crates/synstructure-0.13.2
+	rust-crates/tar-codec-0.0.14
+	rust-crates/tar-framing-0.0.14
 	rust-crates/temp-env-0.3.6
 	rust-crates/tempfile-3.27.0
 	rust-crates/terminal_size-0.4.4
 	rust-crates/textwrap-0.16.2
-	rust-crates/thiserror-2.0.18
-	rust-crates/thiserror-impl-2.0.18
+	rust-crates/thiserror-2.0.20
+	rust-crates/thiserror-impl-2.0.20
 	rust-crates/thread_local-1.1.9
 	rust-crates/tinystr-0.8.2
 	rust-crates/tinyvec-1.11.0
 	rust-crates/tinyvec_macros-0.1.1
-	rust-crates/tokio-1.52.3
+	rust-crates/tokio-1.53.1
 	rust-crates/tokio-macros-2.7.0
-	rust-crates/tokio-stream-0.1.18
-	rust-crates/tokio-util-0.7.18
-	rust-crates/toml-1.1.2+spec-1.1.0
+	rust-crates/tokio-stream-0.1.19
+	rust-crates/toml-1.1.3+spec-1.1.0
 	rust-crates/toml_datetime-1.1.1+spec-1.1.0
-	rust-crates/toml_edit-0.25.12+spec-1.1.0
+	rust-crates/toml_edit-0.25.13+spec-1.1.0
 	rust-crates/toml_parser-1.1.2+spec-1.1.0
-	rust-crates/toml_writer-1.1.1+spec-1.1.0
+	rust-crates/toml_writer-1.1.2+spec-1.1.0
 	rust-crates/tracing-0.1.44
 	rust-crates/tracing-attributes-0.1.31
 	rust-crates/tracing-core-0.1.36
@@ -232,32 +242,24 @@ CARGO_DEPS="
 	rust-crates/tracing-test-0.2.6
 	rust-crates/tracing-test-macro-0.2.6
 	rust-crates/typeid-1.0.3
-	rust-crates/typenum-1.19.0
+	rust-crates/typenum-1.20.1
 	rust-crates/ucd-trie-0.1.7
 	rust-crates/unicode-ident-1.0.24
-	rust-crates/unicode-linebreak-0.1.5
 	rust-crates/unicode-width-0.2.2
-	rust-crates/unicode-xid-0.2.6
 	rust-crates/unscanny-0.1.0
 	rust-crates/url-2.5.8
 	rust-crates/utf8_iter-1.0.4
 	rust-crates/utf8parse-0.2.2
-	rust-crates/uuid-1.23.4
+	rust-crates/uuid-1.24.0
 	rust-crates/valuable-0.1.1
 	rust-crates/version_check-0.9.5
 	rust-crates/vte-0.14.1
 	rust-crates/walkdir-2.5.0
 	rust-crates/wasi-0.11.1+wasi-snapshot-preview1
-	rust-crates/wasi-0.14.7+wasi-0.2.4
-	rust-crates/wasip2-1.0.2+wasi-0.2.9
-	rust-crates/wasip3-0.4.0+wasi-0.3.0-rc-2026-01-06
 	rust-crates/wasm-bindgen-0.2.114
 	rust-crates/wasm-bindgen-macro-0.2.114
 	rust-crates/wasm-bindgen-macro-support-0.2.114
 	rust-crates/wasm-bindgen-shared-0.2.114
-	rust-crates/wasm-encoder-0.244.0
-	rust-crates/wasm-metadata-0.244.0
-	rust-crates/wasmparser-0.244.0
 	rust-crates/winapi-util-0.1.11
 	rust-crates/windows-0.61.3
 	rust-crates/windows-collections-0.2.0
@@ -271,29 +273,34 @@ CARGO_DEPS="
 	rust-crates/windows-result-0.3.4
 	rust-crates/windows-strings-0.4.2
 	rust-crates/windows-sys-0.52.0
+	rust-crates/windows-sys-0.60.2
 	rust-crates/windows-sys-0.61.2
 	rust-crates/windows-targets-0.52.6
+	rust-crates/windows-targets-0.53.5
 	rust-crates/windows-threading-0.1.0
 	rust-crates/windows_aarch64_gnullvm-0.52.6
+	rust-crates/windows_aarch64_gnullvm-0.53.1
 	rust-crates/windows_aarch64_msvc-0.52.6
+	rust-crates/windows_aarch64_msvc-0.53.1
 	rust-crates/windows_i686_gnu-0.52.6
+	rust-crates/windows_i686_gnu-0.53.1
 	rust-crates/windows_i686_gnullvm-0.52.6
+	rust-crates/windows_i686_gnullvm-0.53.1
 	rust-crates/windows_i686_msvc-0.52.6
+	rust-crates/windows_i686_msvc-0.53.1
 	rust-crates/windows_x86_64_gnu-0.52.6
+	rust-crates/windows_x86_64_gnu-0.53.1
 	rust-crates/windows_x86_64_gnullvm-0.52.6
+	rust-crates/windows_x86_64_gnullvm-0.53.1
 	rust-crates/windows_x86_64_msvc-0.52.6
+	rust-crates/windows_x86_64_msvc-0.53.1
 	rust-crates/winnow-1.0.3
-	rust-crates/wit-bindgen-0.51.0
-	rust-crates/wit-bindgen-core-0.51.0
-	rust-crates/wit-bindgen-rust-0.51.0
-	rust-crates/wit-bindgen-rust-macro-0.51.0
-	rust-crates/wit-component-0.244.0
-	rust-crates/wit-parser-0.244.0
+	rust-crates/winx-0.36.4
 	rust-crates/writeable-0.6.2
-	rust-crates/xattr-1.6.1
-	rust-crates/xz2-0.1.7
 	rust-crates/yoke-0.8.1
 	rust-crates/yoke-derive-0.8.1
+	rust-crates/zerocopy-0.8.56
+	rust-crates/zerocopy-derive-0.8.56
 	rust-crates/zerofrom-0.1.6
 	rust-crates/zerofrom-derive-0.1.6
 	rust-crates/zerotrie-0.2.3
@@ -306,7 +313,6 @@ CARGO_DEPS="
 	rust-crates/zstd-sys-2.0.16+zstd.1.5.7
 "
 # lockstep-cargo-deps: end
-EAPI=8
 MERGE_MANIFEST_MODE="tree-blake3-v1"
 
 PYTHON_COMPAT=( python3_{11..14} )
@@ -321,8 +327,8 @@ LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-SRC_URI="https://files.pythonhosted.org/packages/c8/38/8602c78e9df92ece7070ba765440dac3640920d49b00d19cd94173e4fb4b/uv_build-0.11.28.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/uv_build-0.11.28"
+SRC_URI="https://files.pythonhosted.org/packages/8c/54/e920a09f6e86f418da9981cc600cee1907a587bf48f902ea3d54b3b4ba96/uv_build-0.12.19.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/uv_build-0.12.19"
 
 BDEPEND="
 	app-dev/maturin[${PYTHON_USEDEP}]

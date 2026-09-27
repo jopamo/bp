@@ -3,14 +3,14 @@ EAPI=8
 MERGE_MANIFEST_MODE="tree-blake3-v1"
 
 CRATE_NAME="ra-ap-rustc_index"
-CRATE_VERSION="0.143.0"
-CRATE_CHECKSUM="bca3a49a928d38ba7927605e5909b6abe77d09ff359e4695c070c3f91d69cc8a"
+CRATE_VERSION="0.166.0"
+CRATE_CHECKSUM="1d9e47b9ca7d92cfb0d6653503adbabd41938b84474317397a664326b208d6c6"
 CRATE_SOURCE="registry+https://github.com/rust-lang/crates.io-index"
 CRATE_SOURCE_KIND="registry"
 
 inherit cargo-crate
 
-DESCRIPTION="Automatically published version of the package \`rustc_index\` in the rust-lang/rust repository from commit 61cc47e367d7be91e13bcd01e4e96e0e233d4f6d The publishing script for this crate lives at: https://github.com/rust-analyzer/rustc-auto-publish"
+DESCRIPTION="Automatically published version of the package \`rustc_index\` in the rust-lang/rust repository from commit ce89c898570852a1bb441d77570596e50bf362c2 The publishing script for this crate lives at: https://github.com/rust-analyzer/rustc-auto-publish"
 HOMEPAGE="https://github.com/rust-lang/rust"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="${PV}"

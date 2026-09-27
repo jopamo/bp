@@ -5,7 +5,7 @@ inherit cmake flag-o-matic qa-policy
 DESCRIPTION="Collection of tools, libraries and tests for shader compilation"
 HOMEPAGE="https://github.com/google/shaderc"
 
-SNAPSHOT=7060a6615a1c6e2515e696651eea685524ecadb5
+SNAPSHOT=a8abeb0b8a9d4b11e3d59ca9f4550b8213e733ab
 SRC_URI="https://github.com/google/shaderc/archive/${SNAPSHOT}.tar.gz -> shaderc-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/shaderc-${SNAPSHOT}"
 

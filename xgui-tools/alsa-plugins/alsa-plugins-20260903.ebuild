@@ -4,7 +4,7 @@ inherit autotools flag-o-matic
 
 DESCRIPTION="ALSA extra plugins"
 HOMEPAGE="http://www.alsa-project.org/"
-SNAPSHOT=52574cb5ccbb8b546df2759e4b341a20332269b6
+SNAPSHOT=eef274dbc890a21c2400c8bffdcbda243782627d
 SRC_URI="https://github.com/alsa-project/alsa-plugins/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

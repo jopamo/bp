@@ -3,8 +3,8 @@ EAPI=8
 MERGE_MANIFEST_MODE="tree-blake3-v1"
 
 CRATE_NAME="futures-io"
-CRATE_VERSION="0.3.32"
-CRATE_CHECKSUM="cecba35d7ad927e23624b22ad55235f2239cfa44fd10428eecbeba6d6a717718"
+CRATE_VERSION="0.3.34"
+CRATE_CHECKSUM="53c0fa8157de1303bfffdaa1cc2a673bfffb60102f76b0ef4441659124373fed"
 CRATE_SOURCE="registry+https://github.com/rust-lang/crates.io-index"
 CRATE_SOURCE_KIND="registry"
 

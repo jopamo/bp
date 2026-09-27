@@ -3,15 +3,15 @@ EAPI=8
 MERGE_MANIFEST_MODE="tree-blake3-v1"
 
 CRATE_NAME="codspeed-criterion-compat-walltime"
-CRATE_VERSION="2.10.1"
-CRATE_CHECKSUM="7b0a2f7365e347f4f22a67e9ea689bf7bc89900a354e22e26cf8a531a42c8fbb"
+CRATE_VERSION="5.0.1"
+CRATE_CHECKSUM="5c38205d56e2cb4fe04b708de7f9653a3f1b89edbe3a20b28f21e9e525e9e061"
 CRATE_SOURCE="registry+https://github.com/rust-lang/crates.io-index"
 CRATE_SOURCE_KIND="registry"
 
 inherit cargo-crate
 
 DESCRIPTION="Statistics-driven micro-benchmarking library"
-HOMEPAGE="https://bheisler.github.io/criterion.rs/book/index.html"
+HOMEPAGE="https://codspeed.io"
 LICENSE="|| ( Apache-2.0 MIT )"
 SLOT="${PV}"
 KEYWORDS="amd64 arm64"

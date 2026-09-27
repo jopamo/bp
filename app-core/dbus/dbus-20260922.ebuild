@@ -4,7 +4,7 @@ inherit linux-info meson doins qa-policy
 
 DESCRIPTION="A message bus system, a simple way for applications to talk to each other"
 HOMEPAGE="https://dbus.freedesktop.org/"
-SNAPSHOT=e85d83239e9b8215349f6586819569acbf66cd85
+SNAPSHOT=b33c059af14e0c8bc67947cf0e45f869e2ba8f12
 SRC_URI="https://gitlab.freedesktop.org/dbus/dbus/-/archive/${SNAPSHOT}/dbus-${SNAPSHOT}.tar.bz2"
 S=${WORKDIR}/dbus-${SNAPSHOT}
 

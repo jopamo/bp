@@ -7,7 +7,7 @@ inherit cmake flag-o-matic
 DESCRIPTION="Qt QML and Qt Quick modules for the Qt 6 framework"
 HOMEPAGE="https://www.qt.io/"
 
-SNAPSHOT=6cb7ca6b3df86f005b9718263bd66d25b0e3bfe2
+SNAPSHOT=cb44be928d5b30da569f48742dc3f2041c736e15
 SRC_URI="https://invent.kde.org/qt/qt/${PN}/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 

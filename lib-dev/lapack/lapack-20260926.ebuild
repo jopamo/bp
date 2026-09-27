@@ -4,7 +4,7 @@ inherit cmake flag-o-matic
 
 DESCRIPTION="BLAS, CBLAS, LAPACK, LAPACKE reference implementations"
 HOMEPAGE="https://www.netlib.org/lapack/"
-SNAPSHOT=d134ca0070b0a3fa4d7efd96ae1c01be54f9dc19
+SNAPSHOT=b8fc4dc9b30617463b6d68b52a3dbbf847217feb
 SRC_URI="https://github.com/Reference-LAPACK/lapack/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

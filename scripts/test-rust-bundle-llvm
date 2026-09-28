@@ -1,0 +1,132 @@
+#!/usr/bin/env python3
+"""Exercise Rust's private LLVM packaging with real, isolated ELF fixtures."""
+
+import hashlib
+import importlib.util
+import os
+from pathlib import Path
+import subprocess
+import sys
+import tempfile
+import unittest
+
+
+sys.dont_write_bytecode = True
+repo = Path(__file__).resolve().parents[1]
+spec = importlib.util.spec_from_file_location(
+    "bundle_llvm", repo / "app-lang/rust/files/bundle-llvm.py"
+)
+bundler = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(bundler)
+
+
+def run(*args, **kwargs):
+    return subprocess.check_output(args, text=True, **kwargs).strip()
+
+
+class BundleTests(unittest.TestCase):
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory(prefix="rust-llvm-test.")
+        self.addCleanup(self.temp.cleanup)
+        self.root = Path(self.temp.name)
+        self.image = self.root / "image"
+        self.llvm = self.root / "llvm"
+        self.llvm.mkdir()
+        self.lib = self.image / "usr/lib"
+        self.bin = self.image / "usr/bin"
+        self.lib.mkdir(parents=True)
+        self.bin.mkdir(parents=True)
+        self.dep = "libLLVM-fixture-dep.so.23"
+        self.main = "libLLVM-fixture.so.23.1"
+        self.shared(self.llvm / self.dep, "int dep(void) { return 40; }")
+        actual = self.llvm / (self.main + ".7")
+        self.shared(
+            actual, "int dep(void); int llvm(void) { return dep() + 2; }",
+            f"-L{self.llvm}", f"-l:{self.dep}", soname=self.main,
+        )
+        (self.llvm / self.main).symlink_to(actual.name)
+        self.shared(self.llvm / "libLLVM-unused.so.23", "int unused(void) { return 0; }")
+        self.driver = self.lib / "libfixture-driver.so"
+        self.shared(
+            self.driver, "int llvm(void); int driver(void) { return llvm(); }",
+            f"-L{self.llvm}", f"-l:{self.main}", "-Wl,-rpath,$ORIGIN/keep",
+        )
+        self.executable(
+            self.bin / "rustc", "int driver(void); int main(void) { return driver() != 42; }",
+            f"-L{self.lib}", "-lfixture-driver", "-Wl,-rpath,$ORIGIN/../lib",
+        )
+        self.tool = self.lib / "rustlib/fixture/bin/llvm-tool"
+        self.tool.parent.mkdir(parents=True)
+        self.executable(
+            self.tool, "int llvm(void); int main(void) { return llvm() != 42; }",
+            f"-L{self.llvm}", f"-l:{self.main}",
+        )
+
+    def shared(self, path, code, *flags, soname=None):
+        run("cc", "-x", "c", "-shared", "-fPIC", "-", "-o", str(path),
+            f"-Wl,-soname,{soname or path.name}", *flags, input=code)
+
+    def executable(self, path, code, *flags):
+        run("cc", "-x", "c", "-", "-o", str(path), *flags,
+            f"-Wl,-rpath-link,{self.llvm}", input=code)
+
+    def test_private_closure_runs_without_original_libraries(self):
+        original = {p.name: p.read_bytes() for p in self.llvm.iterdir()}
+        original_needed = bundler.needed(self.llvm / self.main)
+        bundler.bundle(self.image, self.llvm)
+        private = self.image / bundler.PRIVATE_DIR
+        self.assertEqual(
+            {p.name for p in private.iterdir()},
+            {bundler.private_name(self.main), bundler.private_name(self.dep)},
+        )
+        for name, data in original.items():
+            self.assertEqual((self.llvm / name).read_bytes(), data)
+        for path in private.iterdir():
+            self.assertFalse(path.is_symlink())
+            self.assertEqual(run("patchelf", "--print-soname", str(path)), path.name)
+        self.assertEqual(
+            run("patchelf", "--print-rpath", str(self.driver)),
+            "$ORIGIN/rust/llvm:$ORIGIN/keep",
+        )
+        self.assertIn(bundler.private_name(self.main), bundler.needed(self.driver))
+        self.assertEqual(run("patchelf", "--print-rpath", str(self.tool)), "$ORIGIN/../../../rust/llvm")
+        self.assertEqual(
+            bundler.needed(private / bundler.private_name(self.main)),
+            [bundler.private_name(n) if n == self.dep else n for n in original_needed],
+        )
+
+        # Rerunning packaging must not copy or modify the libraries again.
+        before = {p: hashlib.sha256(p.read_bytes()).digest() for p in private.iterdir()}
+        bundler.bundle(self.image, self.llvm)
+        self.assertEqual(before, {p: hashlib.sha256(p.read_bytes()).digest() for p in private.iterdir()})
+        self.llvm.rename(self.root / "removed-llvm")
+        env = {k: v for k, v in os.environ.items() if k not in ("LD_LIBRARY_PATH", "LD_PRELOAD")}
+        run(str(self.bin / "rustc"), env=env)
+        run(str(self.tool), env=env)
+
+    def test_missing_transitive_library_fails_before_image_changes(self):
+        before = self.driver.read_bytes()
+        (self.llvm / self.dep).unlink()
+        with self.assertRaises(FileNotFoundError):
+            bundler.bundle(self.image, self.llvm)
+        self.assertEqual(self.driver.read_bytes(), before)
+        self.assertFalse((self.image / bundler.PRIVATE_DIR).exists())
+
+    def test_wrong_soname_is_not_silently_bundled(self):
+        run("patchelf", "--set-soname", "libLLVM-wrong.so.99", str(self.llvm / self.dep))
+        with self.assertRaisesRegex(ValueError, "expected SONAME"):
+            bundler.bundle(self.image, self.llvm)
+        self.assertFalse((self.image / bundler.PRIVATE_DIR).exists())
+
+    def test_no_llvm_dependencies_needs_no_bundle(self):
+        clean = self.root / "clean"
+        clean.mkdir()
+        self.executable(clean / "tool", "int main(void) { return 0; }")
+        before = (clean / "tool").read_bytes()
+        bundler.bundle(clean, self.llvm)
+        self.assertFalse((clean / bundler.PRIVATE_DIR).exists())
+        self.assertEqual((clean / "tool").read_bytes(), before)
+
+
+if __name__ == "__main__":
+    unittest.main()

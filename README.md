@@ -75,3 +75,17 @@ unsatisfied USE requirements, blockers, and slot conflicts for the selected
 profile and USE settings. It does not test every USE combination, downloads,
 `pkg_pretend`, configuration, compilation, or installation. For those phases,
 use the unprivileged `scripts/test-ebuild` helper described in [HACKING.md](HACKING.md).
+
+## Rust's LLVM runtime
+
+Source Rust packages copy the LLVM shared libraries named by their installed
+ELF dependencies into `/usr/lib/rust/llvm`. The install helper follows
+transitive LLVM dependencies, gives the copies private SONAMEs, and rewrites
+their consumers to use relative RUNPATHs. LLVM upgrades can then replace the
+system compiler libraries without removing the copies Rust needs.
+
+Platform runtimes such as libc++, libstdc++ and libunwind remain system
+dependencies, and LLVM is still required for the system `rust-lld` link.
+Rebuild Rust to refresh its private LLVM compiler-library copies;
+upgrading LLVM alone does not update them. The prebuilt `rust-bin` package is
+unchanged. Run `scripts/test-rust-bundle-llvm` for the focused packaging tests.

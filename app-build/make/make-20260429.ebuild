@@ -31,6 +31,9 @@ PATCHES=( "${FILESDIR}"/getopt-gcc15.patch )
 src_prepare() {
 	gl_stage_gnulib
 
+	# These old overrides omit dependencies required by current gnulib sources.
+	rm gl/modules/concat-filename gl/modules/findprog-in || die
+
 	echo "${PV}" > .tarball-version || die
 
 	./bootstrap --copy --skip-po --no-git --gnulib-srcdir="${S}"/gnulib || die

@@ -51,7 +51,6 @@ BDEPEND="
 
 _gettext_prepare_gnulib() {
 	gl_stage_gnulib
-	eapply "${FILESDIR}/gettext-gnulib-counted-by.patch"
 }
 
 _gettext_patch_tree_sitter_source() {

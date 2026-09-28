@@ -56,10 +56,6 @@ RESTRICT="!test? ( test )"
 src_prepare() {
 	rm -rf paxutils || die
 	gl_stage_gnulib
-	# This tar snapshot uses the exclusion-status API added after the
-	# shared gnulib snapshot.
-	eapply "${FILESDIR}/${PN}-gnulib-exclude-status.patch"
-	eapply "${FILESDIR}/${PN}-gnulib-counted-by.patch"
 	cp -a "${WORKDIR}/paxutils-${PAXUTILS_SNAPSHOT}" paxutils || die
 
 	./bootstrap --copy --skip-po --no-git --gnulib-srcdir="${S}"/gnulib || die

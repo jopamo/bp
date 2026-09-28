@@ -2,7 +2,7 @@
 
 SNAPSHOT=c440855d6b33446edf4b5eb1a2d892281f15a99b
 
-inherit flag-o-matic qa-policy gl
+inherit flag-o-matic qa-policy
 
 DESCRIPTION="Extended attributes tools"
 HOMEPAGE="https://savannah.nongnu.org/projects/attr"
@@ -16,8 +16,6 @@ else
 	SRC_URI="https://github.com/1g4-mirror/attr/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 	S="${WORKDIR}/${PN}-${SNAPSHOT}"
 fi
-
-SRC_URI+=" ${GL_SRC_URI}"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
@@ -33,8 +31,6 @@ BDEPEND="
 "
 
 src_prepare() {
-	gl_stage_gnulib
-
 	./autogen.sh || die
 
 	# Modify git-version-gen to use a specific version number

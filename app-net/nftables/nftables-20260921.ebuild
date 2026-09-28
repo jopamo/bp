@@ -9,7 +9,6 @@ SRC_URI="https://github.com/1g4-mirror/nftables/archive/${SNAPSHOT}.tar.gz -> nf
 S=${WORKDIR}/nftables-${SNAPSHOT}
 PATCHES=(
 	"${FILESDIR}"/nftables-99f2b29a16db-flex-ECHO-token.patch
-	"${FILESDIR}"/nftables-20260816-clang-export-visibility.patch
 )
 
 LICENSE="GPL-2"
@@ -20,10 +19,15 @@ IUSE="debug gmp readline router static-libs systemd"
 
 DEPEND="
 	lib-net/libmnl
-	lib-net/libnftnl
+	>=lib-net/libnftnl-20260831
 	virtual/curses
 	gmp? ( lib-core/gmp )
 	readline? ( lib-core/readline )
+"
+BDEPEND="
+	app-build/bison
+	app-build/flex
+	app-dev/pkgconf
 "
 
 pkg_setup() {

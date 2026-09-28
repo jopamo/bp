@@ -7,7 +7,7 @@ HOMEPAGE="https://www.rust-lang.org/"
 SRC_URI="https://static.rust-lang.org/dist/rustc-${PV}-src.tar.xz"
 S="${WORKDIR}/rustc-${PV}-src"
 
-LICENSE="MIT Apache-2.0"
+LICENSE="MIT Apache-2.0 Apache-2.0-with-LLVM-exceptions UoI-NCSA"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
@@ -15,14 +15,22 @@ BDEPEND="
 	${PYTHON_DEPS}
 	app-build/llvm
 	app-dev/cmake
+	app-dev/patchelf
 	virtual/rust
 "
+
+# rust-lld remains a link to the system linker. The compiler's LLVM ABI is
+# bundled privately, so this dependency must not force subslot rebuilds.
+RDEPEND="app-build/llvm"
 
 ABI_VER="$(ver_cut 1-2)"
 
 CMAKE_WARN_UNUSED_CLI=no
 
 RESTRICT="test"
+
+# The private LLVM copies have already passed their package's strip phase.
+QA_PRESTRIPPED="usr/lib/rust/llvm/.*"
 
 QA_FLAGS_IGNORED="
 	usr/lib/${PN}/${PV}/bin/.*
@@ -270,4 +278,10 @@ src_install() {
 			-j$(makeopts_jobs) \
 		|| die
 	)
+
+	local llvm_libdir
+	llvm_libdir=$(/usr/bin/llvm-config --libdir) || die
+	"${EPYTHON}" "${FILESDIR}/bundle-llvm.py" \
+		--image "${ED}" --llvm-libdir "${llvm_libdir}" \
+		|| die "failed to bundle Rust's LLVM libraries"
 }

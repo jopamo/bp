@@ -8,5 +8,5 @@ KEYWORDS="amd64 arm64"
 IUSE="static-libs"
 
 RDEPEND="
-	>=app-crypto/vesk-9999-r1[shared,static-libs?]
+	>=app-crypto/vesk-9999[shared,static-libs?]
 "

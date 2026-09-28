@@ -51,7 +51,8 @@ src_configure() {
 	use static && append-ldflags -static
 
 	qa-policy-configure
-	econf "$(use_enable xattr)"
+	# Autoconf's editor variable must not inherit Corepkg's image directory.
+	econf ED=ed "$(use_enable xattr)"
 }
 
 src_test() {

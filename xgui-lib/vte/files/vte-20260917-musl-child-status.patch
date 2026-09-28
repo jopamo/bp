@@ -1,0 +1,20 @@
+--- a/src/widget.cc
++++ b/src/widget.cc
+@@ -20,7 +20,7 @@
+ 
+ #include "widget.hh"
+ 
+-#include <sys/wait.h> // for W_EXITCODE
++#include <signal.h> // for SIGKILL
+ 
+ #include <exception>
+ #include <new>
+@@ -993,7 +993,7 @@ Widget::dispose() noexcept
+         }
+ 
+         if (m_terminal->terminate_child()) {
+-                int status = W_EXITCODE(0, SIGKILL);
++                int status = SIGKILL;
+                 emit_child_exited(status);
+         }
+ }

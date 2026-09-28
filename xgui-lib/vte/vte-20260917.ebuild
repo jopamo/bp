@@ -20,6 +20,8 @@ DEPEND="
 	xgui-lib/gtk4
 "
 
+PATCHES=( "${FILESDIR}/vte-20260917-musl-child-status.patch" )
+
 src_configure() {
 	filter-flags -flto*
 

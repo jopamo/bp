@@ -36,9 +36,9 @@ BDEPEND="
 
 src_prepare() {
 	gl_stage_gnulib
-	#cd gnulib
-	#git reset --hard 0a12fa9
-	#cd ..
+
+	# Current gnulib fixes triple-backref; keep running it as a required pass.
+	sed -i 's/^XFAIL_TESTS = triple-backref$/XFAIL_TESTS =/' tests/Makefile.am || die
 
 	./bootstrap --copy --skip-po --no-git --gnulib-srcdir="${S}"/gnulib || die
 

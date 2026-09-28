@@ -2,16 +2,22 @@ diff --git a/config.h.in b/config.h.in
 index 9b1d39971..e09e8fea3 100644
 --- a/config.h.in
 +++ b/config.h.in
-@@ -9,6 +9,9 @@
+@@ -9,6 +9,10 @@
  #define GCRYPT_NO_DEPRECATED 1
  #define HAVE_MEMMOVE 1
  
-+/* Required by newer gnulib wrapper headers (e.g. <time.h>).  */
++/* Required by gnulib headers, including in freestanding builds.  */
 +#define _GL_CONFIG_H_INCLUDED 1
++#include <stdbool.h>
 +
  #if @MM_DEBUG@
  #define MM_DEBUG @MM_DEBUG@
  #endif
+@@ -71 +75,4 @@
++/* The freestanding target provides wchar APIs, not libc's uchar APIs.  */
++#  define _REGEX_AVOID_UCHAR_H 1
++
+ #  define _GNU_SOURCE 1
 diff --git a/grub-core/osdep/unix/sleep.c b/grub-core/osdep/unix/sleep.c
 index 5b00a38cd..f938d3f52 100644
 --- a/grub-core/osdep/unix/sleep.c

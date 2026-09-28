@@ -2,7 +2,7 @@
 
 SNAPSHOT=3589787cd589b34bdd9265936e17190b6d3f17d1
 
-inherit flag-o-matic qa-policy gl
+inherit flag-o-matic qa-policy
 
 DESCRIPTION="access control list utilities, libraries and headers"
 HOMEPAGE="https://savannah.nongnu.org/projects/acl"
@@ -16,8 +16,6 @@ else
 	SRC_URI="https://github.com/1g4-mirror/acl/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 	S="${WORKDIR}/${PN}-${SNAPSHOT}"
 fi
-
-SRC_URI+=" ${GL_SRC_URI}"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
@@ -38,8 +36,6 @@ BDEPEND="
 "
 
 src_prepare() {
-	gl_stage_gnulib
-
 	./autogen.sh || die
 
 	# Modify git-version-gen to use a specific version number

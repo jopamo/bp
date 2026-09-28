@@ -5,7 +5,6 @@ inherit git-r3 meson qa-policy
 DESCRIPTION="Native C HTML, DOM, and CSS libraries"
 HOMEPAGE="https://gitlab.com/pjo/liblexa"
 EGIT_REPO_URI="https://gitlab.com/pjo/liblexa"
-S="${WORKDIR}/${P}/src/liblexa"
 
 LICENSE="MIT BSD-3"
 SLOT="0"

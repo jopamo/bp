@@ -79,6 +79,8 @@ src_prepare() {
 
 	cd "${WORKDIR}/hostap-${SNAPSHOT}" || die
 
+	eapply "${FILESDIR}/wpa_supplicant-pasn-group.patch"
+
 	# bug (640492)
 	sed -i 's#-Werror ##' wpa_supplicant/Makefile || die
 }

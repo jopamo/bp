@@ -670,7 +670,7 @@ S="${WORKDIR}/cli-${SNAPSHOT}"
 LICENSE="MIT Apache-2.0 BSD BSD-2 MPL-2.0"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-BDEPEND+=" >=app-lang/go-1.26.20260305:="
+BDEPEND+=" >=app-lang/go-1.27:="
 
 RESTRICT="test"
 

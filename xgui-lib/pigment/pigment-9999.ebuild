@@ -25,6 +25,10 @@ DEPEND="
 	xmedia-lib/tiff
 	introspection? ( lib-dev/gobject-introspection )
 "
+RDEPEND="${DEPEND}
+	!!xgui-lib/gdk-pixbuf
+	!!xgui-lib/librsvg
+"
 BDEPEND="
 	app-build/gettext
 	app-dev/pkgconf

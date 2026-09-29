@@ -28,7 +28,7 @@ COMMON_DEPEND="
 	lib-core/glib
 	xgui-desktop/shared-mime-info
 	xgui-lib/cairo[glib,svg,X?]
-	xgui-lib/gdk-pixbuf
+	xgui-lib/pigment
 	xgui-lib/pango[introspection?]
 	xmedia-lib/graphene
 	xmedia-lib/libepoxy[X(+)?]
@@ -55,7 +55,6 @@ DEPEND="${COMMON_DEPEND}
 
 RDEPEND="${COMMON_DEPEND}"
 PDEPEND="
-	xgui-lib/librsvg
 	xgui-icontheme/adwaita-plus
 	vim-syntax? ( app-tex/gtk-syntax )
 "

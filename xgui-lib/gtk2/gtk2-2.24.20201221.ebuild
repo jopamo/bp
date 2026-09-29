@@ -24,7 +24,7 @@ COMMON_DEPEND="
 	fonts/fontconfig
 	xmedia-lib/libepoxy[X(+)?]
 	xgui-lib/cairo[glib,svg,X?]
-	xgui-lib/gdk-pixbuf[introspection?]
+	xgui-lib/pigment[introspection?]
 	xgui-lib/pango[introspection?]
 	xgui-desktop/shared-mime-info
 	cups? ( lib-print/cups )
@@ -53,7 +53,6 @@ DEPEND="${COMMON_DEPEND}
 RDEPEND="${COMMON_DEPEND}"
 
 PDEPEND="
-	xgui-lib/librsvg
 	xgui-icontheme/adwaita-plus
 	vim-syntax? ( app-tex/gtk-syntax )
 "

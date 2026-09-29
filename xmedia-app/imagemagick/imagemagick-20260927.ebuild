@@ -19,7 +19,7 @@ DEPEND="
 	jpeg2k? ( xmedia-lib/openjpeg )
 	jpeg? ( xmedia-lib/libjpeg-turbo )
 	png? ( xmedia-lib/libpng )
-	svg? ( xgui-lib/librsvg )
+	svg? ( xgui-lib/pigment )
 	tiff? ( xmedia-lib/tiff )
 	webp? ( xmedia-lib/libwebp )
 "

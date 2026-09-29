@@ -16,7 +16,7 @@ SLOT="$(ver_cut 1)"
 KEYWORDS="amd64 arm64"
 
 DEPEND="
-	xgui-lib/librsvg
+	xgui-lib/pigment
 	xgui-lib/qtbase:$(ver_cut 1)=
 "
 

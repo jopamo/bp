@@ -32,7 +32,7 @@ RDEPEND="
 	xgui-icontheme/adwaita-icon-theme
 	xgui-lib/at-spi2-core
 	xgui-lib/cairo
-	xgui-lib/gdk-pixbuf
+	xgui-lib/pigment
 	xgui-lib/gtk3
 	xgui-lib/libxcb
 	xgui-lib/libxkbcommon

@@ -33,7 +33,7 @@ RDEPEND="
 	lib-core/glib
 	xgui-lib/at-spi2-core
 	xgui-lib/cairo[X]
-	xgui-lib/gdk-pixbuf
+	xgui-lib/pigment
 	xgui-lib/gtk3
 	xgui-lib/pango
 	xgui-lib/freetype

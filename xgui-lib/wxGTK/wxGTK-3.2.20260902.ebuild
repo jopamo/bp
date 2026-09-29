@@ -21,7 +21,7 @@ RDEPEND="
 		lib-core/zlib
 		lib-core/glib
 		xgui-lib/cairo
-		xgui-lib/gdk-pixbuf
+		xgui-lib/pigment
 		xgui-lib/gtk3
 		xgui-lib/libSM
 		xgui-lib/libX11

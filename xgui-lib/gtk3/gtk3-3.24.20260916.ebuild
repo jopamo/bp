@@ -26,7 +26,7 @@ DEPEND="
 	xgui-desktop/shared-mime-info
 	xgui-lib/at-spi2-core
 	xgui-lib/cairo[glib,svg,X?]
-	xgui-lib/gdk-pixbuf
+	xgui-lib/pigment
 	xgui-lib/pango[introspection?]
 	xmedia-lib/libepoxy[X(+)?]
 	cups? ( lib-print/cups )
@@ -45,7 +45,6 @@ DEPEND="
 	)
 "
 PDEPEND="
-	xgui-lib/librsvg
 	xgui-icontheme/adwaita-plus
 "
 

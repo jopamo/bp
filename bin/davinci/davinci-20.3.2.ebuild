@@ -51,7 +51,7 @@ lib-dev/nss
 xgui-lib/harfbuzz
 xgui-lib/freeglut
 xgui-lib/libSM
-xgui-lib/librsvg
+xgui-lib/pigment
 xmedia-lib/libpng
 
 app-build/gcc

@@ -20,7 +20,7 @@ DEPEND="
 	app-build/gettext
 	app-dev/pkgconf
 	xgui-lib/gtk3
-	xgui-lib/librsvg
+	xgui-lib/pigment
 "
 
 RESTRICT="binchecks strip"

@@ -5,6 +5,19 @@ MERGE_MANIFEST_MODE="tree-blake3-v1"
 
 PYTHON_COMPAT=( python3_{11..14} )
 
+DISTUTILS_EXT=1
+DEPEND="
+	lib-core/zlib
+	xgui-lib/freetype
+	xgui-lib/lcms
+	xgui-lib/libxcb
+	xmedia-lib/libjpeg-turbo
+	xmedia-lib/libwebp
+	xmedia-lib/openjpeg
+	xmedia-lib/tiff
+"
+RDEPEND="${DEPEND}"
+
 DISTUTILS_USE_PEP517="standalone"
 
 inherit distutils-r1
@@ -19,6 +32,7 @@ SRC_URI="https://files.pythonhosted.org/packages/cd/74/ad3d526f3bf7b6d3f408b73fd
 S="${WORKDIR}/pillow-10.4.0"
 
 BDEPEND="
+	app-dev/pkgconf
 	dev-pypi/gpep517[${PYTHON_USEDEP}]
 	dev-pypi/setuptools[${PYTHON_USEDEP}]
 "

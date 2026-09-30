@@ -8,7 +8,7 @@ inherit distutils-r1
 RDEPEND+="
 	app-dev/ropgadget
 	app-emu/capstone
-	app-emu/unicorn
+	dev-pypi/unicorn
 	dev-pypi/backports-zstd
 	dev-pypi/colored-traceback
 	dev-pypi/intervaltree
@@ -40,7 +40,7 @@ RDEPEND="
 	${PYTHON_DEPS}
 	>=app-emu/capstone-3.0.5[python,${PYTHON_USEDEP}]
 	>=app-dev/ropgadget-5.3[${PYTHON_USEDEP}]
-	>=app-emu/unicorn-1.0.2[python,${PYTHON_USEDEP}]
+	>=dev-pypi/unicorn-1.0.2[${PYTHON_USEDEP}]
 	dev-pypi/colored-traceback[${PYTHON_USEDEP}]
 	>=dev-pypi/intervaltree-3.0[${PYTHON_USEDEP}]
 	>=dev-pypi/mako-1.0.0[${PYTHON_USEDEP}]

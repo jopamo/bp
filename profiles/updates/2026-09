@@ -242,3 +242,5 @@ move dev-python/urllib3 dev-pypi/urllib3
 move dev-python/wcwidth dev-pypi/wcwidth
 move dev-python/wheel dev-pypi/wheel
 move dev-python/yarl dev-pypi/yarl
+move app-emu/unicorn dev-pypi/unicorn
+move xgui-app/pillow dev-pypi/pillow

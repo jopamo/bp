@@ -5,7 +5,7 @@ inherit distutils-r1
 # lockstep-pypi-deps: begin
 RDEPEND+="
 	app-emu/capstone
-	app-emu/unicorn
+	dev-pypi/unicorn
 	dev-pypi/fuzzercorn
 	dev-pypi/gevent
 	dev-pypi/keystone-engine
@@ -38,6 +38,6 @@ KEYWORDS="amd64 arm64"
 RDEPEND="
 	app-emu/capstone[python]
 	app-emu/keystone[python]
-	app-emu/unicorn[python]
+	dev-pypi/unicorn[${PYTHON_USEDEP}]
 	dev-pypi/pyelftools
 "

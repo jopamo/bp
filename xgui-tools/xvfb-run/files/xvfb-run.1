@@ -1,0 +1,67 @@
+.\" Derived from the manual by Branden Robinson, Copyright 1998-2004.
+.\" Distributed under GPL version 2 or later.
+.TH XVFB-RUN 1 "2026-09-30" "1g4 Linux"
+.SH NAME
+xvfb-run \- run a command in a private virtual X display
+.SH SYNOPSIS
+.B xvfb-run
+.RI [ options ]
+.I command
+.RI [ arguments ...]
+.SH DESCRIPTION
+.B xvfb-run
+creates an X authority cookie, starts Xvfb, waits for it to accept connections,
+and runs the command with DISPLAY and XAUTHORITY set.
+After the command exits, the wrapper stops Xvfb and removes its cookie and
+temporary directory.
+TCP listening is disabled by default.
+.SH OPTIONS
+.TP
+.BR -a ", " --auto-servernum
+Find an available display starting at the requested server number.
+Retry startup at most ten times.
+.TP
+.BR -n " NUM, " --server-num=NUM
+Use display NUM, a nonnegative integer. The default is 99.
+.TP
+.BR -e " FILE, " --error-file=FILE
+Append Xvfb and xauth diagnostics to FILE. The default is /dev/null.
+/dev/stdout and /dev/stderr duplicate the corresponding open descriptor.
+.TP
+.BR -f " FILE, " --auth-file=FILE
+Use FILE for the authority cookie instead of a private temporary file.
+The wrapper removes its display's cookie on exit but does not delete FILE.
+.TP
+.BR -s " ARGS, " --server-args=ARGS
+Pass whitespace-separated arguments to Xvfb.
+Shell quoting inside ARGS is not interpreted and pathname patterns are not
+expanded. The default is "-screen 0 1280x1024x24".
+.TP
+.BR -l ", " --listen-tcp
+Enable TCP listening.
+.TP
+.BR -p " PROTO, " --xauth-protocol=PROTO
+Select the xauth protocol. The default is xauth's default protocol.
+.TP
+.BR -w " SECONDS, " --wait=SECONDS
+Accepted for compatibility and ignored. Startup uses Xvfb's readiness signal.
+.TP
+.BR -h ", " --help
+Display help and exit.
+.SH ENVIRONMENT
+.TP
+.B TMPDIR
+Parent directory for the private temporary authority file. Defaults to /tmp.
+.SH EXIT STATUS
+The command's exit status is returned.
+Wrapper failures return 1 for Xvfb startup, 2 for a missing command or invalid
+display number, 3 for a missing runtime tool, 5 for a temporary-directory
+cleanup failure after a successful command, and 6 for invalid options.
+.SH EXAMPLE
+.B xvfb-run -a -e /dev/stderr gtk-test
+.SH AUTHORS
+Branden Robinson and Jeff Licquia; maintained locally in the bp repository
+for 1g4 Linux.
+.SH SEE ALSO
+.BR Xvfb (1),
+.BR xauth (1)

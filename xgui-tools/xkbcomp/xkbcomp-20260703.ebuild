@@ -16,6 +16,7 @@ RDEPEND="
 	xgui-lib/libX11
 	xgui-lib/libxkbfile
 "
+DEPEND="${RDEPEND}"
 BDEPEND="app-build/bison"
 
 src_prepare() {

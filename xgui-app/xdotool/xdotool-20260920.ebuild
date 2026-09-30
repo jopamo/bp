@@ -12,6 +12,18 @@ LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
+RDEPEND="
+	xgui-lib/libX11
+	xgui-lib/libXinerama
+	xgui-lib/libXtst
+	xgui-lib/libxkbcommon
+"
+DEPEND="${RDEPEND}"
+BDEPEND="
+	app-dev/pkgconf
+	app-lang/perl
+"
+
 # tests have various troublesome requirements
 RESTRICT="test"
 

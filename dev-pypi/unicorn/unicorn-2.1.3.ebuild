@@ -19,6 +19,8 @@ SRC_URI="https://files.pythonhosted.org/packages/51/40/52d9961c488d9a45c7ed26f76
 S="${WORKDIR}/unicorn-2.1.3"
 
 BDEPEND="
+	app-dev/cmake
+	app-build/make
 	dev-pypi/build[${PYTHON_USEDEP}]
 	dev-pypi/gpep517[${PYTHON_USEDEP}]
 	dev-pypi/setuptools-scm[${PYTHON_USEDEP}]

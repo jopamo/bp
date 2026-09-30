@@ -1,0 +1,92 @@
+#!/bin/sh
+# Distributed under the terms of the GNU General Public License v2
+
+set -eu
+script=$(realpath "$1")
+test_root=$(mktemp -d)
+trap 'rm -rf "$test_root"' EXIT
+mkdir "$test_root/bin" "$test_root/tmp"
+export TEST_ROOT="$test_root" TMPDIR="$test_root/tmp"
+export PATH="$test_root/bin:$PATH"
+
+cat > "$test_root/bin/Xvfb" <<'EOF'
+#!/bin/sh
+printf '%s\n' "$*" >> "$TEST_ROOT/starts"
+if [ "${FAIL_START:-0}" = 1 ]; then
+    exit 1
+fi
+printf '%s\n' "$$" > "$TEST_ROOT/pid"
+while [ "$#" -gt 0 ]; do
+    if [ "$1" = -auth ]; then
+        shift
+        printf '%s\n' "$1" > "$TEST_ROOT/auth"
+        break
+    fi
+    shift
+done
+trap 'exit 0' TERM
+kill -USR1 "$PPID"
+while :; do sleep 1; done
+EOF
+cat > "$test_root/bin/xauth" <<'EOF'
+#!/bin/sh
+printf '%s\n' "$*" >> "$TEST_ROOT/xauth"
+if [ "$1" = source ]; then
+    cat >/dev/null
+fi
+EOF
+cat > "$test_root/bin/mcookie" <<'EOF'
+#!/bin/sh
+printf '%s\n' 0123456789abcdef0123456789abcdef
+EOF
+chmod +x "$test_root/bin/"*
+
+assert_clean() {
+    if [ -f "$test_root/pid" ] && kill -0 "$(cat "$test_root/pid")" 2>/dev/null; then
+        echo "test-xvfb-run: Xvfb still running" >&2
+        exit 1
+    fi
+    [ -z "$(ls -A "$TMPDIR")" ]
+}
+
+# Preserve the client status and environment, including authority paths with spaces.
+mkdir "$test_root/tmp with spaces"
+export TMPDIR="$test_root/tmp with spaces"
+status=0
+sh "$script" -a -n 0090 -e /dev/stderr sh -c '
+    set -e
+    [ "$DISPLAY" = :90 ]
+    [ "$XAUTHORITY" = "$(cat "$TEST_ROOT/auth")" ]
+    [ -f "$XAUTHORITY" ]
+    exit 23
+' || status=$?
+[ "$status" -eq 23 ]
+assert_clean
+grep -q '^:90 ' "$test_root/starts"
+
+# A supplied authority file survives cleanup as one pathname.
+touch "$test_root/authority file"
+sh "$script" -f "$test_root/authority file" true
+[ -f "$test_root/authority file" ]
+[ "$(cat "$test_root/auth")" = "$test_root/authority file" ]
+assert_clean
+
+# Never launch the client when automatic startup exhausts its retries.
+: > "$test_root/starts"
+status=0
+FAIL_START=1 sh "$script" -a sh -c 'touch "$TEST_ROOT/client-ran"' \
+    2>"$test_root/errors" || status=$?
+[ "$status" -eq 1 ]
+[ "$(wc -l < "$test_root/starts")" -eq 10 ]
+[ ! -e "$test_root/client-ran" ]
+assert_clean
+
+# Reject malformed options and display numbers before starting Xvfb.
+for options in --unknown --server-num=-1; do
+    : > "$test_root/starts"
+    if sh "$script" "$options" true 2>"$test_root/errors"; then
+        exit 1
+    fi
+    [ ! -s "$test_root/starts" ]
+done
+printf '%s\n' "test-xvfb-run: PASS"

@@ -18,6 +18,7 @@ DEPEND="xgui-lib/libX11
 	xgui-lib/libXau
 	xgui-lib/libXext
 	xgui-lib/libXmu"
+RDEPEND="${DEPEND}"
 
 src_prepare() {
 	default

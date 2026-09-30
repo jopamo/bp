@@ -16,6 +16,7 @@
 *xgui-app/kvantum
 *xgui-app/qbittorrent
 *xgui-app/wireshark
+*xgui-app/xdotool
 *xgui-desktop/qalculate-gtk
 *xgui-icontheme/adwaita-plus
 *xgui-icontheme/adwaita-qt
@@ -25,7 +26,12 @@
 *xgui-tools/alsa-utils
 *xgui-tools/desktop-file-utils
 *xgui-tools/mesa-progs
+*xgui-tools/xauth
+*xgui-tools/xkbcomp
+*xgui-tools/xkeyboard-config
+*xgui-tools/xorg-server
 *xgui-tools/xrandr
+*xgui-tools/xvfb-run
 *xmedia-app/audacious
 *xmedia-app/stillmark
 *xmedia-app/imagemagick

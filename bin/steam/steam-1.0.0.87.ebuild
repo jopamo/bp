@@ -22,9 +22,9 @@ RESTRICT="bindist mirror strip"
 QA_PREBUILT="*"
 
 RDEPEND="
-	app-compression/tar
 	app-compression/xz-utils
 	app-core/bash
+	app-core/bx
 	app-core/file
 	app-core/lsof
 	app-lang/python

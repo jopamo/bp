@@ -3,7 +3,6 @@
 *app-build/llvm
 *app-compression/cpio
 *app-compression/pigz
-*app-compression/tar
 *app-compression/xz-utils
 *app-core/corepkg
 *app-core/coreq

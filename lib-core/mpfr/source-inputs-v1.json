@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "record_type": "source_related_inputs",
+  "family": {
+    "repository_id": "bp",
+    "category": "lib-core",
+    "pn": "mpfr"
+  },
+  "paths": []
+}

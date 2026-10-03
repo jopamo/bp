@@ -46,6 +46,7 @@ src_configure() {
 	qa-policy-configure
 
 	local emesonargs=(
+		-Dpkgconfdir="${EPREFIX}/etc/default"
 		$(meson_feature caps capng)
 		$(meson_feature numa)
 		$(meson_feature systemd)

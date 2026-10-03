@@ -1,0 +1,125 @@
+Subject: GTK CSS: Use typed parse-option predicates
+Base: 34dc3af563f767348ca575827f414a50c0458b0e
+
+GtkCssParseOption calls predicates with three arguments. Casting one-argument
+predicates through void pointers bypasses the type check and triggers function
+UBSan. Forward through correctly typed callbacks while retaining the existing
+predicates, option ordering, and shadow-mode data.
+
+--- a/gtk/gtkcssshorthandpropertyimpl.c
++++ b/gtk/gtkcssshorthandpropertyimpl.c
+@@ -654,6 +654,14 @@
+ }
+ 
+ static gboolean
++has_transition_time (GtkCssParser *parser,
++                     gpointer option_data,
++                     gpointer user_data)
++{
++  return gtk_css_number_value_can_parse (parser);
++}
++
++static gboolean
+ parse_transition_time (GtkCssParser *parser,
+                        gpointer      option_data,
+                        gpointer      user_data)
+@@ -666,6 +674,14 @@
+ }
+ 
+ static gboolean
++has_transition_timing_function (GtkCssParser *parser,
++                                gpointer option_data,
++                                gpointer user_data)
++{
++  return _gtk_css_ease_value_can_parse (parser);
++}
++
++static gboolean
+ parse_transition_timing_function (GtkCssParser *parser,
+                                   gpointer      option_data,
+                                   gpointer      user_data)
+@@ -683,10 +699,10 @@
+                       GtkCssParser             *parser)
+ {
+   const GtkCssParseOption options[] = {
+-    { (void *) _gtk_css_ease_value_can_parse, parse_transition_timing_function, &values[3] },
+-    { (void *) gtk_css_number_value_can_parse, parse_transition_time, &values[1] },
+-    { (void *) gtk_css_number_value_can_parse, parse_transition_time, &values[2] },
+-    { (void *) has_transition_property, parse_transition_property, &values[0] },
++    { has_transition_timing_function, parse_transition_timing_function, &values[3] },
++    { has_transition_time, parse_transition_time, &values[1] },
++    { has_transition_time, parse_transition_time, &values[2] },
++    { has_transition_property, parse_transition_property, &values[0] },
+   };
+ 
+   return gtk_css_parser_consume_any (parser, options, G_N_ELEMENTS (options), NULL);
+--- a/gtk/gtkcssshadowvalue.c
++++ b/gtk/gtkcssshadowvalue.c
+@@ -412,6 +412,14 @@
+ }
+ 
+ static gboolean
++has_lengths (GtkCssParser *parser,
++             gpointer option_data,
++             gpointer box_shadow_mode)
++{
++  return gtk_css_number_value_can_parse (parser);
++}
++
++static gboolean
+ parse_lengths (GtkCssParser *parser,
+                gpointer      option_data,
+                gpointer      box_shadow_mode)
+@@ -453,6 +461,14 @@
+ }
+ 
+ static gboolean
++has_color (GtkCssParser *parser,
++           gpointer option_data,
++           gpointer box_shadow_mode)
++{
++  return gtk_css_color_value_can_parse (parser);
++}
++
++static gboolean
+ parse_color (GtkCssParser *parser,
+              gpointer      option_data,
+              gpointer      box_shadow_mode)
+@@ -476,9 +492,9 @@
+   gboolean inset = FALSE;
+   GtkCssParseOption options[] =
+     {
+-      { (void *) gtk_css_number_value_can_parse, parse_lengths, values },
++      { has_lengths, parse_lengths, values },
+       { has_inset, parse_inset, &inset },
+-      { (void *) gtk_css_color_value_can_parse, parse_color, &color },
++      { has_color, parse_color, &color },
+     };
+   guint i;
+ 
+--- a/gtk/gtkcssimagecrossfade.c
++++ b/gtk/gtkcssimagecrossfade.c
+@@ -282,6 +282,14 @@
+ }
+ 
+ static gboolean
++has_progress (GtkCssParser *parser,
++              gpointer option_data,
++              gpointer user_data)
++{
++  return gtk_css_number_value_can_parse (parser);
++}
++
++static gboolean
+ parse_progress (GtkCssParser *parser,
+                 gpointer      option_data,
+                 gpointer      user_data)
+@@ -345,7 +353,7 @@
+   GtkCssImage *image = NULL;
+   GtkCssParseOption options[] =
+     {
+-      { (void *)gtk_css_number_value_can_parse, parse_progress, &progress },
++      { has_progress, parse_progress, &progress },
+       { NULL, parse_image, &image },
+     };
+ 

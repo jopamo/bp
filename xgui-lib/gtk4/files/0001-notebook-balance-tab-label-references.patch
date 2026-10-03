@@ -1,0 +1,206 @@
+Subject: notebook: Balance page-owned tab-label references
+
+Base: 34dc3af563f767348ca575827f414a50c0458b0e
+
+GtkNotebookPage owns the tab-label reference established by its construct
+property. Removal unparents the label and clears that pointer without
+unreffing it. Replacement and hiding default tabs have the same release
+problem; replacement also omits the page-owned reference for new labels.
+
+Release the page reference when removing a label. Keep a separate page
+reference when setting custom and default replacements, and reuse removal
+when hiding default tabs so mnemonic handlers are disconnected too.
+
+Add notebook tests for removal, replacement, hide/show, destruction, a
+retained page object, and caller-owned labels.
+
+--- a/gtk/gtknotebook.c
++++ b/gtk/gtknotebook.c
+@@ -4310,7 +4310,7 @@
+           gtk_widget_unparent (page->tab_label);
+         }
+ 
+-      page->tab_label = NULL;
++      g_clear_object (&page->tab_label);
+     }
+ }
+ 
+@@ -6255,8 +6255,7 @@
+           children = children->next;
+           if (page->default_tab)
+             {
+-              gtk_widget_unparent (page->tab_label);
+-              page->tab_label = NULL;
++              gtk_notebook_remove_tab_label (notebook, page);
+             }
+           else
+             gtk_widget_set_visible (page->tab_label, FALSE);
+@@ -6620,7 +6619,7 @@
+   if (tab_label)
+     {
+       page->default_tab = FALSE;
+-      page->tab_label = tab_label;
++      g_set_object (&page->tab_label, tab_label);
+       g_object_set_data (G_OBJECT (page->tab_label), "notebook", notebook);
+       gtk_widget_set_parent (page->tab_label, page->tab_widget);
+     }
+@@ -6636,6 +6635,7 @@
+           g_snprintf (string, sizeof(string), _("Page %u"),
+                       g_list_position (notebook->children, list));
+           page->tab_label = gtk_label_new (string);
++          g_object_ref_sink (page->tab_label);
+           gtk_widget_set_parent (page->tab_label, page->tab_widget);
+           g_object_set_data (G_OBJECT (page->tab_label), "notebook", notebook);
+         }
+--- a/testsuite/gtk/meson.build
++++ b/testsuite/gtk/meson.build
+@@ -61,6 +61,7 @@
+   { 'name': 'misc' },
+   { 'name': 'multiselection' },
+   { 'name': 'noselection' },
++  { 'name': 'notebook' },
+   { 'name': 'notify' },
+   { 'name': 'no-gtk-init' },
+   { 'name': 'object' },
+--- /dev/null
++++ b/testsuite/gtk/notebook.c
+@@ -0,0 +1,139 @@
++#include <gtk/gtk.h>
++
++static void
++watch_label (GtkNotebook *notebook,
++             GtkWidget *child,
++             GtkWidget **weak_label)
++{
++  GtkWidget *label;
++
++  g_object_get (gtk_notebook_get_page (notebook, child), "tab", &label, NULL);
++  g_assert_nonnull (label);
++  *weak_label = label;
++  g_object_add_weak_pointer (G_OBJECT (label), (gpointer *) weak_label);
++  g_object_unref (label);
++}
++
++static void
++test_remove_label (void)
++{
++  GtkNotebook *notebook = GTK_NOTEBOOK (g_object_ref_sink (gtk_notebook_new ()));
++  GtkWidget *child = gtk_label_new ("Page");
++  GtkWidget *label = gtk_label_new ("Tab");
++  GtkNotebookPage *page;
++  GtkWidget *saved_label;
++
++  gtk_notebook_append_page (notebook, child, label);
++  watch_label (notebook, child, &label);
++  page = g_object_ref (gtk_notebook_get_page (notebook, child));
++  gtk_notebook_remove_page (notebook, 0);
++  g_assert_null (label);
++  g_object_get (page, "tab", &saved_label, NULL);
++  g_assert_null (saved_label);
++  g_object_unref (page);
++  g_object_unref (notebook);
++}
++
++static void
++test_replace_label (void)
++{
++  GtkNotebook *notebook = GTK_NOTEBOOK (g_object_ref_sink (gtk_notebook_new ()));
++  GtkWidget *child = gtk_label_new ("Page");
++  GtkWidget *old_label = gtk_label_new ("Old");
++  GtkWidget *new_label = gtk_label_new ("New");
++  GtkWidget *default_label;
++
++  gtk_notebook_append_page (notebook, child, old_label);
++  watch_label (notebook, child, &old_label);
++  gtk_notebook_set_tab_label (notebook, child, new_label);
++  g_assert_null (old_label);
++  watch_label (notebook, child, &new_label);
++  gtk_notebook_set_tab_label (notebook, child, NULL);
++  g_assert_null (new_label);
++  watch_label (notebook, child, &default_label);
++  gtk_notebook_remove_page (notebook, 0);
++  g_assert_null (default_label);
++  g_object_unref (notebook);
++}
++
++static void
++test_hide_default_label (void)
++{
++  GtkNotebook *notebook = GTK_NOTEBOOK (g_object_ref_sink (gtk_notebook_new ()));
++  GtkWidget *child = gtk_label_new ("Page");
++  GtkWidget *label;
++
++  gtk_notebook_append_page (notebook, child, NULL);
++  watch_label (notebook, child, &label);
++  gtk_notebook_set_show_tabs (notebook, FALSE);
++  g_assert_null (label);
++  gtk_notebook_set_show_tabs (notebook, TRUE);
++  watch_label (notebook, child, &label);
++  gtk_notebook_remove_page (notebook, 0);
++  g_assert_null (label);
++  g_object_unref (notebook);
++}
++
++static void
++test_hide_replaced_default_label (void)
++{
++  GtkNotebook *notebook = GTK_NOTEBOOK (g_object_ref_sink (gtk_notebook_new ()));
++  GtkWidget *child = gtk_label_new ("Page");
++  GtkWidget *label;
++
++  gtk_notebook_append_page (notebook, child, gtk_label_new ("Tab"));
++  gtk_notebook_set_tab_label (notebook, child, NULL);
++  watch_label (notebook, child, &label);
++  gtk_notebook_set_show_tabs (notebook, FALSE);
++  g_assert_null (label);
++  gtk_notebook_set_show_tabs (notebook, TRUE);
++  watch_label (notebook, child, &label);
++  gtk_notebook_remove_page (notebook, 0);
++  g_assert_null (label);
++  g_object_unref (notebook);
++}
++
++static void
++test_destroy_notebook (void)
++{
++  GtkNotebook *notebook = GTK_NOTEBOOK (g_object_ref_sink (gtk_notebook_new ()));
++  GtkWidget *child = gtk_label_new ("Page");
++  GtkWidget *label = gtk_label_new ("Tab");
++
++  gtk_notebook_append_page (notebook, child, label);
++  watch_label (notebook, child, &label);
++  g_object_unref (notebook);
++  g_assert_null (label);
++}
++
++static void
++test_caller_owned_label (void)
++{
++  GtkNotebook *notebook = GTK_NOTEBOOK (g_object_ref_sink (gtk_notebook_new ()));
++  GtkWidget *child = gtk_label_new ("Page");
++  GtkWidget *label = g_object_ref_sink (gtk_label_new ("Tab"));
++
++  gtk_notebook_append_page (notebook, child, label);
++  watch_label (notebook, child, &label);
++  gtk_notebook_remove_page (notebook, 0);
++  g_assert_nonnull (label);
++  g_assert_null (gtk_widget_get_parent (label));
++  g_object_unref (notebook);
++  g_object_unref (label);
++  g_assert_null (label);
++}
++
++int
++main (int argc, char *argv[])
++{
++  gtk_test_init (&argc, &argv);
++
++  g_test_add_func ("/notebook/remove-label", test_remove_label);
++  g_test_add_func ("/notebook/replace-label", test_replace_label);
++  g_test_add_func ("/notebook/hide-default-label", test_hide_default_label);
++  g_test_add_func ("/notebook/hide-replaced-default-label", test_hide_replaced_default_label);
++  g_test_add_func ("/notebook/destroy-notebook", test_destroy_notebook);
++  g_test_add_func ("/notebook/caller-owned-label", test_caller_owned_label);
++
++  return g_test_run ();
++}

@@ -22,11 +22,13 @@ BDEPEND="
 	app-dev/gtk-doc-am
 	app-dev/pkgconf
 "
-DEPEND="
+RDEPEND="
 	ssl? ( virtual/ssl )
+	xz? ( app-compression/xz-utils )
 	zlib? ( lib-core/zlib )
 	zstd? ( app-compression/zstd )
 "
+DEPEND="${RDEPEND}"
 
 src_configure() {
 	local emesonargs=(

@@ -12,10 +12,11 @@ LICENSE="|| ( GPL-3 BSD-2 )"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-DEPEND="
+RDEPEND="
 	virtual/curses
 	lib-core/libpcre2
 "
+DEPEND="${RDEPEND}"
 
 src_prepare() {
 	# Snapshot tarballs lack pre-generated author files expected by the

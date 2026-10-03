@@ -16,14 +16,15 @@ IUSE="caps kernel_linux +numa systemd thermal tui"
 # Hangs
 RESTRICT="test"
 
-DEPEND="
+RDEPEND="
 	lib-core/glib
-	caps? ( lib-core/libcap )
+	caps? ( lib-core/libcap-ng )
 	numa? ( app-util/numactl )
 	systemd? ( app-core/systemd )
 	thermal? ( lib-net/libnl )
 	tui? ( lib-core/ncurses )
 "
+DEPEND="${RDEPEND}"
 
 pkg_setup() {
 	CONFIG_CHECK="~PCI_MSI"

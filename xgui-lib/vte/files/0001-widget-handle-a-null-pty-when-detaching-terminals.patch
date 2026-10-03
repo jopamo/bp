@@ -1,0 +1,165 @@
+From 8c9137f625d281683078d777a067bf4a708e7ca6 Mon Sep 17 00:00:00 2001
+From: Paul Moses <p@1g4.org>
+Date: Thu, 1 Oct 2026 15:40:05 -0500
+Subject: [PATCH] widget: handle a null pty when detaching terminals
+
+vte_terminal_set_pty() accepts NULL to detach a terminal's PTY, but
+Widget::set_pty() passes the cleared wrapper to _vte_pty_get_impl(),
+which dereferences it. Attaching a PTY and then unsetting it crashes.
+This also occurs when an asynchronous terminal spawn fails.
+
+Pass nullptr directly to Terminal::set_pty() when the wrapper is empty.
+Keep _vte_pty_get_impl()'s non-null contract unchanged.
+
+Add GTK 3 and GTK 4 regression tests for attach, detach, repeated setters,
+reattach, property-based detach, notifications, and PTY finalization.
+Skip the widget tests when no display is available.
+
+Fixes: 8c72345d1df5 ("pty: Separate PTY code from its GObject wrapper")
+---
+ src/meson.build    | 15 ++++++++
+ src/widget-test.cc | 90 ++++++++++++++++++++++++++++++++++++++++++++++
+ src/widget.cc      |  2 +-
+ 3 files changed, 106 insertions(+), 1 deletion(-)
+ create mode 100644 src/widget-test.cc
+
+diff --git a/src/meson.build b/src/meson.build
+index f8556d7..6c44bf7 100644
+--- a/src/meson.build
++++ b/src/meson.build
+@@ -1097,6 +1097,21 @@ if get_option('gtk3')
+   test_units += [test_vtetypes,]
+ endif
+ 
++foreach gtk: ['3', '4']
++  if get_option('gtk' + gtk)
++    test_widget = executable(
++      'test-widget-gtk' + gtk,
++      sources: config_sources + files('widget-test.cc'),
++      dependencies: [get_variable('libvte_gtk' + gtk + '_dep')],
++      cpp_args: ['-DVTE_GTK=' + gtk],
++      include_directories: top_inc,
++      install: false,
++    )
++
++    test_units += [test_widget,]
++  endif
++endforeach
++
+ # Run unit tests
+ 
+ test_env = [
+diff --git a/src/widget-test.cc b/src/widget-test.cc
+new file mode 100644
+index 0000000..2f7e541
+--- /dev/null
++++ b/src/widget-test.cc
+@@ -0,0 +1,90 @@
++/*
++ * Copyright © 2026 Paul Moses
++ *
++ * This library is free software: you can redistribute it and/or modify
++ * it under the terms of the GNU Lesser General Public License as published
++ * by the Free Software Foundation, either version 3 of the License, or
++ * (at your option) any later version.
++ *
++ * This library is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public License
++ * along with this library.  If not, see <https://www.gnu.org/licenses/>.
++ */
++
++#include "config.h"
++
++#include "vte/vte.h"
++
++static void
++pty_changed(GObject*,
++            GParamSpec*,
++            unsigned* notifications)
++{
++        ++*notifications;
++}
++
++static void
++test_widget_pty(void)
++{
++        auto terminal = VTE_TERMINAL(g_object_ref_sink(vte_terminal_new()));
++        unsigned notifications = 0;
++        g_signal_connect(terminal, "notify::pty", G_CALLBACK(pty_changed), &notifications);
++
++        g_assert_null(vte_terminal_get_pty(terminal));
++        vte_terminal_set_pty(terminal, nullptr);
++        g_assert_cmpuint(notifications, ==, 0);
++
++        GError* error = nullptr;
++        auto pty = vte_pty_new_sync(VTE_PTY_DEFAULT, nullptr, &error);
++        g_assert_no_error(error);
++        g_assert_nonnull(pty);
++        void* weak_pty = pty;
++        g_object_add_weak_pointer(G_OBJECT(pty), &weak_pty);
++
++        vte_terminal_set_pty(terminal, pty);
++        g_assert_true(vte_terminal_get_pty(terminal) == pty);
++        g_assert_cmpuint(notifications, ==, 1);
++        vte_terminal_set_pty(terminal, pty);
++        g_assert_cmpuint(notifications, ==, 1);
++        g_object_unref(pty);
++
++        vte_terminal_set_pty(terminal, nullptr);
++        g_assert_null(vte_terminal_get_pty(terminal));
++        g_assert_null(weak_pty);
++        g_assert_cmpuint(notifications, ==, 2);
++        vte_terminal_set_pty(terminal, nullptr);
++        g_assert_cmpuint(notifications, ==, 2);
++
++        pty = vte_pty_new_sync(VTE_PTY_DEFAULT, nullptr, &error);
++        g_assert_no_error(error);
++        g_assert_nonnull(pty);
++        vte_terminal_set_pty(terminal, pty);
++        g_assert_true(vte_terminal_get_pty(terminal) == pty);
++        g_assert_cmpuint(notifications, ==, 3);
++        g_object_unref(pty);
++
++        g_object_set(terminal, "pty", nullptr, nullptr);
++        g_assert_null(vte_terminal_get_pty(terminal));
++        g_assert_cmpuint(notifications, ==, 4);
++        g_object_unref(terminal);
++}
++
++int
++main(int argc,
++     char* argv[])
++{
++        g_test_init(&argc, &argv, nullptr);
++#if VTE_GTK == 3
++        if (!gtk_init_check(&argc, &argv))
++#else
++        if (!gtk_init_check())
++#endif
++                return 77;
++
++        g_test_add_func("/vte/widget/pty", test_widget_pty);
++        return g_test_run();
++}
+diff --git a/src/widget.cc b/src/widget.cc
+index 4489a3a..e171f6c 100644
+--- a/src/widget.cc
++++ b/src/widget.cc
+@@ -2229,7 +2229,7 @@ Widget::set_pty(VtePty* pty_obj) noexcept
+                 return false;
+ 
+         m_pty = vte::glib::make_ref(pty_obj);
+-        terminal()->set_pty(_vte_pty_get_impl(pty()));
++        terminal()->set_pty(pty() ? _vte_pty_get_impl(pty()) : nullptr);
+ 
+         return true;
+ }
+
+base-commit: 1a63c87b0702c112406229f3cf98c389d51ca4d4
+-- 
+2.56.0-rc2
+

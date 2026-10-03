@@ -20,7 +20,10 @@ DEPEND="
 	xgui-lib/gtk4
 "
 
-PATCHES=( "${FILESDIR}/vte-20260917-musl-child-status.patch" )
+PATCHES=(
+	"${FILESDIR}/vte-20260917-musl-child-status.patch"
+	"${FILESDIR}/0001-widget-handle-a-null-pty-when-detaching-terminals.patch"
+)
 
 src_configure() {
 	filter-flags -flto*

@@ -1,0 +1,43 @@
+#!/bin/bash
+set -eu
+
+repo=$(cd -- "$(dirname -- "$0")/.." && pwd -P)
+inherit() { :; }
+source "${repo}/eclass/qmake-utils.eclass"
+
+if [[ $# -gt 1 ]]; then
+	echo 'usage: scripts/test-qt-prefix [libQt6Core.so.6]' >&2
+	exit 2
+fi
+
+library=$(realpath "${1:-$(qt6_get_libdir)/libQt6Core.so.6}")
+test_root=$(mktemp -d "${TMPDIR:-/tmp}/bp-qt-prefix.XXXXXX")
+trap 'rm -rf -- "${test_root}"' EXIT
+mkdir "${test_root}/lib"
+ln -s "${library}" "${test_root}/lib/libQt6Core.so.6"
+cp "$(qt6_get_bindir)/qtpaths" "${test_root}/qtpaths"
+
+# Load QtCore through another prefix without an application-local qt.conf.
+check_path() {
+	local actual
+	actual=$(env -u LD_LIBRARY_PATH -u LD_PRELOAD \
+		LD_PRELOAD="${test_root}/lib/libQt6Core.so.6" \
+		"${test_root}/qtpaths" --query "$1")
+	if [[ ${actual} != "$2" ]]; then
+		printf 'FAIL: %s: expected %s, got %s\n' "$1" "$2" "${actual}" >&2
+		exit 1
+	fi
+}
+
+check_path QT_INSTALL_PREFIX /usr
+check_path QT_INSTALL_ARCHDATA /usr
+check_path QT_INSTALL_LIBS "$(qt6_get_libdir)"
+check_path QT_INSTALL_BINS "$(qt6_get_bindir)"
+check_path QT_INSTALL_HEADERS "$(qt6_get_headerdir)"
+check_path QT_INSTALL_PLUGINS "$(qt6_get_plugindir)"
+check_path QT_INSTALL_QML /usr/qml
+check_path QT_INSTALL_DATA /usr/share/qt6
+check_path QT_INSTALL_TRANSLATIONS /usr/share/qt6/translations
+check_path QT_HOST_DATA "$(dirname "$(qt6_get_mkspecsdir)")"
+
+echo 'PASS: Qt 6 fixed-prefix paths through an alternate library location'

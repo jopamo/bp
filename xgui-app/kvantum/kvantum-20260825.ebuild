@@ -14,7 +14,11 @@ KEYWORDS="amd64 arm64"
 
 RESTRICT="test"
 
-RDEPEND="xgui-lib/qtsvg:6"
+RDEPEND="
+	>=xgui-lib/qtbase-6.10.20260903:6
+	xgui-lib/qtsvg:6
+"
+DEPEND="${RDEPEND}"
 BDEPEND="xgui-lib/qttools:6"
 
 src_configure() {

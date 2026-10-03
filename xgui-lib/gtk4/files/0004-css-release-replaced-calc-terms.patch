@@ -1,0 +1,77 @@
+Subject: GTK CSS: Release replaced calc terms
+Base: 34dc3af563f767348ca575827f414a50c0458b0e
+
+The calc array owns each term. Combining compatible terms replaces the array
+entry without releasing its old reference. Unref the old entry after creating
+the owned sum. Exercise ordinary merging, zero operands, and cancellation
+without constructing widgets or application objects.
+
+--- a/gtk/gtkcssnumbervalue.c
++++ b/gtk/gtkcssnumbervalue.c
+@@ -847,6 +847,7 @@
+ 
+       if (sum)
+         {
++          gtk_css_value_unref (g_ptr_array_index (array, i));
+           g_ptr_array_index (array, i) = sum;
+           gtk_css_value_unref (value);
+           return;
+--- /dev/null
++++ b/testsuite/gtk/cssnumbervalue.c
+@@ -0,0 +1,46 @@
++#include <gtk/gtk.h>
++
++#include "gtk/gtkcssnumbervalueprivate.h"
++
++static void
++test_calc_sum_references (gconstpointer data)
++{
++  int second_length = GPOINTER_TO_INT (data);
++  GtkCssValue *values[] = {
++    gtk_css_dimension_value_new (13, GTK_CSS_PX),
++    gtk_css_dimension_value_new (17, GTK_CSS_PERCENT),
++    gtk_css_dimension_value_new (second_length, GTK_CSS_PX),
++    gtk_css_dimension_value_new (23, GTK_CSS_PERCENT),
++  };
++  int references[G_N_ELEMENTS (values)];
++  GtkCssValue *left, *right, *sum;
++
++  for (guint i = 0; i < G_N_ELEMENTS (values); i++)
++    references[i] = ((GtkCssValueBase *) values[i])->ref_count;
++
++  left = gtk_css_number_value_add (values[0], values[1]);
++  right = gtk_css_number_value_add (values[2], values[3]);
++  sum = gtk_css_number_value_add (left, right);
++  g_assert_cmpfloat (gtk_css_number_value_get (sum, 100), ==, 53 + second_length);
++
++  gtk_css_value_unref (sum);
++  gtk_css_value_unref (right);
++  gtk_css_value_unref (left);
++
++  for (guint i = 0; i < G_N_ELEMENTS (values); i++)
++    {
++      g_assert_cmpint (((GtkCssValueBase *) values[i])->ref_count, ==, references[i]);
++      gtk_css_value_unref (values[i]);
++    }
++}
++
++int
++main (int argc, char **argv)
++{
++  g_test_init (&argc, &argv, NULL);
++  g_test_add_data_func ("/css/number/calc-sum", GINT_TO_POINTER (19), test_calc_sum_references);
++  g_test_add_data_func ("/css/number/calc-sum-zero", GINT_TO_POINTER (0), test_calc_sum_references);
++  g_test_add_data_func ("/css/number/calc-sum-cancel", GINT_TO_POINTER (-13), test_calc_sum_references);
++
++  return g_test_run ();
++}
+--- a/testsuite/gtk/meson.build
++++ b/testsuite/gtk/meson.build
+@@ -123,6 +123,7 @@
+     ],
+   },
+   { 'name': 'bitmask' },
++  { 'name': 'cssnumbervalue' },
+   {
+     'name': 'composetable',
+     'sources': [

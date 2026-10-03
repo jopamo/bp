@@ -60,6 +60,13 @@ PDEPEND="
 "
 BDEPEND="lib-dev/sass"
 
+PATCHES=(
+	"${FILESDIR}/0001-notebook-balance-tab-label-references.patch"
+	"${FILESDIR}/0002-gdkarray-avoid-wrapped-pointer-offsets-when-shrinking.patch"
+	"${FILESDIR}/0003-css-use-typed-parse-option-predicates.patch"
+	"${FILESDIR}/0004-css-release-replaced-calc-terms.patch"
+)
+
 pkg_setup() {
 	use introspection && python-any-r1_pkg_setup
 }

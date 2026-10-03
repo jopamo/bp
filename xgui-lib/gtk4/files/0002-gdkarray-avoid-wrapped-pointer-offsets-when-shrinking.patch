@@ -1,0 +1,25 @@
+Subject: gdkarray: Avoid wrapped pointer offsets when shrinking
+
+Base: 34dc3af563f767348ca575827f414a50c0458b0e
+
+added and removed are unsigned sizes. Shrinking wraps their difference
+before adding it to end, which UBSan diagnoses as pointer overflow.
+
+Subtract removed before adding added. The intermediate pointer stays
+within the old array, and reserve provides space for the final size.
+Reuse the existing array tests for ordinary, preallocated, NULL-terminated,
+and element-destroying variants.
+
+--- a/gdk/gdkarrayimpl.c
++++ b/gdk/gdkarrayimpl.c
+@@ -260,8 +260,8 @@
+     }
+ 
+ 
+-  /* might overflow, but does the right thing */
+-  self->end += added - removed;
++  self->end -= removed;
++  self->end += added;
+ }
+ 
+ G_GNUC_UNUSED static void

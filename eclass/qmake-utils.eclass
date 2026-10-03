@@ -56,8 +56,8 @@ eqmake5() {
 qt6_get_bindir()      { echo /usr/lib/qt6/bin; }
 qt6_get_headerdir()   { echo /usr/include/qt6; }
 qt6_get_libdir()      { echo /usr/lib; }
-qt6_get_mkspecsdir()  { echo /usr/lib/qt6/mkspecs; }
-qt6_get_plugindir()   { echo /usr/lib/qt6/plugins; }
+qt6_get_mkspecsdir()  { echo /usr/mkspecs; }
+qt6_get_plugindir()   { echo /usr/plugins; }
 qt6_get_qmake_args() {
 	cat <<-EOF
 		QMAKE_AR="$(tc-getAR) cqs"

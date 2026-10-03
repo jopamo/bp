@@ -56,6 +56,7 @@ src_configure() {
 		-no-static
 		-no-framework
 		-no-rpath
+		-no-feature-relocatable
 		-prefix "${EPREFIX}"/usr
 		-bindir "${EPREFIX}"/usr/lib/qt$(ver_cut 1)/bin
 		-docdir "${EPREFIX}"/usr/share/doc/qt$(ver_cut 1)

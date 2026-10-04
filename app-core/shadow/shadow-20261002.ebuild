@@ -4,7 +4,7 @@ inherit autotools
 
 DESCRIPTION="Utilities to deal with user accounts"
 HOMEPAGE="https://github.com/shadow-maint/shadow http://pkg-shadow.alioth.debian.org/"
-SNAPSHOT=6070212daf4f0f2e9fa7c77892da4521fde40fd3
+SNAPSHOT=44211cf880746f8f94d0a22e92499a6e072cefcf
 SRC_URI="https://github.com/shadow-maint/shadow/archive/${SNAPSHOT}.tar.gz -> shadow-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/shadow-${SNAPSHOT}"
 
@@ -32,8 +32,6 @@ RDEPEND="
 BDEPEND="app-dev/pkgconf"
 
 src_prepare() {
-	eapply "${FILESDIR}/shadow-nscd-stub-type.patch"
-
 	local file
 	for file in "${FILESDIR}"/*; do
 		[[ ${file} == *.patch ]] && continue

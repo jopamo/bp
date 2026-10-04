@@ -3,8 +3,8 @@ EAPI=8
 MERGE_MANIFEST_MODE="tree-blake3-v1"
 
 CRATE_NAME="crossbeam-queue"
-CRATE_VERSION="0.3.12"
-CRATE_CHECKSUM="0f58bbc28f91df819d0aa2a2c00cd19754769c2fad90579b3592b1c9ba7a3115"
+CRATE_VERSION="0.3.14"
+CRATE_CHECKSUM="03e8bd762f7479489c70ed6c768ddca99d7296857de437a68dcb2a94365b3fae"
 CRATE_SOURCE="registry+https://github.com/rust-lang/crates.io-index"
 CRATE_SOURCE_KIND="registry"
 

@@ -4,7 +4,7 @@ inherit toolchain-funcs flag-o-matic
 
 DESCRIPTION="IEEE 802.1X/WPA supplicant for secure wireless transfers"
 HOMEPAGE="https://w1.fi/wpa_supplicant/"
-SNAPSHOT=542b8fd43847bef559769f9a261cb01c1cb78328
+SNAPSHOT=5b156e272a0266ca6be0f394192bad42b0ff176c
 SRC_URI="https://github.com/1g4-mirror/hostap/archive/${SNAPSHOT}.tar.gz -> hostap-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/hostap-${SNAPSHOT}/wpa_supplicant"
 

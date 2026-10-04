@@ -1,0 +1,172 @@
+# Distributed under the terms of the GNU General Public License v2
+# lockstep-cargo-managed: true
+# lockstep-cargo-deps: begin
+CARGO_DEPS="
+	rust-crates/aho-corasick-1.1.5
+	rust-crates/anstream-1.0.0
+	rust-crates/anstyle-1.0.14
+	rust-crates/anstyle-parse-1.0.0
+	rust-crates/anstyle-query-1.1.5
+	rust-crates/anstyle-wincon-3.0.11
+	rust-crates/anyhow-1.0.104
+	rust-crates/approx-0.5.1
+	rust-crates/arrayvec-0.7.8
+	rust-crates/assert_cmd-2.2.2
+	rust-crates/autocfg-0.1.8
+	rust-crates/autocfg-1.5.1
+	rust-crates/bitflags-1.3.2
+	rust-crates/bitflags-2.13.2
+	rust-crates/borsh-1.8.1
+	rust-crates/borsh-derive-1.8.1
+	rust-crates/bstr-1.13.1
+	rust-crates/bumpalo-3.20.3
+	rust-crates/bytes-1.12.1
+	rust-crates/cfg-if-1.0.5
+	rust-crates/cfg_aliases-0.2.2
+	rust-crates/chacha20-0.10.2
+	rust-crates/clap-4.6.7
+	rust-crates/clap_builder-4.6.7
+	rust-crates/clap_complete-4.6.11
+	rust-crates/clap_lex-1.1.1
+	rust-crates/cloudabi-0.0.3
+	rust-crates/colorchoice-1.0.5
+	rust-crates/colored-3.1.1
+	rust-crates/console-0.15.11
+	rust-crates/console-0.16.6
+	rust-crates/cpufeatures-0.3.1
+	rust-crates/csv-1.4.0
+	rust-crates/csv-core-0.1.13
+	rust-crates/difflib-0.4.0
+	rust-crates/encode_unicode-1.0.0
+	rust-crates/equivalent-1.0.2
+	rust-crates/errno-0.3.14
+	rust-crates/fastrand-2.5.0
+	rust-crates/float-cmp-0.10.0
+	rust-crates/fuchsia-cprng-0.1.1
+	rust-crates/getrandom-0.2.17
+	rust-crates/getrandom-0.3.4
+	rust-crates/getrandom-0.4.3
+	rust-crates/hashbrown-0.17.1
+	rust-crates/indexmap-2.14.2
+	rust-crates/indicatif-0.17.4
+	rust-crates/insta-1.48.0
+	rust-crates/instant-0.1.13
+	rust-crates/is_terminal_polyfill-1.70.2
+	rust-crates/itoa-1.0.18
+	rust-crates/libc-0.2.189
+	rust-crates/linux-raw-sys-0.12.1
+	rust-crates/memchr-2.8.3
+	rust-crates/nix-0.31.3
+	rust-crates/normalize-line-endings-0.3.0
+	rust-crates/num-0.2.1
+	rust-crates/num-bigint-0.2.6
+	rust-crates/num-complex-0.2.4
+	rust-crates/num-integer-0.1.47
+	rust-crates/num-iter-0.1.46
+	rust-crates/num-rational-0.2.4
+	rust-crates/num-traits-0.2.19
+	rust-crates/number_prefix-0.4.0
+	rust-crates/once_cell-1.21.4
+	rust-crates/once_cell_polyfill-1.70.2
+	rust-crates/portable-atomic-1.15.0
+	rust-crates/ppv-lite86-0.2.21
+	rust-crates/predicates-3.1.4
+	rust-crates/predicates-core-1.0.10
+	rust-crates/predicates-tree-1.0.13
+	rust-crates/proc-macro-crate-3.5.0
+	rust-crates/proc-macro2-1.0.107
+	rust-crates/quote-1.0.47
+	rust-crates/r-efi-5.3.0
+	rust-crates/r-efi-6.0.0
+	rust-crates/rand-0.10.3
+	rust-crates/rand-0.6.5
+	rust-crates/rand-0.8.8
+	rust-crates/rand-0.9.5
+	rust-crates/rand_chacha-0.1.1
+	rust-crates/rand_chacha-0.3.1
+	rust-crates/rand_chacha-0.9.0
+	rust-crates/rand_core-0.10.1
+	rust-crates/rand_core-0.3.2
+	rust-crates/rand_core-0.4.3
+	rust-crates/rand_core-0.6.4
+	rust-crates/rand_core-0.9.5
+	rust-crates/rand_hc-0.1.0
+	rust-crates/rand_isaac-0.1.1
+	rust-crates/rand_jitter-0.1.4
+	rust-crates/rand_os-0.1.3
+	rust-crates/rand_pcg-0.1.2
+	rust-crates/rand_xorshift-0.1.1
+	rust-crates/rdrand-0.4.0
+	rust-crates/regex-1.13.1
+	rust-crates/regex-automata-0.4.18
+	rust-crates/regex-syntax-0.8.11
+	rust-crates/rust_decimal-1.43.0
+	rust-crates/rustix-1.1.5
+	rust-crates/rustversion-1.0.23
+	rust-crates/ryu-1.0.23
+	rust-crates/serde-1.0.229
+	rust-crates/serde_core-1.0.229
+	rust-crates/serde_derive-1.0.229
+	rust-crates/serde_json-1.0.151
+	rust-crates/shell-words-1.1.1
+	rust-crates/similar-2.7.0
+	rust-crates/statistical-1.0.0
+	rust-crates/strsim-0.11.1
+	rust-crates/syn-2.0.119
+	rust-crates/syn-3.0.6
+	rust-crates/tempfile-3.27.0
+	rust-crates/terminal_size-0.4.4
+	rust-crates/termtree-0.5.1
+	rust-crates/thiserror-2.0.21
+	rust-crates/thiserror-impl-2.0.21
+	rust-crates/toml_datetime-1.1.1+spec-1.1.0
+	rust-crates/toml_edit-0.25.15+spec-1.1.0
+	rust-crates/toml_parser-1.1.3+spec-1.1.0
+	rust-crates/unicode-ident-1.0.26
+	rust-crates/unicode-width-0.1.14
+	rust-crates/unicode-width-0.2.2
+	rust-crates/utf8parse-0.2.2
+	rust-crates/wait-timeout-0.2.1
+	rust-crates/wasi-0.11.1+wasi-snapshot-preview1
+	rust-crates/wasip2-1.0.4+wasi-0.2.12
+	rust-crates/wasm-bindgen-0.2.129
+	rust-crates/wasm-bindgen-macro-0.2.129
+	rust-crates/wasm-bindgen-macro-support-0.2.129
+	rust-crates/wasm-bindgen-shared-0.2.129
+	rust-crates/winapi-0.3.9
+	rust-crates/winapi-i686-pc-windows-gnu-0.4.0
+	rust-crates/winapi-x86_64-pc-windows-gnu-0.4.0
+	rust-crates/windows-link-0.2.1
+	rust-crates/windows-sys-0.59.0
+	rust-crates/windows-sys-0.61.2
+	rust-crates/windows-targets-0.52.6
+	rust-crates/windows_aarch64_gnullvm-0.52.6
+	rust-crates/windows_aarch64_msvc-0.52.6
+	rust-crates/windows_i686_gnu-0.52.6
+	rust-crates/windows_i686_gnullvm-0.52.6
+	rust-crates/windows_i686_msvc-0.52.6
+	rust-crates/windows_x86_64_gnu-0.52.6
+	rust-crates/windows_x86_64_gnullvm-0.52.6
+	rust-crates/windows_x86_64_msvc-0.52.6
+	rust-crates/winnow-1.0.4
+	rust-crates/wit-bindgen-0.57.1
+	rust-crates/zerocopy-0.8.58
+	rust-crates/zerocopy-derive-0.8.58
+	rust-crates/zmij-1.0.23
+"
+# lockstep-cargo-deps: end
+inherit cargo lockstep-cargo
+
+DESCRIPTION="command-line benchmarking tool"
+HOMEPAGE="https://github.com/sharkdp/hyperfine"
+SNAPSHOT=0f7ae35626bfd4b3c08b97949c1f6d5626c1e984
+SRC_URI="https://github.com/sharkdp/hyperfine/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
+
+LICENSE="BSD"
+SLOT="0"
+KEYWORDS="amd64 arm64"
+
+src_install() {
+	dobin target/release/"${PN}"
+}

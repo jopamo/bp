@@ -12,8 +12,6 @@ KEYWORDS="amd64 arm64"
 
 DEPEND="core-perl/libintl-perl"
 
-PATCHES=( "${FILESDIR}"/gcc15.patch )
-
 src_prepare() {
 	filter-flags -fno-signed-zeros -fassociative-math
 

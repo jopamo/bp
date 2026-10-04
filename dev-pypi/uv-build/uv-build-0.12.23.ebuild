@@ -18,7 +18,7 @@ CARGO_DEPS="
 	rust-crates/arrayvec-0.7.8
 	rust-crates/astral-tokio-tar-0.7.0
 	rust-crates/astral-version-ranges-0.2.2
-	rust-crates/astral_async_zip-0.0.20
+	rust-crates/astral_async_zip-0.0.21
 	rust-crates/async-compression-0.4.19
 	rust-crates/autocfg-1.5.0
 	rust-crates/backon-1.6.0
@@ -72,7 +72,7 @@ CARGO_DEPS="
 	rust-crates/fastrand-2.5.0
 	rust-crates/find-msvc-tools-0.1.9
 	rust-crates/fixedbitset-0.5.7
-	rust-crates/flate2-1.1.9
+	rust-crates/flate2-1.1.10
 	rust-crates/foldhash-0.1.5
 	rust-crates/foldhash-0.2.0
 	rust-crates/form_urlencoded-1.2.2
@@ -105,7 +105,7 @@ CARGO_DEPS="
 	rust-crates/icu_provider-2.1.1
 	rust-crates/idna-1.1.0
 	rust-crates/idna_adapter-1.2.1
-	rust-crates/indexmap-2.14.0
+	rust-crates/indexmap-2.14.1
 	rust-crates/indoc-2.0.7
 	rust-crates/insta-1.48.0
 	rust-crates/io-extras-0.19.0
@@ -133,14 +133,14 @@ CARGO_DEPS="
 	rust-crates/matchers-0.2.0
 	rust-crates/maybe-owned-0.3.4
 	rust-crates/memchr-2.8.3
-	rust-crates/miniz_oxide-0.8.9
+	rust-crates/miniz_oxide-0.9.1
 	rust-crates/mio-1.2.0
 	rust-crates/munge-0.4.7
 	rust-crates/munge_macro-0.4.7
 	rust-crates/nu-ansi-term-0.50.3
 	rust-crates/once_cell-1.21.4
 	rust-crates/once_cell_polyfill-1.70.2
-	rust-crates/owo-colors-4.3.0
+	rust-crates/owo-colors-4.4.0
 	rust-crates/parking-2.2.1
 	rust-crates/parking_lot-0.12.5
 	rust-crates/parking_lot_core-0.9.12
@@ -212,7 +212,7 @@ CARGO_DEPS="
 	rust-crates/strip-ansi-escapes-0.2.1
 	rust-crates/strsim-0.11.1
 	rust-crates/syn-2.0.118
-	rust-crates/syn-3.0.3
+	rust-crates/syn-3.0.4
 	rust-crates/synstructure-0.13.2
 	rust-crates/tar-codec-0.0.14
 	rust-crates/tar-framing-0.0.14
@@ -327,8 +327,8 @@ LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-SRC_URI="https://files.pythonhosted.org/packages/8c/54/e920a09f6e86f418da9981cc600cee1907a587bf48f902ea3d54b3b4ba96/uv_build-0.12.19.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/uv_build-0.12.19"
+SRC_URI="https://files.pythonhosted.org/packages/b4/65/672d5c1e7fff2a602b51758cd96c379ea80c0c20d9d10aae5139bfde9877/uv_build-0.12.23.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/uv_build-0.12.23"
 
 BDEPEND="
 	app-dev/maturin[${PYTHON_USEDEP}]

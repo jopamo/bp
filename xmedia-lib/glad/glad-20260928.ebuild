@@ -11,7 +11,7 @@ RDEPEND+="
 # lockstep-pypi-deps: end
 DESCRIPTION="Multi-Language Vulkan/GL/GLES/EGL/GLX/WGL Loader-Generator"
 HOMEPAGE="https://glad.dav1d.de/"
-SNAPSHOT=e3c14f906127dea49ead20ff4d5878294d08b7ab
+SNAPSHOT=0a7cf1af9e25e02821587bd4095807fc90b6426a
 SRC_URI="https://github.com/Dav1dde/glad/archive/${SNAPSHOT}.tar.gz -> glad-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/glad-${SNAPSHOT}"
 

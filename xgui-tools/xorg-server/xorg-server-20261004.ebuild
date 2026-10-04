@@ -6,7 +6,7 @@ inherit meson flag-o-matic nvidia-musl-startup
 
 DESCRIPTION="implementation of the X Window System display server"
 HOMEPAGE="https://www.x.org/wiki/"
-SNAPSHOT=322305bfe6f8fa610c79d9da8734a358f33b8102
+SNAPSHOT=9d03c0a6e23a483c9a205d5948ae1ef07aa353e6
 SRC_URI="https://github.com/X11Libre/xserver/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/xserver-${SNAPSHOT}"
 

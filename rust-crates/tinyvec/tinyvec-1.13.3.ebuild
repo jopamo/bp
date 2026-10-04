@@ -3,8 +3,8 @@ EAPI=8
 MERGE_MANIFEST_MODE="tree-blake3-v1"
 
 CRATE_NAME="tinyvec"
-CRATE_VERSION="1.12.0"
-CRATE_CHECKSUM="bb4ebadaa0af04fab11ae01eb5f9fdb5f9c5b875506e210e71c07873528baa7f"
+CRATE_VERSION="1.13.3"
+CRATE_CHECKSUM="fd3ca314f692efd6c868f8408f53fe444634a845f96c028b97d35f6a1f79f0ee"
 CRATE_SOURCE="registry+https://github.com/rust-lang/crates.io-index"
 CRATE_SOURCE_KIND="registry"
 
@@ -32,4 +32,5 @@ CARGO_CRATE_FEATURES=(
 	"schemars"
 	"serde"
 	"std"
+	"tinyvec_macros"
 )

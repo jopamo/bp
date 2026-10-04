@@ -3,8 +3,8 @@ EAPI=8
 MERGE_MANIFEST_MODE="tree-blake3-v1"
 
 CRATE_NAME="camino"
-CRATE_VERSION="1.2.5"
-CRATE_CHECKSUM="bb1307f12aa967b5a58416e87b3653360e0fd614a016b6e970db08fecbb1b80d"
+CRATE_VERSION="1.2.6"
+CRATE_CHECKSUM="bbbad30e4b4c14a39e3cc8aed085a12a327257c316619c93581e017bc52be591"
 CRATE_SOURCE="registry+https://github.com/rust-lang/crates.io-index"
 CRATE_SOURCE_KIND="registry"
 

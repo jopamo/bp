@@ -3,8 +3,8 @@ EAPI=8
 MERGE_MANIFEST_MODE="tree-blake3-v1"
 
 CRATE_NAME="toml"
-CRATE_VERSION="1.1.4+spec-1.1.0"
-CRATE_CHECKSUM="3aace63f4bbcdfc2c965b059de67119c89c4017a70d633be6c104910f67056f5"
+CRATE_VERSION="1.1.6+spec-1.1.0"
+CRATE_CHECKSUM="920602543f0911ab71da12c50d59701da54c196d1a2bf5cb4b75667f137a406a"
 CRATE_SOURCE="registry+https://github.com/rust-lang/crates.io-index"
 CRATE_SOURCE_KIND="registry"
 

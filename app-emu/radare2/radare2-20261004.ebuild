@@ -1,12 +1,12 @@
 # Distributed under the terms of the GNU General Public License v2
 
 BRANCH_NAME="master"
-SNAPSHOT=7b014248e6d15fee1d517c881b7e90cb89cca782
-SDB_SNAPSHOT=1a6fe8e5a7973b5c3492c7751bea27a3ff185a33
+SNAPSHOT=0e6ddb19b7c9fce5acc258cd9aae136d3d8e294d
+SDB_SNAPSHOT=a57df8d063df83c3d187e9eceba442fc4afaeb20
 V35ARMV7_SNAPSHOT=7d7a78f52196f6333bd5746dc526684edbfd9af0
 V35ARM64_SNAPSHOT=adfc7238a27ef279cc83f3076c6b107573f75444
-QJS_SNAPSHOT=19dbe8524c1a7357d268cb586ee315616984fef8
-CAPSTONE_SNAPSHOT=9791930a895bdacef0b5a5146292c950d56ce1a3
+QJS_SNAPSHOT=90c3922da00f52e477a622245a7c582fbcb7dea6
+CAPSTONE_SNAPSHOT=992e6d7fea4f1f093ea96633b0fa3390e4ac7b31
 
 inherit flag-o-matic toolchain-funcs
 
@@ -44,8 +44,6 @@ src_prepare() {
 	mv "${WORKDIR}/vector35-arch-arm64-${V35ARM64_SNAPSHOT}" subprojects/v35arm64 || die
 	mv "${WORKDIR}/quickjs-${QJS_SNAPSHOT}" subprojects/qjs || die
 	mv "${WORKDIR}/capstone-${CAPSTONE_SNAPSHOT}" subprojects/capstone-v5 || die
-
-	eapply "${FILESDIR}/${PN}-20260912-sdb-c-output.patch"
 
 	cp -a subprojects/packagefiles/qjs/. subprojects/qjs/ || die
 	cp -a subprojects/packagefiles/capstone-v5/. subprojects/capstone-v5/ || die

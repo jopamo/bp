@@ -6,7 +6,7 @@ inherit flag-o-matic qa-policy
 
 DESCRIPTION="an optimizing compiler produced by the GNU Project supporting various programming languages"
 HOMEPAGE="https://gcc.gnu.org/"
-SNAPSHOT=68845de007dc331dea2998c6df0668cd701240c8
+SNAPSHOT=b56c7709b773a29cc039b1677bc48907497c1773
 SRC_URI="https://github.com/gcc-mirror/gcc/archive/${SNAPSHOT}.tar.gz -> gcc-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/gcc-${SNAPSHOT}
 

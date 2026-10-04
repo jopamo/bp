@@ -14,7 +14,7 @@ SLOT="0"
 
 IUSE="
 	+alsa +avcodec +avdevice +avfilter +avformat +avutil debug
-	+gpl +ffmpeg +lame +libass +libdav1d +libxcb +network +nonfree
+	+gpl +ffmpeg +libass +libdav1d +libxcb +network +nonfree
 	nvidia +openssl postproc +protocols pulseaudio static-libs
     +swscale +swresample +version3 +vorbis vulkan vaapi vdpau
 	+x264 +x265
@@ -23,7 +23,6 @@ IUSE="
 DEPEND="
 	app-lang/nasm
 	xmedia-lib/libass
-	lame? ( xmedia-lib/lame )
 	vorbis? ( xmedia-lib/libvorbis )
 	libdav1d? ( xmedia-lib/libdav1d )
 	libxcb? ( xgui-lib/libxcb )
@@ -64,7 +63,8 @@ src_configure() {
 		$(use_enable debug) \
 		$(use_enable ffmpeg) \
 		$(use_enable gpl) \
-		$(use_enable lame libmp3lame) \
+		--disable-libmp3lame \
+		--disable-libshine \
 		$(use_enable libxcb) \
 		$(use_enable libxcb libxcb-shm) \
 		$(use_enable libxcb libxcb-xfixes) \

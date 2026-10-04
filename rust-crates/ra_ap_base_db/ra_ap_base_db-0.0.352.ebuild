@@ -3,14 +3,14 @@ EAPI=8
 MERGE_MANIFEST_MODE="tree-blake3-v1"
 
 CRATE_NAME="ra_ap_base_db"
-CRATE_VERSION="0.0.347"
-CRATE_CHECKSUM="7ea804efdf7c1fdbdac7c1b08002700a6f2930590399abcf84d55b4d4a894116"
+CRATE_VERSION="0.0.352"
+CRATE_CHECKSUM="4ce5c7b9d3f79c6275948b067cddc352b56c7e3f33fc204a66520b7c7fe7d9ca"
 CRATE_SOURCE="registry+https://github.com/rust-lang/crates.io-index"
 CRATE_SOURCE_KIND="registry"
 
 inherit cargo-crate
 
-DESCRIPTION="Basic database traits for rust-analyzer. The concrete DB is defined by \`ide\` (aka \`ra_ap_ide\`)."
+DESCRIPTION="Basic database trait and infra for rust-analyzer's crate and source root inputs. The concrete DB is defined by \`ide\` (aka \`ra_ap_ide\`)."
 HOMEPAGE="https://github.com/rust-lang/rust-analyzer"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="${PV}"

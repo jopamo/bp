@@ -15,8 +15,5 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-SRC_URI="https://files.pythonhosted.org/packages/9b/b4/7065677004d4ec8728da15a70580f431f1a4a079e0e8e8b7aa4ffee4e972/configargparse-1.7.7.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/configargparse-1.7.7"
-
-# SCM inference fails for this sdist; use the packaged release version.
-export SETUPTOOLS_SCM_PRETEND_VERSION_FOR_CONFIGARGPARSE="${PV}"
+SRC_URI="https://files.pythonhosted.org/packages/5d/ed/33c0ba7f0b5be384ff8a2101ce77728f219e816b2104819f1651477e1ad5/configargparse-1.8.0.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/configargparse-1.8.0"

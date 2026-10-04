@@ -3,8 +3,8 @@ EAPI=8
 MERGE_MANIFEST_MODE="tree-blake3-v1"
 
 CRATE_NAME="borsh"
-CRATE_VERSION="1.5.7"
-CRATE_CHECKSUM="ad8646f98db542e39fc66e68a20b2144f6a732636df7c2354e74645faaa433ce"
+CRATE_VERSION="1.8.1"
+CRATE_CHECKSUM="553c5d846a6ba5150c65e3b1b8ec073bcf1abc20f9b7220de384a4443ea4e20a"
 CRATE_SOURCE="registry+https://github.com/rust-lang/crates.io-index"
 CRATE_SOURCE_KIND="registry"
 

@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-SNAPSHOT=9b031151a825bda919203c5202876a725d637368
+SNAPSHOT=6fc1c29d5477bfe71da7af290eb481c0df7811f1
 SHORT=${SNAPSHOT:0:9}
 
 inherit flag-o-matic go-module
@@ -14,8 +14,8 @@ SRC_URI="https://github.com/cli/cli/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSH
 EGO_SUM=(
 	"charm.land/bubbles/v2 v2.2.1"
 	"charm.land/bubbles/v2 v2.2.1/go.mod"
-	"charm.land/bubbletea/v2 v2.0.9"
-	"charm.land/bubbletea/v2 v2.0.9/go.mod"
+	"charm.land/bubbletea/v2 v2.0.10"
+	"charm.land/bubbletea/v2 v2.0.10/go.mod"
 	"charm.land/huh/v2 v2.0.3"
 	"charm.land/huh/v2 v2.0.3/go.mod"
 	"charm.land/lipgloss/v2 v2.0.6"
@@ -367,8 +367,8 @@ EGO_SUM=(
 	"github.com/joho/godotenv v1.5.1/go.mod"
 	"github.com/kballard/go-shellquote v0.0.0-20180428030007-95032a82bc51"
 	"github.com/kballard/go-shellquote v0.0.0-20180428030007-95032a82bc51/go.mod"
-	"github.com/klauspost/compress v1.20.0"
-	"github.com/klauspost/compress v1.20.0/go.mod"
+	"github.com/klauspost/compress v1.20.1"
+	"github.com/klauspost/compress v1.20.1/go.mod"
 	"github.com/kr/pretty v0.3.1"
 	"github.com/kr/pretty v0.3.1/go.mod"
 	"github.com/kr/text v0.2.0"
@@ -389,8 +389,8 @@ EGO_SUM=(
 	"github.com/mattn/go-isatty v0.0.8/go.mod"
 	"github.com/mattn/go-runewidth v0.0.12/go.mod"
 	"github.com/mattn/go-runewidth v0.0.16/go.mod"
-	"github.com/mattn/go-runewidth v0.0.27"
-	"github.com/mattn/go-runewidth v0.0.27/go.mod"
+	"github.com/mattn/go-runewidth v0.0.30"
+	"github.com/mattn/go-runewidth v0.0.30/go.mod"
 	"github.com/mgutz/ansi v0.0.0-20170206155736-9520e82c474b/go.mod"
 	"github.com/mgutz/ansi v0.0.0-20200706080929-d51e80ef957d"
 	"github.com/mgutz/ansi v0.0.0-20200706080929-d51e80ef957d/go.mod"

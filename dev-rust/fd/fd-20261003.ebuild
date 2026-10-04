@@ -23,7 +23,7 @@ CARGO_DEPS="
 	rust-crates/clap_derive-4.6.1
 	rust-crates/clap_lex-1.0.0
 	rust-crates/colorchoice-1.0.4
-	rust-crates/crossbeam-channel-0.5.16
+	rust-crates/crossbeam-channel-0.5.17
 	rust-crates/crossbeam-deque-0.8.6
 	rust-crates/crossbeam-epoch-0.9.18
 	rust-crates/crossbeam-utils-0.8.21
@@ -138,7 +138,7 @@ inherit cargo lockstep-cargo
 
 DESCRIPTION="A simple, fast and user-friendly alternative to gnu find"
 HOMEPAGE="https://github.com/sharkdp/fd"
-SNAPSHOT=ce97e473ebaec49697c07daa50a7bc2b32f713d2
+SNAPSHOT=3460b1e96c3c54ce524dd1763ff361607e323a7f
 SRC_URI="https://github.com/sharkdp/fd/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

@@ -4,7 +4,7 @@ inherit autotools flag-o-matic
 
 DESCRIPTION="A utility for network discovery and security auditing"
 HOMEPAGE="https://nmap.org/"
-SNAPSHOT=a885c55e2fbf5385eacd60a895d3439050723003
+SNAPSHOT=527ef01bf38cb3eae5baf2baf0b28ee03c0d9db2
 SRC_URI="https://github.com/nmap/nmap/archive/${SNAPSHOT}.tar.gz -> nmap-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/nmap-${SNAPSHOT}"
 

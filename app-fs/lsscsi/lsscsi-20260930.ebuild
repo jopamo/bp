@@ -3,7 +3,7 @@
 DESCRIPTION="SCSI sysfs query tool"
 HOMEPAGE="http://sg.danny.cz/scsi/lsscsi.html"
 
-SNAPSHOT=05eaba17a68ab574416bd030f941985cef515db5
+SNAPSHOT=1792b8c33440d6ec82686b234d9136d765048196
 SRC_URI="https://github.com/doug-gilbert/lsscsi/archive/${SNAPSHOT}.tar.gz -> lsscsi-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/lsscsi-${SNAPSHOT}"
 

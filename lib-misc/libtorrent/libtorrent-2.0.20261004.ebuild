@@ -6,7 +6,7 @@ inherit cmake
 
 DESCRIPTION="C++ BitTorrent implementation focusing on efficiency and scalability"
 HOMEPAGE="http://libtorrent.org"
-SNAPSHOT=2bc9c4f7dacb70e89f7ac73e9fa7fc02ed2b395a
+SNAPSHOT=0ae5cf3959b5b01c17cb73c3a53a0cdb9e01abb2
 ASIO_GNUTLS_SNAPSHOT=a57d4d36923c5fafa9698e14be16b8bc2913700a
 TRY_SIGNAL_SNAPSHOT=105cce59972f925a33aa6b1c3109e4cd3caf583d
 LIBSIMULATOR_SNAPSHOT=9f5802b2060526be842994bafcc6be870c1a8460

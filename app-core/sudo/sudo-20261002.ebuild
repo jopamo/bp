@@ -4,7 +4,7 @@
 
 DESCRIPTION="Allows users or groups to run commands as other users"
 HOMEPAGE="https://www.sudo.ws/"
-SNAPSHOT=2802bb3c80807d88b33e5d88938b4083d61af1b5
+SNAPSHOT=aa84f40a9960e21f97fbdcf432c2c7a94c44fb71
 SRC_URI="https://github.com/sudo-project/sudo/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/sudo-${SNAPSHOT}
 

@@ -6,7 +6,7 @@ inherit flag-o-matic toolchain-funcs
 
 DESCRIPTION="Complete solution to record, convert and stream audio and video. Includes libavcodec"
 HOMEPAGE="http://ffmpeg.org/"
-SNAPSHOT=307181df23d4828e6fbb5e8e8a9980fe6031cfc6
+SNAPSHOT=46d8f462eeb87ee1f704d8c44a0ee24fca471ad1
 SRC_URI="https://github.com/FFmpeg/FFmpeg/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/FFmpeg-${SNAPSHOT}"
 
@@ -123,6 +123,9 @@ src_configure() {
 
 		# cli tool
 		$(use_enable ffmpeg)
+
+		# audio encoders
+		--enable-encoder=aac
 
 		# audio decoders
 		--enable-decoder=aac

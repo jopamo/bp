@@ -12,6 +12,12 @@ KEYWORDS="amd64 arm64"
 IUSE="test video"
 
 BDEPEND="test? ( app-lang/python )"
+RDEPEND="
+	video? (
+		xmedia-app/ffmpeg[avcodec,avfilter,avformat,ffmpeg,swresample]
+		xmedia-app/ffmpeg-normalize
+	)
+"
 RESTRICT="!test? ( test )"
 
 src_test() {

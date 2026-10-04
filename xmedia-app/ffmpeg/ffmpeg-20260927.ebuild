@@ -48,6 +48,7 @@ src_configure() {
 		--bindir="${EPREFIX}"/usr/bin \
 		--libdir="${EPREFIX}"/usr/lib \
 		--enable-shared \
+		--enable-encoder=aac \
 		--cc="$(tc-getCC)" \
 		--cxx="$(tc-getCXX)" \
 		--ar="$(tc-getAR)" \

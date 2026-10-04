@@ -16,7 +16,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="
 	+alsa +avcodec +avdevice +avfilter +avformat +avutil debug
-	+gpl +ffmpeg +lame +libass +libdav1d +libxcb +network +nonfree
+	+gpl +ffmpeg +libass +libdav1d +libxcb +network +nonfree
 	nvidia +openssl postproc +protocols pulseaudio static-libs
 	+swscale +swresample +version3 +vorbis vulkan vaapi vdpau
 	+x264 +x265 +opus +vpx
@@ -25,7 +25,6 @@ IUSE="
 DEPEND="
 	app-lang/nasm
 
-	lame? ( xmedia-lib/lame )
 	vorbis? ( xmedia-lib/libvorbis )
 	opus? ( xmedia-lib/opus )
 	vpx? ( xmedia-lib/libvpx )
@@ -107,7 +106,8 @@ src_configure() {
 		$(use_enable openssl)
 
 		# third party codec libs
-		$(use_enable lame libmp3lame)
+		--disable-libmp3lame
+		--disable-libshine
 		$(use_enable vorbis libvorbis)
 		$(use_enable opus libopus)
 		$(use_enable vpx libvpx)

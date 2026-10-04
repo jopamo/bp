@@ -9,7 +9,7 @@ inherit toolchain-funcs
 
 DESCRIPTION="A concurrent garbage collected and typesafe programming language"
 HOMEPAGE="https://go.dev"
-SNAPSHOT=072779d81582543bf2872c259e0c6cceea728de4
+SNAPSHOT=7325b729f07c7ff255b9b5e3f427234ebd21ac47
 SRC_URI="https://github.com/golang/go/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/go-${SNAPSHOT}"
 
@@ -71,7 +71,7 @@ src_compile() {
 src_test() {
 	cd src
 	export GO_TEST_TIMEOUT_SCALE=3
-	GOROOT="${S}" PATH="${S}/bin:${PATH}" \
+	PATH="${S}/bin:${PATH}" \
 	./run.bash --no-rebuild -v -v -v -k || die "tests failed"
 	cd ..
 	rm -fr pkg/*_race || die

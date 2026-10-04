@@ -4,7 +4,7 @@ inherit autotools qa-policy
 
 DESCRIPTION="X.Org Xrender library"
 HOMEPAGE="https://www.x.org/wiki/"
-SNAPSHOT=f32afe9f877ae032c6bc9c27b17b7978b1b4c856
+SNAPSHOT=0564bce5446550c1b1681f3d8a933c20ea1455f7
 SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libXrender/-/archive/${SNAPSHOT}/libXrender-${SNAPSHOT}.tar.bz2 -> libXrender-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/libxrender-${SNAPSHOT}"
 

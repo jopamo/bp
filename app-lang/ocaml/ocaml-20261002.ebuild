@@ -2,7 +2,7 @@
 
 DESCRIPTION="Functional, imperative, and object-oriented programming language"
 HOMEPAGE="https://ocaml.org/"
-SNAPSHOT=c6daf5d6ef3dc536de229fffabf82bd33fb0308d
+SNAPSHOT=bab8b93765f6cacd9d4e7871a2dcd8d39edd17d3
 SRC_URI="https://github.com/ocaml/ocaml/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

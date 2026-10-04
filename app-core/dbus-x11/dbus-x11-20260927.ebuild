@@ -4,7 +4,7 @@ inherit linux-info meson doins qa-policy
 
 DESCRIPTION="Desktop-friendly D-Bus build with systemd user-bus, tools, and X11 integration"
 HOMEPAGE="https://dbus.freedesktop.org/"
-SNAPSHOT=b33c059af14e0c8bc67947cf0e45f869e2ba8f12
+SNAPSHOT=1d58afcb1fafee5e461fe11aae228210a5fdde9e
 SRC_URI="https://gitlab.freedesktop.org/dbus/dbus/-/archive/${SNAPSHOT}/dbus-${SNAPSHOT}.tar.bz2"
 S=${WORKDIR}/dbus-${SNAPSHOT}
 

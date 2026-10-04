@@ -12,7 +12,7 @@ for videofile in *.mp4 *.mkv ; do
 	if [[ "${videofile}" != *-muxed.mp4 ]] && [ ! -f "${videofile%.*}-muxed.mp4" ]; then
 		ffmpeg-normalize "$videofile" -c:a flac -o "${TMPDIR}/${videofile%.*}.flac.mkv"
 		ffmpeg -n -i "${TMPDIR}/${videofile%.*}.flac.mkv" -c copy -an "${TMPDIR}/${videofile%.*}.raw.mkv"
-		ffmpeg -n -i "${TMPDIR}/${videofile%.*}.flac.mkv" -dn -sn -vn -c:a aac -q:a 2 "${TMPDIR}/${videofile%.*}.m4a"
+		ffmpeg -n -i "${TMPDIR}/${videofile%.*}.flac.mkv" -dn -sn -vn -c:a aac -aac_coder nmr -aac_nmr_speed 0 -b:a 192k "${TMPDIR}/${videofile%.*}.m4a"
 		ffmpeg -n -i "${TMPDIR}/${videofile%.*}.raw.mkv" -i "${TMPDIR}/${videofile%.*}.m4a" -c copy -map_metadata -1 -metadata title="${videofile%.*}" -map_chapters -1 -c:s mov_text -movflags +faststart -fflags +bitexact -flags:v +bitexact -flags:a +bitexact "${videofile%.*}-muxed.mp4"
 		rm -rf "${TMPDIR}"/*
 	fi

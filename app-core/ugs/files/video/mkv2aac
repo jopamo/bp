@@ -5,6 +5,6 @@ shopt -s nullglob
 
 for videofile in *.mkv ; do
 	if [[ $videofile != *.raw.mkv ]] && [ ! -f "${videofile%.*}.m4a" ]; then
-		ffmpeg -n -i "$videofile" -dn -sn -vn -c:a aac -q:a 2 "${videofile%.*}.m4a"
+		ffmpeg -n -i "$videofile" -dn -sn -vn -c:a aac -aac_coder nmr -aac_nmr_speed 0 -b:a 192k "${videofile%.*}.m4a"
 	fi
 done

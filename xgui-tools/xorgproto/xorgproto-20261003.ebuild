@@ -6,7 +6,7 @@ PROPERTIES+=" source-payload"
 
 DESCRIPTION="X.Org combined protocol headers"
 HOMEPAGE="https://www.x.org"
-SNAPSHOT=fd86fbff46eb7ab8e193c12b8a529e90bae31835
+SNAPSHOT=6d3907b6d5dc4aa7d7ee6ee5d7d8714e7466630b
 SRC_URI="https://gitlab.freedesktop.org/xorg/proto/xorgproto/-/archive/${SNAPSHOT}/xorgproto-${SNAPSHOT}.tar.bz2 -> xorgproto-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/xorgproto-${SNAPSHOT}"
 

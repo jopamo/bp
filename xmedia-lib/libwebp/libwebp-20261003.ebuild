@@ -4,7 +4,7 @@ inherit autotools qa-policy
 
 DESCRIPTION="A lossy image compression format"
 HOMEPAGE="https://developers.google.com/speed/webp/download"
-SNAPSHOT=0ff181e8d0b7ef41e45c1c292324828bab0a34dd
+SNAPSHOT=a1d89ff209ca01e7a87aca64317201890bac2749
 SRC_URI="https://github.com/webmproject/libwebp/archive/${SNAPSHOT}.tar.gz -> libwebp-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/libwebp-${SNAPSHOT}"
 

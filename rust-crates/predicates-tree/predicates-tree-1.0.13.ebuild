@@ -3,15 +3,15 @@ EAPI=8
 MERGE_MANIFEST_MODE="tree-blake3-v1"
 
 CRATE_NAME="predicates-tree"
-CRATE_VERSION="1.0.12"
-CRATE_CHECKSUM="72dd2d6d381dfb73a193c7fca536518d7caee39fc8503f74e7dc0be0531b425c"
+CRATE_VERSION="1.0.13"
+CRATE_CHECKSUM="d0de1b847b39c8131db0467e9df1ff60e6d0562ab8e9a16e568ad0fdb372e2f2"
 CRATE_SOURCE="registry+https://github.com/rust-lang/crates.io-index"
 CRATE_SOURCE_KIND="registry"
 
 inherit cargo-crate
 
 DESCRIPTION="Render boolean-valued predicate functions results as a tree."
-HOMEPAGE="https://github.com/assert-rs/predicates-rs/tree/master/crates/tree"
+HOMEPAGE="https://github.com/assert-rs/predicates-rs"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="${PV}"
 KEYWORDS="amd64 arm64"

@@ -4,7 +4,7 @@ inherit autotools qa-policy
 
 DESCRIPTION="mDNS/DNS-SD client libraries and browsing tools"
 HOMEPAGE="https://www.avahi.org/"
-SNAPSHOT=b8c344f6003aa59b0dc0475850d3850389985380
+SNAPSHOT=3ed8102c8a881e6fe273bbf06f45e86dccf51e02
 SRC_URI="https://github.com/avahi/avahi/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

@@ -6,7 +6,7 @@ BRANCH_NAME="OPENLDAP_REL_ENG_$(ver_cut 1)_$(ver_cut 2)"
 
 DESCRIPTION="implementation of the Lightweight Directory Access Protocol"
 HOMEPAGE="https://www.openldap.org"
-SNAPSHOT=c09cfdc59a535481e26bfbf7e883f14e93240041
+SNAPSHOT=f46b74e75a9b79fec76655a9456ce643566d9558
 SRC_URI="https://github.com/openldap/openldap/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/openldap-${SNAPSHOT}"
 

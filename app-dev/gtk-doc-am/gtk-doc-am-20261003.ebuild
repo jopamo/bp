@@ -6,7 +6,7 @@ PROPERTIES+=" source-payload"
 
 DESCRIPTION="Automake files from gtk-doc"
 HOMEPAGE="https://www.gtk.org/gtk-doc/"
-SNAPSHOT=1e7f700db7882b7e25e8957c7b8f5dede5b4b81a
+SNAPSHOT=ec8b5b70ce6b847d715057ea70e9093b6f442eb7
 SRC_URI="https://gitlab.gnome.org/GNOME/gtk-doc/-/archive/${SNAPSHOT}/gtk-doc-${SNAPSHOT}.tar.bz2 -> gtk-doc-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/gtk-doc-${SNAPSHOT}"
 

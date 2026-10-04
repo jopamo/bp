@@ -3,8 +3,8 @@ EAPI=8
 MERGE_MANIFEST_MODE="tree-blake3-v1"
 
 CRATE_NAME="rust_decimal"
-CRATE_VERSION="1.39.0"
-CRATE_CHECKSUM="35affe401787a9bd846712274d97654355d21b2a2c092a3139aabe31e9022282"
+CRATE_VERSION="1.43.0"
+CRATE_CHECKSUM="7653272e75dcac41dc199fbea6f5797633994fafd339943c06c9af16bf29cd3a"
 CRATE_SOURCE="registry+https://github.com/rust-lang/crates.io-index"
 CRATE_SOURCE_KIND="registry"
 
@@ -19,6 +19,7 @@ KEYWORDS="amd64 arm64"
 CARGO_CRATE_FEATURES=(
 	"align16"
 	"borsh"
+	"bytemuck"
 	"c-repr"
 	"db-diesel-mysql"
 	"db-diesel-postgres"
@@ -34,8 +35,7 @@ CARGO_CRATE_FEATURES=(
 	"ndarray"
 	"proptest"
 	"rand"
-	"rkyv"
-	"rkyv-safe"
+	"rand-0_9"
 	"rocket-traits"
 	"rust-fuzz"
 	"serde"
@@ -48,4 +48,5 @@ CARGO_CRATE_FEATURES=(
 	"serde-with-str"
 	"std"
 	"tokio-pg"
+	"wasm"
 )

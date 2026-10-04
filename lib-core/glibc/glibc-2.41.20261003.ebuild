@@ -6,7 +6,7 @@ inherit flag-o-matic doins qa-policy
 
 DESCRIPTION="GNU libc C library"
 HOMEPAGE="https://www.gnu.org/software/libc/"
-SNAPSHOT=c97fdd483232a831829aaff458a212307f1bf4bc
+SNAPSHOT=f247c0a2fb5b3e48a771d2d23efc9a45c64e957d
 SRC_URI="https://github.com/1g4-mirror/glibc/archive/${SNAPSHOT}.tar.gz -> glibc-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/glibc-${SNAPSHOT}
 

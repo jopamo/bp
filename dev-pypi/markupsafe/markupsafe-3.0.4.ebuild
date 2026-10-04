@@ -15,8 +15,8 @@ LICENSE="BSD-3-Clause"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-SRC_URI="https://files.pythonhosted.org/packages/7e/99/7690b6d4034fffd95959cbe0c02de8deb3098cc577c67bb6a24fe5d7caa7/markupsafe-3.0.3.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/markupsafe-3.0.3"
+SRC_URI="https://files.pythonhosted.org/packages/38/9b/e422a865e1d5d57d0e509b4e0bf1c1a70a7f6382c29a5aa428df994c8bc8/markupsafe-3.0.4.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/markupsafe-3.0.4"
 
 BDEPEND="
 	dev-pypi/gpep517[${PYTHON_USEDEP}]

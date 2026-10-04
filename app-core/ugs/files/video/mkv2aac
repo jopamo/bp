@@ -1,8 +1,10 @@
 #!/bin/bash
 
+set -e
+shopt -s nullglob
+
 for videofile in *.mkv ; do
 	if [[ $videofile != *.raw.mkv ]] && [ ! -f "${videofile%.*}.m4a" ]; then
-		ffmpeg -n -i "$videofile" -c:a flac "${videofile%.*}.flac"
-		wine /opt/qaac/qaac64.exe "${videofile%.*}.flac"
+		ffmpeg -n -i "$videofile" -dn -sn -vn -c:a aac -q:a 2 "${videofile%.*}.m4a"
 	fi
 done

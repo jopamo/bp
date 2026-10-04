@@ -6,7 +6,7 @@ PROPERTIES+=" source-payload"
 
 DESCRIPTION="Unified C language headers for the OpenCL API"
 HOMEPAGE="https://github.com/KhronosGroup/OpenCL-Headers"
-SNAPSHOT=e6060189f4ebe8b52d885c37af71b9a50c272154
+SNAPSHOT=30bc20a8e90468e231d7c639805ae61ad1fefa4f
 SRC_URI="https://github.com/KhronosGroup/OpenCL-Headers/archive/${SNAPSHOT}.tar.gz -> OpenCL-Headers-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/OpenCL-Headers-${SNAPSHOT}"
 

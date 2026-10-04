@@ -1,12 +1,10 @@
 # Distributed under the terms of the GNU General Public License v2
 
-BRANCH_NAME="release/$(ver_cut 1-2)"
-
 inherit flag-o-matic toolchain-funcs
 
 DESCRIPTION="Complete solution to record, convert and stream audio and video. Includes libavcodec"
 HOMEPAGE="http://ffmpeg.org/"
-SNAPSHOT=46d8f462eeb87ee1f704d8c44a0ee24fca471ad1
+SNAPSHOT=ef52e1cc3850846987edc792c9583103e977e3b2
 SRC_URI="https://github.com/FFmpeg/FFmpeg/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/FFmpeg-${SNAPSHOT}"
 

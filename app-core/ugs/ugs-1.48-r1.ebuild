@@ -14,7 +14,7 @@ IUSE="test video"
 BDEPEND="test? ( app-lang/python )"
 RDEPEND="
 	video? (
-		xmedia-app/ffmpeg[avcodec,avfilter,avformat,ffmpeg,swresample]
+		>=xmedia-app/ffmpeg-20261004[avcodec,avfilter,avformat,ffmpeg,swresample]
 		xmedia-app/ffmpeg-normalize
 	)
 "

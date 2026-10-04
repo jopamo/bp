@@ -73,7 +73,7 @@ HACKAGE_VERSION_SOURCE="cabal-install-solver"
 
 # lockstep-hackage-managed: true
 # lockstep-hackage-deps: begin
-HACKAGE_SNAPSHOT="lts-24.60"
+HACKAGE_SNAPSHOT="lts-24.62"
 HACKAGE_DEPS=(
 	"async 2.2.6 0 45d5587d8a348a7e2b3f04de963fe633db49b49cde10ca1e6f834bef3baecee9"
 	"atomic-counter 0.1.2.4 0 51c0178c727ef4ccd694514c0a44369eb8593ae83dde42bc5fb5c89d5b4c60b5"
@@ -104,7 +104,7 @@ HACKAGE_DEPS=(
 	"tar 0.6.4.0 4 1a5ff2b64cd1bac53ea68d057631818cab6edf7108dc86e7be8ad020b2bf2580"
 	"th-compat 0.1.7 0 449be09a4e3f46ea4645700c026624c4b6f066f508187326c284dbdea8884bc9"
 	"unordered-containers 0.2.20.1 0 e2ee0d7d8f19747d8c4a0f0a3aa617b1ce1317abd2904c743c04fda25feec685"
-	"zlib 0.7.1.1 0 cf2f8f91b10b635bdaa2c3010f40a5562a06ede24b92d819758e7f1b7d04f9f2"
+	"zlib 0.7.1.1 1 56d8bb3f9656059ff24b705d59cc65f6f37e3ea92b6b5f5bb202bd607738bb6f"
 )
 
 hackage_set_globals

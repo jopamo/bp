@@ -4,7 +4,7 @@ inherit flag-o-matic python-single-r1 doins autotools qa-policy
 
 DESCRIPTION="A validating, recursive and caching DNS resolver"
 HOMEPAGE="http://unbound.net/"
-SNAPSHOT=1e12bef540df8e77dcd4b468434b2bf32c318dfb
+SNAPSHOT=eafb02716650266f886def92dd7487b2831a96f3
 SRC_URI="https://github.com/NLnetLabs/unbound/archive/${SNAPSHOT}.tar.gz -> unbound-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/unbound-${SNAPSHOT}"
 

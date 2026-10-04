@@ -1,12 +1,10 @@
 # Distributed under the terms of the GNU General Public License v2
 
-inherit meson qa-policy
+inherit meson git-r3 qa-policy
 
 DESCRIPTION="Socket latency and throughput benchmarking utility"
 HOMEPAGE="https://gitlab.com/pjo/sockperf/"
-SNAPSHOT=de048181fc3fe3e91dff38d2d601a271d2d9f3d6
-SRC_URI="https://gitlab.com/pjo/sockperf/-/archive/${SNAPSHOT}/sockperf-${SNAPSHOT}.tar.gz"
-S="${WORKDIR}/sockperf-${SNAPSHOT}"
+EGIT_REPO_URI="https://gitlab.com/pjo/sockperf"
 
 LICENSE="BSD-3"
 SLOT="0"

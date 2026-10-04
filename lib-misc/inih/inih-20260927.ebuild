@@ -4,7 +4,7 @@ inherit meson qa-policy
 
 DESCRIPTION="inih (INI not invented here) simple .INI file parser"
 HOMEPAGE="https://github.com/benhoyt/inih"
-SNAPSHOT=577ae2dee1f0d9c2d11c7f10375c1715f3d6940c
+SNAPSHOT=2bbdec4a366c8c39746ee0982e7ca0febbb044b6
 SRC_URI="https://github.com/benhoyt/inih/archive/${SNAPSHOT}.tar.gz -> inih-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/inih-${SNAPSHOT}"
 

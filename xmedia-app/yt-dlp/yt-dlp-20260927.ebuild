@@ -5,11 +5,15 @@ DISTUTILS_USE_PEP517=hatchling
 EJS_VERSION=0.8.0
 
 inherit distutils-r1
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND=""
+# lockstep-pypi-deps: end
 
 DESCRIPTION="a command-line program to download videos from YouTube.com and a few more sites"
 HOMEPAGE="https://github.com/yt-dlp/yt-dlp"
 
-SNAPSHOT=c7fb478d21e9e59524befbe23f7801bb267fb880
+SNAPSHOT=51bab8a0116f4d8004c315706d809782607d5847
 SRC_URI="https://github.com/yt-dlp/yt-dlp/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/yt-dlp-${SNAPSHOT}"
 

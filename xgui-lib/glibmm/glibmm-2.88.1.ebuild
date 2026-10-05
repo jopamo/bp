@@ -5,14 +5,7 @@ inherit meson
 DESCRIPTION="C++ bindings for GLib (low-level core library used by GTK and GNOME)"
 HOMEPAGE="https://github.com/GNOME/glibmm"
 
-if [[ ${PV} = *9999 ]]; then
-	EGIT_REPO_URI="https://github.com/GNOME/${PN}"
-	inherit git-r3
-else
-	SNAPSHOT=8c8816dec34932751f3f9dd1b44b56eebf2b3ed3
-	SRC_URI="https://github.com/GNOME/glibmm/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
-	S="${WORKDIR}/${PN}-${SNAPSHOT}"
-fi
+SRC_URI="https://download.gnome.org/sources/${PN}/$(ver_cut 1-2)/${P}.tar.xz"
 
 LICENSE="CCA4"
 SLOT="0"
@@ -20,7 +13,11 @@ KEYWORDS="amd64 arm64"
 
 IUSE="test"
 
-DEPEND="lib-dev/libsigc++"
+RDEPEND="
+	>=lib-dev/libsigc++-3.0:3
+	>=lib-core/glib-2.87.3:0
+"
+DEPEND="${RDEPEND}"
 
 src_prepare() {
 	default
@@ -36,7 +33,7 @@ src_prepare() {
 src_configure() {
 	local emesonargs=(
 		-Db_pch=true
-		-Dmaintainer-mode=true
+		-Dmaintainer-mode=false
 		-Dbuild-deprecated-api=true
 		-Dbuild-documentation=false
 		-Dbuild-examples=false

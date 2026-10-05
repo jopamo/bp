@@ -2,8 +2,8 @@
 +++ b/gdb/ada-lex.l
 @@ -758,7 +758,11 @@
  typedef void (*dummy_function) ();
- dummy_function ada_flex_use[] = 
- { 
+ dummy_function ada_flex_use[] =
+ {
 +#ifdef yyunput
 +  (dummy_function) yyunput_r
 +#else

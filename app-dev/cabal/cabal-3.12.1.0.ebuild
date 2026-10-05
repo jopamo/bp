@@ -44,6 +44,9 @@ BDEPEND="app-lang/ghc"
 
 RESTRICT="strip test"
 
+# Cabal passes this Haskell compiler option to network's C-only configure script.
+QA_CONFIGURE_OPTIONS="--with-compiler"
+
 HACKAGE_ROOTS=(
 	"async"
 	"base16-bytestring"

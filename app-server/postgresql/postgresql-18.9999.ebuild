@@ -11,13 +11,14 @@ LICENSE="POSTGRESQL GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="doc kerberos ldap nls pam perl python readline
-	  +server systemd ssl static-libs tcl threads uuid xml zlib"
+IUSE="doc +icu kerberos ldap nls pam perl python readline
+	  +server systemd ssl static-libs tcl uuid xml zlib"
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
 CDEPEND="
 		app-core/less
 		app-build/gettext
+		icu? ( lib-dev/icu )
 		kerberos? ( app-crypto/heimdal )
 		ldap? ( app-net/openldap )
 		pam? ( lib-core/pam )
@@ -83,6 +84,7 @@ src_configure() {
 		--sysconfdir="${PO}"/etc/postgresql
 		--with-system-tzdata="${PO}"/usr/share/zoneinfo
 		$(use_enable nls)
+		$(use_with icu)
 		$(use_with kerberos gssapi)
 		$(use_with ldap)
 		$(use_with pam)
@@ -92,7 +94,6 @@ src_configure() {
 		$(use_with ssl openssl)
 		$(use_with systemd)
 		$(use_with tcl)
-		$(use_enable threads thread-safety)
 		$(use_with uuid uuid e2fs)
 		$(use_with xml libxml)
 		$(use_with xml libxslt)
@@ -134,4 +135,6 @@ src_install() {
 pkg_postinst() {
 	sysusers_process
 	tmpfiles_process
+	ewarn "Existing clusters from older PostgreSQL major versions require pg_upgrade"
+	ewarn "or a dump/restore before starting PostgreSQL 18. Back up the cluster first."
 }

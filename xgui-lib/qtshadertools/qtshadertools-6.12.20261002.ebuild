@@ -7,7 +7,7 @@ inherit cmake
 DESCRIPTION="Shader tools module for the Qt framework"
 HOMEPAGE="https://www.qt.io/"
 
-SNAPSHOT=6a1ee4da02d5db00bfd4d19bcfa5a2e4ff7494a2
+SNAPSHOT=af0da2a99bd38e7e52857872196d8ccaf2dfb513
 SRC_URI="https://invent.kde.org/qt/qt/${PN}/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 
@@ -16,5 +16,5 @@ SLOT="$(ver_cut 1)"
 KEYWORDS="amd64 arm64"
 
 DEPEND="
-	xgui-lib/qtbase:$(ver_cut 1)=
+	>=xgui-lib/qtbase-6.12:6=
 "

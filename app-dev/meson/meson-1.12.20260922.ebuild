@@ -1,7 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 BRANCH_NAME="$(ver_cut 1-2)"
-SNAPSHOT=d11b8f26f372c844fcd24a82fa745244bb13c6e0
+SNAPSHOT=70598bb7825f0f804fb31ec2795de5e79e7692a0
 
 DISTUTILS_USE_PEP517=setuptools
 

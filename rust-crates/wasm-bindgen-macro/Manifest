@@ -1,6 +1,7 @@
 DIST wasm-bindgen-macro-0.2.100.crate 9663 BLAKE3 10c2861687d86cee5eb1bea82f1a8bec1951cdeca75def9ad055fff463b3247a
 DIST wasm-bindgen-macro-0.2.114.crate 9289 BLAKE3 66d0d514a083526288d03cae4ace3d1407292b2fd451de7b5b09be8e5af8e4b1
 DIST wasm-bindgen-macro-0.2.118.crate 9288 BLAKE3 168dc15b32295887dfc3846096230f345f2866a0c35a292416fe52ccd889cf1e
+DIST wasm-bindgen-macro-0.2.122.crate 9295 BLAKE3 eab3ed7f4f07609889b662494f1321f550397d470dfe913987fbb27eeeb12400
 DIST wasm-bindgen-macro-0.2.126.crate 9303 BLAKE3 d0bf824393e3fdbecb46b6b8236f5e8334c5dad698fe61b08e113bd6f8521fe1
 DIST wasm-bindgen-macro-0.2.127.crate 9372 BLAKE3 ad9c77c2452ab2d03283782bef514d52785e74eafdd28e0afb3bd287f9943d9b
 DIST wasm-bindgen-macro-0.2.129.crate 9612 BLAKE3 706dcb9f997969396ead880e9c4b6a6018004fc9af80fd0062bfe077afa5e07f

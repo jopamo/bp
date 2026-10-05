@@ -34,6 +34,9 @@ BDEPEND="
 src_prepare() {
 	gl_stage_gnulib
 
+	# btoc32's wchar_t fallback requires this module.
+	sed -i '/^[[:space:]]*--avoid=hard-locale$/d' bootstrap.conf || die
+
 	echo "${PV}" > .tarball-version || die
 
 	NOCONFIGURE=1 \

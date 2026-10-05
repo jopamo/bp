@@ -32,6 +32,12 @@ filter-flags -Wl,-z,defs -flto\=\*
 append-cxxflags -felide-constructors
 append-flags -fno-strict-aliasing
 
+PATCHES=(
+	"${FILESDIR}/submodule-urls-from-gitmodules.patch"
+	"${FILESDIR}/wsrep-include-sys-types.patch"
+	"${FILESDIR}/vesk-allocator-callbacks.patch"
+)
+
 src_configure(){
 	CMAKE_BUILD_TYPE="Release"
 
@@ -118,4 +124,9 @@ src_install() {
 	ewarn "Install the Database"
 	ewarn "mysql_install_db --user=mysql --ldata=/var/lib/mysql"
 	ewarn "mysqladmin -u root -h localhost password 'new-password'"
+}
+
+pkg_postinst() {
+	ewarn "Back up existing databases before upgrading the server."
+	ewarn "Run mariadb-upgrade after starting the upgraded server."
 }

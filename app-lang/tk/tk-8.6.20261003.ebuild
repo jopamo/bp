@@ -16,7 +16,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="debug truetype"
 
-DEPEND="app-lang/tcl"
+DEPEND="<app-lang/tcl-9:0="
 RDEPEND="
 	fonts/fontconfig
 	xgui-lib/libX11

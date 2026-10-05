@@ -6,7 +6,7 @@ inherit meson
 
 DESCRIPTION="OpenGL-like graphic library for Linux"
 HOMEPAGE="https://www.mesa3d.org/ https://mesa.freedesktop.org/"
-SNAPSHOT=7f1ccad77883be68e7750ab30b99b16df02e679d
+SNAPSHOT=9a0169f2a72d8d844124801b7abbdc75cc37f874
 SRC_URI="https://gitlab.freedesktop.org/mesa/mesa/-/archive/${SNAPSHOT}/mesa-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/mesa-${SNAPSHOT}"
 
@@ -45,6 +45,7 @@ BDEPEND="
 #PATCHES=("${FILESDIR}"/build-fix.patch)
 
 src_configure() {
+	filter-lto
 	local gallium_drivers=()
 	local vulkan_drivers=()
 
@@ -65,7 +66,7 @@ src_configure() {
 	vulkan_csv="${vulkan_csv// /,}"
 
 	local emesonargs=(
-		-Db_lto=true
+		-Db_lto=false
 		-Degl=enabled
 		-Dgallium-drivers="${gallium_csv:-}"
 		-Dgallium-extra-hud=false

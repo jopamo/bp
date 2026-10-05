@@ -6,7 +6,7 @@ inherit flag-o-matic qa-policy
 
 DESCRIPTION="A SQL Database Engine in a C Library"
 HOMEPAGE="https://sqlite.org/"
-SNAPSHOT=b4d3df26bae9e83a6828b433adfdf002a812637a
+SNAPSHOT=95e64f0e689bd9a9dca1092c714c828573ec89ae
 SRC_URI="https://github.com/sqlite/sqlite/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/sqlite-${SNAPSHOT}"
 

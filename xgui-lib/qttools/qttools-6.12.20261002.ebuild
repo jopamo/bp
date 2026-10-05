@@ -7,12 +7,12 @@ inherit cmake flag-o-matic
 DESCRIPTION="Qt Tools collection (Assistant, Designer, Linguist, etc.)"
 HOMEPAGE="https://www.qt.io/"
 
-SNAPSHOT=58c8df45d28ef2cd08f9a9e69bc86c103e1c693b
+SNAPSHOT=e4992a22dc84b901f25dd5858ae7687dc42ff8a2
 # Follow this qttools commit's gitlinks, not the submodules' branch tips.
 # lockstep-gitlink: QLITEHTML_SNAPSHOT SNAPSHOT src/assistant/qlitehtml
 # lockstep-gitlink: QTTOOLS_LITEHTML_SNAPSHOT QLITEHTML_SNAPSHOT src/3rdparty/litehtml
-QLITEHTML_SNAPSHOT=3fe5821dad98747d6e41c9ed54b86c3d0eee9daf
-QTTOOLS_LITEHTML_SNAPSHOT=6ca1ab0419e770e6d35a1ef690238773a1dafcee
+QLITEHTML_SNAPSHOT=c47c490ce9f58183ec0f1bf881a419496853685b
+QTTOOLS_LITEHTML_SNAPSHOT=9bc84b8b8d15a4e50f18b327aa30955048b441c2
 SRC_URI="
 	https://invent.kde.org/qt/qt/${PN}/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2
 	https://invent.kde.org/qt/playground/qlitehtml/-/archive/${QLITEHTML_SNAPSHOT}/qlitehtml-${QLITEHTML_SNAPSHOT}.tar.bz2
@@ -25,8 +25,8 @@ SLOT="$(ver_cut 1)"
 KEYWORDS="amd64 arm64"
 
 DEPEND="
-	xgui-lib/qtbase:$(ver_cut 1)
-	xgui-lib/qtdeclarative:$(ver_cut 1)
+	>=xgui-lib/qtbase-6.12:6=
+	>=xgui-lib/qtdeclarative-6.12:6=
 	"
 
 src_prepare() {

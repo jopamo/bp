@@ -4,7 +4,7 @@ BRANCH_NAME="maint-$(ver_cut 1-2)"
 
 DESCRIPTION="Larry Wall's Practical Extraction and Report Language"
 HOMEPAGE="https://www.perl.org/"
-SNAPSHOT=74c923f47188c56fe63c40048abdbbed0afad493
+SNAPSHOT=e634cc838fb1785dfafb5d13b52807ea16b5c52c
 SRC_URI="https://github.com/Perl/perl5/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/perl5-${SNAPSHOT}
 

@@ -5,9 +5,7 @@ inherit autotools
 DESCRIPTION="NCurses Disk Usage"
 HOMEPAGE="http://dev.yorhel.nl/ncdu/"
 
-SNAPSHOT=a216bc2d35b6edf4dadf55350f09d7cbf229fbf7
-SRC_URI="https://github.com/rofl0r/ncdu/archive/${SNAPSHOT}.tar.gz -> ncdu-${SNAPSHOT}.tar.gz"
-S="${WORKDIR}/ncdu-${SNAPSHOT}"
+SRC_URI="https://dev.yorhel.nl/download/${P}.tar.gz"
 
 LICENSE="MIT"
 SLOT="0"

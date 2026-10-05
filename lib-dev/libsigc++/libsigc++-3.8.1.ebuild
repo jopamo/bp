@@ -1,15 +1,11 @@
 # Distributed under the terms of the GNU General Public License v2
 
-BRANCH_NAME="libsigc++-$(ver_cut 1)-$(ver_cut 2)"
-
 inherit flag-o-matic meson
 
 DESCRIPTION="Typesafe callback system for standard C++"
 HOMEPAGE="https://libsigcplusplus.github.io/libsigcplusplus/"
 
-SNAPSHOT=94f1b9f48d845323501e82a5c787fbe2beccb01c
-SRC_URI="https://github.com/libsigcplusplus/libsigcplusplus/archive/${SNAPSHOT}.tar.gz -> libsigc++-${SNAPSHOT}.tar.gz"
-S="${WORKDIR}/libsigcplusplus-${SNAPSHOT}"
+SRC_URI="https://github.com/libsigcplusplus/libsigcplusplus/releases/download/${PV}/${P}.tar.xz"
 
 LICENSE="LGPL-2.1+"
 SLOT="3"
@@ -17,11 +13,6 @@ KEYWORDS="amd64 arm64"
 
 IUSE="test"
 RESTRICT="test"
-
-src_prepare() {
-	default
-	mm-common-prepare --copy --force "${S}"
-}
 
 src_configure() {
 	filter-flags -fno-exceptions #84263
@@ -31,7 +22,7 @@ src_configure() {
 		-Dbuild-documentation=false
 		-Dbuild-examples=false
 		$(meson_use test build-tests)
-		-D maintainer-mode=true
+		-Dmaintainer-mode=false
 	)
 	meson_src_configure
 }

@@ -1,0 +1,26 @@
+# lockstep-managed: cargo-crate
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
+
+CRATE_NAME="v8"
+CRATE_VERSION="150.4.0"
+CRATE_CHECKSUM="42a978ff11f15b24e5c05a7123cf2b68f41e763546699781a924ef4e2cf43a49"
+CRATE_SOURCE="registry+https://github.com/rust-lang/crates.io-index"
+CRATE_SOURCE_KIND="registry"
+
+inherit cargo-crate
+
+DESCRIPTION="Rust bindings to V8"
+HOMEPAGE="https://github.com/denoland/rusty_v8"
+LICENSE="MIT"
+SLOT="${PV}"
+KEYWORDS="amd64 arm64"
+
+CARGO_CRATE_FEATURES=(
+	"default"
+	"simdutf"
+	"use_custom_libcxx"
+	"v8_enable_pointer_compression"
+	"v8_enable_sandbox"
+	"v8_enable_v8_checks"
+)

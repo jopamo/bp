@@ -57,6 +57,7 @@ src_configure() {
 	for target in "${libclc_targets[@]}"; do
 		local BUILD_DIR="${WORKDIR}/${PN}-${target}_build"
 		local mycmakeargs=(
+			-DCMAKE_CLC_COMPILER="${BROOT}/usr/bin/clang"
 			-DLLVM_DEFAULT_TARGET_TRIPLE="${target}"
 			-DLLVM_DIR="${ESYSROOT}/usr/lib/cmake/llvm"
 		)

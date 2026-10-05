@@ -22,7 +22,7 @@ hackage_set_globals() {
 				-> hackage-${name}-${version}.tar.gz"
 		fi
 		SRC_URI+=" https://hackage.haskell.org/package/${name}-${version}/revision/${revision}.cabal
-			-> hackage-${name}-${version}.cabal"
+			-> hackage-${name}-${version}-r${revision}.cabal"
 	done
 }
 
@@ -34,7 +34,7 @@ hackage_src_unpack() {
 	for entry in "${HACKAGE_DEPS[@]}"; do
 		read -r name version revision sha256 <<< "${entry}"
 		actual_sha256=$(sha256sum \
-			"${DISTDIR}/hackage-${name}-${version}.cabal") || die
+			"${DISTDIR}/hackage-${name}-${version}-r${revision}.cabal") || die
 		[[ ${actual_sha256%% *} == "${sha256}" ]] ||
 			die "Hackage revision checksum mismatch for ${name}-${version}"
 		local package_dir="${WORKDIR}/${name}-${version}"
@@ -42,7 +42,7 @@ hackage_src_unpack() {
 			package_dir=${S}
 		fi
 		cp \
-			"${DISTDIR}/hackage-${name}-${version}.cabal" \
+			"${DISTDIR}/hackage-${name}-${version}-r${revision}.cabal" \
 			"${package_dir}/${name}.cabal" || die
 	done
 }
@@ -63,7 +63,7 @@ hackage_write_project() {
 			"${DISTDIR}/hackage-${name}-${version}.tar.gz" \
 			"${HACKAGE_REPOSITORY_DIR}/${name}-${version}.tar.gz" || die
 		ln -sf \
-			"${DISTDIR}/hackage-${name}-${version}.cabal" \
+			"${DISTDIR}/hackage-${name}-${version}-r${revision}.cabal" \
 			"${HACKAGE_REPOSITORY_DIR}/${name}-${version}.cabal" || die
 	done
 

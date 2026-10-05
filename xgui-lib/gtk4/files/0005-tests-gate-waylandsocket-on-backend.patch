@@ -1,0 +1,10 @@
+--- a/testsuite/gdk/meson.build
++++ b/testsuite/gdk/meson.build
+@@ -92,4 +92,6 @@
+   internal_tests += { 'name': 'dmabuftexture', 'suites': 'failing' }
+-
++endif
++
++if os_linux and wayland_enabled
+   internal_test_executables += { 'name': 'waylandsocket' }
+ endif

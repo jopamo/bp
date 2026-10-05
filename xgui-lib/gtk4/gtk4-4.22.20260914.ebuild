@@ -6,7 +6,7 @@ inherit meson xdg python-any-r1 flag-o-matic
 
 DESCRIPTION="Multi-platform toolkit for creating graphical user interfaces"
 HOMEPAGE="https://www.gtk.org/"
-SNAPSHOT=34dc3af563f767348ca575827f414a50c0458b0e
+SNAPSHOT=0d41402a077a7504d11c7f52f2ad3806cbd4db62
 SRC_URI="https://github.com/GNOME/gtk/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/gtk-${SNAPSHOT}"
 
@@ -14,10 +14,11 @@ LICENSE="LGPL-2+"
 SLOT="$(ver_cut 1)"
 KEYWORDS="amd64 arm64"
 
-IUSE="broadway cups ffmpeg examples introspection vim-syntax wayland X xinerama vulkan test sysprof colord build-examples demos build-tests"
+IUSE="broadway cups ffmpeg examples introspection vim-syntax wayland +X xinerama vulkan test sysprof colord build-examples demos build-tests"
+RESTRICT="!test? ( test )"
 
 REQUIRED_USE="
-
+	|| ( broadway wayland X )
 	xinerama? ( X )
 "
 
@@ -58,13 +59,17 @@ PDEPEND="
 	xgui-icontheme/adwaita-plus
 	vim-syntax? ( app-tex/gtk-syntax )
 "
-BDEPEND="lib-dev/sass"
+BDEPEND="
+	lib-dev/sass
+	test? ( X? ( xgui-tools/xvfb-run ) )
+"
 
 PATCHES=(
 	"${FILESDIR}/0001-notebook-balance-tab-label-references.patch"
 	"${FILESDIR}/0002-gdkarray-avoid-wrapped-pointer-offsets-when-shrinking.patch"
 	"${FILESDIR}/0003-css-use-typed-parse-option-predicates.patch"
 	"${FILESDIR}/0004-css-release-replaced-calc-terms.patch"
+	"${FILESDIR}/0005-tests-gate-waylandsocket-on-backend.patch"
 )
 
 pkg_setup() {
@@ -101,34 +106,20 @@ src_configure() {
 		-Dtracker=disabled  # tracker3 is not packaged in Gentoo yet
 		-Dwin32-backend=false
 		-Dbuild-demos=false
-		-Dbuild-testsuite=false
+		$(meson_use test build-testsuite)
 		-Dbuild-examples=false
-		-Dbuild-tests=false
+		$(meson_use test build-tests)
 	)
 	meson_src_configure
 }
 
 src_test() {
-	"${BROOT}${GLIB_COMPILE_SCHEMAS}" --allow-any-name "${S}/gtk" || die
-
 	if use X; then
-		einfo "Running tests under X"
-		GSETTINGS_SCHEMA_DIR="${S}/gtk" virtx meson_src_test --setup=x11
-	fi
-
-	if use wayland; then
-		einfo "Running tests under Weston"
-
-		export XDG_RUNTIME_DIR="$(mktemp -p $(pwd) -d xdg-runtime-XXXXXX)"
-
-		weston --backend=headless-backend.so --socket=wayland-5 --idle-time=0 &
-		compositor=$!
-		export WAYLAND_DISPLAY=wayland-5
-
-		GSETTINGS_SCHEMA_DIR="${S}/gtk" meson_src_test --setup=wayland
-
-		exit_code=$?
-		kill ${compositor}
+		xvfb-run -a meson test -C "${BUILD_DIR}" --setup=x11 \
+			--print-errorlogs --num-processes "$(makeopts_jobs)" \
+			|| die "GTK tests failed"
+	else
+		meson_src_test
 	fi
 }
 

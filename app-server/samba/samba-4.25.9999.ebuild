@@ -1,15 +1,11 @@
 # Distributed under the terms of the GNU General Public License v2
 
-#BRANCH_NAME="v$(ver_cut 1)-$(ver_cut 2)-stable"
-#SNAPSHOT=70eeb7220627eae6f6e0e76f1ec114a1ac965671
-
 inherit linux-info git-r3 flag-o-matic doins
 
 DESCRIPTION="Samba Suite Version 4"
 HOMEPAGE="https://www.samba.org/"
 EGIT_REPO_URI=https://github.com/samba-team/samba.git
 EGIT_BRANCH="v$(ver_cut 1)-$(ver_cut 2)-stable"
-#EGIT_COMMIT="${SNAPSHOT}"
 
 LICENSE="GPL-3"
 SLOT="0"
@@ -54,6 +50,7 @@ DEPEND="${CDEPEND}
 RDEPEND="${CDEPEND}
 	client? ( app-core/cifs-utils[ads?] )
 "
+BDEPEND=">=core-perl/Parse-Yapp-1.05"
 
 REQUIRED_USE="
 	addc? ( json winbind )
@@ -121,10 +118,11 @@ src_configure() {
 		$(use_with debug lttng)
 	)
 
-	CPPFLAGS="-I${SYSROOT}${EPREFIX}/usr/include/et ${CPPFLAGS}" \
-		./configure ${myconf[@]}
+	use elibc_musl && myconf+=( --without-libunwind )
 
-	PYTHONHASHSEED=1 WAF_MAKE=1  ./buildtools/bin/waf configure
+	PYTHONHASHSEED=1 WAF_MAKE=1 \
+		CPPFLAGS="-I${SYSROOT}${EPREFIX}/usr/include/et ${CPPFLAGS}" \
+		./configure "${myconf[@]}" || die
 }
 
 src_install() {

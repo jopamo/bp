@@ -747,7 +747,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 BDEPEND="
-	app-tex/go-md2man
+	app-core/bx
 "
 
 PATCHES=(
@@ -766,7 +766,9 @@ src_compile() {
 }
 
 src_install() {
-	go-md2man -in README.md -out ${PN}.1 || die "Unable to create man page"
+	sed '1i# proton-bridge(1)\n' README.md > "${T}/${PN}.1.md" || die
+	bx mandoc -mmarkdown -T man "${T}/${PN}.1.md" > "${PN}.1" ||
+		die "Unable to create man page"
 
 	newbin bridge proton-bridge
 	doman ${PN}.1

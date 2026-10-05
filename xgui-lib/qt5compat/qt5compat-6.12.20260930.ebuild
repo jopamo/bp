@@ -7,7 +7,7 @@ inherit cmake
 DESCRIPTION="The module contains unsupported Qt 5 APIs"
 HOMEPAGE="https://www.qt.io/"
 
-SNAPSHOT=d0082c10516058d42a41b9b8c15ff394c45ed15f
+SNAPSHOT=6db888763bca84c57c89ea2784113001a9c19d9a
 SRC_URI="https://invent.kde.org/qt/qt/${PN}/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 
@@ -16,6 +16,6 @@ SLOT="$(ver_cut 1)"
 KEYWORDS="amd64 arm64"
 
 DEPEND="
-	xgui-lib/qtshadertools
-	xgui-lib/qtbase:$(ver_cut 1)=
+	>=xgui-lib/qtshadertools-6.12:6=
+	>=xgui-lib/qtbase-6.12:6=
 "

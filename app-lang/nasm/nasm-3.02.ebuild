@@ -1,13 +1,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
-BRANCH_NAME="nasm-$(ver_cut 1-2).xx"
-
-
 DESCRIPTION="Netwide Assembler for x86 and x86_64"
-HOMEPAGE="http://www.nasm.us/"
-SNAPSHOT=e2ccd5de268fc4bda5aa4313a79859827c3adc82
-SRC_URI="https://github.com/netwide-assembler/nasm/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
-S="${WORKDIR}/${PN}-${SNAPSHOT}"
+HOMEPAGE="https://www.nasm.us/"
+SRC_URI="https://www.nasm.us/pub/nasm/releasebuilds/${PV}/${P}.tar.xz"
 
 LICENSE="BSD-2"
 SLOT="0"
@@ -32,6 +27,4 @@ src_prepare() {
     Makefile.in || die
   default
 
-	./autogen.sh
-	default
 }

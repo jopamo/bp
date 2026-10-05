@@ -1,0 +1,74 @@
+#!/bin/bash
+set -eu
+
+repo=$(cd -- "$(dirname -- "$0")/.." && pwd -P)
+fixture=$(mktemp -d "${TMPDIR:-/tmp}/bp-browser-versions.XXXXXX")
+trap 'rm -rf -- "${fixture}"' EXIT
+mkdir -p "${fixture}/eclass"
+cp "${repo}/eclass/browser-user-agent.eclass" "${fixture}/eclass/"
+EAPI=8
+die() { printf '%s\n' "$*" >&2; exit 1; }
+declare -A installed=()
+best_version() {
+	[[ $1 == -r ]] || die "wrong package root query"
+	printf '%s\n' "${installed[$2]-}"
+}
+ver_test() {
+	local IFS=. i left right
+	local -a a b
+	read -r -a a <<< "${1/-r/.}"
+	read -r -a b <<< "${3/-r/.}"
+	for ((i=0; i<${#a[@]} || i<${#b[@]}; i++)); do
+		left=${a[i]:-0} right=${b[i]:-0}
+		((10#${left} > 10#${right})) && return 0
+		((10#${left} < 10#${right})) && return 1
+	done
+	return 1
+}
+source "${fixture}/eclass/browser-user-agent.eclass"
+# Phase environments restore function bodies outside their original source.
+eval "$(declare -f _bp_browser_release _bp_browser_version bp_browser_versions)"
+
+add() {
+	local atom=$1 version=$2
+	mkdir -p "${fixture}/${atom}"
+	: > "${fixture}/${atom}/${atom#*/}-${version}.ebuild"
+}
+check() {
+	bp_browser_versions
+	[[ ${BP_CHROME_VERSION} == "$1" && ${BP_FIREFOX_VERSION} == "$2" ]] ||
+		die "expected '$1'/'$2', got '${BP_CHROME_VERSION}'/'${BP_FIREFOX_VERSION}'"
+}
+
+check "" ""
+add bin/google-chrome-unstable 999
+add xgui-app/firefox-nightly-bin 999
+check "" ""
+add bin/chromium 99.0
+add bin/chromium 154.0.8037.92.1-r2
+add bin/chromium 9999
+add bin/chromium 200.0_rc1
+add xgui-app/firefox 157.0
+check 154.0.8037.92.1 157.0
+
+installed[bin/chromium]=bin/chromium-153.0-r4
+installed[xgui-app/firefox]=xgui-app/firefox-156.0-r1
+check 153.0 156.0
+add bin/google-chrome 155.0
+check 153.0 156.0
+installed[bin/google-chrome]=bin/google-chrome-152.0
+check 152.0 156.0
+installed=()
+check 155.0 157.0
+
+inherit() { :; }
+usex() { printf '%s\n' "$3"; }
+qa-policy-configure() { :; }
+meson_src_configure() {
+	[[ ${emesonargs[*]} == "-Dstatic_binary=disabled -Dmira_chrome_version=155.0 -Dmira_firefox_version=157.0" ]] ||
+		die "unexpected bx Meson options: ${emesonargs[*]}"
+}
+PV=9999
+source "${repo}/app-core/bx/bx-9999.ebuild"
+src_configure
+printf '%s\n' 'PASS: installed/repository browser selection and bx Meson inputs'

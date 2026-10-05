@@ -17,6 +17,23 @@ bp is short for 'backpack' to denote it being easier to move around on various c
 * bootstrap golang toolchain from source
 * bootstrap rust toolchain from source
 
+## bx browser compatibility identities
+
+`app-core/bx` obtains Chrome-family and Firefox versions through
+`browser-user-agent.eclass`. Installed stable packages take precedence over
+release ebuilds in this repository. Chrome-family selection prefers
+`bin/google-chrome`, then `bin/chromium`; Firefox uses `xgui-app/firefox`.
+Unstable, nightly, prerelease, and live versions are not automatic candidates.
+No browser dependency is added. Missing families disable their Mira profiles.
+
+The ebuild passes complete release versions to Meson, which emits only the
+major version in compatibility User-Agent strings. User `MYMESONARGS` comes
+last, so `-Dmira_chrome_version=155` overrides discovery and
+`-Dmira_firefox_version=` disables Firefox explicitly.
+
+Run `scripts/test-browser-user-agent` for isolated resolver and ebuild-argument
+coverage without installed browsers.
+
 ## Check dependency resolution without building
 
 Run as your regular user, without `sudo`, from this checkout:

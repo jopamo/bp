@@ -2,7 +2,7 @@
 
 EAPI=8
 
-inherit meson qa-policy
+inherit browser-user-agent meson qa-policy
 
 DESCRIPTION="Native multicall multitool"
 HOMEPAGE="https://github.com/jopamo/bx"
@@ -54,9 +54,12 @@ BDEPEND="
 
 src_configure() {
 	qa-policy-configure
+	bp_browser_versions
 
 	local emesonargs=(
 		-Dstatic_binary=$(usex static enabled disabled)
+		-Dmira_chrome_version="${BP_CHROME_VERSION}"
+		-Dmira_firefox_version="${BP_FIREFOX_VERSION}"
 	)
 
 	meson_src_configure

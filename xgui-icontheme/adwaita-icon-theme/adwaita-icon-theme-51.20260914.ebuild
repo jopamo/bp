@@ -1,12 +1,13 @@
 # Distributed under the terms of the GNU General Public License v2
 
+BRANCH_NAME="gnome-$(ver_cut 1)"
 inherit meson xdg
 
 PROPERTIES+=" source-payload"
 
 DESCRIPTION="Adwaita icon theme"
 HOMEPAGE="https://gitlab.gnome.org/GNOME/adwaita-icon-theme"
-SNAPSHOT=a98b2f7a8e3f344306485155d094ea0877520df6
+SNAPSHOT=70ecd52fbe844304ed4f845a04a1757fa6284884
 SRC_URI="https://gitlab.gnome.org/GNOME/adwaita-icon-theme/-/archive/${SNAPSHOT}/adwaita-icon-theme-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/adwaita-icon-theme-${SNAPSHOT}"
 

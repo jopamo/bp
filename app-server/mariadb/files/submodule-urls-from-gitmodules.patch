@@ -1,0 +1,10 @@
+--- a/cmake/generate_submodule_info.cmake
++++ b/cmake/generate_submodule_info.cmake
+@@ -14,6 +14,6 @@
+ FUNCTION(generate_submodule_info outfile)
+   FIND_PACKAGE(Git REQUIRED)
+-  SET(git_cmd "(git describe --tags --exact 2>/dev/null || echo no-tag) && git rev-parse --short HEAD && git remote get-url origin")
++  SET(git_cmd "(git describe --tags --exact 2>/dev/null || echo no-tag) && git rev-parse --short HEAD && git config -f \"$toplevel/.gitmodules\" --get \"submodule.$name.url\"")
+   SET(ENV_LC_ALL "$ENV{LC_ALL}")
+   SET($ENV{LC_ALL} C)
+   EXECUTE_PROCESS(

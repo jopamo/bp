@@ -1,0 +1,5 @@
+--- a/wsrep-lib/include/wsrep/gtid.hpp
++++ b/wsrep-lib/include/wsrep/gtid.hpp
+@@ -27,1 +27,2 @@
+ #include <iosfwd>
++#include <sys/types.h>

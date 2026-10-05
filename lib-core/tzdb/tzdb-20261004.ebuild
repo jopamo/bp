@@ -4,7 +4,7 @@ inherit toolchain-funcs flag-o-matic qa-policy
 
 DESCRIPTION="The Time Zone Database (often called tz or zoneinfo)"
 HOMEPAGE="https://www.iana.org/time-zones"
-SNAPSHOT=9c772ca79952c0a61cf209c4068ff586d5c4ba6e
+SNAPSHOT=83f40cf091e90137edf09a23367dd040d156c97a
 SRC_URI="https://github.com/eggert/tz/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/tz-${SNAPSHOT}
 
@@ -24,7 +24,7 @@ _emake() {
 		RANLIB="$(tc-getRANLIB)" \
 		CFLAGS="${CFLAGS} ${CPPFLAGS}" \
 		LDFLAGS="${LDFLAGS}" \
-		LDLIBS="${LDLIBS}"
+		LDLIBS="${LDLIBS}" \
 		"$@"
 }
 

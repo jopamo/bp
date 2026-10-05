@@ -1,11 +1,12 @@
 # Distributed under the terms of the GNU General Public License v2
 
+BRANCH_NAME="v2.58"
 inherit toolchain-funcs flag-o-matic qa-policy
 
 DESCRIPTION="UASM is a free MASM-compatible assembler"
 HOMEPAGE="https://www.terraspace.co.uk/uasm.html"
 
-SNAPSHOT=1b95cb75aa118f5af1b379e1d9f0eb152b0d7e0c
+SNAPSHOT=fa7add4042f11050aee97150caa17a9ef699c600
 SRC_URI="https://github.com/Terraspace/UASM/archive/${SNAPSHOT}.tar.gz -> uasm-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/UASM-${SNAPSHOT}"
 
@@ -20,7 +21,7 @@ PATCHES=(
 src_prepare() {
 	default
 	# don't strip binary
-	sed -i Makefile-Linux.mak -e 's/ -s / /g' || die
+	sed -i Makefile-Linux-GCC-64.mak -e 's/ -s / /g' || die
 }
 
 src_compile() {
@@ -29,7 +30,7 @@ src_compile() {
 	append-cflags -fcommon
 	append-cflags -Wno-error=incompatible-pointer-types
 
-	emake -f Makefile-Linux.mak \
+	emake -f Makefile-Linux-GCC-64.mak \
 		CC="$(tc-getCC)" \
 		CFLAGS="${CFLAGS}" \
 		LDFLAGS="${LDFLAGS}"

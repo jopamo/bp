@@ -1,12 +1,12 @@
 # Distributed under the terms of the GNU General Public License v2
 
-BRANCH_NAME="STABLE-BRANCH-$(ver_cut 1)-$(ver_cut 2)"
+BRANCH_NAME="master"
 
 inherit toolchain-funcs flag-o-matic autotools qa-policy
 
 DESCRIPTION="The GNU Privacy Guard, a GPL OpenPGP implementation"
 HOMEPAGE="http://www.gnupg.org/"
-SNAPSHOT=6cd241007f390a4be8f18982783e79e7cfb42c5f
+SNAPSHOT=2deec7247aebcc820f91a854f19acb662b115455
 SRC_URI="https://github.com/gpg/gnupg/archive/${SNAPSHOT}.tar.gz -> gnupg-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/gnupg-${SNAPSHOT}"
 

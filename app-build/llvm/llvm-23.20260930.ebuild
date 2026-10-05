@@ -6,7 +6,7 @@ inherit cmake flag-o-matic qa-policy toolchain-funcs
 
 DESCRIPTION="Low Level Virtual Machine"
 HOMEPAGE="https://llvm.org/"
-SNAPSHOT=ca7933e47d3a3451d81e72ac174dcb5aa28b59d1
+SNAPSHOT=21ef2ddb806006eba611b8a769ae72e5f86f9418
 
 SRC_URI="https://github.com/llvm/llvm-project/archive/${SNAPSHOT}.tar.gz -> llvm-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/llvm-project-${SNAPSHOT}/llvm"
@@ -103,6 +103,16 @@ _llvm_toolchain_usable() {
 	"${cxx_cmd[@]}" -c "${src_cxx}" -o "${obj_cxx}" >/dev/null 2>&1 || return 1
 }
 
+_llvm_cxx_link_usable() {
+	local -a cxx_cmd=( ${CXX} )
+	local -a flags=( ${CPPFLAGS} ${CXXFLAGS} ${LDFLAGS} )
+	local src="${T}/llvm-link-smoke.cpp"
+
+	printf '%s\n' 'int main() { return 0; }' > "${src}" || die
+	"${cxx_cmd[@]}" "${flags[@]}" "${src}" "$@" \
+		-o "${T}/llvm-link-smoke" >/dev/null 2>&1
+}
+
 _llvm_export_gcc_fallback() {
 	local gcc gxx gar gnm granlib
 
@@ -190,8 +200,8 @@ src_configure() {
 		use libcxx || die "USE=syslibcxxabi requires USE=libcxx for a GNU-free runtime stack"
 
 		local nolib_flags=( -nodefaultlibs -lc )
-		if ! test_compiler; then
-			if test_compiler "${nolib_flags[@]}"; then
+		if ! _llvm_cxx_link_usable; then
+			if _llvm_cxx_link_usable "${nolib_flags[@]}"; then
 				local -x LDFLAGS="${LDFLAGS} ${nolib_flags[*]}"
 				ewarn "${CXX} seems to lack runtime, trying with ${nolib_flags[*]}"
 			fi
@@ -731,6 +741,7 @@ EOF
 	local QA_POLICY_ARCHIVE_DUPLICATE_MEMBER_ALLOW="
 		/usr/lib/libclangCodeGen.a:AMDGPU.cpp.o
 		/usr/lib/libclangCodeGen.a:ARM.cpp.o
+		/usr/lib/libclangCodeGen.a:AVR.cpp.o
 		/usr/lib/libclangCodeGen.a:DirectX.cpp.o
 		/usr/lib/libclangCodeGen.a:Hexagon.cpp.o
 		/usr/lib/libclangCodeGen.a:NVPTX.cpp.o
@@ -740,6 +751,8 @@ EOF
 		/usr/lib/libclangCodeGen.a:SystemZ.cpp.o
 		/usr/lib/libclangCodeGen.a:WebAssembly.cpp.o
 		/usr/lib/libclangCodeGen.a:X86.cpp.o
+		/usr/lib/libclangDriver.a:AMDGPU.cpp.o
+		/usr/lib/libLLVMTableGenCommon.a:Types.cpp.o
 	"
 
 	qa-policy-install

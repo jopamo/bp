@@ -6,8 +6,8 @@ inherit flag-o-matic qa-policy
 
 DESCRIPTION="QEMU with enhanced support for multiple architectures and options"
 HOMEPAGE="https://www.qemu.org/"
-SNAPSHOT=4cf887f340edfd2be0c041b303decb9ebda6fa76
-SOFTFLOAT_SNAPSHOT=a0c6494cdc11865811dec815d5c0049fba9d82a8
+SNAPSHOT=4fc49f46dc95d4a27de2509e7fceb2931e91faeb
+SOFTFLOAT_SNAPSHOT=b64af41c3276f97f0e181920400ee056b9c88037
 TESTFLOAT_SNAPSHOT=e7af9751d9f9fd3b47911f51a5cfd08af256a9ab
 SRC_URI="
 	https://github.com/qemu/qemu/archive/${SNAPSHOT}.tar.gz -> qemu-${SNAPSHOT}.tar.gz

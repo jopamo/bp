@@ -59,7 +59,7 @@ LICENSE="BSD-2 MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-BDEPEND="app-tex/go-md2man"
+BDEPEND="app-core/bx"
 
 RESTRICT+=" test"
 
@@ -68,7 +68,9 @@ src_compile() {
 }
 
 src_install() {
-	go-md2man -in README.md -out payload-dumper-go.1 ||	die "Unable to create man page"
+	sed '1i# payload-dumper-go(1)\n' README.md > "${T}/${PN}.1.md" || die
+	bx mandoc -mmarkdown -T man "${T}/${PN}.1.md" > "${PN}.1" ||
+		die "Unable to create man page"
 	dobin payload-dumper-go
 	doman payload-dumper-go.1
 }

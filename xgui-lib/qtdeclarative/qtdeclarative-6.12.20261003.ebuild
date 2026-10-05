@@ -7,7 +7,7 @@ inherit cmake flag-o-matic
 DESCRIPTION="Qt QML and Qt Quick modules for the Qt 6 framework"
 HOMEPAGE="https://www.qt.io/"
 
-SNAPSHOT=cb44be928d5b30da569f48742dc3f2041c736e15
+SNAPSHOT=112f58eb2ebbfc4d8d6d36063b2081519d997487
 SRC_URI="https://invent.kde.org/qt/qt/${PN}/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 
@@ -16,8 +16,8 @@ SLOT="$(ver_cut 1)"
 KEYWORDS="amd64 arm64"
 
 DEPEND="
-	xgui-lib/qtbase:$(ver_cut 1)
-	xgui-lib/qtshadertools:$(ver_cut 1)
+	>=xgui-lib/qtbase-6.12:6=
+	>=xgui-lib/qtshadertools-6.12:6=
 "
 
 append-flags -ffat-lto-objects

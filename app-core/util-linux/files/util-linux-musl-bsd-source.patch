@@ -1,7 +1,7 @@
-diff --git a/include/mount-api-utils.h b/include/mount-api-utils.h
+diff --git a/include/mountutils.h b/include/mountutils.h
 index a916f99..2375152 100644
---- a/include/mount-api-utils.h
-+++ b/include/mount-api-utils.h
+--- a/include/mountutils.h
++++ b/include/mountutils.h
 @@ -10,6 +10,9 @@
  #include <linux/unistd.h>
  #include <sys/syscall.h>
@@ -83,72 +83,55 @@ index a916f99..2375152 100644
  {
          return syscall(SYS_fspick, dfd, pathname, flags);
 diff --git a/include/pidfd-utils.h b/include/pidfd-utils.h
-index 08627ca..908a780 100644
 --- a/include/pidfd-utils.h
 +++ b/include/pidfd-utils.h
-@@ -11,6 +11,9 @@
+@@ -11,3 +11,10 @@
  #ifdef HAVE_SYS_PIDFD_H
  # include <sys/pidfd.h>
- #endif
++#endif
++
 +#ifdef HAVE_MUSL_BSD_PIDFD_API
 +# include <sys/pidfd.h>
-+#endif
- 
- /*
-  * pidfd ioctls
-@@ -36,7 +39,8 @@
- # include <sys/syscall.h>
- # include <unistd.h>
- 
++# define HAVE_PIDFD_SEND_SIGNAL 1
++# define HAVE_PIDFD_OPEN 1
++# define HAVE_PIDFD_GETFD 1
+ #endif
+@@ -40,4 +47,5 @@
 -# if !defined(HAVE_PIDFD_SEND_SIGNAL) && defined(SYS_pidfd_send_signal)
 +# if !defined(HAVE_PIDFD_SEND_SIGNAL) && \
 +     !defined(HAVE_MUSL_BSD_PIDFD_API) && defined(SYS_pidfd_send_signal)
  static inline int pidfd_send_signal(int pidfd, int sig, siginfo_t *info,
  				    unsigned int flags)
  {
-@@ -44,14 +48,16 @@ static inline int pidfd_send_signal(int pidfd, int sig, siginfo_t *info,
- }
- # endif
- 
+@@ -49,4 +57,5 @@
 -# if !defined(HAVE_PIDFD_OPEN) && defined(SYS_pidfd_open)
 +# if !defined(HAVE_PIDFD_OPEN) && \
 +     !defined(HAVE_MUSL_BSD_PIDFD_API) && defined(SYS_pidfd_open)
  static inline int pidfd_open(pid_t pid, unsigned int flags)
  {
  	return syscall(SYS_pidfd_open, pid, flags);
- }
- # endif
- 
+@@ -57,4 +66,5 @@
 -# if !defined(HAVE_PIDFD_GETFD) && defined(SYS_pidfd_getfd)
 +# if !defined(HAVE_PIDFD_GETFD) && \
 +     !defined(HAVE_MUSL_BSD_PIDFD_API) && defined(SYS_pidfd_getfd)
  static inline int pidfd_getfd(int pidfd, int targetfd, unsigned int flags)
  {
  	return syscall(SYS_pidfd_getfd, pidfd, targetfd, flags);
-@@ -64,7 +70,8 @@ static inline int pidfd_getfd(int pidfd, int targetfd, unsigned int flags)
-  * Dummy fallbacks for cases when #ifdef HAVE_PIDFD_* makes the code too complex.
-  */
- 
+@@ -74,4 +84,5 @@
 -#if !defined(HAVE_PIDFD_SEND_SIGNAL) && !defined(SYS_pidfd_send_signal)
 +#if !defined(HAVE_PIDFD_SEND_SIGNAL) && \
-+    !defined(HAVE_MUSL_BSD_PIDFD_API) && !defined(SYS_pidfd_send_signal)
++     !defined(HAVE_MUSL_BSD_PIDFD_API) && !defined(SYS_pidfd_send_signal)
  static inline int pidfd_send_signal(int pidfd __attribute__((unused)),
  				    int sig __attribute__((unused)),
  				    siginfo_t *info __attribute__((unused)),
-@@ -75,7 +82,8 @@ static inline int pidfd_send_signal(int pidfd __attribute__((unused)),
- }
- #endif
- 
+@@ -85,4 +96,5 @@
 -#if !defined(HAVE_PIDFD_OPEN) && !defined(SYS_pidfd_open)
 +#if !defined(HAVE_PIDFD_OPEN) && \
-+    !defined(HAVE_MUSL_BSD_PIDFD_API) && !defined(SYS_pidfd_open)
++     !defined(HAVE_MUSL_BSD_PIDFD_API) && !defined(SYS_pidfd_open)
  static inline int pidfd_open(pid_t pid __attribute__((unused)),
  			     unsigned int flags __attribute__((unused)))
  {
-@@ -84,7 +92,8 @@ static inline int pidfd_open(pid_t pid __attribute__((unused)),
- }
- #endif
- 
+@@ -94,4 +106,5 @@
 -# if !defined(HAVE_PIDFD_GETFD) && !defined(SYS_pidfd_getfd)
 +# if !defined(HAVE_PIDFD_GETFD) && \
 +     !defined(HAVE_MUSL_BSD_PIDFD_API) && !defined(SYS_pidfd_getfd)
@@ -156,38 +139,23 @@ index 08627ca..908a780 100644
  			      int targetfd __attribute__((unused)),
  			      unsigned int flags __attribute__((unused)))
 diff --git a/libmount/meson.build b/libmount/meson.build
-index 29a43be..efd123b 100644
 --- a/libmount/meson.build
 +++ b/libmount/meson.build
-@@ -79,21 +79,24 @@ lib__mount = static_library(
-   lib_mount_sources,
-   include_directories : [dir_include,
-                          dir_libmount],
+@@ -86 +86 @@
 -  dependencies : [blkid_dep])
 +  dependencies : [blkid_dep] + musl_bsd_source_deps)
- 
- lib_mount_static = static_library(
-   'mount_static',
-   link_whole : lib__mount,
-   link_with : [lib_common],
+@@ -92 +92 @@
 -  dependencies : [blkid_static_dep, realtime_libs],
 +  dependencies : [blkid_static_dep, realtime_libs] + musl_bsd_source_deps,
-   install : false)
+@@ -94 +94,4 @@
 -mount_static_dep = declare_dependency(link_with: lib_mount_static, include_directories: '.')
 +mount_static_dep = declare_dependency(
 +  link_with : lib_mount_static,
 +  dependencies : musl_bsd_source_deps,
 +  include_directories : '.')
- 
- lib__mount_deps = [
-   lib_selinux,
-   cryptsetup_dlopen ? lib_dl : lib_cryptsetup,
-   realtime_libs
+@@ -100 +103 @@
 -]
 +] + musl_bsd_source_deps
- lib_mount = library(
-   'mount',
-   link_whole : lib__mount,
 diff --git a/meson.build b/meson.build
 index 1e16926..2765ba5 100644
 --- a/meson.build

@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-# frozen local pin: upstream repository currently returns 404
+# Upstream repository currently returns 404.
 
 inherit meson
 

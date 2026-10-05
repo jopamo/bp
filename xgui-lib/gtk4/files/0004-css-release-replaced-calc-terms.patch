@@ -18,7 +18,9 @@ without constructing widgets or application objects.
            return;
 --- /dev/null
 +++ b/testsuite/gtk/cssnumbervalue.c
-@@ -0,0 +1,46 @@
+@@ -0,0 +1,48 @@
++#undef G_DISABLE_ASSERT
++
 +#include <gtk/gtk.h>
 +
 +#include "gtk/gtkcssnumbervalueprivate.h"
@@ -67,11 +69,9 @@ without constructing widgets or application objects.
 +}
 --- a/testsuite/gtk/meson.build
 +++ b/testsuite/gtk/meson.build
-@@ -123,6 +123,7 @@
-     ],
+@@ -139,4 +139,5 @@
+     ]
    },
    { 'name': 'bitmask' },
 +  { 'name': 'cssnumbervalue' },
-   {
-     'name': 'composetable',
-     'sources': [
+ ]

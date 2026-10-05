@@ -6,7 +6,7 @@ inherit flag-o-matic qa-policy
 
 DESCRIPTION="a collection of binary tools"
 HOMEPAGE="https://sourceware.org/binutils/"
-SNAPSHOT=94e722179949b307f8f8560634dd5c878aee54a3
+SNAPSHOT=695b9b1b7992c66a63081195c4209e2e0596d1d2
 SRC_URI="https://github.com/1g4-mirror/binutils-gdb/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/binutils-gdb-${SNAPSHOT}"
 
@@ -22,6 +22,14 @@ COMMON_DEPEND="
 "
 RDEPEND="${COMMON_DEPEND}"
 DEPEND="${COMMON_DEPEND}"
+BDEPEND+="
+	app-build/bison
+	app-build/flex
+	app-build/make
+	app-build/texinfo
+	app-dev/pkgconf
+	app-lang/perl
+"
 
 PATCHES=(
 	"${FILESDIR}"/binutils-ld-fix-static-linking.patch
@@ -29,6 +37,8 @@ PATCHES=(
 )
 
 src_configure() {
+	replace-flags "-D_FORTIFY_SOURCE=3" "-D_FORTIFY_SOURCE=2"
+
 	filter-flags -Wl,defs
 	append-flags -ffat-lto-objects
 
@@ -60,7 +70,9 @@ src_configure() {
 		--with-pic
 		--with-system-readline
 		--with-system-zlib
+		--without-debuginfod
 		--without-included-gettext
+		--without-msgpack
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }

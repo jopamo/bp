@@ -1,0 +1,13 @@
+diff --git a/src/printsupport/dialogs/qprintdialog_unix.cpp b/src/printsupport/dialogs/qprintdialog_unix.cpp
+--- a/src/printsupport/dialogs/qprintdialog_unix.cpp
++++ b/src/printsupport/dialogs/qprintdialog_unix.cpp
+@@ -487,7 +487,9 @@
+                             if (hasCustomOption) {
+                                 auto *customValueEdit = new QLineEdit;
++#if QT_CONFIG(accessibility)
+                                 customValueEdit->setAccessibleName(
+                                         tr("Custom value for %1").arg(optionText));
++#endif
+                                 choicesCbWithLabelLayout->addWidget(customValueEdit);
+                                 choicesCb->setProperty(customValueLineEditProperty,
+                                                        QVariant::fromValue(customValueEdit));

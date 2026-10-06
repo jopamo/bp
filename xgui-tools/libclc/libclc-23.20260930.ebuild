@@ -39,8 +39,8 @@ src_configure() {
 	libclc_targets=()
 
 	use spirv && libclc_targets+=(
-		"spirv-mesa3d-"
-		"spirv64-mesa3d-"
+		"spirv32-unknown-unknown"
+		"spirv64-unknown-unknown"
 	)
 	use video_cards_nvidia && libclc_targets+=(
 		"nvptx64--"
@@ -81,10 +81,10 @@ src_install() {
 	done
 
 	if use spirv; then
-		for target in spirv spirv64; do
-			dosym -r "/usr/share/clc/${target}-mesa3d-/libclc.spv" \
-				"/usr/share/clc/${target}-mesa3d-.spv"
-		done
+		dosym -r /usr/share/clc/spirv32-unknown-unknown/libclc.spv \
+			/usr/share/clc/spirv-mesa3d-.spv
+		dosym -r /usr/share/clc/spirv64-unknown-unknown/libclc.spv \
+			/usr/share/clc/spirv64-mesa3d-.spv
 	fi
 
 	cat > "${T}/libclc.pc" <<-EOF || die

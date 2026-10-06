@@ -35,6 +35,10 @@ DEPEND="
 	xkbcommon? ( xgui-lib/libxkbcommon )
 "
 
+PATCHES=(
+	"${FILESDIR}/printdialog-accessibility.patch"
+)
+
 src_prepare() {
 	filter-flags -flto*
 

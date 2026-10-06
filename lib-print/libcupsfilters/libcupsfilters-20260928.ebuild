@@ -19,7 +19,7 @@ IUSE="dbus exif jpeg pdf poppler postscript png test tiff"
 RESTRICT="!test? ( test )"
 
 RDEPEND="
-	>=app-tex/qpdf-8.3.0:=
+	>=app-tex/pdfio-20261005:=
 	fonts/fontconfig
 	xgui-lib/lcms
 

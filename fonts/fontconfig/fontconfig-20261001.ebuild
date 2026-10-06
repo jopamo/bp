@@ -10,13 +10,16 @@ S="${WORKDIR}/fontconfig-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"
-#KEYWORDS="amd64 arm64"
-#api/abi breaks are frequent
+KEYWORDS="amd64 arm64"
 
 IUSE="+debug"
 
-DEPEND="xgui-lib/freetype"
+DEPEND="
+	lib-core/expat
+	xgui-lib/freetype
+"
 RDEPEND="${DEPEND}"
+BDEPEND=">=app-dev/meson-1.11.0"
 
 RESTRICT="nostrip"
 
@@ -24,6 +27,7 @@ src_configure() {
 	local emesonargs=(
 		-Dbuildtype=$(usex debug debug release)
 		-Dstrip=$(usex debug false true)
+		-Dxml-backend=expat
 	)
 
 	if use debug ; then
@@ -33,4 +37,10 @@ src_configure() {
 	fi
 
 	meson_src_configure
+}
+
+src_install() {
+	meson_src_install
+	rmdir "${ED}"/var/cache/fontconfig "${ED}"/var/cache "${ED}"/var ||
+		die "expected empty runtime cache directories"
 }

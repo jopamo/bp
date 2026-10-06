@@ -73,50 +73,50 @@ src_install() {
 
 	if ! use africa ; then
 		for x in Africa ; do
-			rm -r "${ED}"/usr/share/zoneinfo/"${x}" || die
-			rm -r "${ED}"/usr/share/zoneinfo-leaps/"${x}" || die
+			rm -rf "${ED}"/usr/share/zoneinfo/"${x}" \
+				"${ED}"/usr/share/zoneinfo/{posix,right}/"${x}" || die
 		done
 	fi
 	if ! use atlantic ; then
 		for x in Atlantic ; do
-			rm -r "${ED}"/usr/share/zoneinfo/"${x}" || die
-			rm -r "${ED}"/usr/share/zoneinfo-leaps/"${x}" || die
+			rm -rf "${ED}"/usr/share/zoneinfo/"${x}" \
+				"${ED}"/usr/share/zoneinfo/{posix,right}/"${x}" || die
 		done
 	fi
 	if ! use indian ; then
 		for x in Indian ; do
-			rm -r "${ED}"/usr/share/zoneinfo/"${x}" || die
-			rm -r "${ED}"/usr/share/zoneinfo-leaps/"${x}" || die
+			rm -rf "${ED}"/usr/share/zoneinfo/"${x}" \
+				"${ED}"/usr/share/zoneinfo/{posix,right}/"${x}" || die
 		done
 	fi
 	if ! use antarctica ; then
 		for x in Antarctica ; do
-			rm -r "${ED}"/usr/share/zoneinfo/"${x}" || die
-			rm -r "${ED}"/usr/share/zoneinfo-leaps/"${x}" || die
+			rm -rf "${ED}"/usr/share/zoneinfo/"${x}" \
+				"${ED}"/usr/share/zoneinfo/{posix,right}/"${x}" || die
 		done
 	fi
 	if ! use asia ; then
 		for x in Asia ; do
-			rm -r "${ED}"/usr/share/zoneinfo/"${x}" || die
-			rm -r "${ED}"/usr/share/zoneinfo-leaps/"${x}" || die
+			rm -rf "${ED}"/usr/share/zoneinfo/"${x}" \
+				"${ED}"/usr/share/zoneinfo/{posix,right}/"${x}" || die
 		done
 	fi
 	if ! use australia ; then
 		for x in Australia ; do
-			rm -r "${ED}"/usr/share/zoneinfo/"${x}" || die
-			rm -r "${ED}"/usr/share/zoneinfo-leaps/"${x}" || die
+			rm -rf "${ED}"/usr/share/zoneinfo/"${x}" \
+				"${ED}"/usr/share/zoneinfo/{posix,right}/"${x}" || die
 		done
 	fi
 	if ! use pacific ; then
 		for x in Pacific ; do
-			rm -r "${ED}"/usr/share/zoneinfo/"${x}" || die
-			rm -r "${ED}"/usr/share/zoneinfo-leaps/"${x}" || die
+			rm -rf "${ED}"/usr/share/zoneinfo/"${x}" \
+				"${ED}"/usr/share/zoneinfo/{posix,right}/"${x}" || die
 		done
 	fi
 	if ! use europe ; then
 		for x in Europe ; do
-			rm -r "${ED}"/usr/share/zoneinfo/"${x}" || die
-			rm -r "${ED}"/usr/share/zoneinfo-leaps/"${x}" || die
+			rm -rf "${ED}"/usr/share/zoneinfo/"${x}" \
+				"${ED}"/usr/share/zoneinfo/{posix,right}/"${x}" || die
 		done
 	fi
 }

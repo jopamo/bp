@@ -42,6 +42,7 @@ src_prepare() {
 src_configure() {
 	local myeconfargs=(
 		--enable-imagefilters
+		--without-jpegxl
 		--localstatedir="${EPREFIX}"/var
 		--with-cups-rundir="${EPREFIX}"/run/cups
 

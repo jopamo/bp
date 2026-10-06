@@ -16,6 +16,7 @@ KEYWORDS="amd64"
 
 PATCHES=(
 	"${FILESDIR}/bool-fix.diff"
+	"${FILESDIR}/c-compat.patch"
 )
 
 src_prepare() {
@@ -27,7 +28,7 @@ src_prepare() {
 src_compile() {
 	qa-policy-configure
 
-	append-cflags -fcommon
+	append-cflags -std=gnu17 -fcommon
 	append-cflags -Wno-error=incompatible-pointer-types
 
 	emake -f Makefile-Linux-GCC-64.mak \

@@ -1,0 +1,79 @@
+diff --git a/H/globals.h b/H/globals.h
+--- a/H/globals.h
++++ b/H/globals.h
+@@ -49,6 +49,7 @@
+ #endif
+ #define _ltoa   ltoa
+ #define _strupr strupr
++extern char *strupr( char * );
+ 
+ #elif defined(__POCC__)
+ 
+@@ -933,6 +934,7 @@
+ //extern void             OutputCodeByte( unsigned char );
+ extern void             FillDataBytes( unsigned char, int len );
+ extern void             OutputBytes( const unsigned char *, int len, struct fixup * );
++extern void             OutputInterleavedBytes( const unsigned char *, int len, struct fixup * );
+ #ifdef __SW_BD
+ extern int  __stdcall   AssembleModule( const char * );
+ #else
+diff --git a/codegenv2.c b/codegenv2.c
+--- a/codegenv2.c
++++ b/codegenv2.c
+@@ -1,9 +1,11 @@
+ 
+ #include "codegenv2.h"
+ 
++#include <ctype.h>
+ #include <time.h>
+ #include "globals.h"
+ #include "parser.h"
++#include "input.h"
+ #include "segment.h"
+ #include "extern.h"
+ #include "fixup.h"
+diff --git a/invoke.c b/invoke.c
+--- a/invoke.c
++++ b/invoke.c
+@@ -22,6 +22,7 @@
+ #include "listing.h"
+ #include "myassert.h"
+ #include "label.h"
++#include "fixup.h"
+ #include "hll.h"
+ 
+ #include "segment.h"
+diff --git a/macho64.c b/macho64.c
+--- a/macho64.c
++++ b/macho64.c
+@@ -728 +728 @@
+-		mm.header.flags = NULL;
++		mm.header.flags = 0;
+diff --git a/H/macrolib.h b/H/macrolib.h
+--- a/H/macrolib.h
++++ b/H/macrolib.h
+@@ -4,3 +4,5 @@
++void CreateMacroLibCases64(void);
++void CreateMacroLibCases32(void);
+ void InitAutoMacros64();
+ void InitAutoMacros32();
+ 
+diff --git a/simd.c b/simd.c
+--- a/simd.c
++++ b/simd.c
+@@ -9,6 +9,7 @@
+ #include "simd.h"
+ #include "globals.h"
+ #include "symbols.h"
++#include "lqueue.h"
+ 
+ extern void     AddLineQueue(const char *line);
+ extern void     AddLineQueueX(const char *fmt, ...);
+diff --git a/H/symbols.h b/H/symbols.h
+--- a/H/symbols.h
++++ b/H/symbols.h
+@@ -588,3 +588,4 @@
++extern  void            SymSimd( struct dsym * );
+ extern  void            SymInit( void );
+ extern  void            SymFini( void );
+ extern  void            SymPassInit( int pass );

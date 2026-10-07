@@ -1,14 +1,15 @@
 # Distributed under the terms of the GNU General Public License v2
 
 BRANCH_NAME="release/$(ver_cut 1).x"
+SNAPSHOT=21ef2ddb806006eba611b8a769ae72e5f86f9418
+EGIT_REPO_URI="https://github.com/llvm/llvm-project.git"
+EGIT_COMMIT="${SNAPSHOT}"
 
-inherit cmake python-any-r1
+inherit cmake git-snapshot python-any-r1
 
 DESCRIPTION="Implementation of OpenCL C built-in libraries for GPU/OpenCL compilers"
 HOMEPAGE="https://llvm.org/"
-SNAPSHOT=21ef2ddb806006eba611b8a769ae72e5f86f9418
-SRC_URI="https://github.com/llvm/llvm-project/archive/${SNAPSHOT}.tar.gz -> llvm-project-${SNAPSHOT}.tar.gz"
-S="${WORKDIR}/llvm-project-${SNAPSHOT}/libclc"
+S="${WORKDIR}/git-source/libclc"
 
 LICENSE="UoI-NCSA rc BSD public-domain"
 SLOT=0
@@ -17,7 +18,7 @@ KEYWORDS="amd64 arm64"
 IUSE="+spirv video_cards_nvidia video_cards_radeonsi"
 REQUIRED_USE="|| ( spirv video_cards_nvidia video_cards_radeonsi )"
 
-BDEPEND="
+BDEPEND+="
 	${PYTHON_DEPS}
 	>=app-build/llvm-23:0
 	<app-build/llvm-24:0

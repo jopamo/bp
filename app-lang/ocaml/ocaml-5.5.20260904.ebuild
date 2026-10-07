@@ -2,6 +2,8 @@
 
 BRANCH_NAME="$(ver_cut 1-2)"
 
+inherit flag-o-matic
+
 DESCRIPTION="Functional, imperative, and object-oriented programming language"
 HOMEPAGE="https://ocaml.org/"
 SNAPSHOT=46e1c324fb9e9f21f52c9cc3399020f7ef8b9b91
@@ -14,6 +16,8 @@ KEYWORDS="amd64 arm64"
 RESTRICT="test"
 
 src_configure() {
+	# Installed runtime archives must contain native code, not compiler-specific IR.
+	filter-lto
 	econf \
 		--bindir="${EPREFIX}/usr/bin" \
 		--libdir="${EPREFIX}/usr/lib/ocaml" \

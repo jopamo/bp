@@ -24,6 +24,10 @@ BDEPEND="
 	test? ( app-build/bison )
 "
 
+PATCHES=(
+	"${FILESDIR}/bootstrap-compare-dependency.patch"
+)
+
 src_prepare() {
 	default
 	eautoreconf

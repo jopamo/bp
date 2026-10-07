@@ -1,0 +1,61 @@
+#!/usr/bin/env python3
+"""Check git-snapshot eclass metadata without running package phases."""
+
+import os
+from pathlib import Path
+import subprocess
+import unittest
+
+
+ECLASS = Path(__file__).resolve().parents[1] / "eclass/git-snapshot.eclass"
+ROOT = "a" * 40
+CHILD = "b" * 40
+
+
+class GitSnapshotTest(unittest.TestCase):
+    def metadata(self, declaration=""):
+        script = f"""
+die() {{ printf '%s\\n' "$*" >&2; exit 1; }}
+EAPI=8 PN=example WORKDIR=/work
+EGIT_REPO_URI=https://github.com/1g4-mirror/example.git
+EGIT_COMMIT={ROOT}
+{declaration}
+source "$1"
+printf '%s\\n' "$SRC_URI" "$S"
+"""
+        return subprocess.run(
+            ["bash", "-c", script, "test-git-snapshot", str(ECLASS)],
+            env={"PATH": os.defpath}, text=True, capture_output=True,
+        )
+
+    def test_v1_metadata_is_unchanged(self):
+        result = self.metadata()
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(result.stdout,
+                         f"git+https://github.com/1g4-mirror/example.git#commit={ROOT}"
+                         f" -> example-{ROOT}.git-v1.tar.zst\n/work/git-source\n")
+
+    def test_submodule_selects_v2(self):
+        child = f"vendor/child@{CHILD}@https://github.com/example/child.git"
+        result = self.metadata(f'EGIT_SNAPSHOT_SUBMODULES=( "{child}" )')
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn(f"&submodule={child} -> example-{ROOT}.git-v2.tar.zst", result.stdout)
+
+    def test_empty_array_keeps_v1(self):
+        self.assertEqual(self.metadata("EGIT_SNAPSHOT_SUBMODULES=()").stdout,
+                         self.metadata().stdout)
+
+    def test_invalid_declarations_fail(self):
+        for declaration in (
+            'EGIT_SNAPSHOT_SUBMODULES="not an array"',
+            'declare -A EGIT_SNAPSHOT_SUBMODULES=()',
+            'EGIT_SNAPSHOT_SUBMODULES=( "child@main@https://example.org/repo.git" )',
+            f'EGIT_SNAPSHOT_SUBMODULES=( "child@{CHILD}@http://example.org/repo.git" )',
+            f'EGIT_SNAPSHOT_SUBMODULES=( "child@{CHILD}@https://example.org/repo.git&other=1" )',
+        ):
+            with self.subTest(declaration=declaration):
+                self.assertNotEqual(self.metadata(declaration).returncode, 0)
+
+
+if __name__ == "__main__":
+    unittest.main()

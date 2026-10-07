@@ -8,4 +8,5 @@ Description: An Extensible Extension Language
 Version: VERSION_REPLACE
 Requires:
 Libs: -L${libdir} -llua -lm
+Libs.private: -ldl
 Cflags: -I${includedir}

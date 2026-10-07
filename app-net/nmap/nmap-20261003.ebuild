@@ -15,7 +15,7 @@ KEYWORDS="amd64 arm64"
 IUSE="ipv6 libssh2 os-db ncat nping nselib scripts ssl"
 
 DEPEND="
-	app-lang/lua
+	app-lang/lua:5.4=
 	lib-core/libpcre2
 	lib-core/zlib
 	lib-dev/liblinear

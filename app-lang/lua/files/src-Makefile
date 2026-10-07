@@ -1,5 +1,5 @@
 # == CHANGE THE SETTINGS BELOW TO SUIT YOUR ENVIRONMENT =======================
-LIBS = -lm
+LIBS = -lm -ldl
 
 # Installation directories
 INSTALL_TOP = "${EPREFIX}/usr/"
@@ -45,7 +45,7 @@ $(LUA_A): $(BASE_O)
 	$(RANLIB) $@
 
 $(LUA_SO): $(CORE_O) $(LIB_O)
-	$(CC) -shared -ldl -Wl,--soname,$(LUA_SO).$(V) -o $@.$(R) $? -lm
+	$(CC) $(LDFLAGS) -shared -Wl,--soname,$(LUA_SO).$(V) -o $@.$(R) $(BASE_O) $(LIBS)
 	ln -sf $(LUA_SO).$(R) $(LUA_SO).$(V)
 	ln -sf $(LUA_SO).$(R) $(LUA_SO)
 

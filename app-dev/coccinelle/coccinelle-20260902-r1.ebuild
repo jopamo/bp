@@ -17,14 +17,14 @@ BDEPEND="
 	app-build/autoconf
 	app-build/automake
 	app-dev/pkgconf
-	app-lang/findlib
-	app-lang/ocaml
+	>=app-lang/findlib-20260718-r1
+	>=app-lang/ocaml-5.5:0=
+	<app-lang/ocaml-5.6:0
 "
 
 PATCHES=(
 	"${FILESDIR}/${PN}-stdcompat-ocaml-5.4.patch"
 	"${FILESDIR}/${PN}-stdcompat-ocaml-5.5.patch"
-	"${FILESDIR}/${PN}-stdcompat-ocaml-5.6.patch"
 )
 
 src_prepare() {

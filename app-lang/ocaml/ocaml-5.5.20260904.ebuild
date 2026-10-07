@@ -1,13 +1,15 @@
 # Distributed under the terms of the GNU General Public License v2
 
+BRANCH_NAME="$(ver_cut 1-2)"
+
 DESCRIPTION="Functional, imperative, and object-oriented programming language"
 HOMEPAGE="https://ocaml.org/"
-SNAPSHOT=bab8b93765f6cacd9d4e7871a2dcd8d39edd17d3
+SNAPSHOT=46e1c324fb9e9f21f52c9cc3399020f7ef8b9b91
 SRC_URI="https://github.com/ocaml/ocaml/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="QPL-1.0 LGPL-2"
-SLOT="0"
+SLOT="0/${PV}"
 KEYWORDS="amd64 arm64"
 RESTRICT="test"
 

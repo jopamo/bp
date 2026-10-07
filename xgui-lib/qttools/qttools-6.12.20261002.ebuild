@@ -37,6 +37,7 @@ src_prepare() {
 		"${S}/src/assistant/qlitehtml/src/3rdparty/litehtml" || die
 
 	eapply "${FILESDIR}"/${PN}-litehtml-exceptions.patch
+	eapply "${FILESDIR}"/${PN}-litehtml-atoi.patch
 	cmake_src_prepare
 }
 

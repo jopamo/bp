@@ -1,0 +1,25 @@
+OCaml 5.4 adds out_width to Format.formatter_out_functions. Re-export
+the field only on compilers that provide it.
+
+--- a/bundles/stdcompat/stdcompat-current/configure.ac
++++ b/bundles/stdcompat/stdcompat-current/configure.ac
+@@ -185,6 +185,7 @@
+ AC_WITH_OCAML_VERSION([5_1_0], [5.1.0])
+ AC_WITH_OCAML_VERSION([5_2_0], [5.2.0])
+ AC_WITH_OCAML_VERSION([5_3_0], [5.3.0])
++AC_WITH_OCAML_VERSION([5_4_0], [5.4.0])
+ 
+ AS_IF([test "x$target_os_type" = "xWin32"],
+   [AC_WITH_BLOCK([WIN32])],
+--- a/bundles/stdcompat/stdcompat-current/stdcompat__format_s.mli.in
++++ b/bundles/stdcompat/stdcompat-current/stdcompat__format_s.mli.in
+@@ -44,6 +44,9 @@
+ type formatter_out_functions = Format.formatter_out_functions =
+   {
+   out_string: string -> int -> int -> unit ;
++@BEGIN_FROM_5_4_0@
++  out_width: string -> pos:int -> len:int -> int ;
++@END_FROM_5_4_0@
+   out_flush: unit -> unit ;
+   out_newline: unit -> unit ;
+   out_spaces: int -> unit ;

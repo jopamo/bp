@@ -21,9 +21,17 @@ BDEPEND="
 	app-lang/ocaml
 "
 
+PATCHES=(
+	"${FILESDIR}/${PN}-stdcompat-ocaml-5.4.patch"
+)
+
 src_prepare() {
 	default
 	./autogen || die
+	(
+		cd bundles/stdcompat/stdcompat-current || die
+		eautoconf
+	)
 }
 
 src_configure() {

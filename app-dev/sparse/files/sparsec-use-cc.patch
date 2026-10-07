@@ -1,0 +1,20 @@
+Use the compiler driver for assembling and linking on LLVM-only systems.
+
+--- a/sparsec
++++ b/sparsec
+@@ -48,13 +48,13 @@
+ 	;;
+ esac
+ 
+-$DIRNAME/sparse-llvm $SPARSEOPTS | $LLC ${LLC_ARCH_OPTS} | as -o $TMPFILE
++$DIRNAME/sparse-llvm $SPARSEOPTS | $LLC ${LLC_ARCH_OPTS} | ${CC:-cc} -x assembler -c -o $TMPFILE -
+ 
+ if [ $NEED_LINK -eq 1 ]; then
+ 	if [ -z $OUTFILE ]; then
+ 		OUTFILE=a.out
+ 	fi
+-	gcc $TMPFILE -o $OUTFILE
++	${CC:-cc} $TMPFILE -o $OUTFILE
+ 	rm -f $TMPFILE
+ else
+ 	if [ -z $OUTFILE ]; then

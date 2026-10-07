@@ -1,0 +1,143 @@
+#!/usr/bin/env python3
+"""Check installed analyzer features, not substitutes for upstream suites."""
+
+import argparse
+import hashlib
+import os
+from pathlib import Path
+import sqlite3
+import subprocess
+import tempfile
+import xml.etree.ElementTree as ET
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    for name in ("sparse", "smatch", "coccinelle"):
+        parser.add_argument(f"--{name}-root", type=Path, default=Path("/"))
+    args = parser.parse_args()
+    roots = [args.sparse_root.resolve(), args.smatch_root.resolve(),
+             args.coccinelle_root.resolve()]
+    env = os.environ.copy()
+    env["PATH"] = os.pathsep.join(str(root / "usr/bin") for root in roots) + \
+        os.pathsep + env["PATH"]
+    env["COCCINELLE_HOME"] = str(roots[2] / "usr/lib/coccinelle")
+    env["CHECK"] = str(roots[0] / "usr/bin/sparse")
+
+    with tempfile.TemporaryDirectory(prefix="bp-analyzer-install.") as directory:
+        work = Path(directory)
+
+        def run(root, tool, *arguments):
+            result = subprocess.run(
+                [str(root / "usr/bin" / tool), *map(str, arguments)],
+                cwd=work, env=env, text=True, capture_output=True, timeout=120,
+            )
+            if result.returncode:
+                raise RuntimeError(
+                    f"{tool} exited {result.returncode}\n{result.stdout}{result.stderr}"
+                )
+            return result.stdout + result.stderr
+
+        def require(condition, message):
+            if not condition:
+                raise RuntimeError(message)
+
+        source = work / "sample.c"
+        source.write_text(
+            "#include <stddef.h>\n#include <stdarg.h>\n"
+            "int maximum(int x, int y) { if (x > y) return x; return y; }\n"
+            "int main(void) { return maximum(2, 3) != 3; }\n"
+        )
+        run(roots[0], "sparse", source)
+        run(roots[0], "cgcc", "-no-compile", source)
+        xml = run(roots[0], "c2xml", source)
+        require(ET.fromstring(xml).find(".//*[@ident='maximum']") is not None,
+                "c2xml did not describe the function")
+        run(roots[0], "semind", "add", source)
+        require("maximum" in run(roots[0], "semind", "search", "maximum"),
+                "semind did not index the function")
+        run(roots[0], "sparsec", source, "-o", work / "compiled")
+        subprocess.run([str(work / "compiled")], check=True, env=env)
+
+        bad = work / "bad.c"
+        bad.write_text(
+            "typedef unsigned int __attribute__((bitwise)) restricted_t;\n"
+            "restricted_t bad(unsigned int x) { return x; }\n"
+        )
+        require("incorrect type" in run(roots[0], "sparse", bad),
+                "Sparse did not diagnose the restricted-type mismatch")
+
+        run(roots[1], "smatch", source)
+        bad.write_text("int bad(void) { int x; return x; }\n")
+        require("uninitialized" in run(roots[1], "smatch", "--spammy", bad),
+                "Smatch did not diagnose the uninitialized variable")
+
+        private = roots[1] / "usr/libexec/smatch"
+
+        def installed_files():
+            return {
+                str(path.relative_to(private)): hashlib.sha256(path.read_bytes()).hexdigest()
+                for path in private.rglob("*") if path.is_file()
+            }
+
+        before = installed_files()
+        # Exercise the data pipeline with a minimal make fixture, not a kernel build.
+        (work / "kernel").mkdir()
+        (work / "fs").mkdir()
+        (work / "Makefile").write_text(
+            ".PHONY: clean bzImage modules\nclean modules:\n\t@:\n"
+            "bzImage:\n\t$(CHECK) sample.c\n"
+        )
+        data_env = env.copy()
+        data_env["SMATCH_DATA_DIR"] = str(work / "smatch_data")
+        (work / "smatch_warns.txt").write_text("")
+        commands = [
+            [str(private / "smatch_data/db/create_db.sh"), "-p=kernel", "smatch_warns.txt"],
+            [str(private / "smatch_scripts/build_kernel_data.sh")],
+        ]
+        for command in commands:
+            data = subprocess.run(
+                command, cwd=work, env=data_env, text=True, capture_output=True, timeout=300,
+            )
+            require(data.returncode == 0,
+                    f"Smatch data pipeline failed:\n{data.stdout}{data.stderr}")
+        require((work / "smatch_data/kernel/ioctls").read_bytes() ==
+                (private / "smatch_data/kernel/ioctls").read_bytes(),
+                "Smatch did not preserve the seed data")
+        with sqlite3.connect(work / "smatch_db.sqlite") as db:
+            require(db.execute("PRAGMA integrity_check").fetchone() == ("ok",),
+                    "Smatch database failed its integrity check")
+            db.execute("SELECT * FROM return_states LIMIT 1").fetchall()
+        require((work / "smatch_data/kernel/common_functions").is_file(),
+                "Smatch did not write generated data to the workspace")
+        require(installed_files() == before, "Smatch modified its installed files")
+
+        patch = work / "features.cocci"
+        patch.write_text(
+            '@r@\nidentifier f =~ "^maximum(?=$)";\n@@\nint f(...) { ... }\n'
+            '@script:python@\nf << r.f;\n@@\nprint("python:" + f)\n'
+            '@script:ocaml@\nf << r.f;\n@@\nPrintf.printf "ocaml:%s\\n" f\n'
+        )
+        output = run(roots[2], "spatch", "--sp-file", patch, source)
+        require("python:maximum" in output and "ocaml:maximum" in output,
+                "Coccinelle did not execute both scripting languages")
+        require("python:main" not in output and "ocaml:main" not in output,
+                "Coccinelle did not apply the identifier regex constraint")
+        run(roots[2], "pycocci", "--help")
+        run(roots[2], "spgen", "--help")
+
+    # Separate image roots permit a file-level co-installation check.
+    if len(set(roots)) == len(roots):
+        owners = {}
+        for root in roots:
+            for path in (root / "usr").rglob("*"):
+                if path.is_file() or path.is_symlink():
+                    relative = path.relative_to(root)
+                    require(relative not in owners,
+                            f"Install collision: {relative} in {root} and {owners.get(relative)}")
+                    owners[relative] = root
+    print("Installed analyzer feature checks passed.")
+
+
+if __name__ == "__main__":
+    main()

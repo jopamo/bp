@@ -3,3 +3,8 @@ lib-net/mbedtls
 
 # Nettle is private implementation code inside Vesk.
 lib-core/nettle
+
+# Analyzer candidates have not passed the release gates in
+# app-dev/README.md.
+=app-dev/smatch-20261002
+=app-dev/coccinelle-20260929

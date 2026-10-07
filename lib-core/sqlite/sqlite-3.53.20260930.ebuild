@@ -18,13 +18,16 @@ IUSE="static-libs debug fts5 rtree geopoly session json
         +math +memsys5 update-limit editline readline gcov"
 
 DEPEND="
-    app-lang/tcl
+    <app-lang/tcl-9:0=
     lib-core/readline
     lib-core/zlib
 "
 
 src_configure() {
     qa-policy-configure
+    local tclsh
+    tclsh=$(type -P tclsh8.6) || die "System Tcl 8.6 interpreter not found"
+
     # Support detection of misuse of SQLite API.
     # https://sqlite.org/compile.html#enable_api_armor
     append-cppflags -DSQLITE_ENABLE_API_ARMOR
@@ -113,6 +116,9 @@ src_configure() {
         --disable-memsys3
         --enable-load-extension
         --enable-threadsafe
+        --enable-tcl
+        --with-tcl="${ESYSROOT}/usr/lib"
+        --with-tclsh="${tclsh}"
         --prefix="${EPREFIX}"/usr
         --soname=legacy
         $(use_enable debug)
@@ -129,7 +135,8 @@ src_configure() {
         $(use_enable static-libs static)
         $(use_enable update-limit)
     )
-    ./configure "${myconf[@]}"
+    WRAPPER="${S}/configure" "${tclsh}" "${S}/autosetup/autosetup" \
+        "${myconf[@]}" || die "SQLite configure failed"
 }
 
 src_install() {

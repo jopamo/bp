@@ -2,7 +2,7 @@
 
 EAPI=8
 
-DESCRIPTION="Meta package installed by default but will auto purge if not kept"
+DESCRIPTION="1g4 development and administration tools"
 HOMEPAGE="https://1g4.org/"
 
 # This package intentionally installs no files.
@@ -14,14 +14,17 @@ KEYWORDS="amd64 arm64"
 
 RDEPEND="
 app-lang/go
+app-build/gdb
 app-build/llvm
 app-core/bx
 app-core/lsof
+app-core/sudo
 app-core/tmux
 app-crypto/certbot
 app-crypto/pass
 app-crypto/tpm2-tools
 app-dev/beautysh
+app-dev/coccinelle
 app-dev/ctags
 app-dev/debootstrap
 app-dev/dwarves
@@ -44,19 +47,25 @@ app-fs/smartmontools
 app-fs/sshfs
 app-fs/testdisk
 app-kernel/dracut
+app-kernel/k1g4
 app-kernel/kernel-hardening-checker
 app-kernel/perf
 app-net/aircrack-ng
 app-net/bind-tools
+app-net/bpftool
 app-net/ethtool
 app-net/iftop
 app-net/iperf
 app-net/iputils
 app-net/iw
+app-net/linuxptp
 app-net/nftables
 app-net/nmap
+app-net/sockperf
 app-net/tcpdump
+app-net/wpa_supplicant
 app-server/lighttpd
+app-server/nodejs
 app-util/lshw
 app-var/perl-cleaner
 dev-pypi/black
@@ -65,5 +74,6 @@ dev-pypi/paramiko
 dev-pypi/pexpect
 dev-pypi/pip
 dev-pypi/pytest
+lib-net/xdp-tools
 virtual/rust
 "

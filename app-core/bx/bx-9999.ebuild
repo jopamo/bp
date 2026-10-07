@@ -25,6 +25,7 @@ IUSE="+static"
 RDEPEND="
 	!app-compression/zip-utils
 	!app-net/mira
+	!dev-rust/ripgrep
 	static? (
 		app-compression/bzip2[static-libs(+)]
 		app-compression/xz-utils[static-libs(+)]

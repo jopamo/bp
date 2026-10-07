@@ -1,0 +1,36 @@
+diff --git a/gcc/gengtype-lex.l b/gcc/gengtype-lex.l
+--- a/gcc/gengtype-lex.l
++++ b/gcc/gengtype-lex.l
+@@ -194,7 +194,7 @@
+ %%
+ 
+ void
+-yybegin (const char *fname)
++gengtype_lex_begin (const char *fname)
+ {
+   yyin = fopen (fname, "r");
+   if (yyin == NULL)
+diff --git a/gcc/gengtype-parse.cc b/gcc/gengtype-parse.cc
+--- a/gcc/gengtype-parse.cc
++++ b/gcc/gengtype-parse.cc
+@@ -1151,7 +1151,7 @@
+ void
+ parse_file (const char *fname)
+ {
+-  yybegin (fname);
++  gengtype_lex_begin (fname);
+   for (;;)
+     {
+       switch (token ())
+diff --git a/gcc/gengtype.h b/gcc/gengtype.h
+--- a/gcc/gengtype.h
++++ b/gcc/gengtype.h
+@@ -452,7 +452,7 @@
+ 
+ /* Lexer and parser routines.  */
+ extern int yylex (const char **yylval);
+-extern void yybegin (const char *fname);
++extern void gengtype_lex_begin (const char *fname);
+ extern void yyend (void);
+ extern void parse_file (const char *name);
+ extern bool hit_error;

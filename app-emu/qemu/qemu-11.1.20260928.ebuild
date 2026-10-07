@@ -145,7 +145,7 @@ src_configure() {
 		--datadir="${EPREFIX}"/usr/share
 		--mandir="${EPREFIX}"/usr/share/man
 		--infodir="${EPREFIX}"/usr/share/info
-		--target-list=$(usex arm64 "aarch64-softmmu aarch64-linux-user" "x86_64-softmmu x86_64-linux-user")
+		--target-list="x86_64-softmmu aarch64-softmmu x86_64-linux-user aarch64-linux-user"
 		--disable-alsa
 		$(use_enable bpf)
 		$(use_enable capstone)

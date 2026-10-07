@@ -1,0 +1,47 @@
+diff --git a/src/cpp-flex.skl b/src/cpp-flex.skl
+--- a/src/cpp-flex.skl
++++ b/src/cpp-flex.skl
+@@ -4370,7 +4370,6 @@
+ m4preproc_undivert(1)
+ #undef M4_MODE_PREFIX[[IN_HEADER]]
+ #endif /* M4_MODE_PREFIX[[HEADER_H]] */
+-m4_undefine([[M4_YY_IN_HEADER]])m4_dnl
+ ]])
+ 
+ %# Local Variables:
+diff --git a/tests/header_nr_scanner.l b/tests/header_nr_scanner.l
+--- a/tests/header_nr_scanner.l
++++ b/tests/header_nr_scanner.l
+@@ -21,6 +21,10 @@
+  * PURPOSE.
+  */
+ 
++%top{
++int section_three(void);
++}
++
+ %{
+ /* A template scanner file to build "scanner.c". */
+ #include <stdio.h>
+@@ -39,4 +43,9 @@
+ .|\n              { }
+ 
+ %%
+ 
++int section_three(void)
++{
++    return 1;
++}
++
+diff --git a/tests/header_nr_main.c b/tests/header_nr_main.c
+--- a/tests/header_nr_main.c
++++ b/tests/header_nr_main.c
+@@ -32,6 +32,8 @@
+     testin = stdin;
+     testout = stdout;
+     testlex();
++    if (section_three() != 1)
++        return 1;
+     printf("TEST RETURNING OK.\n");
+     return 0;
+ }

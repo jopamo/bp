@@ -21,6 +21,11 @@ DEPEND="
 		 )
 	zlib? ( lib-core/zlib[static-libs(+)?] )
 "
+RDEPEND="
+	app-core/hwdata
+	kmod? ( app-core/kmod )
+	zlib? ( lib-core/zlib )
+"
 
 switch_config() {
 	[[ $# -ne 2 ]] && return 1

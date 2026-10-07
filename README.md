@@ -34,6 +34,31 @@ last, so `-Dmira_chrome_version=155` overrides discovery and
 Run `scripts/test-browser-user-agent` for isolated resolver and ebuild-argument
 coverage without installed browsers.
 
+## Pinned Git sources
+
+Prefer `git-snapshot` for pinned source trees and `1g4-mirror` GitHub URLs when
+the mirror contains the requested commit. Set `EGIT_REPO_URI` and
+`EGIT_COMMIT="${SNAPSHOT}"` before inheriting the eclass. The local compressed
+cache is not a Manifest DIST file.
+
+For submodules, declare the complete pinned closure before inheriting:
+
+```bash
+EGIT_SNAPSHOT_SUBMODULES=(
+    "vendor/library@${LIBRARY_SNAPSHOT}@https://github.com/owner/library.git"
+)
+```
+
+Corepkg verifies these pins against the parent gitlinks and ignores fetch URLs
+in `.gitmodules`. Nested paths are relative to the main source root. Install
+Corepkg with snapshot-v2 support before using this declaration. Cache hits
+require neither network access nor a retained Git repository.
+
+The tracked mirror inventory is in `lockstep/src/lockstep/mirror_repos.py`.
+Populate a new mirror with `lockstep/scripts/mirror_repos --repo NAME` before
+switching recipes to its URL. Run `scripts/test-git-snapshot` to check the
+eclass metadata contract.
+
 ## Check dependency resolution without building
 
 Run as your regular user, without `sudo`, from this checkout:

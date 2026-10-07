@@ -1,0 +1,28 @@
+OCaml 5.5 exposes Fun.id as a value rather than an external primitive.
+Match that declaration while retaining the primitive on older compilers.
+
+--- a/bundles/stdcompat/stdcompat-current/configure.ac
++++ b/bundles/stdcompat/stdcompat-current/configure.ac
+@@ -186,6 +186,7 @@
+ AC_WITH_OCAML_VERSION([5_2_0], [5.2.0])
+ AC_WITH_OCAML_VERSION([5_3_0], [5.3.0])
+ AC_WITH_OCAML_VERSION([5_4_0], [5.4.0])
++AC_WITH_OCAML_VERSION([5_5_0], [5.5.0])
+ 
+ AS_IF([test "x$target_os_type" = "xWin32"],
+   [AC_WITH_BLOCK([WIN32])],
+--- a/bundles/stdcompat/stdcompat-current/stdcompat__fun_s.mli.in
++++ b/bundles/stdcompat/stdcompat-current/stdcompat__fun_s.mli.in
+@@ -5,7 +5,12 @@
+ val compose : ('b -> 'c) -> ('a -> 'b) -> 'a -> 'c
+ (** @since 5.2.0: val compose : ('b -> 'c) -> ('a -> 'b) -> 'a -> 'c *)
+ 
++@BEGIN_FROM_5_5_0@
++val id : 'a -> 'a
++@END_FROM_5_5_0@
++@BEGIN_BEFORE_5_5_0@
+ external id : 'a -> 'a = "%identity"
++@END_BEFORE_5_5_0@
+ (** @since 4.08.0: external id : 'a -> 'a = "%identity" *)
+ 
+ val const : 'a -> 'b -> 'a

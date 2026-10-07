@@ -1,8 +1,8 @@
 # Analyzer snapshot validation
 
 Source-cache support and complete analyzer packaging are separate gates.
-The newest Smatch and Coccinelle recipes remain masked while the failures below
-are unresolved. Their previous recipes remain available.
+The newest Smatch and Coccinelle recipes remain masked pending the release
+gates below. Their previous recipes remain available.
 
 ## Source selection
 
@@ -23,32 +23,66 @@ repositories were created or pushed during this review.
 
 ## Completed checks
 
-The isolated amd64/glibc helper builds and merges Sparse, libdb, DBI,
-DBD-SQLite and Try-Tiny. DBD-SQLite uses the system SQLite library.
+Validation uses the isolated amd64/glibc helper, GCC 15.3.1, LLVM 22.1.8,
+OCaml 5.5.1 and Python 3.13. It is not an arm64 or musl build.
 
-Smatch's snapshot-v2 cache includes both data submodules, contains no retained
-Git object stores, and supports offline unpack and compilation. A separate
-install/merge check succeeds with its private frontend and complete data/script
-directories. This does not override its failed regression suite.
+- Sparse builds and merges with explicit LLVM, XML, SQLite and GTK selection.
+  Its suite passes: 839 passes and 65 upstream-marked expected failures.
+  Installed checks exercise `sparse`, `cgcc`, `c2xml`, `semind`, `sparse-llvm`
+  through `sparsec`, and generated executable behavior. The compiler wrappers
+  work with both GCC and Clang. The GTK inspector opens a window under Xvfb.
+  A separate GTK-disabled build passes and does not install `test-inspect`.
+- OCaml builds native-code runtime archives without LTO. Its previous slim-LTO
+  archive indexes omit runtime symbols after installation; reindexing a
+  diagnostic copy restores native linking. The rebuilt installed toolchain
+  links and runs a native program, and Findlib builds and merges.
+- Coccinelle builds and merges with Python, OCaml scripting and PCRE enabled.
+  Its suite passes all 765 expected-pass tests, with 21 known failures.
+  Installed checks execute both scripting languages, apply a PCRE lookahead
+  constraint and exercise the `pycocci` and `spgen` entry points.
+- libdb, DBI, DBD-SQLite and Try-Tiny build and merge. DBD-SQLite uses the system
+  SQLite library.
+- Smatch's snapshot-v2 cache includes both pinned data submodules and supports
+  offline unpack and compilation without retained Git object stores.
+  A separate install/merge check succeeds. Installed positive/negative fixtures
+  pass with LTO disabled. A minimal make fixture exercises the kernel-data and
+  database pipeline without root: generated files stay in the workspace,
+  SQLite integrity checking passes, and installed file hashes remain unchanged.
+  This is not a full kernel analysis and does not override the failed suite.
+- Sparse and Smatch locate builtin headers with the compiler's
+  `-print-file-name=include` query. The previous empty-filename query can return
+  a `LIBRARY_PATH` directory rather than the compiler resource directory.
+- The installed images have no file-level collisions under `/usr`.
+- Sparse, Smatch, Coccinelle and OCaml dependency graphs resolve for all four
+  amd64/arm64 and glibc/musl profiles. Candidate masks are lifted only in the
+  private resolver configurations for this check.
+
+Run the installed checks with `scripts/test-analyzer-install`. It accepts
+`--sparse-root`, `--smatch-root` and `--coccinelle-root`, defaulting to `/`.
+For isolated dependency roots, supply the corresponding loader, OCaml and
+Perl search paths as well. These checks supplement, rather than replace, each
+upstream suite.
 
 ## Remaining release gates
 
-- Smatch devel's upstream suite reports 805 passes and 339 failures out of 1144
-  tests in the tested configuration. Failures include process crashes and
-  references to missing checks. Do not suppress these failures or claim the
-  candidate has passed regression testing.
-- Smatch's installed `build_kernel_data.sh` still targets its adjacent data
-  directory. Redirect generated data to a writable workspace and test database
-  generation as an unprivileged user before releasing the package.
-- Coccinelle's candidate reaches compilation with the isolated OCaml 5.5.1
-  toolchain but stops with no rule to build `bundles/stdcompat/stdcompat.cmxa`.
-  The isolated Findlib build also fails native linking. Resolve those failures
-  before enabling and validating Python, OCaml scripting and PCRE; the current
-  candidate retains the previous recipe's disabled feature switches.
-- Sparse still needs explicit optional-feature selection and installed
-  functionality tests. Its local build uses LLVM 22, not the requested LLVM 23.
-- Installed positive/negative analysis fixtures, co-installation checks,
-  reproducible rebuilds, musl and arm64 validation remain outstanding.
+- Smatch devel reports 1024 passes and 120 failures out of 1144 tests without
+  LTO. Of these failures, 66 are upstream-marked expected failures and 54 are
+  unexpected. Thirty tests lack the configured kernel build directory and
+  three reference missing named checks. The other 21 output differences remain
+  unresolved. Do not suppress these failures or claim an upstream regression
+  without isolating its cause.
+- The initial GCC 15 LTO Smatch build crashes in `token_store` on ordinary
+  conditional expressions. Both `-O0` and `-O3` non-LTO builds avoid those
+  crashes. The recipe disables LTO. The underlying LTO interaction remains
+  undiagnosed.
+- Smatch's `tagger` requires a preinitialized Berkeley DB environment.
+  Upstream's root-level `create_tagger_db.py` uses `bsddb3`, which is absent
+  from BP and the test host. Package that binding and initializer, then test
+  tag creation and lookup. Installing `tagger` alone does not validate this
+  workflow.
+- arm64, musl, LLVM 23 and Python 3.14 execution, full kernel analysis and
+  reproducible binary-package rebuilds remain unvalidated. The tested build
+  environment is amd64/glibc, not the complete supported platform matrix.
 
 Use `scripts/test-ebuild` for further builds and retain its logs. Do not
 interpret successful source fetches, dependency resolution, or a separate

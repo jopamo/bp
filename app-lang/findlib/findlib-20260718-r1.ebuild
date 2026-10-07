@@ -11,7 +11,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 RESTRICT="test"
 
-BDEPEND="app-lang/ocaml"
+BDEPEND="app-lang/ocaml:0="
 RDEPEND="${BDEPEND}"
 
 src_prepare() {

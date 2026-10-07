@@ -14,7 +14,7 @@ LICENSE="tcltk"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-DEPEND="lib-core/sqlite"
+DEPEND="lib-core/zlib"
 
 QA_CONFIG_IMPL_DECL_SKIP=(
 	stat64
@@ -38,6 +38,8 @@ src_install() {
 	emake INSTALL_ROOT="${ED}" install install-private-headers
 
 	local v1=$(ver_cut 1-2)
+
+	dosym -r /usr/bin/tclsh${v1} /usr/bin/tclsh
 
 	for x in lib${PN}${v1}.so.1 lib${PN}.so lib${PN}.so.${v1}.0 ; do
 		dosym -r /usr/lib/lib${PN}${v1}.so /usr/lib/${x}

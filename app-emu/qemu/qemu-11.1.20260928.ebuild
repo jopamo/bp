@@ -2,7 +2,9 @@
 
 BRANCH_NAME="stable-$(ver_cut 1-2)"
 
-inherit flag-o-matic xdg
+PYTHON_COMPAT=( python3_{11..14} )
+
+inherit flag-o-matic python-any-r1 xdg
 
 DESCRIPTION="QEMU with enhanced support for multiple architectures and options"
 HOMEPAGE="https://www.qemu.org/"
@@ -103,7 +105,21 @@ DEPEND="
 
 BDEPEND="
 	app-emu/keycodemapdb
+	$(python_gen_any_dep '
+		>=app-dev/meson-1.5.0[${PYTHON_USEDEP}]
+		>=dev-pypi/pip-20.3.4[${PYTHON_USEDEP}]
+		>=dev-pypi/setuptools-44.1.1[${PYTHON_USEDEP}]
+		>=dev-pypi/wheel-0.34.2[${PYTHON_USEDEP}]
+	')
 "
+
+python_check_deps() {
+	python_has_version \
+		">=app-dev/meson-1.5.0[${PYTHON_USEDEP}]" \
+		">=dev-pypi/pip-20.3.4[${PYTHON_USEDEP}]" \
+		">=dev-pypi/setuptools-44.1.1[${PYTHON_USEDEP}]" \
+		">=dev-pypi/wheel-0.34.2[${PYTHON_USEDEP}]"
+}
 
 src_prepare() {
 	filter-flags -Wl,-z,defs -flto*
@@ -134,6 +150,7 @@ src_configure() {
 	cd build
 
 	local myconf=(
+		--python="${PYTHON}"
 		--prefix="${EPREFIX}"/usr
 		--bindir="${EPREFIX}"/usr/bin
 		--sbindir="${EPREFIX}"/usr/bin
@@ -193,7 +210,7 @@ src_configure() {
 		--enable-virtfs
 		--disable-xkbcommon
 	)
-	../configure "${myconf[@]}"
+	../configure "${myconf[@]}" || die
 }
 
 src_compile() {

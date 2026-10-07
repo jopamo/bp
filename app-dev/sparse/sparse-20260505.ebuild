@@ -1,12 +1,13 @@
 # Distributed under the terms of the GNU General Public License v2
 
-inherit toolchain-funcs
+SNAPSHOT=37156835e3d725b6d750f000be33ba3814bb2310
+EGIT_REPO_URI="https://github.com/1g4-mirror/sparse.git"
+EGIT_COMMIT="${SNAPSHOT}"
+
+inherit git-snapshot toolchain-funcs
 
 DESCRIPTION="Semantic parser and type checker for C"
-HOMEPAGE="https://github.com/1g4-mirror/sparse"
-SNAPSHOT=37156835e3d725b6d750f000be33ba3814bb2310
-SRC_URI="https://github.com/1g4-mirror/sparse/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
-S="${WORKDIR}/${PN}-${SNAPSHOT}"
+HOMEPAGE="https://sparse.docs.kernel.org/"
 
 LICENSE="MIT"
 SLOT="0"
@@ -18,12 +19,17 @@ DEPEND="
 	lib-core/libxml2
 	lib-core/sqlite
 "
-BDEPEND="app-dev/pkgconf"
+BDEPEND+=" app-dev/pkgconf"
+
+sparse_make() {
+	emake CC="$(tc-getCC)" CXX="$(tc-getCXX)" AR="$(tc-getAR)" \
+		PREFIX="${EPREFIX}/usr" SPARSE_VERSION="${PV}+git.${SNAPSHOT}" "$@"
+}
 
 src_compile() {
-	emake CC="$(tc-getCC)" AR="$(tc-getAR)"
+	sparse_make
 }
 
 src_install() {
-	emake DESTDIR="${D}" PREFIX="${EPREFIX}/usr" install
+	sparse_make DESTDIR="${D}" install
 }

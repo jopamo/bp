@@ -1,0 +1,19 @@
+diff --git a/lib/util/xdpsock.c b/lib/util/xdpsock.c
+--- a/lib/util/xdpsock.c
++++ b/lib/util/xdpsock.c
+@@ -1733,12 +1733,12 @@
+ 	int ret;
+ 
+ 	/* Configure sched priority for better wake-up accuracy */
+-	ret = sched_setscheduler(0, sched_policy, &schparam);
++	ret = pthread_setschedparam(pthread_self(), sched_policy, &schparam);
+ 	if (ret)
+ 		pr_warn("Error(%d) in setting priority(%d): %s\n",
+-			errno, sched_prio, strerror(errno));
++			ret, sched_prio, strerror(ret));
+ 
+-	return ret;
++	return -ret;
+ }
+ 
+ struct xsk_ctx *xsk_ctx__create(const struct xsk_opts *opt, enum xsk_benchmark_type bench)

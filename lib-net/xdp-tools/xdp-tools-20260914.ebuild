@@ -28,6 +28,8 @@ BDEPEND="
 	app-build/m4
 "
 
+PATCHES=( "${FILESDIR}/xdp-bench-pthread-scheduling.patch" )
+
 # Not prebuilt -- we build them -- but they're not ordinary ELF objects either.
 QA_PREBUILT="usr/lib/bpf/*.o"
 

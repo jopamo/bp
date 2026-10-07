@@ -11,7 +11,7 @@ EGIT_SNAPSHOT_SUBMODULES=(
 	"smatch_data/wine@${WINE_SNAPSHOT}@https://github.com/error27/smatch_wine_data.git"
 )
 
-inherit git-snapshot toolchain-funcs
+inherit flag-o-matic git-snapshot toolchain-funcs
 
 DESCRIPTION="Static analysis tool for finding bugs in C code"
 HOMEPAGE="https://repo.or.cz/w/smatch.git https://github.com/error27/smatch"
@@ -19,6 +19,7 @@ HOMEPAGE="https://repo.or.cz/w/smatch.git https://github.com/error27/smatch"
 LICENSE="GPL-2+ BSD-3 MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+IUSE="test"
 
 DEPEND="
 	lib-core/libdb
@@ -32,10 +33,32 @@ RDEPEND="
 	core-perl/DBD-SQLite
 	core-perl/Try-Tiny
 "
-BDEPEND+=" app-dev/pkgconf"
+BDEPEND+="
+	app-dev/pkgconf
+	test? (
+		app-lang/perl
+		app-lang/python[sqlite]
+		core-perl/DBD-SQLite
+		core-perl/Try-Tiny
+		lib-core/sqlite
+	)
+"
+
+PATCHES=( "${FILESDIR}/smatch-rootless-kernel-data.patch" )
+
+src_configure() {
+	# The GCC 15 LTO build crashes in token_store on ordinary conditional expressions.
+	filter-lto
+}
 
 smatch_make() {
+	local compiler_include
+	compiler_include=$($(tc-getCC) -print-file-name=include) || die
+	[[ ${compiler_include} == /* && -d ${compiler_include} ]] ||
+		die "Cannot locate compiler builtin headers: ${compiler_include}"
+
 	emake CC="$(tc-getCC)" CXX="$(tc-getCXX)" AR="$(tc-getAR)" \
+		GCC_BASE="${compiler_include}/.." \
 		PREFIX="${EPREFIX}/usr" SPARSE_VERSION="${PV}+git.${SNAPSHOT}" \
 		smatch_datadir="${EPREFIX}/usr/libexec/smatch" \
 		HAVE_LIBXML=no HAVE_SQLITE=no HAVE_GTK=no HAVE_LLVM=no \

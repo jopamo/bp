@@ -1,0 +1,106 @@
+Keep generated data in a complete caller-owned copy and execute the installed analyzer without writing beside it.
+
+--- a/smatch_scripts/build_kernel_data.sh
++++ b/smatch_scripts/build_kernel_data.sh
+@@ -16,10 +16,13 @@
+ 	usage;
+ fi
+ 
+-SCRIPT_DIR=$(dirname $0)
+-if [ -e $SCRIPT_DIR/../smatch -a -d kernel -a -d fs ] ; then
+-    CMD=$SCRIPT_DIR/../smatch
+-    DATA_DIR=$SCRIPT_DIR/../smatch_data
++SCRIPT_DIR=$(cd -- "$(dirname -- "$0")" && pwd)
++if [ -x "$SCRIPT_DIR/../smatch" ] && [ -d kernel ] && [ -d fs ]; then
++    DATA_DIR=${SMATCH_DATA_DIR:-"$PWD/smatch_data"}
++    if [ ! -d "$DATA_DIR" ]; then
++        cp -a "$SCRIPT_DIR/../smatch_data" "$DATA_DIR"
++    fi
++    export SMATCH_DATA_DIR="$DATA_DIR"
+ else
+     echo "This script should be located in the smatch_scripts/ subdirectory of the smatch source."
+     echo "It should be run from the root of a kernel source tree."
+@@ -30,7 +33,7 @@
+ # required packages are installed
+ if [ ! -e smatch_db.sqlite ] ; then
+     [ -e smatch_warns.txt ] || touch smatch_warns.txt
+-    if ! $DATA_DIR/db/create_db.sh -p=kernel smatch_warns.txt ; then
++    if ! "$SCRIPT_DIR/../smatch_data/db/create_db.sh" -p=kernel smatch_warns.txt ; then
+         echo "Hm... Not working.  Make sure you have all the sqlite3 packages"
+         echo "And the sqlite3 libraries for Perl and Python"
+         exit 1
+@@ -38,18 +41,18 @@
+ fi
+ 
+ BUILD_STATUS=0
+-$SCRIPT_DIR/test_kernel.sh --call-tree --info --spammy --data=$DATA_DIR || BUILD_STATUS=$?
++"$SCRIPT_DIR/test_kernel.sh" --call-tree --info --spammy --data="$DATA_DIR" || BUILD_STATUS=$?
+ echo "smatch_warns.txt built."
+ 
+-for i in $SCRIPT_DIR/gen_* ; do
+-	$i smatch_warns.txt -p=kernel
++for i in "$SCRIPT_DIR"/gen_* ; do
++	"$i" smatch_warns.txt -p=kernel
+ done
+ 
+ for data_file in ${PROJECT}.* ; do
+     TO=$(echo $data_file | sed -e "s/${PROJECT}.//")
+-    mv $data_file $DATA_DIR/$PROJECT/$TO
++    mv "$data_file" "$DATA_DIR/$PROJECT/$TO"
+ done
+ 
+-$DATA_DIR/db/create_db.sh -p=kernel smatch_warns.txt
++"$SCRIPT_DIR/../smatch_data/db/create_db.sh" -p=kernel smatch_warns.txt
+ 
+ exit $BUILD_STATUS
+--- a/smatch_scripts/test_kernel.sh
++++ b/smatch_scripts/test_kernel.sh
+@@ -52,10 +52,9 @@
+ [ -z "${SMATCH_ENV_TARGET:-}" ] || TARGET="$SMATCH_ENV_TARGET"
+ [ -z "${SMATCH_ENV_BUILD_PARAM:-}" ] || BUILD_PARAM="$SMATCH_ENV_BUILD_PARAM"
+ 
+-SCRIPT_DIR=$(dirname $0)
+-if [ -e $SCRIPT_DIR/../smatch ] ; then
+-    cp $SCRIPT_DIR/../smatch $SCRIPT_DIR/../bak.smatch
+-    CMD=$SCRIPT_DIR/../bak.smatch
++SCRIPT_DIR=$(cd -- "$(dirname -- "$0")" && pwd)
++if [ -x "$SCRIPT_DIR/../smatch" ] ; then
++    CMD=$SCRIPT_DIR/../smatch
+ elif which smatch | grep smatch > /dev/null ; then
+     CMD=smatch
+ else
+--- a/smatch_data/db/create_db.sh
++++ b/smatch_data/db/create_db.sh
+@@ -20,6 +20,11 @@
+ fi
+ 
+ bin_dir=$(dirname $0)
++data_dir=${SMATCH_DATA_DIR:-"$PWD/smatch_data"}
++if [ ! -d "$data_dir" ]; then
++    cp -a "$bin_dir/.." "$data_dir"
++fi
++export SMATCH_DATA_DIR="$data_dir"
+ db_file=smatch_db.sqlite.new
+ 
+ rm -f $db_file
+--- a/smatch_data/db/fill_db_caller_info.pl
++++ b/smatch_data/db/fill_db_caller_info.pl
+@@ -3,6 +3,7 @@
+ use strict;
+ use DBI;
+ use Scalar::Util qw(looks_like_number);
++use File::Path qw(make_path);
+ 
+ sub usage()
+ {
+@@ -29,7 +30,9 @@
+ 
+     close(FUNCS);
+ 
+-    open(FILE, ">", "$path/../$project/common_functions");
++    my $data_dir = $ENV{SMATCH_DATA_DIR} // "smatch_data";
++    make_path("$data_dir/$project");
++    open(FILE, ">", "$data_dir/$project/common_functions") or die $!;
+     foreach my $func (keys %too_common_funcs) {
+         if ($func =~ / /) {
+             next;

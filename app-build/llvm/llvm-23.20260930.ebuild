@@ -1,15 +1,15 @@
 # Distributed under the terms of the GNU General Public License v2
 
 BRANCH_NAME="release/$(ver_cut 1).x"
+SNAPSHOT=21ef2ddb806006eba611b8a769ae72e5f86f9418
+EGIT_REPO_URI="https://github.com/llvm/llvm-project.git"
+EGIT_COMMIT="${SNAPSHOT}"
 
-inherit cmake flag-o-matic qa-policy toolchain-funcs
+inherit cmake flag-o-matic git-snapshot qa-policy toolchain-funcs
 
 DESCRIPTION="Low Level Virtual Machine"
 HOMEPAGE="https://llvm.org/"
-SNAPSHOT=21ef2ddb806006eba611b8a769ae72e5f86f9418
-
-SRC_URI="https://github.com/llvm/llvm-project/archive/${SNAPSHOT}.tar.gz -> llvm-${SNAPSHOT}.tar.gz"
-S="${WORKDIR}/llvm-project-${SNAPSHOT}/llvm"
+S="${WORKDIR}/git-source/llvm"
 
 LICENSE="Apache-2.0-with-LLVM-exceptions UoI-NCSA rc BSD public-domain"
 SLOT=0
@@ -36,7 +36,7 @@ COMMON_DEPEND="
 
 RDEPEND="${COMMON_DEPEND}"
 DEPEND="${COMMON_DEPEND}"
-BDEPEND="
+BDEPEND+="
 	app-lang/python
 	lldb? ( app-lang/swig )
 "

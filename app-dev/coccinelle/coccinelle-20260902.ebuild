@@ -23,6 +23,8 @@ BDEPEND="
 
 PATCHES=(
 	"${FILESDIR}/${PN}-stdcompat-ocaml-5.4.patch"
+	"${FILESDIR}/${PN}-stdcompat-ocaml-5.5.patch"
+	"${FILESDIR}/${PN}-stdcompat-ocaml-5.6.patch"
 )
 
 src_prepare() {

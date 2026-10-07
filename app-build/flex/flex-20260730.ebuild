@@ -26,6 +26,7 @@ BDEPEND="
 
 PATCHES=(
 	"${FILESDIR}/bootstrap-compare-dependency.patch"
+	"${FILESDIR}/header-section-three.patch"
 )
 
 src_prepare() {

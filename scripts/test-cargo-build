@@ -1,0 +1,88 @@
+#!/usr/bin/env python3
+"""Check Cargo target selection and profile paths with an offline workspace."""
+
+from pathlib import Path
+import subprocess
+import tempfile
+
+repo = Path(__file__).resolve().parents[1]
+shell = """
+    set -e
+    inherit() { :; }
+    EXPORT_FUNCTIONS() { :; }
+    die() { printf '%s\\n' "$*" >&2; exit 1; }
+    einfo() { printf '%s\\n' "$*" >&2; }
+    makeopts_jobs() { printf '1\\n'; }
+    PROFILE=$3
+    use() { [[ $1 == debug && $PROFILE == debug ]]; }
+    WORKDIR=$2/work
+    source "$1/eclass/cargo.eclass"
+    cd "$2"
+    cargo_src_compile -p "$4"
+    printf '%s\\n' "$(cargo_target_dir)"
+"""
+
+with tempfile.TemporaryDirectory(prefix="bp-cargo-build.") as directory:
+    root = Path(directory)
+    for profile, custom in (("release", False), ("debug", False), ("debug", True)):
+        workspace = root / (profile + ("-custom" if custom else ""))
+        workspace.mkdir()
+        (workspace / "Cargo.toml").write_text(
+            '[workspace]\nmembers = ["selected", "other"]\nresolver = "2"\n'
+        )
+        for name in ("selected", "other"):
+            package = workspace / name
+            (package / "src").mkdir(parents=True)
+            (package / "Cargo.toml").write_text(
+                f'[package]\nname = "fixture-{name}"\n'
+                'version = "0.1.0"\nedition = "2021"\n'
+            )
+            (package / "src/main.rs").write_text("fn main() {}\n")
+        home = workspace / "home"
+        home.mkdir()
+        env = {
+            "PATH": "/usr/bin:/bin",
+            "LC_ALL": "C",
+            "HOME": str(home),
+            "CARGO_NET_OFFLINE": "true",
+        }
+        target = workspace / ("custom target" if custom else "target")
+        if custom:
+            env["CARGO_TARGET_DIR"] = str(target)
+        command = [
+            "bash",
+            "-c",
+            shell,
+            "test-cargo-build",
+            str(repo),
+            str(workspace),
+            profile,
+            "fixture-selected",
+        ]
+        result = subprocess.run(
+            command,
+            env=env,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+            timeout=30,
+            check=True,
+        )
+        expected = str(target / profile) if custom else "target/" + profile
+        assert result.stdout.strip() == expected, result.stdout
+        assert (target / profile / "fixture-selected").is_file(), result.stderr
+        assert not (
+            target / profile / "fixture-other"
+        ).exists(), "cargo_src_compile drops the selected package"
+    command[-1] = "fixture-missing"
+    failed = subprocess.run(
+        command,
+        env=env,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+        timeout=30,
+    )
+    assert failed.returncode != 0, "missing selected package is ignored"
+    assert "cargo build failed" in failed.stderr, failed.stderr
+print("PASS: selected package, release/debug/custom paths and Cargo errors")

@@ -4,7 +4,7 @@ inherit autotools flag-o-matic
 
 DESCRIPTION="display bandwidth usage on an interface"
 HOMEPAGE="http://www.ex-parrot.com/pdw/iftop/"
-SRC_URI="http://www.ex-parrot.com/pdw/iftop/download/${P/_/}.tar.gz"
+SRC_URI="https://www.ex-parrot.com/pdw/iftop/download/${P/_/}.tar.gz"
 S="${WORKDIR}"/${P/_/}
 
 LICENSE="GPL-2"

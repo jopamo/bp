@@ -188,6 +188,7 @@ if [[ -z ${_CARGO_VENDOR_ECLASS} ]]; then
 		cargo_env cargo build \
 			"${build_mode[@]}" \
 			"${common_args[@]}" \
+			"${@}" \
 			|| die "cargo build failed"
 	}
 

@@ -4,7 +4,7 @@ inherit flag-o-matic qa-policy toolchain-funcs
 
 DESCRIPTION="Uncompress rar files"
 HOMEPAGE="http://www.rarlab.com/rar_add.htm"
-SRC_URI="http://www.rarlab.com/rar/${PN}src-${PV}.tar.gz -> ${P}.tar.gz"
+SRC_URI="https://www.rarlab.com/rar/${PN}src-${PV}.tar.gz -> ${P}.tar.gz"
 
 LICENSE="unRAR"
 S=${WORKDIR}/unrar

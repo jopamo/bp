@@ -4,7 +4,7 @@ inherit flag-o-matic qa-policy
 
 DESCRIPTION="S-Lang interpreter and terminal UI library (embedded scripting, curses-like widgets)"
 HOMEPAGE="http://www.jedsoft.org/slang/"
-SRC_URI="http://www.jedsoft.org/releases/${PN}/${P}.tar.bz2"
+SRC_URI="https://www.jedsoft.org/releases/${PN}/${P}.tar.bz2"
 
 LICENSE="GPL-2"
 SLOT="0"

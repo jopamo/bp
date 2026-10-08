@@ -24,6 +24,7 @@ DEPEND="
 	virtual/linux-sources
 	lib-net/libbpf
 	lib-net/libmnl
+	lib-net/libtirpc
 	caps? ( lib-core/libcap )
 	elf? ( virtual/libelf )
 	iptables? ( app-net/iptables )

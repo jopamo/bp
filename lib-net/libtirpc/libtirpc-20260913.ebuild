@@ -29,6 +29,7 @@ src_configure() {
 	local myconf=(
 		$(use_enable ipv6)
 		$(use_enable static-libs static)
+		$(use_enable elibc_musl rpcdb)
 		--disable-gssapi
 	)
 	ECONF_SOURCE=${S} econf ${myconf[@]}

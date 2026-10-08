@@ -1,4 +1,4 @@
-cpan		http://cpan.metacpan.org http://search.cpan.org/CPAN http://www.cpan.org
+cpan		https://cpan.metacpan.org
 debian		http://http.debian.net/debian/
 gentoo		https://gentoo.osuosl.org/distfiles/
 github		https://github.com/downloads

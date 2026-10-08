@@ -16,6 +16,10 @@ SLOT=0
 KEYWORDS="amd64 arm64"
 
 IUSE="amdgpu +assertions bootstrap +bolt +clang-tools-extra bpf cuda debug libcxx libcxxabi +libfuzzer +lldb lto nvptx orc +polly sanitizers static_analyzer -sysclang syslibcxxabi test wasm xcore +z3"
+REQUIRED_USE="
+	libcxx? ( || ( libcxxabi syslibcxxabi ) )
+	syslibcxxabi? ( libcxx )
+"
 
 COMMON_DEPEND="
 	app-net/curl
@@ -29,7 +33,8 @@ COMMON_DEPEND="
 	bolt? ( virtual/libelf )
 	lldb? (
 		app-compression/xz-utils
-		app-lang/lua
+		app-lang/lua:5.4=
+		app-lang/python:=
 	)
 	z3? ( lib-misc/z3 )
 "
@@ -38,7 +43,15 @@ RDEPEND="${COMMON_DEPEND}"
 DEPEND="${COMMON_DEPEND}"
 BDEPEND+="
 	app-lang/python
-	lldb? ( app-lang/swig )
+	lldb? ( >=app-lang/swig-4 )
+	test? (
+		dev-pypi/psutil
+		lldb? (
+			app-crypto/vesk
+			dev-pypi/packaging
+			dev-pypi/pexpect
+		)
+	)
 "
 
 RESTRICT="!test? ( test )"
@@ -51,11 +64,7 @@ PATCHES=(
 )
 
 _llvm_get_tuple() {
-	if command -v gcc >/dev/null 2>&1; then
-		gcc -dumpmachine
-	else
-		clang --print-target-triple
-	fi
+	printf '%s\n' "${CHOST}"
 }
 
 _llvm_make_tool_wrapper() {
@@ -108,9 +117,11 @@ _llvm_cxx_link_usable() {
 	local -a flags=( ${CPPFLAGS} ${CXXFLAGS} ${LDFLAGS} )
 	local src="${T}/llvm-link-smoke.cpp"
 
-	printf '%s\n' 'int main() { return 0; }' > "${src}" || die
+	printf '%s\n' '#include <string>' \
+		'int main(int argc, char **argv) { return std::string(argv[argc - 1]).empty(); }' \
+		> "${src}" || die
 	"${cxx_cmd[@]}" "${flags[@]}" "${src}" "$@" \
-		-o "${T}/llvm-link-smoke" >/dev/null 2>&1
+		-o "${T}/llvm-link-smoke" > "${T}/llvm-link-smoke.log" 2>&1
 }
 
 _llvm_export_gcc_fallback() {
@@ -162,6 +173,12 @@ src_prepare() {
         tools/llvm-mc-assemble-fuzzer/llvm-mc-assemble-fuzzer.cpp || die
 
     cmake_src_prepare
+
+    pushd "${S}/.." >/dev/null || die
+    eapply "${FILESDIR}/lldb-check-lua.patch"
+    eapply "${FILESDIR}/lldb-vesk-tests.patch"
+    eapply "${FILESDIR}/compiler-rt-selected-tests.patch"
+    popd >/dev/null || die
 
     sed -i \
         '/#include <string>/a #include <cstdint>' \
@@ -343,6 +360,7 @@ src_configure() {
 		-DCOMPILER_RT_BUILD_PROFILE=ON
 		-DCOMPILER_RT_BUILD_SANITIZERS=$(usex sanitizers)
 		-DCOMPILER_RT_BUILD_XRAY=OFF
+		-DCOMPILER_RT_INCLUDE_TESTS=$(usex test)
 		-DCOMPILER_RT_USE_LIBEXECINFO=OFF
 		-DCOMPILER_RT_USE_LLVM_UNWINDER=ON
 		-DENABLE_LINKER_BUILD_ID=ON
@@ -404,100 +422,9 @@ src_configure() {
 		)
 	fi
 
-	local bootstrap_passthrough=(
-		CMAKE_INSTALL_PREFIX
-		CMAKE_INSTALL_LIBDIR
-		CMAKE_VERBOSE_MAKEFILE
-		CLANG_DEFAULT_LINKER
-		CLANG_DEFAULT_RTLIB
-		CLANG_DEFAULT_UNWINDLIB
-		COMPILER_RT_BUILD_LIBFUZZER
-		COMPILER_RT_BUILD_PROFILE
-		COMPILER_RT_BUILD_SANITIZERS
-		COMPILER_RT_DEFAULT_TARGET_ONLY
-		COMPILER_RT_DEFAULT_TARGET_TRIPLE
-		COMPILER_RT_SANITIZERS_TO_BUILD
-		LLVM_BUILD_TOOLS
-		LLVM_ENABLE_ASSERTIONS
-		LLVM_ENABLE_CURL
-		LLVM_ENABLE_EH
-		LLVM_ENABLE_LIBEDIT
-		LLVM_ENABLE_LIBPFM
-		LLVM_ENABLE_LIBXML2
-		LLVM_ENABLE_PER_TARGET_RUNTIME_DIR
-		LLVM_ENABLE_PIC
-		LLVM_ENABLE_RTTI
-		LLVM_ENABLE_TERMINFO
-		LLVM_ENABLE_THREADS
-		LLVM_ENABLE_Z3_SOLVER
-		LLVM_ENABLE_ZLIB
-		LLVM_ENABLE_ZSTD
-		LLVM_INSTALL_UTILS
-		LLVM_TARGETS_TO_BUILD
-		RUNTIMES_CMAKE_ARGS
-	)
-
-	if use lldb; then
-		bootstrap_passthrough+=(
-			LLDB_ENABLE_CURSES
-			LLDB_ENABLE_LIBEDIT
-			LLDB_ENABLE_LIBXML2
-			LLDB_ENABLE_LUA
-			LLDB_ENABLE_LZMA
-			LLDB_ENABLE_PYTHON
-			LLDB_ENABLE_SWIG
-		)
-	fi
-
-	if use elibc_musl; then
-		bootstrap_passthrough+=(
-			HAVE_MALLINFO
-			HAVE_MALLINFO2
-		)
-	fi
-
-	if use syslibcxxabi; then
-		bootstrap_passthrough+=(
-			CLANG_DEFAULT_CXX_STDLIB
-			CLANG_DEFAULT_RTLIB
-			CLANG_DEFAULT_UNWINDLIB
-			COMPILER_RT_CXX_LIBRARY
-			COMPILER_RT_USE_BUILTINS_LIBRARY
-			COMPILER_RT_USE_LLVM_UNWINDER
-			SANITIZER_CXX_ABI
-			SANITIZER_TEST_CXX
-			LIBCXXABI_ENABLE_SHARED
-			LIBCXXABI_ENABLE_STATIC
-			LIBCXXABI_ENABLE_STATIC_UNWINDER
-			LIBCXXABI_INCLUDE_TESTS
-			LIBCXXABI_LIBUNWIND_INCLUDES
-			LIBCXXABI_USE_COMPILER_RT
-			LIBCXXABI_USE_LLVM_UNWINDER
-			LIBCXX_HAS_ATOMIC_LIB
-			LIBCXX_CXX_ABI
-			LIBCXX_CXX_ABI_INCLUDE_PATHS
-			LIBCXX_CXX_ABI_LIBRARY_PATH
-			LIBCXX_ENABLE_LOCALIZATION
-			LIBCXX_ENABLE_NEW_DELETE_DEFINITIONS
-			LIBCXX_ENABLE_STATIC_ABI_LIBRARY
-			LIBCXX_USE_COMPILER_RT
-			LIBCXX_HARDENING_MODE
-			LIBCXX_HAS_MUSL_LIBC
-			LIBCXX_INCLUDE_BENCHMARKS
-			LIBCXX_INCLUDE_TESTS
-			LIBUNWIND_USE_COMPILER_RT
-			LLVM_ENABLE_LIBCXX
-		)
-	fi
-
-	local bootstrap_passthrough_string=$(printf '%s;' "${bootstrap_passthrough[@]}")
-	bootstrap_passthrough_string=${bootstrap_passthrough_string%;}
-
 	local bootstrap=(
-		-DBOOTSTRAP_BOOTSTRAP_LLVM_ENABLE_LLD=ON
 		-DBOOTSTRAP_LLVM_ENABLE_LLD=ON
 		-DBOOTSTRAP_LLVM_ENABLE_LTO=$(usex lto ON Off)
-		-DCLANG_BOOTSTRAP_PASSTHROUGH=${bootstrap_passthrough_string}
 		-DCLANG_ENABLE_BOOTSTRAP=ON
 	)
 
@@ -571,11 +498,6 @@ src_configure() {
 
 	mycmakeargs+=( -DLLVM_ENABLE_LTO=${llvm_lto_mode} )
 
-	if [[ ${#runtimes_cmake_args[@]} -gt 0 ]]; then
-		local runtimes_cmake_args_string=$(printf '%s;' "${runtimes_cmake_args[@]}")
-		mycmakeargs+=( -DRUNTIMES_CMAKE_ARGS="${runtimes_cmake_args_string%;}" )
-	fi
-
 	if (( sysclang_requested )); then
 		mycmakeargs+=("${sysclang[@]}")
 	fi
@@ -605,10 +527,40 @@ src_configure() {
 			-DLLDB_ENABLE_LZMA=ON
 			-DLLDB_ENABLE_PYTHON=ON
 			-DLLDB_ENABLE_SWIG=ON
+			-DLLDB_ENABLE_TREESITTER=OFF
+			-DLLDB_INCLUDE_TESTS=$(usex test)
+			-DLLDB_ENFORCE_STRICT_TEST_REQUIREMENTS=$(usex test)
 		)
 	fi
 
 	if use bootstrap; then
+		local arg name
+		local bootstrap_passthrough=(
+			CMAKE_VERBOSE_MAKEFILE
+			CMAKE_USER_MAKE_RULES_OVERRIDE
+			CMAKE_C_FLAGS
+			CMAKE_CXX_FLAGS
+			CMAKE_ASM_FLAGS
+			CMAKE_C_FLAGS_${CMAKE_BUILD_TYPE^^}
+			CMAKE_CXX_FLAGS_${CMAKE_BUILD_TYPE^^}
+			CMAKE_ASM_FLAGS_${CMAKE_BUILD_TYPE^^}
+			CMAKE_EXE_LINKER_FLAGS
+			CMAKE_MODULE_LINKER_FLAGS
+			CMAKE_SHARED_LINKER_FLAGS
+			RUNTIMES_CMAKE_ARGS
+		)
+		for arg in "${mycmakeargs[@]}"; do
+			name=${arg#-D}
+			name=${name%%=*}
+			case ${name} in
+				CMAKE_C_COMPILER|CMAKE_CXX_COMPILER|CMAKE_ASM_COMPILER|LLVM_USE_LINKER)
+					continue
+					;;
+			esac
+			bootstrap_passthrough+=( "${name}" )
+		done
+		local bootstrap_passthrough_string=$(printf '%s;' "${bootstrap_passthrough[@]}")
+		mycmakeargs+=( "-DCLANG_BOOTSTRAP_PASSTHROUGH=${bootstrap_passthrough_string%;}" )
 		use syslibcxxabi && mycmakeargs+=( -DBOOTSTRAP_LLVM_ENABLE_LIBCXX=ON )
 		mycmakeargs+=("${bootstrap[@]}")
 	fi
@@ -617,6 +569,28 @@ src_configure() {
 
 	local QA_POLICY_LTO_CONFIGURE=0
 	qa-policy-configure
+
+	runtimes_cmake_args+=(
+		"-DCMAKE_C_FLAGS=${CFLAGS} ${CPPFLAGS}"
+		"-DCMAKE_CXX_FLAGS=${CXXFLAGS} ${CPPFLAGS}"
+		"-DCMAKE_ASM_FLAGS=${CFLAGS} ${CPPFLAGS}"
+		-DCMAKE_C_FLAGS_${CMAKE_BUILD_TYPE^^}=
+		-DCMAKE_CXX_FLAGS_${CMAKE_BUILD_TYPE^^}=
+		-DCMAKE_ASM_FLAGS_${CMAKE_BUILD_TYPE^^}=
+	)
+	local runtimes_cmake_args_string=$(printf '%s;' "${runtimes_cmake_args[@]}")
+	mycmakeargs+=( -DRUNTIMES_CMAKE_ARGS="${runtimes_cmake_args_string%;}" )
+
+	local link_probe_args=( "--target=${TUPLE}" -fuse-ld=lld )
+	if use syslibcxxabi; then
+		link_probe_args+=( -stdlib=libc++ -rtlib=compiler-rt -unwindlib=libunwind )
+	fi
+	if ! _llvm_cxx_link_usable "${link_probe_args[@]}"; then
+		cat "${T}/llvm-link-smoke.log" >&2
+		die "The selected LLVM C++ runtime stack cannot compile and link <string>"
+	fi
+
+	_llvm_runtimes_preflight "${runtimes_cmake_args[@]}"
 
 	if use libcxx && use syslibcxxabi && [[ -d ${BUILD_DIR}/runtimes ]]; then
 		# libc++ can cache a stale positive libatomic probe here and keep
@@ -630,7 +604,39 @@ src_configure() {
 		|| die "LLVM did not detect libpfm; llvm-exegesis would lack hardware counter support"
 }
 
-src_compile() {
+_llvm_runtimes_preflight() {
+	local arg generator
+	case ${CMAKE_MAKEFILE_GENERATOR} in
+		ninja) generator=Ninja ;;
+		emake) generator="Unix Makefiles" ;;
+		*) die "Unsupported CMake generator: ${CMAKE_MAKEFILE_GENERATOR}" ;;
+	esac
+	local runtime_args=(
+		-DCMAKE_BUILD_TYPE="${CMAKE_BUILD_TYPE}"
+		-DCMAKE_C_FLAGS="${CFLAGS} ${CPPFLAGS}"
+		-DCMAKE_CXX_FLAGS="${CXXFLAGS} ${CPPFLAGS}"
+		-DCMAKE_EXE_LINKER_FLAGS="${LDFLAGS}"
+		-DCMAKE_SHARED_LINKER_FLAGS="${LDFLAGS}"
+		-DCMAKE_MODULE_LINKER_FLAGS="${LDFLAGS}"
+		# External builtins source manifests do not exist before stage one.
+		-DCOMPILER_RT_BUILD_BUILTINS=ON
+		-DCOMPILER_RT_TEST_EXTERNAL_BUILTINS=OFF
+	)
+	for arg in "${mycmakeargs[@]}"; do
+		case ${arg} in
+			-DCMAKE_*|-DCOMPILER_RT_*|-DSANITIZER_*|-DLIBCXX*|-DLIBUNWIND_*|\
+			-DLLVM_ENABLE_RUNTIMES=*|-DLLVM_INCLUDE_TESTS=*|\
+			-DLLVM_ENABLE_PER_TARGET_RUNTIME_DIR=*|-DLLVM_DEFAULT_TARGET_TRIPLE=*)
+				runtime_args+=( "${arg}" )
+				;;
+		esac
+	done
+	"${CMAKE_BINARY}" -G "${generator}" -S "${S}/../runtimes" \
+		-B "${T}/llvm-runtimes-preflight" "${runtime_args[@]}" "$@" \
+		|| die "LLVM runtime configuration failed before compiler build"
+}
+
+_llvm_generate_cxx_headers() {
 	if use libcxx && use syslibcxxabi; then
 		_cmake_check_build_dir
 		# compiler-rt can start before libc++ has copied its generated headers
@@ -644,16 +650,31 @@ src_compile() {
 		"${CMAKE_BINARY}" --build "${runtimes_build_dir}" --target generate-cxx-headers \
 			|| die "Failed to generate libc++ headers for compiler-rt"
 	fi
+}
 
+src_compile() {
+	_llvm_generate_cxx_headers
+
+	if use bootstrap; then
+		cmake_build stage2-configure
+		local BUILD_DIR="${BUILD_DIR}/tools/clang/stage2-bins"
+		_llvm_generate_cxx_headers
+	fi
 	cmake_src_compile
 }
 
 src_test() {
     local -x LIT_PRESERVES_TMP=1
-    cmake_src_make check
+    if use bootstrap; then
+        local BUILD_DIR="${BUILD_DIR}/tools/clang/stage2-bins"
+    fi
+    cmake_build check-all
 }
 
 src_install() {
+    if use bootstrap; then
+        local BUILD_DIR="${BUILD_DIR}/tools/clang/stage2-bins"
+    fi
     cmake_src_install
 
 	: "${TUPLE:=$(_llvm_get_tuple)}"

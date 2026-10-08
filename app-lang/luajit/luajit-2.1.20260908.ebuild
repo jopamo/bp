@@ -55,6 +55,5 @@ src_install(){
 	ln -fs libluajit-5.1.so.$(ver_cut 1-2) libluajit-5.1.so.2 || die
 
 	dosym -r /usr/include/luajit-2.1/luajit.h /usr/include/luajit.h
-	dosym -r /usr/include/luajit-2.1/lua.hpp /usr/include/lua.hpp
 	qa-policy-install
 }

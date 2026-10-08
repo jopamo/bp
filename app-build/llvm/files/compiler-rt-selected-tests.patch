@@ -1,0 +1,16 @@
+--- a/compiler-rt/test/CMakeLists.txt
++++ b/compiler-rt/test/CMakeLists.txt
+@@ -1,5 +1,13 @@
+ # Needed for lit support in standalone builds.
+ include(AddLLVM)
+ 
++# Platform support does not imply that this build includes the runtime.
++foreach(sanitizer IN LISTS ALL_SANITIZERS)
++  if(NOT sanitizer IN_LIST COMPILER_RT_SANITIZERS_TO_BUILD)
++    string(TOUPPER "${sanitizer}" sanitizer_upper)
++    set(COMPILER_RT_HAS_${sanitizer_upper} FALSE)
++  endif()
++endforeach()
++
+ pythonize_bool(COMPILER_RT_TEST_STANDALONE_BUILD_LIBS)
+ 

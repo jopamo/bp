@@ -1,0 +1,126 @@
+--- a/lldb/test/API/symstore/TestSymStore.py
++++ b/lldb/test/API/symstore/TestSymStore.py
+@@ -1,10 +1,10 @@
+-import datetime
++import hashlib
+ import http.server
+-import ipaddress
+ import os
+ import shutil
+ import socketserver
+ import ssl
++import subprocess
+ import sys
+ import threading
+ import time
+@@ -168,47 +168,28 @@
+     """
+ 
+     def __init__(self, tmpdir):
+-        from cryptography import x509
+-        from cryptography.x509.oid import NameOID
+-        from cryptography.hazmat.primitives import hashes, serialization
+-        from cryptography.hazmat.primitives.asymmetric import rsa
+-
+-        key = rsa.generate_private_key(public_exponent=65537, key_size=2048)
+-        name = x509.Name([x509.NameAttribute(NameOID.COMMON_NAME, "localhost")])
+-        now = datetime.datetime.now(datetime.timezone.utc)
+-        cert = (
+-            x509.CertificateBuilder()
+-            .subject_name(name)
+-            .issuer_name(name)
+-            .public_key(key.public_key())
+-            .serial_number(x509.random_serial_number())
+-            .not_valid_before(now)
+-            .not_valid_after(now + datetime.timedelta(days=1))
+-            .add_extension(
+-                x509.SubjectAlternativeName(
+-                    [
+-                        x509.DNSName("localhost"),
+-                        x509.IPAddress(ipaddress.IPv4Address("127.0.0.1")),
+-                    ]
+-                ),
+-                critical=False,
+-            )
+-            .sign(key, hashes.SHA256())
+-        )
+         os.makedirs(tmpdir, exist_ok=False)
+         self.key_file = os.path.join(tmpdir, "server.key")
+         self.file = os.path.join(tmpdir, "server.crt")
+-        with open(self.key_file, "wb") as f:
+-            f.write(
+-                key.private_bytes(
+-                    serialization.Encoding.PEM,
+-                    serialization.PrivateFormat.TraditionalOpenSSL,
+-                    serialization.NoEncryption(),
+-                )
+-            )
+-        with open(self.file, "wb") as f:
+-            f.write(cert.public_bytes(serialization.Encoding.PEM))
+-        self.fingerprint = cert.fingerprint(hashes.SHA256()).hex()
++        config_file = os.path.join(tmpdir, "openssl.cnf")
++        with open(config_file, "w", encoding="ascii") as config:
++            config.write("[req]\ndistinguished_name = dn\n[dn]\n")
++        subprocess.run(
++            [
++                "openssl", "req", "-new", "-x509", "-newkey", "rsa:2048",
++                "-nodes", "-sha256", "-days", "1", "-subj", "/CN=localhost",
++                "-addext", "subjectAltName=DNS:localhost,IP:127.0.0.1",
++                "-config", config_file, "-keyout", self.key_file,
++                "-out", self.file,
++            ],
++            check=True,
++            stdin=subprocess.DEVNULL,
++            stdout=subprocess.PIPE,
++            stderr=subprocess.PIPE,
++        )
++        with open(self.file, encoding="ascii") as cert:
++            der = ssl.PEM_cert_to_DER_cert(cert.read())
++        self.fingerprint = hashlib.sha256(der).hexdigest()
+ 
+ 
+ class RedirectHandler(http.server.BaseHTTPRequestHandler):
+@@ -464,7 +445,6 @@
+                     warnings = err_file.read().decode()
+                 self.assertIn("failed to download", warnings)
+ 
+-    @skipUnlessPackageAvailable("cryptography")
+     def test_https(self):
+         """
+         Check that breakpoint resolves with remote SymStore via HTTPS.
+@@ -482,7 +462,6 @@
+                 )
+                 self.try_breakpoint(exe, should_have_loc=True)
+ 
+-    @skipUnlessPackageAvailable("cryptography")
+     def test_https_reject_selfsigned_cert(self):
+         """
+         Check that LLDB rejects an HTTPS server with an untrusted self-signed cert.
+@@ -503,7 +482,6 @@
+                 )
+                 self.try_breakpoint(exe, should_have_loc=False)
+ 
+-    @skipUnlessPackageAvailable("cryptography")
+     def test_https_reject_redirect_http(self):
+         """
+         Check that LLDB does not retrieve symbols from servers that redirect with security downgrades.
+--- a/lldb/test/CMakeLists.txt
++++ b/lldb/test/CMakeLists.txt
+@@ -12,7 +12,7 @@
+ if(LLDB_ENFORCE_STRICT_TEST_REQUIREMENTS)
+   message(STATUS "Enforcing strict test requirements for LLDB")
+   # Lit uses psutil to do per-test timeouts.
+-  set(useful_python_modules psutil packaging cryptography)
++  set(useful_python_modules psutil packaging)
+ 
+   if(NOT WIN32)
+     # We no longer vendor pexpect and it is not used on Windows.
+--- a/lldb/test/requirements.txt
++++ b/lldb/test/requirements.txt
+@@ -7,5 +7,4 @@
+ packaging
+ # Required for python tests
+ swig>=4.0.0
+-# Required for SymStore HTTPS API tests
+-cryptography>=43.0.0
++# SymStore HTTPS API tests use the system openssl command.

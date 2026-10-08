@@ -1,0 +1,258 @@
+#!/bin/bash
+set -eu
+
+repo=$(cd -- "$(dirname -- "$0")/.." && pwd -P)
+fixture=$(mktemp -d "${TMPDIR:-/tmp}/bp-llvm-build.XXXXXX")
+trap 'rm -rf -- "${fixture}"' EXIT
+die() { printf '%s\n' "$*" >&2; exit 1; }
+inherit() { :; }
+ver_cut() { printf '23\n'; }
+use() { [[ " ${enabled} " == *" $1 "* ]]; }
+usex() { if use "$1"; then printf '%s\n' "${2:-ON}"; else printf '%s\n' "${3:-OFF}"; fi; }
+filter-clang() { :; }
+filter-lto() { :; }
+qa-policy-configure() { :; }
+CHOST=aarch64-unknown-linux-musl
+WORKDIR=${fixture}
+T=${fixture}
+EPREFIX=
+CPPFLAGS= CFLAGS= CXXFLAGS= LDFLAGS=
+BUILD_DIR=${fixture}/build
+CMAKE_MAKEFILE_GENERATOR=ninja
+CMAKE_BINARY=record_cmake
+record_cmake() { runtime_command=( "$@" ); }
+FILESDIR=${repo}/app-build/llvm/files
+ED=${fixture}/image/
+source "${repo}/app-build/llvm/llvm-23.20260930.ebuild"
+(
+	CXX=clang++
+	_llvm_cxx_link_usable || die "host C++ runtime cannot link <string>"
+	if _llvm_cxx_link_usable -nostdlib++; then
+		die "C++ runtime probe accepts a link without its standard library"
+	fi
+)
+_llvm_toolchain_usable() { return 0; }
+_llvm_cxx_link_usable() { return 0; }
+cmake_src_configure() {
+	args=( "${mycmakeargs[@]}" )
+	mkdir -p "${BUILD_DIR}/include/llvm/Config"
+	printf '#define HAVE_LIBPFM 1\n' > "${BUILD_DIR}/include/llvm/Config/config.h"
+}
+has_arg() {
+	local arg
+	for arg in "${args[@]}"; do [[ ${arg} == "$1" ]] && return 0; done
+	die "missing CMake argument: $1"
+}
+enabled='lldb bootstrap libcxx libcxxabi syslibcxxabi elibc_musl'
+CPPFLAGS=-DBP_LLVM_PROBE
+src_configure >/dev/null
+[[ ${runtime_command[1]} == Ninja ]] || die "runtime preflight changes the generator"
+for arg in '-DCOMPILER_RT_INCLUDE_TESTS=OFF' '-DCOMPILER_RT_BUILD_BUILTINS=ON' \
+	'-DCOMPILER_RT_TEST_EXTERNAL_BUILTINS=OFF' \
+	'-DCMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY' '-DLIBCXXABI_HAS_CXA_THREAD_ATEXIT_IMPL=OFF'; do
+	[[ " ${runtime_command[*]} " == *" ${arg} "* ]] || die "runtime preflight drops ${arg}"
+done
+[[ ${TUPLE} == "${CHOST}" ]] || die "host compiler changed the requested tuple"
+has_arg '-DLLDB_ENABLE_TREESITTER=OFF'
+has_arg '-DLLDB_INCLUDE_TESTS=OFF'
+has_arg '-DLLDB_ENFORCE_STRICT_TEST_REQUIREMENTS=OFF'
+has_arg '-DCOMPILER_RT_BUILD_ORC=OFF'
+has_arg '-DCOMPILER_RT_INCLUDE_TESTS=OFF'
+has_arg '-DCLANG_ENABLE_STATIC_ANALYZER=OFF'
+has_arg '-DCLANG_ENABLE_BOOTSTRAP=ON'
+pass=
+for arg in "${args[@]}"; do
+	[[ ${arg} == -DCLANG_BOOTSTRAP_PASSTHROUGH=* ]] && pass=${arg#*=}
+done
+for name in CMAKE_CXX_FLAGS CMAKE_CXX_FLAGS_RELEASE CMAKE_USER_MAKE_RULES_OVERRIDE \
+	CMAKE_EXE_LINKER_FLAGS COMPILER_RT_BUILD_ORC COMPILER_RT_BUILD_XRAY COMPILER_RT_INCLUDE_TESTS LLVM_ENABLE_FFI \
+	LLVM_LINK_LLVM_DYLIB LLVM_INCLUDE_TESTS CLANG_ENABLE_STATIC_ANALYZER \
+	LLDB_ENABLE_TREESITTER RUNTIMES_CMAKE_ARGS; do
+	[[ ";${pass};" == *";${name};"* ]] || die "bootstrap drops ${name}"
+done
+[[ " ${runtime_command[*]} " == *' -DCMAKE_CXX_FLAGS= -DBP_LLVM_PROBE -DNDEBUG '* ]] ||
+	die "runtime preflight drops CPPFLAGS"
+[[ " ${runtime_command[*]} " == *' -DCMAKE_CXX_FLAGS_RELEASE= '* ]] ||
+	die "runtime preflight restores CMake optimization defaults"
+[[ ";${pass};" != *';LLVM_USE_LINKER;'* ]] || die "bootstrap sets both linker options"
+[[ ";${pass};" != *';CMAKE_CXX_COMPILER;'* ]] || die "bootstrap keeps the host compiler"
+enabled='lldb test orc static_analyzer'
+CMAKE_MAKEFILE_GENERATOR=emake
+src_configure >/dev/null
+[[ ${runtime_command[1]} == "Unix Makefiles" ]] || die "runtime preflight ignores emake"
+[[ " ${runtime_command[*]} " == *' -DCOMPILER_RT_INCLUDE_TESTS=ON '* ]] ||
+	die "runtime preflight disables requested tests"
+has_arg '-DLLDB_INCLUDE_TESTS=ON'
+has_arg '-DLLDB_ENFORCE_STRICT_TEST_REQUIREMENTS=ON'
+has_arg '-DCOMPILER_RT_BUILD_ORC=ON'
+has_arg '-DCOMPILER_RT_INCLUDE_TESTS=ON'
+has_arg '-DCLANG_ENABLE_STATIC_ANALYZER=ON'
+enabled=
+src_configure >/dev/null
+has_arg '-DLLVM_ENABLE_PROJECTS=llvm;clang;lld'
+has_arg '-DLLVM_ENABLE_RUNTIMES=libunwind;compiler-rt'
+for arg in "${args[@]}"; do
+	case ${arg} in
+		-DLLDB_*|-DCLANG_ENABLE_BOOTSTRAP=*)
+			die "disabled project retains configuration: ${arg}"
+			;;
+	esac
+done
+
+calls=()
+_llvm_generate_cxx_headers() { calls+=( "headers:${BUILD_DIR}" ); }
+cmake_src_compile() { calls+=( "compile:${BUILD_DIR}" ); }
+cmake_build() { calls+=( "$*:${BUILD_DIR}" ); }
+enabled=bootstrap
+src_compile
+src_test
+stage2=${BUILD_DIR}/tools/clang/stage2-bins
+[[ ${calls[*]} == "headers:${BUILD_DIR} stage2-configure:${BUILD_DIR} headers:${stage2} compile:${stage2} check-all:${stage2}" ]] ||
+	die "incorrect bootstrap phase routing: ${calls[*]}"
+# Stop installation after observing the selected build directory.
+cmake_src_install() {
+	[[ ${BUILD_DIR} == "${stage2}" ]] || die "installation uses stage one"
+	exit 0
+}
+( src_install )
+calls=()
+enabled=
+src_compile
+src_test
+[[ ${calls[*]} == "headers:${BUILD_DIR} compile:${BUILD_DIR} check-all:${BUILD_DIR}" ]] ||
+	die "incorrect single-stage routing: ${calls[*]}"
+printf '%s\n' 'PASS: LLVM USE arguments, bootstrap passthrough, and phase routing'
+
+if [[ $# == 0 ]]; then exit 0; fi
+[[ $# == 2 ]] || die "usage: scripts/test-llvm-build [prepared-llvm-source-root lua-prefix]"
+source_root=$(cd -- "$1" && pwd -P)
+lua_prefix=$(cd -- "$2" && pwd -P)
+module=lldb/cmake/modules/FindLuaAndSwig.cmake
+mkdir -p "${fixture}/cmake/$(dirname -- "${module}")" "${fixture}/cmake/include"
+sed '/^if(LUAANDSWIG_FOUND)/,$d' "${source_root}/${module}" |
+	sed '${/^$/d;}' > "${fixture}/cmake/${module}"
+patch -s -p1 -d "${fixture}/cmake" < "${repo}/app-build/llvm/files/lldb-check-lua.patch"
+cp "${lua_prefix}/include/"{lua.h,luaconf.h,lauxlib.h,lualib.h,lua.hpp} "${fixture}/cmake/include/"
+cat > "${fixture}/cmake/CMakeLists.txt" <<'EOF'
+cmake_minimum_required(VERSION 3.20)
+project(LuaProbe LANGUAGES CXX)
+set(LLDB_ENABLE_SWIG ON)
+set(LUA_VERSION_MAJOR 5)
+set(LUA_VERSION_MINOR 4)
+set(CMAKE_REQUIRED_INCLUDES saved)
+set(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)
+include(lldb/cmake/modules/FindLuaAndSwig.cmake)
+if(NOT CMAKE_REQUIRED_INCLUDES STREQUAL "saved" OR
+   NOT CMAKE_TRY_COMPILE_TARGET_TYPE STREQUAL "STATIC_LIBRARY")
+  message(FATAL_ERROR "Lua probe changes caller state")
+endif()
+EOF
+configure() {
+	cmake -S "${fixture}/cmake" -B "${fixture}/cmake-build" \
+		"-DLUA_INCLUDE_DIR=${fixture}/cmake/include" \
+		"-DLUA_LIBRARIES=${lua_library}" > "${fixture}/probe.log" 2>&1
+}
+expect_failure() {
+	if configure; then die "Lua probe accepts $1"; fi
+	grep -q 'LLDB needs lua.hpp' "${fixture}/probe.log" || {
+		cat "${fixture}/probe.log" >&2
+		die "Lua probe fails for the wrong reason"
+	}
+}
+lua_library=${lua_prefix}/lib/liblua.so
+configure || { cat "${fixture}/probe.log" >&2; exit 1; }
+printf '\n#undef LUA_VERSION_NUM\n#define LUA_VERSION_NUM 501\n' >> "${fixture}/cmake/include/lua.hpp"
+expect_failure 'mismatched headers after a successful cached probe'
+cp "${lua_prefix}/include/lua.hpp" "${fixture}/cmake/include/"
+configure || { cat "${fixture}/probe.log" >&2; exit 1; }
+rm "${fixture}/cmake/include/lua.hpp"
+expect_failure 'a missing C++ wrapper'
+cp "${lua_prefix}/include/lua.hpp" "${fixture}/cmake/include/"
+printf 'int not_lua;\n' > "${fixture}/empty.cpp"
+"${CXX:-c++}" -c "${fixture}/empty.cpp" -o "${fixture}/empty.o"
+ar rcs "${fixture}/libempty.a" "${fixture}/empty.o"
+lua_library=${fixture}/libempty.a
+expect_failure 'a library without Lua symbols under compile-only caller settings'
+printf '%s\n' 'PASS: Lua compile/link probe, missing/mismatched inputs, cache refresh, and caller state'
+
+for path in lldb/test/API/symstore/TestSymStore.py lldb/test/CMakeLists.txt lldb/test/requirements.txt; do
+	mkdir -p "${fixture}/vesk/$(dirname -- "${path}")"
+	cp "${source_root}/${path}" "${fixture}/vesk/${path}"
+done
+vesk_patch=${repo}/app-build/llvm/files/lldb-vesk-tests.patch
+if ! patch -s --force -R --dry-run -p1 -d "${fixture}/vesk" < "${vesk_patch}" >/dev/null 2>&1; then
+	patch -s --force -p1 -d "${fixture}/vesk" < "${vesk_patch}"
+fi
+python3 - "${fixture}/vesk/lldb/test/API/symstore/TestSymStore.py" "${fixture}" <<'PY'
+import ast
+import hashlib
+import http.server
+import os
+from pathlib import Path
+import socket
+import socketserver
+import ssl
+import subprocess
+import sys
+import threading
+from functools import partial
+from urllib.parse import urlparse
+
+path = Path(sys.argv[1])
+source = path.read_text()
+assert "cryptography" not in source
+tree = ast.parse(source)
+tree.body = [
+    node for node in tree.body
+    if isinstance(node, ast.ClassDef) and node.name in {"SelfSignedCert", "HTTPSServer"}
+]
+assert len(tree.body) == 2
+namespace = dict(globals())
+exec(compile(tree, str(path), "exec"), namespace)
+cert = namespace["SelfSignedCert"](str(Path(sys.argv[2]) / "cert"))
+fingerprint = subprocess.check_output(
+    ["openssl", "x509", "-in", cert.file, "-noout", "-fingerprint", "-sha256"],
+    text=True,
+).strip().split("=", 1)[1].replace(":", "").lower()
+assert cert.fingerprint == fingerprint
+trusted = ssl.create_default_context(cafile=cert.file)
+untrusted = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
+webroot = Path(sys.argv[2]) / "www"
+webroot.mkdir()
+(webroot / "marker").write_bytes(b"vesk-lldb\n")
+with namespace["HTTPSServer"](dir=str(webroot), cert=cert) as url:
+    port = urlparse(url).port
+
+    def connect(context, hostname):
+        with socket.create_connection(("localhost", port), timeout=5) as raw:
+            with context.wrap_socket(raw, server_hostname=hostname) as client:
+                assert hashlib.sha256(client.getpeercert(binary_form=True)).hexdigest() == cert.fingerprint
+                client.sendall(b"GET /marker HTTP/1.0\r\nHost: localhost\r\n\r\n")
+                response = b""
+                while chunk := client.recv(4096):
+                    response += chunk
+                assert b"200 OK" in response and response.endswith(b"vesk-lldb\n")
+
+    connect(trusted, "localhost")
+    connect(trusted, "127.0.0.1")
+    curl = ["curl", "--disable", "--silent", "--show-error", "--fail", "--noproxy", "*", "--max-time", "5"]
+    response = subprocess.check_output(curl + ["--cacert", cert.file, url + "/marker"])
+    assert response == b"vesk-lldb\n"
+    for options, request_url in [
+        ([], url + "/marker"),
+        (["--cacert", cert.file, "--resolve", f"not-localhost:{port}:127.0.0.1"],
+         f"https://not-localhost:{port}/marker"),
+    ]:
+        rejected = subprocess.run(curl + options + [request_url], capture_output=True)
+        assert rejected.returncode == 60 and not rejected.stdout, rejected
+    for context, hostname in [(untrusted, "localhost"), (trusted, "not-localhost")]:
+        try:
+            connect(context, hostname)
+        except ssl.SSLCertVerificationError:
+            pass
+        else:
+            raise AssertionError("certificate verification accepts an invalid peer")
+    connect(trusted, "localhost")
+    assert trusted.check_hostname and trusted.verify_mode == ssl.CERT_REQUIRED
+print("PASS: Vesk certificate, DNS/IP SANs, fingerprint, Python/curl HTTPS, and rejection checks")
+PY

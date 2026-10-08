@@ -51,6 +51,7 @@ src_install() {
 	doins luaconf.h
 	doins lauxlib.h
 	doins lualib.h
+	doins "${FILESDIR}/lua.hpp"
 
 	qa-policy-install
 }

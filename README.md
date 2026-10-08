@@ -118,6 +118,33 @@ profile and USE settings. It does not test every USE combination, downloads,
 `pkg_pretend`, configuration, compilation, or installation. For those phases,
 use the unprivileged `scripts/test-ebuild` helper described in [HACKING.md](HACKING.md).
 
+## LLVM build checks
+
+LLVM configuration checks the selected C++ runtime link and configures the
+runtime dependency graph before compiling Clang. Runtime tests follow `USE=test`
+and reference only the selected sanitizer runtimes.
+Bootstrap builds the required stage-one targets, then builds, tests, and installs
+stage two. Both stages and the runtimes retain the package's compiler flags.
+
+Run `scripts/test-llvm-build` for isolated USE argument and bootstrap phase
+checks. To also check LLDB's Lua compile/link probe and Vesk-generated HTTPS
+test certificates, provide a prepared LLVM monorepo and a tested Lua install
+prefix. The latter checks require Vesk's `openssl` tool and curl:
+
+```sh
+scripts/test-llvm-build /path/to/work/git-source /path/to/test-root/usr
+```
+
+Lua installs `/usr/include/lua.hpp`. LuaJIT installs its wrapper only under
+`/usr/include/luajit-2.1`. On systems with the old LuaJIT-owned global symlink,
+rebuild LuaJIT before Lua, then rebuild LLVM.
+
+LLDB's SymStore HTTPS tests generate their localhost certificates with Vesk's
+`openssl` tool instead of the Python `cryptography` module. The certificates
+retain SHA-256 fingerprints and localhost DNS/IP SANs. Upstream LLDB implements
+the test certificate fingerprint override only on Windows; the focused native
+certificate checks do not replace the full LLDB API suite.
+
 ## Rust's LLVM runtime
 
 Source Rust packages copy the LLVM shared libraries named by their installed

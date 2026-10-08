@@ -1,0 +1,39 @@
+--- a/lldb/cmake/modules/FindLuaAndSwig.cmake
++++ b/lldb/cmake/modules/FindLuaAndSwig.cmake
+@@ -41,3 +41,36 @@
+                                       LUA_VERSION_MAJOR
+                                       LLDB_ENABLE_SWIG)
+ endif()
++
++if(LUAANDSWIG_FOUND)
++  function(lldb_check_lua)
++    if(NOT EXISTS "${LUA_INCLUDE_DIR}/lua.hpp")
++      message(FATAL_ERROR "LLDB needs lua.hpp in ${LUA_INCLUDE_DIR}; rebuild app-lang/lua")
++    endif()
++    include(CMakePushCheckState)
++    include(CheckCXXSourceCompiles)
++    cmake_push_check_state(RESET)
++    set(CMAKE_TRY_COMPILE_TARGET_TYPE EXECUTABLE)
++    set(CMAKE_REQUIRED_INCLUDES "${LUA_INCLUDE_DIR}")
++    set(CMAKE_REQUIRED_LIBRARIES "${LUA_LIBRARIES}")
++    unset(LLDB_LUA_HEADER_AND_LIBRARY_MATCH CACHE)
++    check_cxx_source_compiles("
++      #include <lua.hpp>
++      static_assert(LUA_VERSION_NUM == ${LUA_VERSION_MAJOR} * 100 + ${LUA_VERSION_MINOR},
++                    \"Lua C and C++ headers must have the same version\");
++      int main() {
++        lua_State *state = luaL_newstate();
++        luaL_openlibs(state);
++        lua_isinteger(state, -1);
++      #if LUA_VERSION_NUM >= 504
++        lua_newuserdatauv(state, 1, 0);
++      #endif
++        lua_close(state);
++      }" LLDB_LUA_HEADER_AND_LIBRARY_MATCH)
++    cmake_pop_check_state()
++    if(NOT LLDB_LUA_HEADER_AND_LIBRARY_MATCH)
++      message(FATAL_ERROR "LLDB needs lua.hpp matching the selected Lua headers and library; rebuild app-lang/lua")
++    endif()
++  endfunction()
++  lldb_check_lua()
++endif()

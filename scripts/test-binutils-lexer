@@ -1,0 +1,43 @@
+#!/bin/sh
+set -eu
+
+if [ "$#" -ne 1 ]; then
+	echo "usage: $0 /absolute/path/to/binutils/bin" >&2
+	exit 2
+fi
+tools=$1
+case $tools in
+	/*) ;;
+	*) echo "binutils directory must be absolute" >&2; exit 2 ;;
+esac
+tmp=$(mktemp -d)
+trap 'rm -rf "$tmp"' EXIT HUP INT TERM
+cd "$tmp"
+
+printf 'void entry(void) {}\n' > probe.c
+"${CC:-cc}" -c probe.c -o probe.o
+"$tools/ld" -e entry --defsym 'value=1+2' --defsym 'other=value+4' \
+	-o default probe.o
+
+symbol() {
+	"$tools/nm" -P "$1" | awk -v name="$2" \
+		'$1 == name { sub(/^0+/, "", $3); print $2, $3 }'
+}
+[ "$(symbol default value)" = 'A 3' ]
+[ "$(symbol default other)" = 'A 7' ]
+
+printf 'script_value = 11;\n' > included.ld
+cat > script.ld <<'EOF'
+INCLUDE included.ld
+SECTIONS { .text : { *(.text) } }
+EOF
+"$tools/ld" -e entry --defsym 'value=3' -T script.ld -o explicit probe.o
+[ "$(symbol explicit value)" = 'A 3' ]
+[ "$(symbol explicit script_value)" = 'A b' ]
+
+if "$tools/ld" --defsym 'value=' -o invalid probe.o >invalid.log 2>&1; then
+	echo 'FAIL: accepted incomplete symbol expression' >&2
+	exit 1
+fi
+grep -q 'syntax error' invalid.log
+echo 'PASS: linker string buffers, script inclusion and malformed expressions'

@@ -1,0 +1,19 @@
+Set beginning-of-line state through flex's interface after selecting the
+string buffer. Newer flex snapshots rename the private buffer member.
+
+--- a/ld/ldlex.l
++++ b/ld/ldlex.l
+@@ -546,7 +546,6 @@ yy_create_string_buffer (const char *string, size_t size)
+ 
+   b->yy_is_our_buffer = 1;
+   b->yy_is_interactive = 0;
+-  b->yy_at_bol = 1;
+   b->yy_fill_buffer = 0;
+ 
+   /* flex 2.4.7 changed the interface.  FIXME: We should not be using
+@@ -578,4 +577,5 @@ lex_redirect (const char *string, const char *fake_filename, unsigned int count)
+   lineno = count;
+   tmp = yy_create_string_buffer (string, strlen (string));
+   yy_switch_to_buffer (tmp);
++  yy_set_bol (1);
+ }

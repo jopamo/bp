@@ -1,0 +1,29 @@
+--- a/configure
++++ b/configure
+@@ -5520,6 +5520,26 @@
+ ac_compiler_gnu=$ac_cv_c_compiler_gnu
+ 
+ 
++# Move compiler arguments into flags before the quoted standard-library probes.
++# This is the MOVE_TO_FLAGS workaround already used by GHC's source configure.
++tmp_IFS="$IFS"
++IFS=' '
++eval set -- $CC
++IFS="$tmp_IFS"
++
++CC="$1"
++shift
++CFLAGS="$@ $CFLAGS"
++
++tmp_IFS="$IFS"
++IFS=' '
++eval set -- $CXX
++IFS="$tmp_IFS"
++
++CXX="$1"
++shift
++CXXFLAGS="$@ $CXXFLAGS"
++
+ ac_ext=c
+ ac_cpp='$CPP $CPPFLAGS'
+ ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'

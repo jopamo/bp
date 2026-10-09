@@ -31,6 +31,7 @@ app-dev/dwarves
 app-dev/gcovr
 app-dev/intltool
 app-dev/ropgadget
+app-dev/shellcheck
 app-dev/strace
 app-dev/valgrind
 app-emu/qemu

@@ -170,16 +170,16 @@ qa-elf-check-hardening-presence() {
 	local file=$1
 	local rel=$2
 	local mode=${QA_POLICY_ELF_HARDENING_MODE}
-	local dyn stack_line readelf_cmd
+	local symbols stack_line readelf_cmd
 	local -i ssp_present=0 fortify_present=0 nx_present=0
 
 	[[ ${mode} != off ]] || return 0
 
-	dyn=$(_elfqa-dyn "${file}")
-	grep -Eq '\[(__stack_chk_fail|__stack_chk_guard)(@|]|$)' <<< "${dyn}" && ssp_present=1
-	grep -Eq '\[__[^]]+_chk(@|]|$)' <<< "${dyn}" && fortify_present=1
-
 	readelf_cmd=$(tc-getREADELF)
+	symbols=$("${readelf_cmd}" -W -s "${file}" 2>/dev/null || true)
+	grep -Eq '[[:space:]](__stack_chk_fail|__stack_chk_fail_local|__stack_chk_guard)(@[^[:space:]]*)?([[:space:]]|$)' <<< "${symbols}" && ssp_present=1
+	grep -Eq '[[:space:]]__[[:alnum:]_]+_chk(@[^[:space:]]*)?([[:space:]]|$)' <<< "${symbols}" && fortify_present=1
+
 	stack_line=$("${readelf_cmd}" -W -l "${file}" 2>/dev/null | awk '/GNU_STACK/ { print; exit }')
 	if [[ -n ${stack_line} && ${stack_line} != *RWE* && ${stack_line} != *" E "* ]]; then
 		nx_present=1

@@ -17,6 +17,9 @@ KEYWORDS="amd64 arm64"
 IUSE="+gnutls +shared +static-libs"
 REQUIRED_USE="shared ${PYTHON_REQUIRED_USE}"
 
+# CPython imports these extensions by path; no library links against them.
+QA_POLICY_ELF_ALLOW_MISSING_SONAME='^/usr/lib/python3\.13/site-packages/cryptography/hazmat/bindings/_(openssl|padding)\.abi3\.so$'
+
 DEPEND="
 	${PYTHON_DEPS}
 	lib-core/libgpg-error

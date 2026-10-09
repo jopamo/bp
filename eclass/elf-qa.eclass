@@ -93,6 +93,8 @@ _elfqa-note() {
 
 _elfqa-default-interp() {
 	case ${CHOST} in
+		x86_64*-linux-musl*) echo '^/lib/ld-musl-x86_64\.so\.1$' ;;
+		aarch64*-linux-musl*) echo '^/lib/ld-musl-aarch64\.so\.1$' ;;
 		x86_64*) echo '^/lib64/ld-linux-x86-64\.so\.2$' ;;
 		i?86*) echo '^/lib/ld-linux\.so\.2$' ;;
 		aarch64*) echo '^/lib/ld-linux-aarch64\.so\.1$' ;;

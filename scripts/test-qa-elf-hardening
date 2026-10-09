@@ -1,0 +1,43 @@
+#!/bin/bash
+set -eu
+
+repo=$(cd -- "$(dirname -- "$0")/.." && pwd -P)
+inherit() { :; }
+source "${repo}/eclass/qa-elf.eclass"
+source "${repo}/eclass/elf-qa.eclass"
+tc-getREADELF() { printf '%s\n' "${READELF:-readelf}"; }
+_qa-report-record-mode() { reports+=("$3"); }
+QA_POLICY_ELF_HARDENING_MODE=report
+
+work=$(mktemp -d)
+trap 'rm -rf "${work}"' EXIT
+cat > "${work}/probe.c" <<'EOF'
+#include <stddef.h>
+extern void consume(const void *);
+extern void *__memcpy_chk(void *, const void *, size_t, size_t);
+void probe(const void *data, size_t length)
+{
+	char buffer[32];
+	__memcpy_chk(buffer, data, length, sizeof(buffer));
+	consume(buffer);
+}
+EOF
+"${CC:-cc}" -O2 -fPIC -shared -fstack-protector-strong -Wl,-z,noexecstack \
+	-o "${work}/protected.so" "${work}/probe.c"
+reports=()
+qa-elf-check-hardening-presence "${work}/protected.so" /protected.so
+[[ ${#reports[@]} == 0 ]] || {
+	printf 'FAIL: protected fixture: %s\n' "${reports[*]}" >&2
+	exit 1
+}
+
+printf 'int probe(void) { return 1; }\n' > "${work}/plain.c"
+"${CC:-cc}" -O2 -fPIC -shared -fno-stack-protector -Wl,-z,noexecstack \
+	-o "${work}/plain.so" "${work}/plain.c"
+reports=()
+qa-elf-check-hardening-presence "${work}/plain.so" /plain.so
+[[ ${reports[*]} == 'ssp-missing fortify-missing' ]] || {
+	printf 'FAIL: unprotected fixture: %s\n' "${reports[*]}" >&2
+	exit 1
+}
+echo 'PASS: hardening symbol detection and missing-symbol reports'

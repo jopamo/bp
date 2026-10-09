@@ -100,6 +100,14 @@ ghc_bootstrap_terminfo_compat() {
 	die "failed to find a terminfo library for the GHC bootstrap compiler"
 }
 
+src_prepare() {
+	default
+
+	pushd "$(ghc_bootstrap_dir)" >/dev/null || die
+	eapply "${FILESDIR}/ghc-9.8.2-bindist-compiler-flags.patch"
+	popd >/dev/null || die
+}
+
 src_configure() {
 	local bootstrap_dir bootstrap_root bootstrap_sources
 

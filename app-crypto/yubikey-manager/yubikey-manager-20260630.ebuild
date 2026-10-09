@@ -1,12 +1,13 @@
 # Distributed under the terms of the GNU General Public License v2
 
 DISTUTILS_USE_PEP517=poetry
+PYTHON_COMPAT=( python3_13 )
 
 inherit distutils-r1
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	app-crypto/cryptography
+	app-crypto/vesk[${PYTHON_USEDEP}]
 	dev-pypi/click
 	dev-pypi/fido2
 	dev-pypi/keyring
@@ -36,7 +37,7 @@ IUSE="ssl"
 RDEPEND="
 	app-crypto/ccid
 	>=dev-pypi/click-8.0[${PYTHON_USEDEP}]
-	app-crypto/cryptography[${PYTHON_USEDEP}]
+	app-crypto/vesk[${PYTHON_USEDEP}]
 	>=dev-pypi/fido2-2.0[${PYTHON_USEDEP}]
 	<dev-pypi/fido2-3[${PYTHON_USEDEP}]
 	dev-pypi/keyring[${PYTHON_USEDEP}]

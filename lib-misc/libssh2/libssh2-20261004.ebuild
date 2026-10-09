@@ -16,7 +16,7 @@ IUSE="gcrypt static-libs test zlib"
 
 DEPEND="
 	!gcrypt? ( virtual/ssl )
-	gcrypt? ( >=lib-core/libgcrypt-1.5.3:0 )
+	gcrypt? ( app-crypto/vesk )
 	zlib? ( >=lib-core/zlib-1.2.8-r1 )
 "
 RDEPEND="${DEPEND}"

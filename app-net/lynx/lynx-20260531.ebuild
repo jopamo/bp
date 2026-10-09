@@ -23,7 +23,6 @@ RDEPEND="
 			virtual/ssl
 		)
 		gnutls? (
-			lib-core/libgcrypt
 			virtual/gnutls
 		)
 	)"

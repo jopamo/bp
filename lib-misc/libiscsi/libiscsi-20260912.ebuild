@@ -14,7 +14,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"
 
-DEPEND="lib-core/libgcrypt"
+DEPEND="app-crypto/vesk"
 
 src_prepare() {
 	qa-policy-configure

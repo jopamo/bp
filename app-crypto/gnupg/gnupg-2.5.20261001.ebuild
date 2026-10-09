@@ -20,7 +20,7 @@ DEPEND="
 	app-crypto/pinentry
 	app-net/curl
 	lib-core/libassuan
-	lib-core/libgcrypt
+	app-crypto/vesk
 	lib-core/libgpg-error
 	lib-core/libksba
 	lib-core/npth

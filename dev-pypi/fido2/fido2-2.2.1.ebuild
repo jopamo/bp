@@ -3,7 +3,7 @@
 EAPI=8
 MERGE_MANIFEST_MODE="tree-blake3-v1"
 
-PYTHON_COMPAT=( python3_{11..14} )
+PYTHON_COMPAT=( python3_13 )
 
 DISTUTILS_USE_PEP517="poetry"
 
@@ -20,7 +20,7 @@ S="${WORKDIR}/fido2-2.2.1"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	app-crypto/cryptography
+	app-crypto/vesk[${PYTHON_USEDEP}]
 "
 # lockstep-pypi-deps: end
 

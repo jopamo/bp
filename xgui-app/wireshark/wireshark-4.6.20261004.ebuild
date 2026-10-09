@@ -28,7 +28,7 @@ REQUIRED_USE="
 
 DEPEND="
 	app-compression/brotli
-	lib-core/libgcrypt
+	app-crypto/vesk
 	lib-core/glib
 	lib-net/libpcap
 	lib-net/c-ares

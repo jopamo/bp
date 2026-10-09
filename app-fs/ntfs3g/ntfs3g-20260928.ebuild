@@ -24,7 +24,7 @@ DEPEND="
 	app-core/attr
 	app-fs/fuse
 	ntfsdecrypt? (
-		lib-core/libgcrypt
+		app-crypto/vesk
 		virtual/gnutls
 	)"
 

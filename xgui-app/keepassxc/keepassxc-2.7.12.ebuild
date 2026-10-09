@@ -15,7 +15,6 @@ IUSE="autotype test"
 DEPEND="
 	app-crypto/vesk
 	app-crypto/botan
-	lib-core/libgcrypt
 	lib-core/zlib
 	lib-core/libsodium
 	xgui-lib/qtbase:5

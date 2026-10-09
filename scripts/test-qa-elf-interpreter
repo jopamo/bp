@@ -1,0 +1,34 @@
+#!/bin/bash
+set -eu
+
+repo=$(cd -- "$(dirname -- "$0")/.." && pwd -P)
+inherit() { :; }
+source "${repo}/eclass/elf-qa.eclass"
+source "${repo}/eclass/qa-elf.eclass"
+_elfqa-type() { echo DYN; }
+_elfqa-interp() { echo "${interpreter}"; }
+_qa-report-record-mode() { reports+=("$3"); }
+QA_POLICY_ELF_MODE=report
+QA_POLICY_ELF_ALLOW_INTERP=
+
+check() {
+	local CHOST=$1 interpreter=$2 expected=$3
+	local -a reports=()
+	qa-elf-check-interpreter ignored /usr/bin/probe
+	if [[ ${expected} == pass ]]; then
+		[[ ${#reports[@]} == 0 ]] && return
+	else
+		[[ ${reports[*]} == unexpected-interpreter ]] && return
+	fi
+	printf 'FAIL: %s with %s: %s\n' "${CHOST}" "${interpreter}" "${reports[*]}" >&2
+	exit 1
+}
+
+check x86_64-pc-linux-musl /lib/ld-musl-x86_64.so.1 pass
+check aarch64-unknown-linux-musl /lib/ld-musl-aarch64.so.1 pass
+check x86_64-pc-linux-gnu /lib64/ld-linux-x86-64.so.2 pass
+check aarch64-unknown-linux-gnu /lib/ld-linux-aarch64.so.1 pass
+check x86_64-pc-linux-musl /lib64/ld-linux-x86-64.so.2 fail
+check x86_64-pc-linux-gnu /lib/ld-musl-x86_64.so.1 fail
+check aarch64-unknown-linux-musl /lib/ld-musl-x86_64.so.1 fail
+echo 'PASS: libc-specific interpreter checks'

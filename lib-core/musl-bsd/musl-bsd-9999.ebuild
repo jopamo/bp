@@ -16,15 +16,8 @@ BDEPEND="app-dev/pkgconf"
 src_configure() {
 	local emesonargs=(
 		-Db_staticpic=true
+		-Dglibc_runtime=disabled
 	)
-
-	if use amd64; then
-		emesonargs+=( -Dglibc_runtime=enabled )
-	elif use arm64; then
-		emesonargs+=( -Dglibc_runtime=disabled )
-	else
-		die "unsupported architecture for musl-bsd runtime policy"
-	fi
 
 	qa-policy-configure
 	meson_src_configure
@@ -57,35 +50,12 @@ src_install() {
 	[[ ! -e "${ED}/usr/lib/libmusl-bsd-glibc-host.so" ]] ||
 		die "unversioned musl-bsd host linker name must not be installed"
 
-	if use amd64; then
-		[[ -e "${ED}${host_runtime}" ]] ||
-			die "missing qualified musl-bsd runtime: ${host_runtime}"
-		[[ -f "${ED}${pc_dir}/musl-bsd-glibc-host.pc" ]] ||
-			die "missing qualified musl-bsd host interface"
-		[[ -f "${ED}${startup_pc}" ]] ||
-			die "missing qualified musl-bsd startup interface"
-		grep -Fq 'Libs: -L${libdir} -Wl,--push-state,--no-as-needed -l:libmusl-bsd-glibc-host.so.2 -Wl,--pop-state' \
-			"${ED}${pc_dir}/musl-bsd-glibc-host.pc" ||
-			die "invalid qualified musl-bsd host interface"
-		grep -F 'Libs: -Wl,--push-state,--no-as-needed ${libdir}/libmusl-bsd-glibc-host.so.2 ${facadelibdir}/libc.so.6 ${facadelibdir}/libdl.so.2 ${facadelibdir}/libm.so.6 ${facadelibdir}/libpthread.so.0 ${facadelibdir}/libresolv.so.2 ${facadelibdir}/librt.so.1 ${facadelibdir}/libutil.so.1 -Wl,--pop-state -Wl,-rpath,${facadelibdir}' \
-			"${ED}${startup_pc}" >/dev/null ||
-			die "invalid qualified musl-bsd startup interface"
-
-		local host_soname
-		host_soname=$(
-			"$(tc-getREADELF)" -d "${ED}${host_runtime}" |
-				sed -n 's/.*(SONAME).*\[\(.*\)\].*/\1/p'
-		) || die "failed to inspect musl-bsd runtime SONAME"
-		[[ ${host_soname} == libmusl-bsd-glibc-host.so.2 ]] ||
-			die "invalid musl-bsd runtime SONAME: ${host_soname:-missing}"
-	else
-		[[ ! -e "${ED}${host_runtime}" ]] ||
-			die "unqualified ABI installed musl-bsd host runtime"
-		[[ ! -e "${ED}${pc_dir}/musl-bsd-glibc-host.pc" ]] ||
-			die "unqualified ABI installed musl-bsd host interface"
-		[[ ! -e "${ED}${startup_pc}" ]] ||
-			die "unqualified ABI installed musl-bsd startup interface"
-	fi
+	[[ ! -e "${ED}${host_runtime}" ]] ||
+		die "disabled musl-bsd host runtime was installed"
+	[[ ! -e "${ED}${pc_dir}/musl-bsd-glibc-host.pc" ]] ||
+		die "disabled musl-bsd host interface was installed"
+	[[ ! -e "${ED}${startup_pc}" ]] ||
+		die "disabled musl-bsd startup interface was installed"
 
 	qa-policy-install
 }

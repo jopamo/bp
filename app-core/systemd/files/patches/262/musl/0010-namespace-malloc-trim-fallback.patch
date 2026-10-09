@@ -1,0 +1,22 @@
+Subject: [PATCH] musl: Give the malloc_trim fallback a private name
+
+The musl-bsd malloc.h overlay declares an external malloc_trim. Defining
+systemd's static fallback with the same name after include_next conflicts
+with that declaration.
+
+Keep the no-op fallback under a private name and redirect callers to it,
+as the other musl wrappers do. This also works without the overlay and
+does not introduce a link dependency on libmusl-bsd.
+
+diff --git a/src/include/musl/malloc.h b/src/include/musl/malloc.h
+--- a/src/include/musl/malloc.h
++++ b/src/include/musl/malloc.h
+@@ -31,6 +31,7 @@
+         return -1;
+ }
+
+-static inline int malloc_trim(size_t pad) {
++static inline int missing_malloc_trim(size_t pad) {
+         return 0;
+ }
++#define malloc_trim missing_malloc_trim

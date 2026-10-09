@@ -3,7 +3,7 @@
 EAPI=8
 MERGE_MANIFEST_MODE="tree-blake3-v1"
 
-PYTHON_COMPAT=( python3_{11..14} )
+PYTHON_COMPAT=( python3_13 )
 
 DISTUTILS_USE_PEP517="setuptools"
 
@@ -20,7 +20,7 @@ S="${WORKDIR}/python_pskc-1.4"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	app-crypto/cryptography
+	app-crypto/vesk[${PYTHON_USEDEP}]
 	dev-pypi/python-dateutil
 "
 # lockstep-pypi-deps: end

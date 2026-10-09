@@ -3,6 +3,7 @@
 BRANCH_NAME="stable-$(ver_cut 1-2)"
 
 DISTUTILS_USE_PEP517=setuptools
+PYTHON_COMPAT=( python3_13 )
 
 inherit distutils-r1
 # lockstep-pypi-managed: true
@@ -26,7 +27,7 @@ RDEPEND="
 	>=dev-pypi/jinja-3.1.0[${PYTHON_USEDEP}]
 	>=dev-pypi/pyyaml-5.1[${PYTHON_USEDEP}]
 	dev-pypi/setuptools[${PYTHON_USEDEP}]
-	app-crypto/cryptography[${PYTHON_USEDEP}]
+	app-crypto/vesk[${PYTHON_USEDEP}]
 	dev-pypi/httplib2[${PYTHON_USEDEP}]
 	dev-pypi/six[${PYTHON_USEDEP}]
 	dev-pypi/packaging[${PYTHON_USEDEP}]

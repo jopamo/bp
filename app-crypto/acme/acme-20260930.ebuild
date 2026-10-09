@@ -1,12 +1,13 @@
 # Distributed under the terms of the GNU General Public License v2
 
 DISTUTILS_USE_PEP517=setuptools
+PYTHON_COMPAT=( python3_13 )
 
 inherit distutils-r1
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	app-crypto/cryptography
+	app-crypto/vesk[${PYTHON_USEDEP}]
 	dev-pypi/josepy
 	dev-pypi/pyopenssl
 	dev-pypi/pyrfc3339
@@ -35,7 +36,7 @@ BDEPEND="
 	)
 "
 RDEPEND="
-	>=app-crypto/cryptography-43.0.0[${PYTHON_USEDEP}]
+	app-crypto/vesk[${PYTHON_USEDEP}]
 	>=dev-pypi/josepy-2.0.0[${PYTHON_USEDEP}]
 	>=dev-pypi/pyopenssl-25.0.0[${PYTHON_USEDEP}]
 	dev-pypi/pyrfc3339[${PYTHON_USEDEP}]

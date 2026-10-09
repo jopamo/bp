@@ -1,0 +1,69 @@
+Subject: [PATCH] shared: Load the Vesk library SONAMEs
+
+The distro SSL virtual selects Vesk, whose libcrypto and libssl use
+SONAMEs 52 and 54. Load the libraries matching the build headers, not
+OpenSSL libraries with a different ABI. Keep the dlopen notes aligned.
+
+diff --git a/src/shared/crypto-util.c b/src/shared/crypto-util.c
+--- a/src/shared/crypto-util.c
++++ b/src/shared/crypto-util.c
+@@ -359,7 +359,7 @@
+
+         LIBCRYPTO_NOTE(suggested);
+
+-        FOREACH_STRING(soname, "libcrypto.so.4", "libcrypto.so.3") {
++        FOREACH_STRING(soname, "libcrypto.so.52") {
+                 r = dlopen_many_sym_or_warn(
+                         &libcrypto_dl,
+                         soname,
+@@ -644,7 +644,7 @@
+                         break;
+         }
+         if (r < 0) {
+-                log_full_errno(log_level, r, "Neither libcrypto.so.4 nor libcrypto.so.3 could be loaded");
++                log_full_errno(log_level, r, "Vesk libcrypto.so.52 could not be loaded");
+                 return -EOPNOTSUPP; /* turn into recognizable error */
+         }
+
+diff --git a/src/shared/ssl-util.c b/src/shared/ssl-util.c
+--- a/src/shared/ssl-util.c
++++ b/src/shared/ssl-util.c
+@@ -38,7 +38,7 @@
+
+         LIBSSL_NOTE(suggested);
+
+-        FOREACH_STRING(soname, "libssl.so.4", "libssl.so.3") {
++        FOREACH_STRING(soname, "libssl.so.54") {
+                 r = dlopen_many_sym_or_warn(
+                                 &libssl_dl,
+                                 soname,
+@@ -69,7 +69,7 @@
+                         break;
+         }
+         if (r < 0) {
+-                log_full_errno(log_level, r, "Neither libssl.so.4 nor libssl.so.3 could be loaded");
++                log_full_errno(log_level, r, "Vesk libssl.so.54 could not be loaded");
+                 return -EOPNOTSUPP; /* turn into recognizable error */
+         }
+
+diff --git a/src/shared/dlopen-note.h b/src/shared/dlopen-note.h
+--- a/src/shared/dlopen-note.h
++++ b/src/shared/dlopen-note.h
+@@ -87,7 +87,7 @@
+                         libcrypto,                                      \
+                         "Support for cryptographic operations",         \
+                         priority,                                       \
+-                        "libcrypto.so.4", "libcrypto.so.3")
++                        "libcrypto.so.52")
+ #else
+ #  define LIBCRYPTO_NOTE(priority)
+ #endif
+@@ -308,7 +308,7 @@
+                         libssl,                                         \
+                         "Support for TLS",                              \
+                         priority,                                       \
+-                        "libssl.so.4", "libssl.so.3")
++                        "libssl.so.54")
+ #else
+ #  define LIBSSL_NOTE(priority)
+ #endif

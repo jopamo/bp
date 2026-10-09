@@ -28,7 +28,7 @@ diff --git a/units/meson.build b/units/meson.build
 index 4f47a3b2bd..237870025b 100644
 --- a/units/meson.build
 +++ b/units/meson.build
-@@ -154,7 +154,6 @@ units = [
+@@ -172,7 +172,6 @@ units = [
          {
            'file' : 'proc-sys-fs-binfmt_misc.automount',
            'conditions' : ['ENABLE_BINFMT'],
@@ -36,7 +36,7 @@ index 4f47a3b2bd..237870025b 100644
          },
          {
            'file' : 'proc-sys-fs-binfmt_misc.mount',
-@@ -263,7 +262,6 @@ units = [
+@@ -283,7 +282,6 @@ units = [
          {
            'file' : 'systemd-binfmt.service.in',
            'conditions' : ['ENABLE_BINFMT'],
@@ -76,4 +76,3 @@ index 318bf8efc2..6ef684861d 100644
 +WantedBy=sysinit.target
 -- 
 2.34.1
-

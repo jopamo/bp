@@ -6,7 +6,7 @@ inherit flag-o-matic meson
 
 DESCRIPTION="System and service manager for Linux"
 HOMEPAGE="https://www.freedesktop.org/wiki/Software/systemd"
-SNAPSHOT=84ff4f0dff41c26472cd48c4c4955c2d77f5ac08
+SNAPSHOT=e65cb0b5832535217a714501aec6722b5fd7af4b
 SRC_URI="https://github.com/systemd/systemd/archive/${SNAPSHOT}.tar.gz -> systemd-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/systemd-${SNAPSHOT}"
 
@@ -19,18 +19,21 @@ IUSE="devmode gshadow"
 REQUIRED_USE="elibc_musl? ( !gshadow )"
 
 DEPEND="
-    app-build/gettext
     app-core/acl
     app-core/bx
     app-core/procps[kill(+)]
     app-core/util-linux
-    app-dev/gperf
-    app-dev/pkgconf
     lib-core/libcap
     lib-core/libseccomp
     virtual/ssl
+    elibc_musl? ( lib-core/libucontext )
 "
+RDEPEND="${DEPEND}"
 BDEPEND="
+    app-build/gettext
+    app-dev/gperf
+    app-dev/patchelf
+    app-dev/pkgconf
     dev-pypi/jinja
 "
 
@@ -39,9 +42,8 @@ src_prepare() {
 
     append-cflags -Wno-error=format-truncation
 
-    if use elibc_musl; then
-        eapply "${FILESDIR}"/patches/"$(ver_cut 1)"/*.patch
-    fi
+    eapply "${FILESDIR}"/patches/"$(ver_cut 1)"/common/*.patch
+    use elibc_musl && eapply "${FILESDIR}"/patches/"$(ver_cut 1)"/musl/*.patch
 
     default
 }
@@ -71,11 +73,13 @@ src_configure() {
         -Dgnutls=disabled
         -Dhibernate=false
         -Dhomed=disabled
+        -Dhostname-wordlist=false
         -Dhostnamed=false
         -Dhtml=disabled
         -Dhwdb=false
         -Didn=false
         -Dima=false
+        -Dimds=disabled
         -Dimportd=disabled
         -Dinitrd=false
         -Dinstall-tests=false
@@ -85,8 +89,6 @@ src_configure() {
         -Dlibcurl=disabled
         -Dlibcryptsetup=disabled
         -Dlibidn2=disabled
-        -Dlibidn=disabled
-        -Dlibiptc=disabled
         -Dlibmount=enabled
         -Dlink-networkd-shared=false
         -Dlink-timesyncd-shared=false
@@ -125,6 +127,7 @@ src_configure() {
         -Dsysext=false
         -Dsysupdate=disabled
         -Dsysupdated=disabled
+        -Dsysinstall=false
         -Dutmp=false
         -Dtests=false
         -Dtimedated=false
@@ -139,14 +142,13 @@ src_configure() {
         -Dxkbcommon=disabled
         $(usex devmode '-Dmode=developer' '-Dmode=release')
         $(usex elibc_musl '-Dlibc=musl' '-Dlibc=glibc')
-        -Dsysvinit-path=/etc/init.d
-        -Dsysvrcnd-path=/etc/rc.d
         -Dbacklight=false
         -Ddefault-kill-user-processes=false
         -Dpamlibdir="${EPREFIX}"/usr/lib/security
-        -Drc-local=""
         -Dsplit-bin=false
-        -Dstandalone-binaries=true
+        -Dstandalone-binaries=shutdown,sysusers,tmpfiles
+        -Dbuild-static=false
+        -Dsystemd-multicall-binary=false
         -Dsysusers=true
         -Dtmpfiles=true
         -Dsbat-distro-url="https://1g4.org/"

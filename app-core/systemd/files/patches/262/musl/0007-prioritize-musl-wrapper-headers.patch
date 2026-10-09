@@ -10,7 +10,7 @@ them before dependency includes. Keep custom preprocessor commands aligned.
 diff --git a/meson.build b/meson.build
 --- a/meson.build
 +++ b/meson.build
-@@ -2062,31 +2062,28 @@ boot_stubs = []
+@@ -1843,30 +1843,27 @@ boot_stubs = []
 
  # This is similar to system_includes below, but for passing custom_target().
 +wrapper_system_includes = get_option('libc') != 'musl'
@@ -40,16 +40,15 @@ diff --git a/meson.build b/meson.build
 +        include_directories('src/include/override', is_system : wrapper_system_includes),
  ]
 
- if get_option('libc') == 'musl'
-         system_include_args = [
--                '-isystem', meson.project_build_root()  / 'src/include/musl',
--                '-isystem', meson.project_source_root() / 'src/include/musl',
-+                wrapper_include_flag, meson.project_build_root()  / 'src/include/musl',
-+                wrapper_include_flag, meson.project_source_root() / 'src/include/musl',
-         ] + system_include_args
+ libc_include_dir = 'src/include' / get_option('libc')
+ system_include_args = [
+-        '-isystem', meson.project_build_root()  / libc_include_dir,
+-        '-isystem', meson.project_source_root() / libc_include_dir,
++        wrapper_include_flag, meson.project_build_root()  / libc_include_dir,
++        wrapper_include_flag, meson.project_source_root() / libc_include_dir,
+ ] + system_include_args
 
--        system_includes += include_directories('src/include/musl', is_system : true)
-+        system_includes = [include_directories('src/include/musl')] + system_includes
- endif
+-system_includes += include_directories(libc_include_dir, is_system : true)
++system_includes = [include_directories(libc_include_dir, is_system : wrapper_system_includes)] + system_includes
 
  basic_includes = [

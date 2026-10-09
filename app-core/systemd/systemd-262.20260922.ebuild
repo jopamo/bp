@@ -6,7 +6,7 @@ inherit flag-o-matic linux-info meson doins
 
 DESCRIPTION="System and service manager for Linux"
 HOMEPAGE="https://www.freedesktop.org/wiki/Software/systemd"
-SNAPSHOT=84ff4f0dff41c26472cd48c4c4955c2d77f5ac08
+SNAPSHOT=e65cb0b5832535217a714501aec6722b5fd7af4b
 SRC_URI="https://github.com/systemd/systemd/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/systemd-${SNAPSHOT}"
 
@@ -30,6 +30,7 @@ DEPEND="
     lib-core/libcap
     lib-core/libseccomp
     virtual/ssl
+    elibc_musl? ( lib-core/libucontext )
     apparmor? ( app-core/apparmor )
     bpf-framework? ( lib-net/libbpf )
     dbus? ( virtual/dbus )
@@ -40,6 +41,7 @@ DEPEND="
     pam? ( lib-core/pam )
     pcre? ( lib-core/libpcre2 )
 "
+RDEPEND="${DEPEND}"
 BDEPEND="
     app-build/gettext
     app-dev/gperf
@@ -80,9 +82,8 @@ src_prepare() {
 
     append-cflags -Wno-error=format-truncation
 
-    if use elibc_musl; then
-        eapply "${FILESDIR}"/patches/"$(ver_cut 1)"/*.patch
-    fi
+    eapply "${FILESDIR}"/patches/"$(ver_cut 1)"/common/*.patch
+    use elibc_musl && eapply "${FILESDIR}"/patches/"$(ver_cut 1)"/musl/*.patch
 
     default
 }
@@ -148,6 +149,8 @@ src_configure() {
         -Dlibidn2=disabled
         -Dlink-timesyncd-shared=false
         -Dhomed=disabled
+        -Dhostname-wordlist=false
+        -Dimds=disabled
         -Dman=disabled
         -Dmicrohttpd=disabled
         # Keep hostname resolution libc-neutral.  Both glibc and musl use
@@ -171,10 +174,13 @@ src_configure() {
         -Dseccomp=enabled
         -Dsmack=false
         -Dsplit-bin=false
-        -Dstandalone-binaries=false
+        -Dstandalone-binaries=
+        -Dbuild-static=false
+        -Dsystemd-multicall-binary=false
         #-Dstatic-libsystemd=true
         -Dsysupdate=disabled
         -Dsysupdated=disabled
+        -Dsysinstall=false
         -Dsysusers=true
         -Dtimesyncd=false
         -Dtmpfiles=true
@@ -324,12 +330,12 @@ pkg_postinst() {
     sysusers_process
     tmpfiles_process 1g4-journal.conf
 
-    journalctl --update-catalog
+    journalctl --root="${EROOT}" --update-catalog
 
-    use hwdb && systemd-hwdb update --root="${EROOT%/}"
-    udevadm control --reload
+    use hwdb && systemd-hwdb update --root="${EROOT}"
 
     if _doins_is_live_root; then
+        udevadm control --reload
         systemctl preset getty@tty1.service remote-fs.target
         use networkd && systemctl preset systemd-networkd.service systemd-networkd-wait-online.service
         use resolve && systemctl preset systemd-resolved.service

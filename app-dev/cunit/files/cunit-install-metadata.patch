@@ -1,0 +1,24 @@
+--- a/CUnit/CMakeLists.txt
++++ b/CUnit/CMakeLists.txt
+@@ -108,6 +108,17 @@
+ if(CUNIT_CMAKE_INSTALL STREQUAL yes)
+-  install(DIRECTORY CUnit/ DESTINATION include/CUnit)
+-  install(TARGETS cunit DESTINATION lib EXPORT cunit-targets)
+-  install(EXPORT cunit-targets DESTINATION CUnit/share/cmake FILE CUnitTargets.cmake)
+-  install(FILES CUnitConfig.cmake DESTINATION CUnit/share/cmake)
++  include(GNUInstallDirs)
++  set(prefix "${CMAKE_INSTALL_PREFIX}")
++  set(exec_prefix "\${prefix}")
++  set(libdir "\${prefix}/${CMAKE_INSTALL_LIBDIR}")
++  set(includedir "\${prefix}/${CMAKE_INSTALL_INCLUDEDIR}")
++  set(VERSION "${CUNIT_VERSION}")
++  set(RELEASE "${CUNIT_RELEASE}")
++  configure_file(../cunit.pc.in cunit.pc @ONLY)
++  install(FILES "${CMAKE_CURRENT_BINARY_DIR}/cunit.pc"
++    DESTINATION "${CMAKE_INSTALL_LIBDIR}/pkgconfig")
++  install(DIRECTORY CUnit/ DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/CUnit"
++    FILES_MATCHING PATTERN "*.h")
++  install(TARGETS cunit DESTINATION "${CMAKE_INSTALL_LIBDIR}" EXPORT cunit-targets)
++  install(EXPORT cunit-targets DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/CUnit" FILE CUnitTargets.cmake)
++  install(FILES CUnitConfig.cmake DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/CUnit")
+ endif()

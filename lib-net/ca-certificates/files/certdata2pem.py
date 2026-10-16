@@ -96,9 +96,16 @@ for obj in objects:
 
 # Deduplicate: SHA256 of DER bytes as the key.
 written_hashes = set()
+written_names = set()
 for obj in objects:
     if obj['CKA_CLASS'] == 'CKO_CERTIFICATE':
         if obj['CKA_LABEL'] not in trust or not trust[obj['CKA_LABEL']]:
+            continue
+
+        # PEM cannot express NSS issuance-date distrust constraints.
+        if obj.get('CKA_NSS_SERVER_DISTRUST_AFTER', 'CK_FALSE') != 'CK_FALSE':
+            print("Ignoring certificate with server distrust constraint: %s" %
+                  obj['CKA_LABEL'])
             continue
 
         der_bytes = obj['CKA_VALUE']
@@ -130,9 +137,10 @@ for obj in objects:
             bname = bname.encode('utf-8').decode('string_escape')
             fname = bname + b'.crt'
 
-        if os.path.exists(fname):
+        if fname in written_names:
             print("Found duplicate filename %s, using hash instead." % fname)
-            fname = sha256 + (b'.crt' if isinstance(fname, bytes) else '.crt')
+            fname = sha256.encode('ascii') + b'.crt'
+        written_names.add(fname)
 
         with open(fname, 'w') as f:
             f.write("-----BEGIN CERTIFICATE-----\n")

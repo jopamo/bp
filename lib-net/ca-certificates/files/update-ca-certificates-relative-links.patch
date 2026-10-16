@@ -1,0 +1,39 @@
+--- a/sbin/update-ca-certificates
++++ b/sbin/update-ca-certificates
+@@ -77,3 +77,6 @@
++CERTSDIR=$(realpath -m "$CERTSDIR")
++LOCALCERTSDIR=$(realpath -m "$LOCALCERTSDIR")
++
+ if [ ! -s "$CERTSCONF" ]
+ then
+   fresh=1
+@@ -89,5 +92,5 @@
+ # Helper files.  (Some of them are not simple arrays because we spawn
+ # subshells later on.)
+-TEMPBUNDLE="${ETCCERTSDIR}/${CERTBUNDLE}.new"
++TEMPBUNDLE=$(mktemp "${ETCCERTSDIR}/${CERTBUNDLE}.XXXXXX")
+ ADDED="$(mktemp -p "${TMPDIR:-/tmp}" "ca-certificates.tmp.XXXXXX")"
+ REMOVED="$(mktemp -p "${TMPDIR:-/tmp}" "ca-certificates.tmp.XXXXXX")"
+@@ -100,9 +103,10 @@
+   PEM="$ETCCERTSDIR/$(basename "$CERT" .crt | sed -e 's/ /_/g' \
+                                                   -e 's/[()]/=/g' \
+                                                   -e 's/,/_/g').pem"
+-  if ! test -e "$PEM" || [ "$(readlink "$PEM")" != "$CERT" ]
++  TARGET=$(realpath --relative-to="$ETCCERTSDIR" "$CERT")
++  if ! test -e "$PEM" || [ "$(readlink "$PEM")" != "$TARGET" ]
+   then
+-    ln -sf "$CERT" "$PEM"
++    ln -sf "$TARGET" "$PEM"
+     echo "+$PEM" >> "$ADDED"
+   fi
+   # Add trailing newline to certificate, if it is missing (#635570)
+@@ -125,7 +129,7 @@
+   find . -type l -print | while read -r symlink
+   do
+-    case $(readlink "$symlink") in
+-      $CERTSDIR*|$LOCALCERTSDIR*) rm -f "$symlink";;
++    case $(realpath -m "$symlink") in
++      "$CERTSDIR"/*|"$LOCALCERTSDIR"/*) rm -f "$symlink";;
+     esac
+   done
+   find . -type l -print | while read -r symlink

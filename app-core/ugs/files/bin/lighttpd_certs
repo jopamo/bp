@@ -1,5 +1,12 @@
 #!/bin/bash
 
+set -e
+umask 077
+
+temporary=
+trap '[[ -z ${temporary} ]] || rm -f -- "${temporary}"' EXIT
+trap 'exit 1' HUP INT TERM
+
 CONFIG_FILE="/etc/lighttpd/lighttpd_cert_domains.conf"
 
 if [[ ! -f "$CONFIG_FILE" ]]; then
@@ -18,7 +25,17 @@ while IFS= read -r line; do
         continue
     fi
 
-    certbot certonly --webroot -w /var/lighttpd/${line} -d ${line} -d www.${line} --expand --force-renewal --key-type ecdsa --cert-name ${line} --quiet
+    certbot certonly --webroot -w "/var/lighttpd/${line}" -d "${line}" -d "www.${line}" --expand --force-renewal --key-type ecdsa --cert-name "${line}" --quiet
 
-    cat /etc/letsencrypt/live/${line}/cert.pem /etc/letsencrypt/live/${line}/privkey.pem > /etc/letsencrypt/live/${line}/web.pem
+    directory="/etc/letsencrypt/live/${line}"
+    temporary=$(mktemp "${directory}/.web.pem.XXXXXX")
+    cat "${directory}/cert.pem" "${directory}/privkey.pem" > "${temporary}"
+    certificate_key=$(openssl x509 -in "${temporary}" -pubkey -noout)
+    private_key=$(openssl pkey -in "${temporary}" -pubout -passin pass:)
+    if [[ ${certificate_key} != "${private_key}" ]]; then
+        echo "Certificate and private key do not match for ${line}." >&2
+        exit 1
+    fi
+    mv -f -- "${temporary}" "${directory}/web.pem"
+    temporary=
 done < "$CONFIG_FILE"

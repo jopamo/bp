@@ -11,8 +11,9 @@ KEYWORDS="amd64 arm64"
 
 IUSE="test video"
 
-BDEPEND="test? ( app-lang/python )"
+BDEPEND="test? ( app-lang/python virtual/ssl )"
 RDEPEND="
+	virtual/ssl
 	video? (
 		>=xmedia-app/ffmpeg-20261004[avcodec,avfilter,avformat,ffmpeg,swresample]
 		xmedia-app/ffmpeg-normalize
@@ -22,6 +23,7 @@ RESTRICT="!test? ( test )"
 
 src_test() {
 	python3 "${FILESDIR}/test_mkimg.py" || die "mkimg tests failed"
+	python3 "${FILESDIR}/test_lighttpd_certs.py" || die "lighttpd certificate tests failed"
 }
 
 src_install() {

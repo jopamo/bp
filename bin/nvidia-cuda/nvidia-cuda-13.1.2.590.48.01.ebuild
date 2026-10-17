@@ -102,6 +102,11 @@ src_install() {
 		doexe "${S}"/builds/cuda_sanitizer_api/compute-sanitizer/compute-sanitizer
 	fi
 
+	rm -f \
+		"${ED}${targetdir}/lib/lib64" \
+		"${ED}${targetdir}/include/include" \
+		|| die "Failed to remove broken nested CUDA symlinks"
+
 	# Common CUDA discovery paths
 	dosym -r "${targetdir}/include" "${cudadir}/include"
 	dosym -r "${targetdir}/lib" "${cudadir}/lib"

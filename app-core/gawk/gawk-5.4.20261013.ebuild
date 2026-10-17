@@ -1,7 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 BRANCH_NAME="gawk-$(ver_cut 1-2)-stable"
-SNAPSHOT=153545505f238432372648c0fb9a1d6f0f907fe9
+SNAPSHOT=25779506a4f2ccf74ba56f82b5829c202d4549a6
 
 inherit flag-o-matic qa-policy
 

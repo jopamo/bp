@@ -2,17 +2,23 @@
 
 inherit flag-o-matic libtool toolchain-funcs qa-policy
 
+BRANCH_NAME="master"
+
 DESCRIPTION="A high-quality and portable font engine"
 HOMEPAGE="https://www.freetype.org/"
 SNAPSHOT=023fd06e3dbe84ab7327ddddd9fe851824fe1ade
-SRC_URI="https://github.com/freetype/freetype/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+DLG_SNAPSHOT=395ccad2c1e0daae535c4d20bb0a3f2424648e17
+# lockstep-gitlink: DLG_SNAPSHOT SNAPSHOT subprojects/dlg
+SRC_URI="
+	https://github.com/freetype/freetype/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz
+	https://github.com/nyorain/dlg/archive/${DLG_SNAPSHOT}.tar.gz -> dlg-${DLG_SNAPSHOT}.tar.gz
+"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
-LICENSE="|| ( FTL GPL-2+ )"
+LICENSE="|| ( FTL GPL-2+ ) Boost-1.0"
 SLOT="2"
 IUSE="brotli bzip2 debug harfbuzz png static-libs zlib"
-#KEYWORDS="amd64 arm64"
-# build is intricate with git
+KEYWORDS="amd64 arm64"
 
 RDEPEND="
 	brotli? ( app-compression/brotli )
@@ -21,11 +27,23 @@ RDEPEND="
 	png? ( xmedia-lib/libpng )
 	zlib? ( lib-core/zlib )
 "
+DEPEND="${RDEPEND}"
+BDEPEND+="
+	app-build/autoconf
+	app-build/automake
+	app-build/libtool
+	app-dev/pkgconf
+"
 
 append-flags -fno-strict-aliasing
 
 src_prepare() {
 	default
+
+	mkdir -p include/dlg || die
+	cp "${WORKDIR}/dlg-${DLG_SNAPSHOT}"/include/dlg/{dlg.h,output.h} include/dlg/ || die
+	cp "${WORKDIR}/dlg-${DLG_SNAPSHOT}"/src/dlg/dlg.c src/dlg/ || die
+	./autogen.sh || die "FreeType bootstrap failed"
 
 	enable_option() {
 		sed -i -e "/#define $1/ { s:/\* ::; s: \*/:: }" \

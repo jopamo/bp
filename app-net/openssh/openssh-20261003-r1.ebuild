@@ -7,6 +7,7 @@ HOMEPAGE="http://www.openssh.org/"
 SNAPSHOT=15289cc38956aa74d4947174a68c10ac9ad2157f
 SRC_URI="https://github.com/openssh/openssh-portable/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/openssh-portable-${SNAPSHOT}
+PATCHES=( "${FILESDIR}"/openssh-connection-hash-sha256.patch )
 
 LICENSE="BSD GPL-2"
 SLOT="0"

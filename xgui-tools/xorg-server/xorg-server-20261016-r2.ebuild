@@ -70,6 +70,8 @@ src_prepare() {
 
 	eapply "${FILESDIR}"/${PN}-backtrace-execinfo.patch
 	eapply "${FILESDIR}"/${PN}-nvidia-musl-startup.patch
+	eapply "${FILESDIR}"/${PN}-composite-damage.patch
+	eapply "${FILESDIR}"/${PN}-glyph-sha256.patch
 
 	sed -i -E \
 		'/^[[:space:]]*static[[:space:]]+inline[[:space:]]+int[[:space:]]+pci_device_is_boot_display[[:space:]]*\(/,/^[[:space:]]*}\s*$/d' \
@@ -133,7 +135,7 @@ src_configure() {
     -Dlinux_acpi=false           # legacy /proc/acpi hooks, safe to disable
 
     # crypto and misc
-    -Dsha1=libcrypto             # use openssl for sha1
+    -Dsha1=libcrypto             # link libcrypto for the glyph-cache hash
     -Dlibunwind=false            # keep unwinder off unless debugging
     -Dlegacy_nvidia_340x=false   # do not export obsolete 340xx driver entrypoints
     -Dnvidia_musl_startup="${nvidia_musl_startup}"

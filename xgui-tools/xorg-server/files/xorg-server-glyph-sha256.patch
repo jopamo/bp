@@ -1,0 +1,118 @@
+Use truncated SHA-256 for the internal glyph-cache key. Vesk rejects plain
+SHA-1, which makes HashGlyph() return BadAlloc for RenderAddGlyphs.
+The package selects the libcrypto backend; keep the existing 20-byte key.
+Reuse one digest context per request and reinitialize it for each glyph.
+
+--- a/Xext/render/glyph.c
++++ b/Xext/render/glyph.c
+@@ -28,7 +28,6 @@
+ #include "include/mipict.h"
+ #include "include/misc.h"
+ #include "os/bug_priv.h"
+-#include "os/xsha1.h"
+
+ #include "scrnintstr.h"
+ #include "os.h"
+@@ -165,24 +164,22 @@
+ }
+
+ int
+-HashGlyph(xGlyphInfo * gi,
++HashGlyph(EVP_MD_CTX *ctx, xGlyphInfo * gi,
+           CARD8 *bits, unsigned long size, unsigned char sha1[20])
+ {
+-    void *ctx = x_sha1_init();
++    unsigned char digest[EVP_MAX_MD_SIZE];
++    unsigned int digest_len = 0;
+     int success;
+
+-    if (!ctx)
++    success = EVP_DigestInit_ex(ctx, EVP_sha256(), NULL) &&
++              EVP_DigestUpdate(ctx, gi, sizeof(xGlyphInfo)) &&
++              EVP_DigestUpdate(ctx, bits, size) &&
++              EVP_DigestFinal_ex(ctx, digest, &digest_len);
++    if (!success || digest_len < 20)
+         return BadAlloc;
+
+-    success = x_sha1_update(ctx, gi, sizeof(xGlyphInfo));
+-    if (!success)
+-        return BadAlloc;
+-    success = x_sha1_update(ctx, bits, size);
+-    if (!success)
+-        return BadAlloc;
+-    success = x_sha1_final(ctx, sha1);
+-    if (!success)
+-        return BadAlloc;
++    /* This is an internal cache key, not a protocol SHA-1 value. */
++    memcpy(sha1, digest, 20);
+     return Success;
+ }
+
+--- a/Xext/render/glyphstr_priv.h
++++ b/Xext/render/glyphstr_priv.h
+@@ -7,6 +7,7 @@
+ #define _XSERVER_GLYPHSTR_PRIV_H_
+
+ #include <X11/extensions/renderproto.h>
++#include <openssl/evp.h>
+ #include "glyphstr.h"
+ #include "picture.h"
+ #include "screenint.h"
+@@ -51,7 +52,8 @@
+
+ void GlyphUninit(ScreenPtr pScreen);
+ GlyphPtr FindGlyphByHash(unsigned char sha1[20], int format);
+-int HashGlyph(xGlyphInfo * gi, CARD8 *bits, unsigned long size, unsigned char sha1[20]);
++int HashGlyph(EVP_MD_CTX *ctx, xGlyphInfo * gi, CARD8 *bits,
++              unsigned long size, unsigned char sha1[20]);
+ void AddGlyph(GlyphSetPtr glyphSet, GlyphPtr glyph, Glyph id);
+ Bool DeleteGlyph(GlyphSetPtr glyphSet, Glyph id);
+ GlyphPtr FindGlyph(GlyphSetPtr glyphSet, Glyph id);
+--- a/Xext/render/render.c
++++ b/Xext/render/render.c
+@@ -823,6 +823,7 @@
+     int err;
+     int i;
+     CARD32 component_alpha;
++    EVP_MD_CTX *ctx = NULL;
+
+     REQUEST_AT_LEAST_SIZE(xRenderAddGlyphsReq);
+     err =
+@@ -868,6 +869,12 @@
+         goto bail;
+     }
+
++    if (nglyphs) {
++        ctx = EVP_MD_CTX_new();
++        if (!ctx)
++            goto bail;
++    }
++
+     for (i = 0; i < nglyphs; i++) {
+         size_t padded_width;
+
+@@ -883,7 +890,7 @@
+         if (remain < size)
+             break;
+
+-        err = HashGlyph(&gi[i], bits, size, glyph_new->sha1);
++        err = HashGlyph(ctx, &gi[i], bits, size, glyph_new->sha1);
+         if (err)
+             goto bail;
+
+@@ -990,6 +997,7 @@
+         FreeGlyph(glyphs[i].glyph, glyphSet->fdepth);
+     }
+
++    EVP_MD_CTX_free(ctx);
+     if (glyphsBase != glyphsLocal)
+         free(glyphsBase);
+     return Success;
+@@ -1008,6 +1016,7 @@
+         if (glyphs[i].glyph)
+             FreeGlyph(glyphs[i].glyph, glyphSet->fdepth);
+     }
++    EVP_MD_CTX_free(ctx);
+     if (glyphsBase != glyphsLocal)
+         free(glyphsBase);
+     return err;

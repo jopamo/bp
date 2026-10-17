@@ -42,7 +42,7 @@ CARGO_DEPS="
 	rust-crates/find-msvc-tools-0.1.9
 	rust-crates/foldhash-0.1.5
 	rust-crates/getrandom-0.4.2
-	rust-crates/globset-0.4.19
+	rust-crates/globset-0.4.20
 	rust-crates/hashbrown-0.15.5
 	rust-crates/hashbrown-0.16.1
 	rust-crates/heck-0.5.0
@@ -51,9 +51,9 @@ CARGO_DEPS="
 	rust-crates/indexmap-2.13.0
 	rust-crates/is_terminal_polyfill-1.70.2
 	rust-crates/itoa-1.0.17
-	rust-crates/jiff-0.2.35
+	rust-crates/jiff-0.2.37
 	rust-crates/jiff-core-0.1.0
-	rust-crates/jiff-static-0.2.35
+	rust-crates/jiff-static-0.2.37
 	rust-crates/jiff-tzdb-0.1.6
 	rust-crates/jiff-tzdb-platform-0.1.3
 	rust-crates/leb128fmt-0.1.0
@@ -64,7 +64,7 @@ CARGO_DEPS="
 	rust-crates/memchr-2.8.0
 	rust-crates/nix-0.30.1
 	rust-crates/nix-0.31.3
-	rust-crates/normpath-1.5.1
+	rust-crates/normpath-1.5.2
 	rust-crates/nu-ansi-term-0.50.3
 	rust-crates/objc2-0.6.4
 	rust-crates/objc2-encode-4.1.0
@@ -138,7 +138,7 @@ inherit cargo lockstep-cargo
 
 DESCRIPTION="A simple, fast and user-friendly alternative to gnu find"
 HOMEPAGE="https://github.com/sharkdp/fd"
-SNAPSHOT=3460b1e96c3c54ce524dd1763ff361607e323a7f
+SNAPSHOT=14dcd92fb76ca0ebc2e82671a275f67c790d25fc
 SRC_URI="https://github.com/sharkdp/fd/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

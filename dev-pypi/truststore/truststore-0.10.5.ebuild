@@ -15,8 +15,8 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-SRC_URI="https://files.pythonhosted.org/packages/53/a3/1585216310e344e8102c22482f6060c7a6ea0322b63e026372e6dcefcfd6/truststore-0.10.4.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/truststore-0.10.4"
+SRC_URI="https://files.pythonhosted.org/packages/ee/9f/c5201d42a484c061e528825fc8e2d565f5abd50a4ced6fb7d29c4ec99b2b/truststore-0.10.5.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/truststore-0.10.5"
 
 BDEPEND="
 	dev-pypi/flit-core[${PYTHON_USEDEP}]

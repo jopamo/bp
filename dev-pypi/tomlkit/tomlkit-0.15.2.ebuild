@@ -15,8 +15,8 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-SRC_URI="https://files.pythonhosted.org/packages/94/96/e07752635b98536177fa1f37671c8f3cdde2e724c6bcf6034b2cfb571565/tomlkit-0.15.1.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/tomlkit-0.15.1"
+SRC_URI="https://files.pythonhosted.org/packages/08/72/fc01563df95c189a9f65850096bdc205bc2fe37da6c740cd64afaf18d07e/tomlkit-0.15.2.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/tomlkit-0.15.2"
 
 BDEPEND="
 	dev-pypi/gpep517[${PYTHON_USEDEP}]

@@ -7,7 +7,7 @@ inherit cmake
 DESCRIPTION="Qt 6 multimedia framework for audio, video, radio, and camera"
 HOMEPAGE="https://www.qt.io/"
 
-SNAPSHOT=bb363045d192581b779f94ea38db713e0494865c
+SNAPSHOT=3230c0a385be97e03a85ecf78293628b494ec17d
 SRC_URI="https://invent.kde.org/qt/qt/${PN}/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 

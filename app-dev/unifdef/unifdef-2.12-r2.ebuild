@@ -5,7 +5,8 @@ inherit toolchain-funcs
 
 DESCRIPTION="remove #ifdef'ed lines from a file while otherwise leaving the file alone"
 HOMEPAGE="https://dotat.at/prog/unifdef/"
-SRC_URI="https://dotat.at/prog/unifdef/${P}.tar.xz"
+SRC_URI="https://github.com/fanf2/unifdef/archive/refs/tags/unifdef-${PV}.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/unifdef-unifdef-${PV}"
 
 LICENSE="BSD"
 SLOT="0"
@@ -17,4 +18,7 @@ src_prepare() {
 	sed -i "/^prefix/s:=.*:=${EPREFIX}/usr:" Makefile || die
 	tc-export CC
 	default
+	local source_date
+	source_date=$(date -u -r unifdef.c '+%Y-%m-%d %H:%M:%S %z') || die
+	printf 'V="unifdef-%s"\nD="%s"\n' "${PV}" "${source_date}" > version.sh || die
 }

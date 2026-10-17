@@ -6,7 +6,7 @@ inherit flag-o-matic
 
 DESCRIPTION="Functional, imperative, and object-oriented programming language"
 HOMEPAGE="https://ocaml.org/"
-SNAPSHOT=46e1c324fb9e9f21f52c9cc3399020f7ef8b9b91
+SNAPSHOT=9dcf0c86201cf5e8ece56c6bb5f61fc4d92fb74a
 SRC_URI="https://github.com/ocaml/ocaml/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

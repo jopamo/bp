@@ -15,8 +15,8 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-SRC_URI="https://files.pythonhosted.org/packages/36/eb/f4836c4c30cef5f26cb0d77fa16938303665f87c1e0f64c2812d00706ecf/ffmpeg_progress_yield-1.1.3.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/ffmpeg_progress_yield-1.1.3"
+SRC_URI="https://files.pythonhosted.org/packages/d1/eb/a363add886230f72e69e671470607e76d7e80c796c63fff80e45a8696d2a/ffmpeg_progress_yield-1.1.4.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/ffmpeg_progress_yield-1.1.4"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="

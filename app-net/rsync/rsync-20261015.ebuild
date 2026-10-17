@@ -4,7 +4,7 @@ inherit flag-o-matic
 
 DESCRIPTION="File transfer program to keep remote files into sync"
 HOMEPAGE="https://rsync.samba.org/"
-SNAPSHOT=7b9cedca0f85aee7ca4acfd03917019d098cc038
+SNAPSHOT=b70a61f394d0d4c71ee349a9260b4ed8babbb6be
 SRC_URI="https://github.com/RsyncProject/rsync/archive/${SNAPSHOT}.tar.gz -> rsync-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/rsync-${SNAPSHOT}"
 

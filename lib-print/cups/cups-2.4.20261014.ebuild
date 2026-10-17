@@ -1,7 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 BRANCH_NAME="$(ver_cut 1-2).x"
-SNAPSHOT=05290665eb6d30a6259cf320a10525e41415d47a
+SNAPSHOT=4f79650387c5e1fed0573b7b1c549815c82df726
 
 inherit qa-policy toolchain-funcs user
 

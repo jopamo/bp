@@ -4,7 +4,7 @@ inherit autotools
 
 DESCRIPTION="a library and collection of command line digital forensics tools"
 HOMEPAGE="https://www.sleuthkit.org/"
-SNAPSHOT=7c94288dec0c9621a883da402b3552a46f916320
+SNAPSHOT=e08bdd2f9b74b319981144c03ee492e9287b9e0f
 SRC_URI="https://github.com/sleuthkit/sleuthkit/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

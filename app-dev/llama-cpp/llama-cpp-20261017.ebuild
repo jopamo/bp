@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-inherit cmake qa-policy user
+inherit cmake qa-policy toolchain-funcs user
 
 DESCRIPTION="High-performance inference of large language models (llama.cpp)"
 HOMEPAGE="https://github.com/ggml-org/llama.cpp"
@@ -29,6 +29,11 @@ RDEPEND="${DEPEND}"
 src_configure() {
 	addpredict "/proc/self/task"
 	qa-policy-configure
+	if use cuda && tc-is-gcc && [[ $(gcc-major-version) == 16 ]]; then
+		ewarn "Allowing GCC 16 for nvcc; this host compiler is not supported by CUDA 13.3."
+		export CUDAFLAGS="${CUDAFLAGS:+${CUDAFLAGS} }-allow-unsupported-compiler"
+	fi
+
 	export NODE_ENV=development
 	export npm_config_cache="${T}/npm-cache"
 	export npm_config_include=dev

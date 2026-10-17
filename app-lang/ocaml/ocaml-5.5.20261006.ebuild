@@ -15,6 +15,8 @@ SLOT="0/${PV}"
 KEYWORDS="amd64 arm64"
 RESTRICT="test"
 
+PATCHES=( "${FILESDIR}/${PN}-5.5-bigarray-dimension-bounds.patch" )
+
 src_configure() {
 	# Installed runtime archives must contain native code, not compiler-specific IR.
 	filter-lto

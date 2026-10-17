@@ -1,0 +1,17 @@
+--- a/runtime/bigarray.c
++++ b/runtime/bigarray.c
+@@ -228,5 +228,5 @@
+-  CAMLassert(0 <= num_dims);
+-  CAMLassert(num_dims <= CAML_BA_MAX_NUM_DIMS);
++  if (num_dims < 0 || num_dims > CAML_BA_MAX_NUM_DIMS)
++    caml_invalid_argument("Bigarray.create: bad number of dimensions");
+   CAMLassert((flags & CAML_BA_KIND_MASK) < CAML_BA_FIRST_UNIMPLEMENTED_KIND);
+   for (int i = 0; i < num_dims; i++) dimcopy[i] = dim[i];
+   num_elts = 1;
+@@ -271,4 +271,5 @@
+-  CAMLassert(num_dims <= CAML_BA_MAX_NUM_DIMS);
++  if (num_dims < 0 || num_dims > CAML_BA_MAX_NUM_DIMS)
++    caml_invalid_argument("Bigarray.create: bad number of dimensions");
+   va_start(ap, data);
+   for (int i = 0; i < num_dims; i++) dim[i] = va_arg(ap, intnat);
+   va_end(ap);

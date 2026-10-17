@@ -4,7 +4,7 @@ inherit autotools qa-policy
 
 DESCRIPTION="X.Org Xlib-based client API for the XTEST & RECORD extensions library"
 HOMEPAGE="https://www.x.org/wiki/"
-SNAPSHOT=a1086d8f255e89f8148110a7f03f4a0a3398b784
+SNAPSHOT=b95aac652cd77f66c4b472aa840b30c337b77715
 SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libXtst/-/archive/${SNAPSHOT}/libXtst-${SNAPSHOT}.tar.bz2 -> libXtst-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/libxtst-${SNAPSHOT}"
 

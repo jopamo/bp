@@ -15,5 +15,5 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-SRC_URI="https://files.pythonhosted.org/packages/78/6b/4e5481ddcdb9c255b2715f54c863629f1543e97bc8c309d1c5c131ad14f2/colorlog-6.7.0.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/colorlog-6.7.0"
+SRC_URI="https://files.pythonhosted.org/packages/8c/55/ba79756cb90c8d69d599d57785398ac87bba7b19c80e87f4e8a562197c93/colorlog-6.12.0.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/colorlog-6.12.0"

@@ -4,6 +4,9 @@ lib-net/mbedtls
 # Nettle is private implementation code inside Vesk.
 lib-core/nettle
 
+# Vesk provides the Python cryptography distribution.
+dev-pypi/cryptography
+
 # Analyzer candidates have not passed the release gates in
 # app-dev/README.md.
 =app-dev/smatch-20261002

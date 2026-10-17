@@ -7,7 +7,7 @@ inherit distutils-r1
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-pypi/cryptography
+	app-crypto/vesk
 	dev-pypi/josepy
 	dev-pypi/pyopenssl
 	dev-pypi/pyrfc3339

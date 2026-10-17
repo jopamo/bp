@@ -20,6 +20,6 @@ S="${WORKDIR}/pyopenssl-26.4.0"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	dev-pypi/cryptography
+	app-crypto/vesk
 "
 # lockstep-pypi-deps: end

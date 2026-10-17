@@ -15,8 +15,8 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-SRC_URI="https://files.pythonhosted.org/packages/12/18/020d3b27a10450ddb11429f637404e8ea67ecf4d9fd999d4f1d553f25506/dunamai-1.26.2.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/dunamai-1.26.2"
+SRC_URI="https://files.pythonhosted.org/packages/c5/62/edf5352d8ce1371129ccfe971e6de3a1ce4dc7f9bdc80390fb79856b78d4/dunamai-1.26.3.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/dunamai-1.26.3"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="

@@ -13,11 +13,6 @@ KEYWORDS="amd64 arm64"
 IUSE="embedded libusb policykit selinux systemd udev"
 REQUIRED_USE="^^ ( udev libusb ) ${PYTHON_REQUIRED_USE}"
 
-PATCHES=(
-	"${FILESDIR}"/${PN}-1.9.8-systemd-user.patch
-	"${FILESDIR}"/${PN}-2.2.3-change-setup-spy-script-location.patch
-)
-
 src_configure() {
 	filter-flags -Wl,-z,defs
 

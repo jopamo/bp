@@ -6,7 +6,7 @@ PROPERTIES+=" source-payload"
 
 DESCRIPTION="High-level CPP Binding for ZeroMQ"
 HOMEPAGE="https://github.com/zeromq/cppzmq"
-SNAPSHOT=7f0530688804c2b5b6b0d985773405593fd25ca8
+SNAPSHOT=c5b2f52c62e1bae0cfb09e2e1c42ce92929543a2
 SRC_URI="https://github.com/zeromq/cppzmq/archive/${SNAPSHOT}.tar.gz -> cppzmq-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/cppzmq-${SNAPSHOT}"
 

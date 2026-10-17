@@ -6,7 +6,7 @@ PROPERTIES+=" source-payload"
 
 DESCRIPTION="X keyboard configuration database"
 HOMEPAGE="https://www.freedesktop.org/wiki/Software/XKeyboardConfig"
-SNAPSHOT=582bb71b64c4a638a2aad63256b78508081c14e8
+SNAPSHOT=77244b2f003b65f53cce3f9a9a21c6ff5c853c48
 SRC_URI="https://gitlab.freedesktop.org/xkeyboard-config/xkeyboard-config/-/archive/${SNAPSHOT}/xkeyboard-config-${SNAPSHOT}.tar.bz2 -> ${PN}-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

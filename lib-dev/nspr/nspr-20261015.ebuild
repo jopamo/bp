@@ -4,10 +4,9 @@ inherit autotools toolchain-funcs
 
 DESCRIPTION="Netscape Portable Runtime"
 HOMEPAGE="http://www.mozilla.org/projects/nspr/"
-# The 20260902 Debian snapshot contains the unmodified NSPR 4.40 sources.
-MY_PV=4.40
-SRC_URI="https://archive.mozilla.org/pub/nspr/releases/v${MY_PV}/src/${PN}-${MY_PV}.tar.gz"
-S="${WORKDIR}/${PN}-${MY_PV}"
+SNAPSHOT=90d4aa70daed97e9134f0656f9045b414a6c9145
+SRC_URI="https://github.com/mozilla/nspr/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="|| ( MPL-2.0 GPL-2 LGPL-2.1 )"
 SLOT="0"
@@ -15,25 +14,23 @@ KEYWORDS="amd64 arm64"
 IUSE="debug"
 
 src_prepare() {
-	cd "${S}"/nspr || die
-
 	default
 
 	# rename configure.in to configure.ac for new autotools compatibility
-	if [[ -e "${S}"/nspr/configure.in ]] ; then
+	if [[ -e "${S}"/configure.in ]] ; then
 		einfo "Renaming configure.in to configure.ac"
-		mv "${S}"/nspr/configure.{in,ac} || die
+		mv "${S}"/configure.{in,ac} || die
 	fi
 
 	# We must run eautoconf to regenerate configure
 	eautoconf
 
 	# make sure it won't find Perl out of Prefix
-	sed -i -e "s/perl5//g" "${S}"/nspr/configure || die
+	sed -i -e "s/perl5//g" "${S}"/configure || die
 
 	# Respect LDFLAGS
 	sed -i -e 's/\$(MKSHLIB) \$(OBJS)/\$(MKSHLIB) \$(LDFLAGS) \$(OBJS)/g' \
-		"${S}"/nspr/config/rules.mk || die
+		"${S}"/config/rules.mk || die
 }
 
 src_configure() {
@@ -53,7 +50,7 @@ src_configure() {
 	)
 
 	# Ancient autoconf needs help finding the right tools.
-	LC_ALL="C" ECONF_SOURCE="${S}/nspr" \
+	LC_ALL="C" ECONF_SOURCE="${S}" \
 	ac_cv_path_AR="${AR}" \
 	econf "${myconf[@]}"
 }

@@ -5,7 +5,7 @@ inherit meson
 DESCRIPTION="LTR-only FriBidi API/ABI compatibility shim"
 HOMEPAGE="https://gitlab.com/pjo/fakebidi https://fribidi.org/"
 
-SNAPSHOT=2958860d93a60fffb80b2144785a651d5534dc24
+SNAPSHOT=17cccda30f6f4fff879eea2c53f60b530efb1cba
 SRC_URI="https://gitlab.com/pjo/fakebidi/-/archive/${SNAPSHOT}/fakebidi-${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/fakebidi-${SNAPSHOT}
 

@@ -3,15 +3,15 @@ EAPI=8
 MERGE_MANIFEST_MODE="tree-blake3-v1"
 
 CRATE_NAME="tar-framing"
-CRATE_VERSION="0.0.14"
-CRATE_CHECKSUM="783223a7a6590be4227cb821e7ce80372575511f67c824921aba0752d8ad5573"
+CRATE_VERSION="0.0.15"
+CRATE_CHECKSUM="563e8181b47c9cdcce569eae3ad431eec71543d6269dd60c7bd2350f70bcd233"
 CRATE_SOURCE="registry+https://github.com/rust-lang/crates.io-index"
 CRATE_SOURCE_KIND="registry"
 
 inherit cargo-crate
 
 DESCRIPTION="A framing layer for tar archives."
-HOMEPAGE="https://github.com/astral-sh/tar-codec"
+HOMEPAGE="https://github.com/astral-sh/astral-codec"
 LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="${PV}"
 KEYWORDS="amd64 arm64"

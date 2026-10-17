@@ -1,0 +1,6 @@
+--- a/libr/lang/p/qjs.c
++++ b/libr/lang/p/qjs.c
+@@ -35 +35,2 @@
+-static int qjs_interrupt_handler(JSRuntime *rt, void *opaque) {
++static int qjs_interrupt_handler(JSContext *ctx, void *opaque) {
++	(void)ctx;

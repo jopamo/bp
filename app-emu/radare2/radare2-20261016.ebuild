@@ -34,6 +34,10 @@ DEPEND="
 "
 BDEPEND="app-dev/gperf"
 
+PATCHES=(
+	"${FILESDIR}"/radare2-20261016-qjs-interrupt-handler-context.patch
+)
+
 src_prepare() {
 	default
 

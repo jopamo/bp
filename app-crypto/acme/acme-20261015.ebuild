@@ -7,7 +7,7 @@ inherit distutils-r1
 # lockstep-pypi-managed: true
 # lockstep-pypi-deps: begin
 RDEPEND+="
-	app-crypto/vesk[${PYTHON_USEDEP}]
+	dev-pypi/cryptography
 	dev-pypi/josepy
 	dev-pypi/pyopenssl
 	dev-pypi/pyrfc3339
@@ -20,7 +20,7 @@ PARENT_P="${PARENT_PN}-${PV}"
 DESCRIPTION="An implementation of the ACME protocol"
 HOMEPAGE="https://letsencrypt.org"
 SRC_URI="https://github.com/certbot/certbot/archive/v${PV}.tar.gz -> ${PARENT_P}.gh.tar.gz"
-SNAPSHOT=15809b002f109b8f1be5c64779049c33ec8f7f86
+SNAPSHOT=990a59a814c8d4c53cc896f3c376c1c14e6c099c
 SRC_URI="https://github.com/certbot/certbot/archive/${SNAPSHOT}.tar.gz -> acme-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PARENT_PN}-${SNAPSHOT}/acme"
 

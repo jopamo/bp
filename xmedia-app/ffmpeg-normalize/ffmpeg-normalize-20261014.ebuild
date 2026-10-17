@@ -14,7 +14,7 @@ RDEPEND+="
 # lockstep-pypi-deps: end
 DESCRIPTION="Audio Normalization for Python/ffmpeg"
 HOMEPAGE="https://github.com/slhck/ffmpeg-normalize"
-SNAPSHOT=08876d1b9113e8a10ef1e5ba3cfd5e277324f8af
+SNAPSHOT=90dc8904353bfe596222da94c039dffd83401bf0
 SRC_URI="https://github.com/slhck/ffmpeg-normalize/archive/${SNAPSHOT}.tar.gz -> ffmpeg-normalize-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/ffmpeg-normalize-${SNAPSHOT}"
 

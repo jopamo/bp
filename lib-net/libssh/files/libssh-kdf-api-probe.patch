@@ -1,0 +1,22 @@
+--- a/ConfigureChecks.cmake
++++ b/ConfigureChecks.cmake
+@@ -103,3 +103,18 @@
+     check_function_exists(EVP_KDF_CTX_new_id HAVE_OPENSSL_EVP_KDF_CTX_NEW_ID)
+-    check_function_exists(EVP_KDF_CTX_new HAVE_OPENSSL_EVP_KDF_CTX_NEW)
++    # Match the API branch selected by src/libcrypto.c.
++    check_c_source_compiles("
++#include <openssl/opensslv.h>
++#include <openssl/evp.h>
++#include <openssl/kdf.h>
++#if OPENSSL_VERSION_NUMBER < 0x30000000L
++#error libcrypto.c requires the legacy KDF API
++#endif
++int main(void)
++{
++    EVP_KDF *kdf = EVP_KDF_fetch(NULL, \"SSHKDF\", NULL);
++    EVP_KDF_CTX *ctx = EVP_KDF_CTX_new(kdf);
++    EVP_KDF_CTX_free(ctx);
++    EVP_KDF_free(kdf);
++    return 0;
++}" HAVE_OPENSSL_EVP_KDF_CTX_NEW)
+     check_function_exists(FIPS_mode HAVE_OPENSSL_FIPS_MODE)

@@ -9,6 +9,7 @@ SRC_URI="https://gitlab.com/libssh/libssh-mirror/-/archive/${SNAPSHOT}/libssh-mi
 S="${WORKDIR}/libssh-mirror-${SNAPSHOT}"
 PATCHES=(
 	"${FILESDIR}/${PN}-sntrup761-maybe-uninitialized.patch"
+	"${FILESDIR}/${PN}-kdf-api-probe.patch"
 )
 
 LICENSE="BSD"

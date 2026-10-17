@@ -3,8 +3,8 @@ EAPI=8
 MERGE_MANIFEST_MODE="tree-blake3-v1"
 
 CRATE_NAME="zstd-safe"
-CRATE_VERSION="8.0.0"
-CRATE_CHECKSUM="ae42c0555055784c70058d19ba8e275528e8a99a706684868ace5da4e716a4ab"
+CRATE_VERSION="8.1.0"
+CRATE_CHECKSUM="bdd44c6a7284e91f3717755b24315a302edd9153a01f753c3cba3d765e8eafac"
 CRATE_SOURCE="registry+https://github.com/rust-lang/crates.io-index"
 CRATE_SOURCE_KIND="registry"
 
@@ -33,6 +33,7 @@ CARGO_CRATE_FEATURES=(
 	"thin"
 	"thin-lto"
 	"vendored"
+	"with-rust-allocator"
 	"zdict_builder"
 	"zstdmt"
 )

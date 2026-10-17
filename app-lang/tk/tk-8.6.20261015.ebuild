@@ -6,7 +6,7 @@ inherit autotools toolchain-funcs prefix
 
 DESCRIPTION="Tk Widget Set"
 HOMEPAGE="https://www.tcl.tk/"
-SNAPSHOT=06621cc079918146e61c940aa9787ce26d79210e
+SNAPSHOT=98a14e2c644de8ac67d574c3277c98e490419aec
 SRC_URI="https://github.com/tcltk/tk/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 

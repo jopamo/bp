@@ -7,7 +7,7 @@ inherit cmake
 DESCRIPTION="Additional format plugins for the Qt image I/O system"
 HOMEPAGE="https://www.qt.io/"
 
-SNAPSHOT=9164385c556c34da6424c54504a31474dbefad37
+SNAPSHOT=a617952a600b19735a313bf3418781de40c3894a
 SRC_URI="https://invent.kde.org/qt/qt/${PN}/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 

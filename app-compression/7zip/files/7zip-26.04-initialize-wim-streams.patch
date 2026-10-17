@@ -1,0 +1,53 @@
+Initialize WIM stream fields before copying records into CRecordVector.
+New data and metadata resources need KeepSolid=false and SolidIndex=-1.
+Initialize the old-format Id field even when writing or reading modern WIMs,
+since the vector copies the entire CStreamInfo rather than its serialized fields.
+
+--- a/CPP/7zip/Archive/Wim/WimHandlerOut.cpp
++++ b/CPP/7zip/Archive/Wim/WimHandlerOut.cpp
+@@ -1456,6 +1456,7 @@
+     const unsigned streamIndex = streams.Size();
+     CStreamInfo s;
+     s.Resource = rs;
++    s.Id = 0;
+     s.PartNumber = 1;
+     s.RefCount = numRefs;
+
+@@ -1659,6 +1660,8 @@
+           index = (int)streams.Size();
+           RINOK(WriteStream(outStream, (const Byte *)mi.Reparse + 8, packSize))
+           CStreamInfo s;
++          s.Resource.Clear();
++          s.Id = 0;
+           s.Resource.PackSize = packSize;
+           s.Resource.Offset = curPos;
+           s.Resource.UnpackSize = packSize;
+@@ -1755,6 +1758,8 @@
+             {
+               index = (int)streams.Size();
+               CStreamInfo s;
++              s.Resource.Clear();
++              s.Id = 0;
+               s.Resource.PackSize = packSize;
+               s.Resource.Offset = curPos;
+               s.Resource.UnpackSize = size;
+@@ -1881,6 +1886,8 @@
+       return E_FAIL;
+     {
+       CStreamInfo s;
++      s.Resource.Clear();
++      s.Id = 0;
+       s.Resource.PackSize = pos;
+       s.Resource.Offset = curPos;
+       s.Resource.UnpackSize = pos;
+--- a/CPP/7zip/Archive/Wim/WimIn.cpp
++++ b/CPP/7zip/Archive/Wim/WimIn.cpp
+@@ -1194,7 +1194,7 @@
+       else
+       {
+         s.PartNumber = Get16(p + 24);
+-        // s.Id = 0; // optional : unused
++        s.Id = 0;
+         p += kStreamInfoSize;
+       }
+       // (p) is aligned for 2-bytes

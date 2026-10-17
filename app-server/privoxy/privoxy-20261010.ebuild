@@ -4,7 +4,7 @@ inherit autotools doins toolchain-funcs user
 
 DESCRIPTION="A web proxy with advanced filtering capabilities for enhancing privacy"
 HOMEPAGE="https://www.privoxy.org https://sourceforge.net/projects/ijbswa/"
-SNAPSHOT=314fc388abe0289011bd110454f8dc9841f65f6f
+SNAPSHOT=08593d415b661a676ce95c05934f8929f426e957
 SRC_URI="https://github.com/1g4-mirror/privoxy/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

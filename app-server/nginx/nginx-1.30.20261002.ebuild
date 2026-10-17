@@ -6,7 +6,7 @@ inherit user
 
 DESCRIPTION="High-performance HTTP server and reverse proxy"
 HOMEPAGE="https://nginx.org"
-SNAPSHOT=4556c714d1cfa587f92c7c0365c09209d42d148b
+SNAPSHOT=fb0e979c6dd63c018958b41eeb844947c5c21264
 SRC_URI="https://github.com/nginx/nginx/archive/${SNAPSHOT}.tar.gz -> nginx-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/nginx-${SNAPSHOT}"
 

@@ -3,8 +3,8 @@ EAPI=8
 MERGE_MANIFEST_MODE="tree-blake3-v1"
 
 CRATE_NAME="normpath"
-CRATE_VERSION="1.5.1"
-CRATE_CHECKSUM="b9985ef7269fa99f3b12437bb698381da2428743ab90f20393f399fa14cab21a"
+CRATE_VERSION="1.5.2"
+CRATE_CHECKSUM="b11ce00d2594068e8a27c9146fdc5cf9f3ac38eb42c7cd34d05fea618873ac9f"
 CRATE_SOURCE="registry+https://github.com/rust-lang/crates.io-index"
 CRATE_SOURCE_KIND="registry"
 

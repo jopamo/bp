@@ -7,7 +7,12 @@ HOMEPAGE="http://www.openssh.org/"
 SNAPSHOT=15289cc38956aa74d4947174a68c10ac9ad2157f
 SRC_URI="https://github.com/openssh/openssh-portable/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/openssh-portable-${SNAPSHOT}
-PATCHES=( "${FILESDIR}"/openssh-connection-hash-sha256.patch )
+PATCHES=(
+	"${FILESDIR}"/openssh-connection-hash-sha256.patch
+	"${FILESDIR}"/openssh-hmac-api.patch
+	"${FILESDIR}"/openssh-krl-hash-policy.patch
+	"${FILESDIR}"/openssh-cipher-errors.patch
+)
 
 LICENSE="BSD GPL-2"
 SLOT="0"
@@ -82,6 +87,10 @@ src_install() {
 
 	insinto /etc/ssh
 	doins "${FILESDIR}"/{ssh,sshd}_config
+	if ! use ssl; then
+		sed -i '/^  Ciphers /s/,aes[0-9]*-gcm@openssh.com//g' \
+			"${ED}"/etc/ssh/ssh_config || die
+	fi
 
 	keepdir /var/empty
 

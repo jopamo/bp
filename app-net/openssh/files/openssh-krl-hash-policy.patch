@@ -1,0 +1,27 @@
+Do not request a legacy fingerprint when the KRL has no entries of that
+type. A populated SHA-1 table still requires its check to succeed; digest
+refusal remains an error, never an unrevoked result.
+
+--- a/krl.c
++++ b/krl.c
+@@ -1199,9 +1199,11 @@
+-	memset(&rb, 0, sizeof(rb));
+-	if ((r = sshkey_fingerprint_raw(key, SSH_DIGEST_SHA1,
+-	    &rb.blob, &rb.len)) != 0)
+-		return r;
+-	erb = RB_FIND(revoked_blob_tree, &krl->revoked_sha1s, &rb);
+-	free(rb.blob);
+-	if (erb != NULL) {
+-		KRL_DBG(("revoked by key SHA1"));
+-		return SSH_ERR_KEY_REVOKED;
++	if (!RB_EMPTY(&krl->revoked_sha1s)) {
++		memset(&rb, 0, sizeof(rb));
++		if ((r = sshkey_fingerprint_raw(key, SSH_DIGEST_SHA1,
++		    &rb.blob, &rb.len)) != 0)
++			return r;
++		erb = RB_FIND(revoked_blob_tree, &krl->revoked_sha1s, &rb);
++		free(rb.blob);
++		if (erb != NULL) {
++			KRL_DBG(("revoked by key SHA1"));
++			return SSH_ERR_KEY_REVOKED;
++		}

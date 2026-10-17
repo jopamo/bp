@@ -1,0 +1,53 @@
+Honor boolean EVP_Cipher failure for ordinary ciphers without treating the
+zero-byte success of custom GCM finalization as failure. Reject mismatched
+authentication-tag extents before packet processing.
+
+--- a/cipher.c
++++ b/cipher.c
+@@ -340 +340 @@
+- * Both 'aadlen' and 'authlen' can be set to 0.
++ * 'aadlen' may be 0; 'authlen' must match the cipher's tag length.
+@@ -345,0 +346,6 @@
++#ifdef WITH_OPENSSL
++	int ret;
++#endif
++
++	if (authlen != cipher_authlen(cc->cipher))
++		return SSH_ERR_INVALID_ARGUMENT;
+@@ -367,2 +372,0 @@
+-		if (authlen != cipher_authlen(cc->cipher))
+-			return SSH_ERR_INVALID_ARGUMENT;
+@@ -387,2 +391,3 @@
+-	if (EVP_Cipher(cc->evp, dest + aadlen, (u_char *)src + aadlen,
+-	    len) < 0)
++	ret = EVP_Cipher(cc->evp, dest + aadlen, (u_char *)src + aadlen, len);
++	/* GCM returns a byte count; ordinary ciphers return a boolean. */
++	if (ret < 0 || (authlen == 0 && ret == 0))
+--- a/cipher-chachapoly-libcrypto.c
++++ b/cipher-chachapoly-libcrypto.c
+@@ -89,0 +90,3 @@
++	if (authlen != POLY1305_TAGLEN)
++		return SSH_ERR_INVALID_ARGUMENT;
++
+@@ -99 +102 @@
+-	    poly_key, sizeof(poly_key)) < 0) {
++	    poly_key, sizeof(poly_key)) != 1) {
+@@ -118 +121 @@
+-		    EVP_Cipher(ctx->header_evp, dest, src, aadlen) < 0) {
++		    EVP_Cipher(ctx->header_evp, dest, src, aadlen) != 1) {
+@@ -127 +130 @@
+-	    EVP_Cipher(ctx->main_evp, dest + aadlen, src + aadlen, len) < 0) {
++	    EVP_Cipher(ctx->main_evp, dest + aadlen, src + aadlen, len) != 1) {
+@@ -158 +161 @@
+-	if (EVP_Cipher(ctx->header_evp, buf, (u_char *)cp, sizeof(buf)) < 0)
++	if (EVP_Cipher(ctx->header_evp, buf, (u_char *)cp, sizeof(buf)) != 1)
+--- a/packet.c
++++ b/packet.c
+@@ -1656 +1656 @@
+-		if (cipher_get_length(state->receive_context,
++		if ((r = cipher_get_length(state->receive_context,
+@@ -1658,2 +1658,2 @@
+-		    sshbuf_ptr(state->input), sshbuf_len(state->input)) != 0)
+-			return 0;
++		    sshbuf_ptr(state->input), sshbuf_len(state->input))) != 0)
++			return r == SSH_ERR_MESSAGE_INCOMPLETE ? 0 : r;

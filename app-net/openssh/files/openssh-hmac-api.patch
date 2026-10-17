@@ -1,0 +1,114 @@
+Use the linked HMAC owner in OpenSSL builds; do not request standalone
+digests for HMAC or fall back to the local construction after refusal.
+
+--- a/hmac.c
++++ b/hmac.c
+@@ -27,0 +28,98 @@
++size_t
++ssh_hmac_bytes(int alg)
++{
++	return ssh_digest_bytes(alg);
++}
++
++#ifdef WITH_OPENSSL
++#include <limits.h>
++#include <openssl/evp.h>
++#include <openssl/hmac.h>
++
++#include "sshbuf.h"
++
++struct ssh_hmac_ctx {
++	HMAC_CTX *ctx;
++	const EVP_MD *md;
++	size_t len;
++};
++
++struct ssh_hmac_ctx *
++ssh_hmac_start(int alg)
++{
++	struct ssh_hmac_ctx *ret;
++	const char *name = ssh_digest_alg_name(alg);
++
++	if (name == NULL || (ret = calloc(1, sizeof(*ret))) == NULL)
++		return NULL;
++	ret->len = ssh_hmac_bytes(alg);
++	if ((ret->md = EVP_get_digestbyname(name)) == NULL ||
++	    ret->len == 0 || ret->len > EVP_MAX_MD_SIZE ||
++	    (ret->ctx = HMAC_CTX_new()) == NULL ||
++	    HMAC_Init_ex(ret->ctx, "", 0, ret->md, NULL) != 1) {
++		ssh_hmac_free(ret);
++		return NULL;
++	}
++	return ret;
++}
++
++int
++ssh_hmac_init(struct ssh_hmac_ctx *ctx, const void *key, size_t klen)
++{
++	if (ctx == NULL || ctx->ctx == NULL || (key != NULL && klen > INT_MAX))
++		return -1;
++	if (HMAC_Init_ex(ctx->ctx, key, key == NULL ? 0 : (int)klen,
++	    key == NULL ? NULL : ctx->md, NULL) != 1) {
++		/* A failed rekey must not leave a usable partial context. */
++		HMAC_CTX_free(ctx->ctx);
++		ctx->ctx = NULL;
++		return -1;
++	}
++	return 0;
++}
++
++int
++ssh_hmac_update(struct ssh_hmac_ctx *ctx, const void *m, size_t mlen)
++{
++	if (ctx == NULL || ctx->ctx == NULL || (m == NULL && mlen != 0))
++		return -1;
++	return HMAC_Update(ctx->ctx, m, mlen) == 1 ? 0 : -1;
++}
++
++int
++ssh_hmac_update_buffer(struct ssh_hmac_ctx *ctx, const struct sshbuf *b)
++{
++	if (b == NULL)
++		return -1;
++	return ssh_hmac_update(ctx, sshbuf_ptr(b), sshbuf_len(b));
++}
++
++int
++ssh_hmac_final(struct ssh_hmac_ctx *ctx, u_char *d, size_t dlen)
++{
++	u_char result[EVP_MAX_MD_SIZE];
++	unsigned int len = 0;
++	int ret = -1;
++
++	if (ctx == NULL || ctx->ctx == NULL || d == NULL ||
++	    dlen < ctx->len || dlen > UINT_MAX)
++		return -1;
++	if (HMAC_Final(ctx->ctx, result, &len) == 1 && len == ctx->len) {
++		memcpy(d, result, len);
++		ret = 0;
++	}
++	explicit_bzero(result, sizeof(result));
++	return ret;
++}
++
++void
++ssh_hmac_free(struct ssh_hmac_ctx *ctx)
++{
++	if (ctx == NULL)
++		return;
++	HMAC_CTX_free(ctx->ctx);
++	freezero(ctx, sizeof(*ctx));
++}
++
++#else /* WITH_OPENSSL */
++
+@@ -36,6 +133,0 @@
+-
+-size_t
+-ssh_hmac_bytes(int alg)
+-{
+-	return ssh_digest_bytes(alg);
+-}
+@@ -197,0 +290,2 @@
++
++#endif /* WITH_OPENSSL */

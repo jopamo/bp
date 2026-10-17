@@ -24,6 +24,7 @@ PrintLastLog no
 PrintMotd no
 Protocol 2
 PubkeyAuthentication yes
+RequiredRSASize 3072
 StrictModes yes
 Subsystem sftp /usr/libexec/sftp-server
 SyslogFacility AUTH

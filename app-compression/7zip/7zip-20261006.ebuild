@@ -20,6 +20,7 @@ BDEPEND="
 
 PATCHES=(
 	"${FILESDIR}"/7zip-26.02-initialize-filter-group-index.patch
+	"${FILESDIR}"/7zip-26.04-wfmo-lifetimebound.patch
 )
 
 pkg_setup() {

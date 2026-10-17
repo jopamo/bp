@@ -1,0 +1,5 @@
+--- a/CPP/Windows/Synchronization.h
++++ b/CPP/Windows/Synchronization.h
+@@ -278 +278 @@
+-  operator CHandle_WFMO() { return this; }
++  operator CHandle_WFMO() Z7_lifetimebound { return this; }

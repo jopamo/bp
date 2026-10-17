@@ -8,9 +8,9 @@ inherit distutils-r1
 # lockstep-pypi-deps: begin
 RDEPEND+="
 	app-crypto/acme
-	app-crypto/vesk[${PYTHON_USEDEP}]
 	dev-pypi/configargparse
 	dev-pypi/configobj
+	dev-pypi/cryptography
 	dev-pypi/distro
 	dev-pypi/josepy
 	dev-pypi/parsedatetime
@@ -21,7 +21,7 @@ DESCRIPTION="Let’s Encrypt client to automate deployment of X.509 certificates
 
 HOMEPAGE="https://github.com/certbot/certbot"
 KEYWORDS="amd64 arm64"
-SNAPSHOT=15809b002f109b8f1be5c64779049c33ec8f7f86
+SNAPSHOT=990a59a814c8d4c53cc896f3c376c1c14e6c099c
 SRC_URI="https://github.com/certbot/certbot/archive/${SNAPSHOT}.tar.gz -> certbot-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/certbot-${SNAPSHOT}/certbot"
 

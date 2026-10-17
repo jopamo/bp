@@ -70,6 +70,9 @@ src_compile() {
 			-Wno-cast-qual \
 			-Wno-disabled-macro-expansion \
 			-Wno-reserved-macro-identifier
+	elif tc-is-gcc && [[ $(gcc-major-version) == 16 ]]; then
+		# GCC 16 speculates unrelated COM destructors and reports false bounds errors.
+		append-cxxflags -fno-devirtualize-speculatively
 	fi
 
 	export G_CFLAGS=${CFLAGS}

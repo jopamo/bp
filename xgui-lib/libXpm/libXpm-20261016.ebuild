@@ -4,7 +4,7 @@ inherit autotools qa-policy
 
 DESCRIPTION="X.Org Xpm library"
 HOMEPAGE="https://www.x.org/wiki/"
-SNAPSHOT=58eb875b786e872012c17bb43796b0199f484941
+SNAPSHOT=34f15baa50a14e1bb8e33ed42d8f252a06446fd8
 SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libXpm/-/archive/${SNAPSHOT}/libXpm-${SNAPSHOT}.tar.bz2 -> libXpm-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/libxpm-${SNAPSHOT}"
 

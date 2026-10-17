@@ -6,22 +6,19 @@ EAPI=8
 CARGO_DEPS="
 	rust-crates/ahash-0.8.12
 	rust-crates/aho-corasick-1.1.3
-	rust-crates/allocator-api2-0.2.21
 	rust-crates/autocfg-1.3.0
-	rust-crates/base64-0.22.1
+	rust-crates/base64-0.23.1
 	rust-crates/bitflags-2.9.1
 	rust-crates/bitvec-1.0.1
 	rust-crates/bumpalo-3.19.0
-	rust-crates/cc-1.0.101
 	rust-crates/cfg-if-1.0.0
 	rust-crates/displaydoc-0.2.5
 	rust-crates/enum_dispatch-0.3.13
-	rust-crates/equivalent-1.0.2
 	rust-crates/foldhash-0.2.0
 	rust-crates/form_urlencoded-1.2.2
 	rust-crates/funty-2.0.0
 	rust-crates/getrandom-0.3.3
-	rust-crates/hashbrown-0.16.1
+	rust-crates/hashbrown-0.17.1
 	rust-crates/heck-0.5.0
 	rust-crates/hex-0.4.3
 	rust-crates/icu_collections-1.5.0
@@ -37,7 +34,7 @@ CARGO_DEPS="
 	rust-crates/idna-1.1.0
 	rust-crates/idna_adapter-1.2.0
 	rust-crates/itoa-1.0.11
-	rust-crates/jiter-0.14.0
+	rust-crates/jiter-0.16.0
 	rust-crates/js-sys-0.3.77
 	rust-crates/lexical-parse-float-1.0.5
 	rust-crates/lexical-parse-integer-1.0.5
@@ -45,7 +42,7 @@ CARGO_DEPS="
 	rust-crates/libc-0.2.185
 	rust-crates/litemap-0.7.3
 	rust-crates/log-0.4.27
-	rust-crates/lru-0.16.3
+	rust-crates/lru-0.18.5
 	rust-crates/memchr-2.7.4
 	rust-crates/num-bigint-0.4.6
 	rust-crates/num-integer-0.1.46
@@ -53,31 +50,30 @@ CARGO_DEPS="
 	rust-crates/once_cell-1.21.3
 	rust-crates/percent-encoding-2.3.2
 	rust-crates/portable-atomic-1.6.0
-	rust-crates/proc-macro2-1.0.86
-	rust-crates/pyo3-0.28.3
-	rust-crates/pyo3-build-config-0.28.3
-	rust-crates/pyo3-ffi-0.28.3
-	rust-crates/pyo3-macros-0.28.3
-	rust-crates/pyo3-macros-backend-0.28.3
-	rust-crates/python3-dll-a-0.2.14
+	rust-crates/proc-macro2-1.0.107
+	rust-crates/pyo3-0.29.2
+	rust-crates/pyo3-build-config-0.29.2
+	rust-crates/pyo3-ffi-0.29.2
+	rust-crates/pyo3-macros-0.29.2
+	rust-crates/pyo3-macros-backend-0.29.2
 	rust-crates/quote-1.0.44
 	rust-crates/r-efi-5.2.0
 	rust-crates/radium-0.7.0
-	rust-crates/regex-1.12.3
-	rust-crates/regex-automata-0.4.13
-	rust-crates/regex-syntax-0.8.5
-	rust-crates/rustversion-1.0.17
-	rust-crates/serde-1.0.228
-	rust-crates/serde_core-1.0.228
-	rust-crates/serde_derive-1.0.228
-	rust-crates/serde_json-1.0.149
-	rust-crates/smallvec-1.15.1
+	rust-crates/regex-1.13.1
+	rust-crates/regex-automata-0.4.18
+	rust-crates/regex-syntax-0.8.11
+	rust-crates/serde-1.0.229
+	rust-crates/serde_core-1.0.229
+	rust-crates/serde_derive-1.0.229
+	rust-crates/serde_json-1.0.151
+	rust-crates/smallvec-1.16.2
 	rust-crates/speedate-0.17.0
 	rust-crates/stable_deref_trait-1.2.0
 	rust-crates/static_assertions-1.1.0
 	rust-crates/strum-0.27.2
 	rust-crates/strum_macros-0.27.2
 	rust-crates/syn-2.0.82
+	rust-crates/syn-3.0.6
 	rust-crates/synstructure-0.13.1
 	rust-crates/tap-1.0.1
 	rust-crates/target-lexicon-0.13.4
@@ -86,7 +82,7 @@ CARGO_DEPS="
 	rust-crates/url-2.5.8
 	rust-crates/utf16_iter-1.0.5
 	rust-crates/utf8_iter-1.0.4
-	rust-crates/uuid-1.23.0
+	rust-crates/uuid-1.23.4
 	rust-crates/version_check-0.9.5
 	rust-crates/wasi-0.14.2+wasi-0.2.4
 	rust-crates/wasm-bindgen-0.2.100
@@ -123,8 +119,8 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-SRC_URI="https://files.pythonhosted.org/packages/af/f9/8a06bea35ef8daf588f707784c973a7046e0034c8d8cfb08828eeffb8b75/pydantic_core-2.46.5.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/pydantic_core-2.46.5"
+SRC_URI="https://files.pythonhosted.org/packages/a6/24/af4ec4be49fbc810f35b0bdcacc3d433b56bbfa469fd3bfd4ae116cd9bf1/pydantic_core-2.50.1.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/pydantic_core-2.50.1"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="

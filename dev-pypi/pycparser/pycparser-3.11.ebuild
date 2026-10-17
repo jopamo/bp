@@ -15,11 +15,10 @@ LICENSE="BSD-3-Clause"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-SRC_URI="https://files.pythonhosted.org/packages/1b/7d/92392ff7815c21062bea51aa7b87d45576f649f16458d78b7cf94b9ab2e6/pycparser-3.0.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/pycparser-3.0"
+SRC_URI="https://files.pythonhosted.org/packages/da/a8/c5fdbeee588bb8ada9458774f43adf1bdd30bd59157055142183e769a024/pycparser-3.11.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/pycparser-3.11"
 
 BDEPEND="
 	dev-pypi/gpep517[${PYTHON_USEDEP}]
 	dev-pypi/setuptools[${PYTHON_USEDEP}]
-	dev-pypi/wheel[${PYTHON_USEDEP}]
 "

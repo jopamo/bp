@@ -4,7 +4,7 @@ inherit meson python-single-r1
 
 DESCRIPTION="ELF utils that can check files for security relevant properties"
 HOMEPAGE="https://wiki.gentoo.org/index.php?title=Project:Hardened/PaX_Utilities"
-SNAPSHOT=a19d74326cf0dfc5eea93a5f0bc23dc3a5a959b5
+SNAPSHOT=9bab227c2e0a8f7df6f513bd375ee0f477e513e8
 SRC_URI="https://github.com/gentoo/pax-utils/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/pax-utils-${SNAPSHOT}"
 

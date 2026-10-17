@@ -4,7 +4,7 @@ inherit autotools qa-policy
 
 DESCRIPTION="Userspace access to USB devices"
 HOMEPAGE="http://libusb.info/ https://github.com/libusb/libusb"
-SNAPSHOT=abba63ed3cad642cc2540ad407b5304109c0ca45
+SNAPSHOT=1d8469ec9d55aee43b45a10574f99b43303f70f3
 SRC_URI="https://github.com/libusb/libusb/archive/${SNAPSHOT}.tar.gz -> libusb-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/libusb-${SNAPSHOT}"
 

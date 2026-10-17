@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-SNAPSHOT=06837d991232c2b016fd051bb8a406da0248b610
+SNAPSHOT=c9c310556451f0d0a90f45e4d80a39d00567928f
 EGIT_REPO_URI="https://github.com/perl5-dbi/dbi.git"
 EGIT_COMMIT="${SNAPSHOT}"
 

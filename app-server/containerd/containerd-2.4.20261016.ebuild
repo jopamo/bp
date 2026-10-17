@@ -6,7 +6,7 @@ inherit go-module
 
 DESCRIPTION="A daemon to control runC"
 HOMEPAGE="https://containerd.io/"
-SNAPSHOT=fc4ba68cadcab72c1e1f243cf800e3cbdcba9cb2
+SNAPSHOT=52e365dbd1ed059a0a5e3656c74b221c8edc681d
 SRC_URI="https://github.com/containerd/containerd/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 # lockstep-go-managed: true
 # lockstep-go-deps: begin
@@ -346,8 +346,8 @@ EGO_SUM=(
 	"golang.org/x/crypto v0.19.0/go.mod"
 	"golang.org/x/crypto v0.23.0/go.mod"
 	"golang.org/x/crypto v0.33.0/go.mod"
-	"golang.org/x/crypto v0.56.0"
-	"golang.org/x/crypto v0.56.0/go.mod"
+	"golang.org/x/crypto v0.57.0"
+	"golang.org/x/crypto v0.57.0/go.mod"
 	"golang.org/x/mod v0.12.0/go.mod"
 	"golang.org/x/mod v0.15.0/go.mod"
 	"golang.org/x/mod v0.17.0/go.mod"
@@ -362,9 +362,9 @@ EGO_SUM=(
 	"golang.org/x/net v0.15.0/go.mod"
 	"golang.org/x/net v0.21.0/go.mod"
 	"golang.org/x/net v0.25.0/go.mod"
-	"golang.org/x/net v0.58.0"
-	"golang.org/x/net v0.58.0/go.mod"
 	"golang.org/x/net v0.6.0/go.mod"
+	"golang.org/x/net v0.60.0"
+	"golang.org/x/net v0.60.0/go.mod"
 	"golang.org/x/oauth2 v0.36.0"
 	"golang.org/x/oauth2 v0.36.0/go.mod"
 	"golang.org/x/sync v0.0.0-20190423024810-112230192c58/go.mod"
@@ -400,8 +400,8 @@ EGO_SUM=(
 	"golang.org/x/term v0.17.0/go.mod"
 	"golang.org/x/term v0.20.0/go.mod"
 	"golang.org/x/term v0.29.0/go.mod"
-	"golang.org/x/term v0.45.0"
-	"golang.org/x/term v0.45.0/go.mod"
+	"golang.org/x/term v0.46.0"
+	"golang.org/x/term v0.46.0/go.mod"
 	"golang.org/x/term v0.5.0/go.mod"
 	"golang.org/x/term v0.8.0/go.mod"
 	"golang.org/x/text v0.13.0/go.mod"
@@ -411,8 +411,8 @@ EGO_SUM=(
 	"golang.org/x/text v0.3.0/go.mod"
 	"golang.org/x/text v0.3.3/go.mod"
 	"golang.org/x/text v0.3.7/go.mod"
-	"golang.org/x/text v0.41.0"
-	"golang.org/x/text v0.41.0/go.mod"
+	"golang.org/x/text v0.42.0"
+	"golang.org/x/text v0.42.0/go.mod"
 	"golang.org/x/text v0.7.0/go.mod"
 	"golang.org/x/text v0.9.0/go.mod"
 	"golang.org/x/time v0.16.0"

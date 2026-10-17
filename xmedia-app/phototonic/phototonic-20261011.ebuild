@@ -5,7 +5,7 @@ inherit qmake-utils qa-policy xdg
 DESCRIPTION="Image Viewer and organizer"
 HOMEPAGE="https://github.com/luebking/phototonic"
 
-SNAPSHOT=fc4c1bd3f8c30ef09fc8b9fe7658c1a70523cb9c
+SNAPSHOT=044ec467d296123ac6573ebcebbb28eb257595a4
 SRC_URI="https://github.com/luebking/phototonic/archive/${SNAPSHOT}.tar.gz -> phototonic-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/phototonic-${SNAPSHOT}"
 

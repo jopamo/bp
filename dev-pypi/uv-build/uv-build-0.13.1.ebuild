@@ -13,18 +13,19 @@ CARGO_DEPS="
 	rust-crates/anstyle-query-1.1.5
 	rust-crates/anstyle-wincon-3.0.11
 	rust-crates/anyhow-1.0.104
-	rust-crates/archive-trait-0.0.14
+	rust-crates/archive-trait-0.0.15
 	rust-crates/arcstr-1.2.0
 	rust-crates/arrayvec-0.7.8
+	rust-crates/astral-mail-headers-0.0.1
 	rust-crates/astral-tokio-tar-0.7.0
 	rust-crates/astral-version-ranges-0.2.2
-	rust-crates/astral_async_zip-0.0.21
-	rust-crates/async-compression-0.4.19
+	rust-crates/astral_async_zip-0.0.22
+	rust-crates/async-compression-0.4.46
 	rust-crates/autocfg-1.5.0
 	rust-crates/backon-1.6.0
 	rust-crates/base64-0.22.1
 	rust-crates/bitflags-1.3.2
-	rust-crates/bitflags-2.13.1
+	rust-crates/bitflags-2.13.2
 	rust-crates/block-buffer-0.10.4
 	rust-crates/block-buffer-0.12.1
 	rust-crates/boxcar-0.2.14
@@ -35,23 +36,22 @@ CARGO_DEPS="
 	rust-crates/bytes-1.12.1
 	rust-crates/cap-primitives-4.0.3
 	rust-crates/cap-std-4.0.3
-	rust-crates/cc-1.2.57
 	rust-crates/cfg-if-1.0.4
-	rust-crates/charset-0.1.5
 	rust-crates/clap-4.6.6
 	rust-crates/clap_builder-4.6.6
 	rust-crates/clap_derive-4.6.4
 	rust-crates/clap_lex-1.1.0
 	rust-crates/colorchoice-1.0.5
-	rust-crates/console-0.16.4
+	rust-crates/compression-codecs-0.4.45
+	rust-crates/compression-core-0.4.33
+	rust-crates/console-0.16.6
 	rust-crates/cpufeatures-0.2.17
 	rust-crates/cpufeatures-0.3.0
-	rust-crates/crc32fast-1.5.0
+	rust-crates/crc32fast-1.5.1
 	rust-crates/crypto-common-0.1.7
 	rust-crates/crypto-common-0.2.2
 	rust-crates/csv-1.4.0
 	rust-crates/csv-core-0.1.13
-	rust-crates/data-encoding-2.11.1
 	rust-crates/defmt-1.1.0
 	rust-crates/defmt-macros-1.1.0
 	rust-crates/defmt-parser-1.0.0
@@ -67,10 +67,8 @@ CARGO_DEPS="
 	rust-crates/enumflags2-0.7.12
 	rust-crates/enumflags2_derive-0.7.12
 	rust-crates/equivalent-1.0.2
-	rust-crates/erased-serde-0.4.10
 	rust-crates/errno-0.3.14
 	rust-crates/fastrand-2.5.0
-	rust-crates/find-msvc-tools-0.1.9
 	rust-crates/fixedbitset-0.5.7
 	rust-crates/flate2-1.1.10
 	rust-crates/foldhash-0.1.5
@@ -105,7 +103,7 @@ CARGO_DEPS="
 	rust-crates/icu_provider-2.1.1
 	rust-crates/idna-1.1.0
 	rust-crates/idna_adapter-1.2.1
-	rust-crates/indexmap-2.14.1
+	rust-crates/indexmap-2.14.2
 	rust-crates/indoc-2.0.7
 	rust-crates/insta-1.48.0
 	rust-crates/io-extras-0.19.0
@@ -120,7 +118,6 @@ CARGO_DEPS="
 	rust-crates/jiff-static-0.2.35
 	rust-crates/jiff-tzdb-0.1.8
 	rust-crates/jiff-tzdb-platform-0.1.3
-	rust-crates/jobserver-0.1.35
 	rust-crates/js-sys-0.3.91
 	rust-crates/junction-2.0.0
 	rust-crates/lazy_static-1.5.0
@@ -129,7 +126,6 @@ CARGO_DEPS="
 	rust-crates/litemap-0.8.1
 	rust-crates/lock_api-0.4.14
 	rust-crates/log-0.4.29
-	rust-crates/mailparse-0.16.1
 	rust-crates/matchers-0.2.0
 	rust-crates/maybe-owned-0.3.4
 	rust-crates/memchr-2.8.3
@@ -154,7 +150,6 @@ CARGO_DEPS="
 	rust-crates/pin-project-1.1.11
 	rust-crates/pin-project-internal-1.1.11
 	rust-crates/pin-project-lite-0.2.17
-	rust-crates/pkg-config-0.3.32
 	rust-crates/portable-atomic-1.13.1
 	rust-crates/portable-atomic-util-0.2.6
 	rust-crates/potential_utf-0.1.4
@@ -164,7 +159,6 @@ CARGO_DEPS="
 	rust-crates/ptr_meta-0.3.1
 	rust-crates/ptr_meta_derive-0.3.1
 	rust-crates/quote-1.0.47
-	rust-crates/quoted_printable-0.5.1
 	rust-crates/r-efi-6.0.0
 	rust-crates/rancor-0.1.1
 	rust-crates/redox_syscall-0.5.15
@@ -189,7 +183,6 @@ CARGO_DEPS="
 	rust-crates/seahash-4.1.0
 	rust-crates/self-replace-1.5.0
 	rust-crates/serde-1.0.229
-	rust-crates/serde-untagged-0.1.9
 	rust-crates/serde_core-1.0.229
 	rust-crates/serde_derive-1.0.229
 	rust-crates/serde_derive_internals-0.30.0
@@ -198,13 +191,12 @@ CARGO_DEPS="
 	rust-crates/sha2-0.10.9
 	rust-crates/sha2-0.11.0
 	rust-crates/sharded-slab-0.1.7
-	rust-crates/shlex-1.3.0
 	rust-crates/signal-hook-registry-1.4.8
 	rust-crates/simd-adler32-0.3.8
 	rust-crates/simdutf8-0.1.5
 	rust-crates/similar-2.7.0
 	rust-crates/slab-0.4.12
-	rust-crates/smallvec-1.15.2
+	rust-crates/smallvec-1.16.1
 	rust-crates/smawk-0.3.2
 	rust-crates/socket2-0.6.3
 	rust-crates/spdx-0.13.5
@@ -212,14 +204,14 @@ CARGO_DEPS="
 	rust-crates/strip-ansi-escapes-0.2.1
 	rust-crates/strsim-0.11.1
 	rust-crates/syn-2.0.118
-	rust-crates/syn-3.0.4
+	rust-crates/syn-3.0.5
 	rust-crates/synstructure-0.13.2
-	rust-crates/tar-codec-0.0.14
-	rust-crates/tar-framing-0.0.14
+	rust-crates/tar-codec-0.0.15
+	rust-crates/tar-framing-0.0.15
 	rust-crates/temp-env-0.3.6
 	rust-crates/tempfile-3.27.0
 	rust-crates/terminal_size-0.4.4
-	rust-crates/textwrap-0.16.2
+	rust-crates/textwrap-0.16.3
 	rust-crates/thiserror-2.0.20
 	rust-crates/thiserror-impl-2.0.20
 	rust-crates/thread_local-1.1.9
@@ -229,10 +221,10 @@ CARGO_DEPS="
 	rust-crates/tokio-1.53.1
 	rust-crates/tokio-macros-2.7.0
 	rust-crates/tokio-stream-0.1.19
-	rust-crates/toml-1.1.3+spec-1.1.0
+	rust-crates/toml-1.1.6+spec-1.1.0
 	rust-crates/toml_datetime-1.1.1+spec-1.1.0
-	rust-crates/toml_edit-0.25.13+spec-1.1.0
-	rust-crates/toml_parser-1.1.2+spec-1.1.0
+	rust-crates/toml_edit-0.25.15+spec-1.1.0
+	rust-crates/toml_parser-1.1.5+spec-1.1.0
 	rust-crates/toml_writer-1.1.2+spec-1.1.0
 	rust-crates/tracing-0.1.44
 	rust-crates/tracing-attributes-0.1.31
@@ -241,7 +233,6 @@ CARGO_DEPS="
 	rust-crates/tracing-subscriber-0.3.23
 	rust-crates/tracing-test-0.2.6
 	rust-crates/tracing-test-macro-0.2.6
-	rust-crates/typeid-1.0.3
 	rust-crates/typenum-1.20.1
 	rust-crates/ucd-trie-0.1.7
 	rust-crates/unicode-ident-1.0.24
@@ -299,8 +290,8 @@ CARGO_DEPS="
 	rust-crates/writeable-0.6.2
 	rust-crates/yoke-0.8.1
 	rust-crates/yoke-derive-0.8.1
-	rust-crates/zerocopy-0.8.56
-	rust-crates/zerocopy-derive-0.8.56
+	rust-crates/zerocopy-0.8.57
+	rust-crates/zerocopy-derive-0.8.57
 	rust-crates/zerofrom-0.1.6
 	rust-crates/zerofrom-derive-0.1.6
 	rust-crates/zerotrie-0.2.3
@@ -308,9 +299,6 @@ CARGO_DEPS="
 	rust-crates/zerovec-derive-0.11.2
 	rust-crates/zlib-rs-0.6.3
 	rust-crates/zmij-1.0.21
-	rust-crates/zstd-0.13.3
-	rust-crates/zstd-safe-7.2.4
-	rust-crates/zstd-sys-2.0.16+zstd.1.5.7
 "
 # lockstep-cargo-deps: end
 MERGE_MANIFEST_MODE="tree-blake3-v1"
@@ -327,8 +315,8 @@ LICENSE="|| ( MIT Apache-2.0 )"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-SRC_URI="https://files.pythonhosted.org/packages/b4/65/672d5c1e7fff2a602b51758cd96c379ea80c0c20d9d10aae5139bfde9877/uv_build-0.12.23.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/uv_build-0.12.23"
+SRC_URI="https://files.pythonhosted.org/packages/18/db/8f80e3383a93a72317d06eb4afc89cd111d6ff30d25fd1d65150aba284be/uv_build-0.13.1.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/uv_build-0.13.1"
 
 BDEPEND="
 	app-dev/maturin[${PYTHON_USEDEP}]

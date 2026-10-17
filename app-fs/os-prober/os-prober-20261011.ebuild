@@ -4,7 +4,7 @@ PROPERTIES+=" source-payload"
 
 DESCRIPTION="Utility to detect other OSs on a set of drives"
 HOMEPAGE="https://packages.debian.org/source/sid/os-prober"
-SNAPSHOT=9a94fb8c42043b0c9fe8fd3d3a20aa51a81fabbc
+SNAPSHOT=a82eabee40dad5de1ad9cd4568e05e9be74fd4e2
 SRC_URI="https://salsa.debian.org/installer-team/os-prober/-/archive/${SNAPSHOT}/os-prober-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

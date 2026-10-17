@@ -10,13 +10,13 @@ DISTUTILS_USE_PEP517="setuptools"
 inherit distutils-r1
 
 DESCRIPTION="plugin and hook calling mechanisms for python"
-HOMEPAGE="https://pypi.org/project/pluggy/"
+HOMEPAGE="https://github.com/pytest-dev/pluggy"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-SRC_URI="https://files.pythonhosted.org/packages/f9/e2/3e91f31a7d2b083fe6ef3fa267035b518369d9511ffab804f839851d2779/pluggy-1.6.0.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/pluggy-1.6.0"
+SRC_URI="https://files.pythonhosted.org/packages/bf/db/7fc19e6f2dc92a966727031389fc2e08b558f0f25eb7403c1119ad4713cd/pluggy-1.7.0.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/pluggy-1.7.0"
 
 BDEPEND="
 	dev-pypi/gpep517[${PYTHON_USEDEP}]

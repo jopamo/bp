@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-SNAPSHOT=3572ddc0c4c19e34fafeeaea1b7935909343b3cd
+SNAPSHOT=2b32b126922f0b7738a77329d09169af08f04102
 
 inherit autotools
 

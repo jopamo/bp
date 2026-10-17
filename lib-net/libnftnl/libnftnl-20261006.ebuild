@@ -4,7 +4,7 @@ inherit linux-info autotools qa-policy
 
 DESCRIPTION="Netlink API to the in-kernel nf_tables subsystem"
 HOMEPAGE="https://netfilter.org/projects/nftables/"
-SNAPSHOT=3d7184970506df2c09868dc6ef3c21aba383db63
+SNAPSHOT=6b3bded9a9e86f327b00e26391ac72076368a487
 SRC_URI="https://github.com/1g4-mirror/libnftnl/archive/${SNAPSHOT}.tar.gz -> libnftnl-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/libnftnl-${SNAPSHOT}
 

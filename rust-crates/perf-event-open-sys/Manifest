@@ -1,1 +1,2 @@
 DIST perf-event-open-sys-4.0.0.crate 35790 BLAKE3 cff4492ebe22c4a9f77f99c5f2e1647a9e2ed2907964efafa6346866f621aea2
+DIST perf-event-open-sys-6.0.0.crate 78544 BLAKE3 21b8d91481520ae85e2edd6c77ba2ee602314aa904f40d6702c74f4b3206e5d8

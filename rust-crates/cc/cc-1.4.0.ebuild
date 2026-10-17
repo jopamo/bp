@@ -3,8 +3,8 @@ EAPI=8
 MERGE_MANIFEST_MODE="tree-blake3-v1"
 
 CRATE_NAME="cc"
-CRATE_VERSION="1.0.101"
-CRATE_CHECKSUM="ac367972e516d45567c7eafc73d24e1c193dcf200a8d94e9db7b3d38b349572d"
+CRATE_VERSION="1.4.0"
+CRATE_CHECKSUM="5add81bb678e6cb321aff7fa0dc7689ad82b112dbc032cea19f91d6b8e3582b9"
 CRATE_SOURCE="registry+https://github.com/rust-lang/crates.io-index"
 CRATE_SOURCE_KIND="registry"
 
@@ -17,5 +17,6 @@ SLOT="${PV}"
 KEYWORDS="amd64 arm64"
 
 CARGO_CRATE_FEATURES=(
+	"jobserver"
 	"parallel"
 )

@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-SNAPSHOT=dc16f8e3d62c9e808ef86ffe82c2b93ac1446da3
+SNAPSHOT=6853e0c278f0047a05667113963f6af0175a3118
 SHORT=${SNAPSHOT:0:7}
 
 inherit autotools qa-policy
@@ -15,6 +15,8 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="gdb.py static-libs"
+
+PATCHES=( "${FILESDIR}/${PN}-20261003-exception-header.patch" )
 
 DEPEND="
 	lib-core/gmp

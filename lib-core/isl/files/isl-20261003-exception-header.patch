@@ -1,0 +1,14 @@
+--- a/cpp/cpp.h.top
++++ b/cpp/cpp.h.top
+@@ -14,3 +14,4 @@
++#include <exception>
+ #include <functional>
+ #include <memory>
+ #include <ostream>
+--- a/include/isl/cpp.h
++++ b/include/isl/cpp.h
+@@ -14,3 +14,4 @@
++#include <exception>
+ #include <functional>
+ #include <memory>
+ #include <ostream>

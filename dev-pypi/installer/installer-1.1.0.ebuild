@@ -15,8 +15,8 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-SRC_URI="https://files.pythonhosted.org/packages/06/fe/b9f481cf0cc867958a21338baa900357b7b7d86cac9b025948049d77923c/installer-1.0.1.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/installer-1.0.1"
+SRC_URI="https://files.pythonhosted.org/packages/56/d3/2fab33d15004d41ae8e7b5d3e310510f7f34a7e1dd032a3e60d8b38d8fba/installer-1.1.0.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/installer-1.1.0"
 
 BDEPEND="
 	dev-pypi/flit-core[${PYTHON_USEDEP}]

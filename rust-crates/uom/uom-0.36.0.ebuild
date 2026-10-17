@@ -1,0 +1,52 @@
+# lockstep-managed: cargo-crate
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
+
+CRATE_NAME="uom"
+CRATE_VERSION="0.36.0"
+CRATE_CHECKSUM="ffd36e5350a65d112584053ee91843955826bf9e56ec0d1351214e01f6d7cd9c"
+CRATE_SOURCE="registry+https://github.com/rust-lang/crates.io-index"
+CRATE_SOURCE_KIND="registry"
+
+inherit cargo-crate
+
+DESCRIPTION="Units of measurement"
+HOMEPAGE="https://github.com/iliekturtles/uom"
+LICENSE="|| ( Apache-2.0 MIT )"
+SLOT="${PV}"
+KEYWORDS="amd64 arm64"
+
+CARGO_CRATE_FEATURES=(
+	"autoconvert"
+	"bigint"
+	"bigint-support"
+	"bigrational"
+	"biguint"
+	"complex-support"
+	"complex32"
+	"complex64"
+	"default"
+	"f32"
+	"f64"
+	"i128"
+	"i16"
+	"i32"
+	"i64"
+	"i8"
+	"isize"
+	"rational"
+	"rational-support"
+	"rational32"
+	"rational64"
+	"serde"
+	"si"
+	"std"
+	"try-from"
+	"u128"
+	"u16"
+	"u32"
+	"u64"
+	"u8"
+	"use_serde"
+	"usize"
+)

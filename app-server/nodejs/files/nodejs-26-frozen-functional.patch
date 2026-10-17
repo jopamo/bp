@@ -1,0 +1,5 @@
+--- a/deps/LIEF/third-party/frozen/include/frozen/map.h
++++ b/deps/LIEF/third-party/frozen/include/frozen/map.h
+@@ -32 +32,2 @@
++#include <functional>
+ #include <utility>

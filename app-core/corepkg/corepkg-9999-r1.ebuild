@@ -6,7 +6,6 @@ DESCRIPTION="1g4 package manager and query tools"
 HOMEPAGE="https://gitlab.com/pjo/corepkg"
 
 EGIT_REPO_URI="https://gitlab.com/pjo/corepkg"
-EGIT_COMMIT="105df2b7dd90c40d62ca7d8294e4d785d172866e"
 inherit git-r3
 
 LICENSE="GPL-2"

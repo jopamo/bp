@@ -67,6 +67,9 @@ ghc_bootstrap_dir() {
 		die "unsupported architecture"
 	fi
 	platform="${arch}-unknown-linux"
+	if use arm64 && use elibc_musl; then
+		platform="${arch}-alpine-linux"
+	fi
 	printf '%s\n' \
 		"${WORKDIR}/ghc-${GHC_BOOTSTRAP_VERSION}-${platform}"
 }

@@ -35,6 +35,8 @@ RDEPEND="${DEPEND}
 
 REQUIRED_USE="( caps? ( daemon ) )"
 
+PATCHES=( "${FILESDIR}/${PN}-include-errno.patch" )
+
 src_prepare() {
 	append-flags -ffat-lto-objects
 

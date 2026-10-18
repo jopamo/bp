@@ -1,0 +1,11 @@
+--- a/lib/dev_parse_debug.cpp
++++ b/lib/dev_parse_debug.cpp
+@@ -13 +13,2 @@
++#include <errno.h>
+ #include "dev_ata_cmd_set.h"
+--- a/lib/farmcmds.cpp
++++ b/lib/farmcmds.cpp
+@@ -13,2 +13,3 @@
+ #define __STDC_FORMAT_MACROS 1
++#include <errno.h>
+ #include <inttypes.h>

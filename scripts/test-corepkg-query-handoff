@@ -1,0 +1,72 @@
+#!/bin/bash
+set -euo pipefail
+
+repo=$(cd -- "$(dirname -- "$0")/.." && pwd -P)
+fixture=$(mktemp -d "${TMPDIR:-/tmp}/bp-query-handoff.XXXXXX")
+trap 'rm -rf -- "${fixture}"' EXIT
+
+die() { printf '%s\n' "$*" >&2; exit 1; }
+inherit() { :; }
+check_extra_config() { :; }
+has_version() { [[ $1 == app-core/coreq ]]; }
+ewarn() { printf '%s\n' "$*" >> "${fixture}/warnings"; }
+sysusers_process() { :; }
+tmpfiles_process() { :; }
+chown() {
+	[[ ${owner_available} == true ]] || return 1
+	printf '%s\n' "$*" >> "${fixture}/owners"
+}
+mkdir() {
+	local path
+	for path do
+		[[ ${path} != "${fail_directory:-}" ]] || return 1
+	done
+	command mkdir "$@"
+}
+python_foreach_impl() { :; }
+python_replicate_script() { :; }
+keepdir() { :; }
+newsysusers() { cp -- "$1" "${fixture}/sysusers"; }
+newtmpfiles() { cp -- "$1" "${fixture}/tmpfiles"; }
+
+export PYTHON_USEDEP=
+source "${repo}/app-core/corepkg/corepkg-9999-r1.ebuild"
+[[ ${RDEPEND} == *"!!app-core/coreq"* ]] || die "missing pre-install blocker"
+pkg_pretend
+grep -qF 'coreq-update' "${fixture}/warnings"
+
+export PN=corepkg
+T="${fixture}/temp"
+ED="${fixture}/image"
+mkdir -p "${T}" "${ED}/usr/bin"
+printf '#!/usr/bin/python3\n' > "${ED}/usr/bin/fixture"
+src_install
+grep -qxF 'd /var/cache/coreq 0775 corepkg corepkg -' "${fixture}/tmpfiles"
+
+for EPREFIX in "" /prefix; do
+	EROOT="${fixture}/root${EPREFIX}/"
+	query_cache="${EROOT%/}/var/cache/coreq"
+	mkdir -p "${query_cache}" "${EROOT%/}/etc/coreqrc"
+	printf 'generated cache\n' > "${query_cache}/old"
+	printf 'user configuration\n' > "${EROOT%/}/etc/coreqrc/custom"
+	# The standalone package's postrm runs before Corepkg's postinst.
+	rm -r -- "${query_cache}"
+	owner_available=true
+	pkg_postinst
+	[[ -d ${query_cache} && ! -e ${query_cache}/old ]]
+	[[ $(stat -c %a "${query_cache}") == 775 ]]
+	grep -qxF "corepkg:corepkg ${query_cache}" "${fixture}/owners"
+	grep -qxF 'user configuration' "${EROOT%/}/etc/coreqrc/custom"
+
+	owner_available=false
+	pkg_postinst
+	grep -qF "Unable to set owner/group on ${query_cache}" "${fixture}/warnings"
+done
+
+owner_available=true
+fail_directory="${query_cache}"
+if (pkg_postinst) > "${fixture}/failure" 2>&1; then
+	die "cache directory creation failure was ignored"
+fi
+
+printf '%s\n' 'PASS: query blocker, cache recreation, prefix, ownership and failure handling'

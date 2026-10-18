@@ -5,7 +5,6 @@
 *app-compression/pigz
 *app-compression/xz-utils
 *app-core/corepkg
-*app-core/coreq
 *app-core/diffutils
 *app-core/file
 *app-core/findutils

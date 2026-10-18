@@ -15,8 +15,7 @@ KEYWORDS="amd64 arm64"
 RDEPEND="
 	app-core/bash
 	app-lang/perl
-	app-core/corepkg
-	app-core/coreq
+	>=app-core/corepkg-9999-r1
 "
 
 PATCHES=( "${FILESDIR}"/perl-cleaner-bp.patch )

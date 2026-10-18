@@ -2,18 +2,12 @@
 
 inherit meson linux-info multiprocessing python-r1 flag-o-matic doins
 
-DESCRIPTION="1g4 package manager"
+DESCRIPTION="1g4 package manager and query tools"
 HOMEPAGE="https://gitlab.com/pjo/corepkg"
 
-if [[ ${PV} = *9999 ]]; then
-	EGIT_REPO_URI="https://gitlab.com/pjo/corepkg"
-	inherit git-r3
-	#EGIT_COMMIT=3f1d71a8b30381f1585431ddf7fd2285559e885e
-else
-	SNAPSHOT=37832269366c74d1dc9039130f48787d5950a44c
-	SRC_URI="https://gitlab.com/pjo/corepkg/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
-	S="${WORKDIR}/${PN}-${SNAPSHOT}"
-fi
+EGIT_REPO_URI="https://gitlab.com/pjo/corepkg"
+EGIT_COMMIT="105df2b7dd90c40d62ca7d8294e4d785d172866e"
+inherit git-r3
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -40,7 +34,10 @@ DEPEND="
 	app-build/patch
 "
 
-RDEPEND="${COMMON_DEPEND}"
+RDEPEND="
+	${COMMON_DEPEND}
+	!!app-core/coreq
+"
 BDEPEND+="
 	app-build/llvm
 	app-dev/pkgconf
@@ -55,6 +52,11 @@ pkg_pretend() {
 	local CONFIG_CHECK="~IPC_NS ~PID_NS ~NET_NS ~UTS_NS"
 
 	check_extra_config
+
+	if has_version app-core/coreq ; then
+		ewarn "Corepkg replaces app-core/coreq and provides q and its companion commands."
+		ewarn "The old package removes /var/cache/coreq; run coreq-update after the upgrade to rebuild it."
+	fi
 }
 
 src_prepare() {
@@ -126,6 +128,7 @@ src_install() {
 		d /var/lib/corepkg 2755 root corepkg -
 		d /var/lib/corepkg/home 0700 corepkg corepkg -
 		d /var/cache/distfiles 02775 corepkg corepkg -
+		d /var/cache/coreq 0775 corepkg corepkg -
 	EOF
 
 	newsysusers "${T}/${PN}-sysusers" "${PN}.conf"
@@ -256,6 +259,7 @@ pkg_postinst() {
 	local privdir="${EROOT%/}${EPREFIX}/var/lib/corepkg"
 	local homedir="${privdir}/home"
 	local distdir="${EROOT%/}${EPREFIX}/var/cache/distfiles"
+	local query_cachedir="${EROOT%/}/var/cache/coreq"
 	local distfiles_ownership_stamp="${privdir}/compat_upgrade/one_off/20260305_distfiles_ownership.done"
 
 	sysusers_process
@@ -264,6 +268,11 @@ pkg_postinst() {
 	mkdir -p "${configdir}" || die
 	mkdir -p "${homedir}" || die
 	mkdir -p "${distdir}" || die
+	mkdir -p -- "${query_cachedir}" || die
+	chmod 0775 "${query_cachedir}" || die
+	if ! chown corepkg:corepkg "${query_cachedir}" 2>/dev/null ; then
+		ewarn "Unable to set owner/group on ${query_cachedir}; ensure it is writable by corepkg."
+	fi
 
 	if chown corepkg:corepkg "${homedir}" 2>/dev/null ; then
 		chmod 0700 "${homedir}" || die

@@ -20,15 +20,19 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="build gentoo-dev ipc native-extensions
-	gentoo_repo +rsync-verify selinux test xattr"
+	gentoo_repo +rsync-verify selinux sqlite test xattr"
 
 COMMON_DEPEND="
+	app-compression/libarchive
 	app-core/bash
 	app-core/bx
 	app-core/sed
 	app-crypto/blake3
 	app-crypto/gnupg
+	app-crypto/vesk
 	dev-pypi/lxml[${PYTHON_USEDEP}]
+	lib-core/libpcre2
+	sqlite? ( lib-core/sqlite )
 "
 
 DEPEND="
@@ -37,6 +41,14 @@ DEPEND="
 "
 
 RDEPEND="${COMMON_DEPEND}"
+BDEPEND+="
+	app-build/llvm
+	app-dev/pkgconf
+	test? (
+		dev-pypi/pytest[${PYTHON_USEDEP}]
+		dev-pypi/pytest-xdist[${PYTHON_USEDEP}]
+	)
+"
 PDEPEND="app-net/rsync"
 
 pkg_pretend() {
@@ -67,6 +79,7 @@ my_src_configure() {
 		$(meson_use gentoo-dev)
 		$(meson_use ipc)
 		$(meson_use xattr)
+		$(meson_use sqlite coreq-sqlite)
 	)
 
 	if use native-extensions && [[ "${EPYTHON}" != "pypy3" ]] ; then

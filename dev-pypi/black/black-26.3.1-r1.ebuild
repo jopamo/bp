@@ -86,8 +86,21 @@ python_prepare_all() {
 	):
 	    text = drop_section(text, header)
 
+	# The removed VCS hook includes this file despite .gitignore.
+	text += '\n[tool.hatch.build]\nartifacts = ["src/_black_version.py"]\n'
 	path.write_text(text, encoding="utf-8")
 	PY
 
 	distutils-r1_python_prepare_all
+}
+
+python_test() {
+	"${EPYTHON}" -m black --version || die "Black cannot start"
+	"${EPYTHON}" - <<-'PY' || die "Black formatting smoke test failed"
+	import os
+	import black
+
+	assert black.__version__ == os.environ["PV"]
+	assert black.format_str("x=1\n", mode=black.Mode()) == "x = 1\n"
+	PY
 }

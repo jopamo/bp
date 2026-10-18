@@ -23,7 +23,7 @@ LICENSE="PSF-2"
 SLOT="$(ver_cut 1-2)"
 #KEYWORDS="amd64 arm64"
 
-IUSE="bluetooth debug libedit ncurses perf pgo readline sqlite ssl static test tk valgrind xml"
+IUSE="bluetooth debug ipv6 libedit ncurses perf pgo readline sqlite ssl static test tk valgrind xml"
 
 RESTRICT="perf? ( strip ) test"
 
@@ -132,7 +132,7 @@ src_configure() {
 
 	local myeconfargs=(
 		--bindir="${prefix}"/usr/bin
-		--disable-ipv6
+		$(use_enable ipv6)
 		--enable-loadable-sqlite-extensions
 		--enable-shared
 		--infodir='${prefix}/share/info'

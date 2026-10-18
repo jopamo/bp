@@ -10,7 +10,7 @@ LICENSE="|| ( Ruby-BSD BSD-2 )"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug jemalloc socks5 static-libs"
+IUSE="debug ipv6 jemalloc socks5 static-libs"
 
 src_prepare() {
 	qa-policy-configure
@@ -29,7 +29,7 @@ src_configure() {
 		$(use_with jemalloc jemalloc)
 		$(use_with static-libs static-linked-ext)
 		--disable-install-doc
-		--disable-ipv6
+		$(use_enable ipv6)
 		--disable-rpath
 		--enable-option-checking=no
 		--enable-pthread

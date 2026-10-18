@@ -9,7 +9,7 @@ S=${WORKDIR}
 
 KEYWORDS="amd64 arm64"
 
-IUSE="test video"
+IUSE="ipv6 test video"
 
 BDEPEND="test? ( app-lang/python virtual/ssl )"
 RDEPEND="
@@ -50,6 +50,16 @@ src_install() {
 	for f in "${bin_utils[@]}"; do
 		dobin "${FILESDIR}/bin/$f"
 	done
+
+	if use ipv6; then
+		sed -i \
+			-e 's/ONEG4_SETUP_NETWORKD_DHCP:-ipv4/ONEG4_SETUP_NETWORKD_DHCP:-yes/' \
+			-e 's/ONEG4_SETUP_NETWORKD_IPV6_ACCEPT_RA:-no/ONEG4_SETUP_NETWORKD_IPV6_ACCEPT_RA:-yes/' \
+			"${ED}/usr/bin/1g4-system-setup" || die
+		sed -i \
+			-e 's/write_config_var ONEG4_SETUP_NETWORKD_DHCP ipv4/write_config_var ONEG4_SETUP_NETWORKD_DHCP yes/' \
+			"${ED}/usr/bin/1g4-finalize-install" || die
+	fi
 
 	insinto /usr/lib/systemd/system
 	insopts -m 0644

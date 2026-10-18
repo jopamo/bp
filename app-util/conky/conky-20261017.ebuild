@@ -13,7 +13,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="apcupsd curl vim hddtemp
-	intel-backlight iostats math mpd ncurses nvidia
+	intel-backlight iostats ipv6 math mpd ncurses nvidia
 	+portmon pulseaudio rss systemd +xft
 	wayland wifi +vim X xinerama xmms2"
 
@@ -91,7 +91,7 @@ src_configure() {
 		-DBUILD_IMLIB2=no
 		-DBUILD_INTEL_BACKLIGHT=$(usex intel-backlight)
 		-DBUILD_IOSTATS=$(usex iostats)
-		-DBUILD_IPV6=yes
+		-DBUILD_IPV6=$(usex ipv6)
 		-DBUILD_JOURNAL=$(usex systemd)
 		-DBUILD_MATH=$(usex math)
 		-DBUILD_MOC=no

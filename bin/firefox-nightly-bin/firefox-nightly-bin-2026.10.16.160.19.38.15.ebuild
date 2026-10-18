@@ -24,6 +24,8 @@ RESTRICT="strip mirror"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
+IUSE="ipv6"
+
 RDEPEND="
 	virtual/dbus
 	app-tex/hunspell
@@ -73,6 +75,9 @@ src_install() {
 	doins "${FILESDIR}"/local-settings.js
 	insinto opt/${MOZ_PN}
 	doins "${FILESDIR}"/all-set.js
+	sed -i \
+		-e "s/lockPref(\"network.dns.disableIPv6\", true);/lockPref(\"network.dns.disableIPv6\", $(usex ipv6 false true));/" \
+		"${ED}/opt/${MOZ_PN}/all-set.js" || die
 
 	fperms 0755 /opt/${MOZ_PN}/firefox
 	fperms 0755 /opt/${MOZ_PN}/firefox-bin

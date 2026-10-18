@@ -10,7 +10,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="brotli bzip2 cjk gnutls idn nls ssl"
+IUSE="brotli bzip2 cjk gnutls idn ipv6 nls ssl"
 
 RDEPEND="
 	lib-core/ncurses
@@ -43,7 +43,7 @@ src_configure() {
 		--enable-externs
 		--enable-file-upload
 		--enable-included-msgs
-		--enable-ipv6
+		$(use_enable ipv6)
 		--enable-nested-tables
 		--enable-nsl-fork
 		--enable-persistent-cookies

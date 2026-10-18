@@ -562,6 +562,10 @@ src_configure() {
 		local bootstrap_passthrough_string=$(printf '%s;' "${bootstrap_passthrough[@]}")
 		mycmakeargs+=( "-DCLANG_BOOTSTRAP_PASSTHROUGH=${bootstrap_passthrough_string%;}" )
 		use syslibcxxabi && mycmakeargs+=( -DBOOTSTRAP_LLVM_ENABLE_LIBCXX=ON )
+		if use libcxx; then
+			# Stage two uses stage one's libc++ before building its own runtimes.
+			mycmakeargs+=( "-DBOOTSTRAP_CMAKE_BUILD_RPATH=${BUILD_DIR}/lib/${TUPLE}" )
+		fi
 		mycmakeargs+=("${bootstrap[@]}")
 	fi
 

@@ -23,7 +23,7 @@ CMAKE_BINARY=record_cmake
 record_cmake() { runtime_command=( "$@" ); }
 FILESDIR=${repo}/app-build/llvm/files
 ED=${fixture}/image/
-source "${repo}/app-build/llvm/llvm-23.20260930.ebuild"
+source "${repo}/app-build/llvm/llvm-23.20261014.ebuild"
 (
 	CXX=clang++
 	_llvm_cxx_link_usable || die "host C++ runtime cannot link <string>"
@@ -60,6 +60,8 @@ has_arg '-DCOMPILER_RT_BUILD_ORC=OFF'
 has_arg '-DCOMPILER_RT_INCLUDE_TESTS=OFF'
 has_arg '-DCLANG_ENABLE_STATIC_ANALYZER=OFF'
 has_arg '-DCLANG_ENABLE_BOOTSTRAP=ON'
+bootstrap_rpath=${BUILD_DIR}/lib/${CHOST}
+has_arg "-DBOOTSTRAP_CMAKE_BUILD_RPATH=${bootstrap_rpath}"
 pass=
 for arg in "${args[@]}"; do
 	[[ ${arg} == -DCLANG_BOOTSTRAP_PASSTHROUGH=* ]] && pass=${arg#*=}
@@ -76,6 +78,16 @@ done
 	die "runtime preflight restores CMake optimization defaults"
 [[ ";${pass};" != *';LLVM_USE_LINKER;'* ]] || die "bootstrap sets both linker options"
 [[ ";${pass};" != *';CMAKE_CXX_COMPILER;'* ]] || die "bootstrap keeps the host compiler"
+CHOST=x86_64-pc-linux-musl
+src_configure >/dev/null
+has_arg "-DBOOTSTRAP_CMAKE_BUILD_RPATH=${BUILD_DIR}/lib/${CHOST}"
+CHOST=aarch64-unknown-linux-musl
+enabled=bootstrap
+src_configure >/dev/null
+for arg in "${args[@]}"; do
+	[[ ${arg} != -DBOOTSTRAP_CMAKE_BUILD_RPATH=* ]] ||
+		die "bootstrap without libc++ adds a runtime RPATH"
+done
 enabled='lldb test orc static_analyzer'
 CMAKE_MAKEFILE_GENERATOR=emake
 src_configure >/dev/null
@@ -93,7 +105,7 @@ has_arg '-DLLVM_ENABLE_PROJECTS=llvm;clang;lld'
 has_arg '-DLLVM_ENABLE_RUNTIMES=libunwind;compiler-rt'
 for arg in "${args[@]}"; do
 	case ${arg} in
-		-DLLDB_*|-DCLANG_ENABLE_BOOTSTRAP=*)
+		-DLLDB_*|-DCLANG_ENABLE_BOOTSTRAP=*|-DBOOTSTRAP_CMAKE_BUILD_RPATH=*)
 			die "disabled project retains configuration: ${arg}"
 			;;
 	esac
@@ -122,6 +134,63 @@ src_test
 [[ ${calls[*]} == "headers:${BUILD_DIR} compile:${BUILD_DIR} check-all:${BUILD_DIR}" ]] ||
 	die "incorrect single-stage routing: ${calls[*]}"
 printf '%s\n' 'PASS: LLVM USE arguments, bootstrap passthrough, and phase routing'
+
+mkdir -p "${fixture}/rpath-src"
+cat > "${fixture}/rpath-src/CMakeLists.txt" <<'EOF'
+cmake_minimum_required(VERSION 3.20)
+project(BootstrapRuntime LANGUAGES C)
+set(CMAKE_INSTALL_RPATH "$ORIGIN/../lib")
+add_library(runtime_old SHARED old.c)
+add_library(runtime_new SHARED new.c)
+set_target_properties(runtime_old runtime_new PROPERTIES
+  OUTPUT_NAME bp-bootstrap-runtime SOVERSION 1)
+set_target_properties(runtime_old PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${OLD_RUNTIME_DIR}")
+set_target_properties(runtime_new PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${BOOTSTRAP_RUNTIME_DIR}")
+add_library(consumer SHARED consumer.c)
+add_dependencies(consumer runtime_new runtime_old)
+# A driver-added -L path does not give CMake a runtime dependency path.
+target_link_options(consumer PRIVATE "-L${BOOTSTRAP_RUNTIME_DIR}")
+target_link_libraries(consumer PRIVATE bp-bootstrap-runtime)
+add_executable(loader loader.c)
+target_link_libraries(loader PRIVATE consumer)
+target_link_options(loader PRIVATE "-Wl,-rpath-link,${BOOTSTRAP_RUNTIME_DIR}")
+install(TARGETS consumer runtime_new loader
+  LIBRARY DESTINATION lib RUNTIME DESTINATION bin)
+EOF
+printf 'int old_runtime(void) { return 0; }\n' > "${fixture}/rpath-src/old.c"
+printf 'int new_runtime(void) { return 0; }\n' > "${fixture}/rpath-src/new.c"
+printf 'extern int new_runtime(void);\nint consumer(void) { return new_runtime(); }\n' \
+	> "${fixture}/rpath-src/consumer.c"
+printf 'extern int consumer(void);\nint main(void) { return consumer(); }\n' \
+	> "${fixture}/rpath-src/loader.c"
+rpath_configure() {
+	cmake -G Ninja -S "${fixture}/rpath-src" -B "${fixture}/rpath-build" \
+		"-DBOOTSTRAP_RUNTIME_DIR=${bootstrap_rpath}" \
+		"-DOLD_RUNTIME_DIR=${fixture}/old-runtime" \
+		"-DCMAKE_BUILD_RPATH=$1" > "${fixture}/rpath.log" 2>&1 &&
+		cmake --build "${fixture}/rpath-build" >> "${fixture}/rpath.log" 2>&1 || {
+		cat "${fixture}/rpath.log" >&2
+		die "bootstrap runtime fixture failed to build"
+	}
+}
+rpath_configure "${fixture}/old-runtime"
+if "${fixture}/rpath-build/loader" > "${fixture}/loader.log" 2>&1; then
+	die "bootstrap runtime fixture does not reproduce an incompatible runtime"
+fi
+grep -q 'new_runtime' "${fixture}/loader.log" ||
+	die "bootstrap runtime fixture fails for a reason other than the missing symbol"
+rpath_configure "${bootstrap_rpath};${fixture}/old-runtime"
+"${fixture}/rpath-build/loader" ||
+	die "bootstrap build RPATH does not select the matching runtime"
+cmake --install "${fixture}/rpath-build" --prefix "${fixture}/installed" \
+	>> "${fixture}/rpath.log" 2>&1
+for file in bin/loader lib/libconsumer.so lib/libbp-bootstrap-runtime.so.1; do
+	dynamic=$(readelf -d "${fixture}/installed/${file}") || die "cannot read installed ELF: ${file}"
+	[[ ${dynamic} != *"${fixture}"* ]] || die "installed ELF retains a bootstrap build path: ${file}"
+done
+rm -rf -- "${bootstrap_rpath}"
+"${fixture}/installed/bin/loader" || die "installed program depends on the bootstrap runtime"
+printf '%s\n' 'PASS: Bootstrap runtime selection and install RPATH isolation'
 
 if [[ $# == 0 ]]; then exit 0; fi
 [[ $# == 2 ]] || die "usage: scripts/test-llvm-build [prepared-llvm-source-root lua-prefix]"

@@ -76,11 +76,11 @@ ghc_bootstrap_dir() {
 
 ghc_bootstrap_terminfo_compat() {
 	local compat_dir="${T}/ghc-bootstrap-libs"
-	local target
+	local target curses_target="${EPREFIX}/usr/lib/libncursesw.so.6"
 
-	# Upstream bootstrap distributions require the conventional
-	# libtinfo.so.6 SONAME. bp's threaded wide-character ncurses uses
-	# libtinfotw.so.6 instead; netbsd-curses provides libterminfo.so.
+	# GHC uses the terminfo API, linked as libtinfo.so.6 or libncursesw.so.6
+	# depending on the bootstrap distribution. bp's threaded ncurses uses
+	# libtinfotw.so.6; netbsd-curses provides libterminfo.so.
 	for target in \
 		"${EPREFIX}/usr/lib/libtinfo.so.6" \
 		"${EPREFIX}/usr/lib/libtinfotw.so.6" \
@@ -93,6 +93,8 @@ ghc_bootstrap_terminfo_compat() {
 		[[ -e ${target} ]] || continue
 		mkdir -p "${compat_dir}" || die
 		ln -sf "${target}" "${compat_dir}/libtinfo.so.6" || die
+		[[ -e ${curses_target} ]] || curses_target=${target}
+		ln -sf "${curses_target}" "${compat_dir}/libncursesw.so.6" || die
 		case :${LD_LIBRARY_PATH-}: in
 			*:"${compat_dir}":*) ;;
 			*) export LD_LIBRARY_PATH="${compat_dir}${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}" ;;
@@ -116,6 +118,7 @@ src_configure() {
 
 	bootstrap_dir=$(ghc_bootstrap_dir)
 	bootstrap_root="${T}/ghc-bootstrap"
+	ghc_bootstrap_terminfo_compat
 
 	pushd "${bootstrap_dir}" >/dev/null || die
 	./configure \
@@ -125,7 +128,6 @@ src_configure() {
 	popd >/dev/null || die
 
 	export PATH="${bootstrap_root}/bin:${PATH}"
-	ghc_bootstrap_terminfo_compat
 	"${bootstrap_root}/bin/ghc" --info >/dev/null ||
 		die "installed GHC bootstrap compiler is not executable"
 

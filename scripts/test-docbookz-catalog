@@ -1,0 +1,80 @@
+#!/bin/bash
+set -eu
+
+repo=$(cd -- "$(dirname -- "$0")/.." && pwd -P)
+inherit() { :; }
+die() { echo "$*" >&2; exit 1; }
+source "${repo}/app-tex/docbookz/docbookz-9999.ebuild"
+
+scratch=$(mktemp -d "${TMPDIR:-/tmp}/bp-docbookz-catalog.XXXXXX")
+trap 'rm -rf -- "${scratch}"' EXIT
+EPREFIX="${scratch}/prefix"
+EROOT="${EPREFIX}/"
+REPLACED_BY_VERSION=
+catalog="${EROOT}etc/xml/catalog"
+entry="${EPREFIX}/etc/xml/docbook-toolchain/catalog"
+mkdir -p "${entry%/*}"
+
+entry_count() {
+	xmllint --nonet --xpath "count(/*/*[@catalog='${entry}'])" "${catalog}"
+}
+
+pkg_postinst
+[[ $(entry_count) == 1 ]]
+[[ $(stat -c %a "${catalog}") == 644 ]]
+xmlcatalog --noout --add system urn:other file:///untouched "${catalog}"
+chmod 0640 "${catalog}"
+pkg_postinst
+[[ $(entry_count) == 1 ]]
+[[ $(stat -c %a "${catalog}") == 640 ]]
+[[ $(xmlcatalog "${catalog}" urn:other) == file:///untouched ]]
+
+cp "${catalog}" "${scratch}/before"
+REPLACED_BY_VERSION=9999 pkg_postrm
+cmp "${catalog}" "${scratch}/before"
+pkg_postrm
+[[ $(entry_count) == 0 ]]
+[[ $(xmlcatalog "${catalog}" urn:other) == file:///untouched ]]
+
+mv "${catalog}" "${catalog}.target"
+ln -s catalog.target "${catalog}"
+pkg_postinst
+[[ -L ${catalog} && $(entry_count) == 1 ]]
+rm "${catalog}"
+mv "${catalog}.target" "${catalog}"
+cp "${catalog}" "${scratch}/valid"
+
+for invalid in 'broken catalog' '<not-a-catalog/>'; do
+	printf '%s\n' "${invalid}" > "${catalog}"
+	cp "${catalog}" "${scratch}/before"
+	if pkg_postinst 2>/dev/null; then
+		die "Accepted an invalid catalog"
+	fi
+	cmp "${catalog}" "${scratch}/before"
+	[[ $(find "${catalog%/*}" -name 'catalog.*' | wc -l) == 0 ]]
+done
+
+cp "${scratch}/valid" "${catalog}"
+cp "${catalog}" "${scratch}/before"
+xmlcatalog() { return 9; }
+if pkg_postinst 2>/dev/null; then
+	die "Ignored an XML catalog update failure"
+fi
+unset -f xmlcatalog
+cmp "${catalog}" "${scratch}/before"
+[[ $(find "${catalog%/*}" -name 'catalog.*' | wc -l) == 0 ]]
+
+# A staged root must not change the active prefix or embed the staging path.
+EROOT="${scratch}/stage${EPREFIX}/"
+mkdir -p "${EROOT}etc/xml/docbook-toolchain"
+pkg_postinst
+cmp "${catalog}" "${scratch}/before"
+catalog="${EROOT}etc/xml/catalog"
+[[ $(entry_count) == 1 ]]
+pkg_postrm
+[[ $(entry_count) == 0 ]]
+rm "${catalog}"
+pkg_postrm
+[[ ! -e ${catalog} ]]
+
+echo 'PASS: catalog registration, upgrades, removal, prefixes, and failed updates'

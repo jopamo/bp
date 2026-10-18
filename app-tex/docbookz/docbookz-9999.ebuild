@@ -19,6 +19,7 @@ RDEPEND="
 	lib-core/libxslt
 "
 DEPEND="${RDEPEND}"
+IDEPEND="lib-core/libxml2"
 
 src_configure() {
 	local emesonargs=(
@@ -28,4 +29,40 @@ src_configure() {
 	)
 
 	meson_src_configure
+}
+
+_docbookz_update_xml_catalog() (
+	local catalog="${EROOT%/}/etc/xml/catalog"
+	local entry="${EPREFIX}/etc/xml/docbook-toolchain/catalog"
+	local candidate
+
+	catalog=$(readlink -f -- "${catalog}") || die
+	candidate=$(mktemp "${catalog}.XXXXXX") || die
+	trap 'rm -f -- "${candidate}"' EXIT
+
+	if [[ -e ${catalog} ]]; then
+		cp -p -- "${catalog}" "${candidate}" || die
+		xmllint --nonet --xpath \
+			'/*[local-name()="catalog" and namespace-uri()="urn:oasis:names:tc:entity:xmlns:xml:catalog"]' \
+			"${candidate}" >/dev/null || die "Invalid system XML catalog"
+	else
+		xmlcatalog --create > "${candidate}" || die
+		chmod 0644 "${candidate}" || die
+	fi
+
+	xmlcatalog --noout --del "${entry}" "${candidate}" || die
+	if [[ ${1} == add ]]; then
+		xmlcatalog --noout --add nextCatalog "" "${entry}" "${candidate}" || die
+	fi
+	mv -fT -- "${candidate}" "${catalog}" || die
+)
+
+pkg_postinst() {
+	_docbookz_update_xml_catalog add
+}
+
+pkg_postrm() {
+	[[ -n ${REPLACED_BY_VERSION} ]] && return
+	[[ -f ${EROOT%/}/etc/xml/catalog ]] || return 0
+	_docbookz_update_xml_catalog remove
 }

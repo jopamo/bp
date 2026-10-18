@@ -1,0 +1,9 @@
+Pass the opened include stream to Flex's buffer constructor. Current
+Flex-generated scanners disable buffer refills when the stream is NULL,
+so Wine's custom YY_INPUT never reads the header.
+
+--- a/tools/wrc/ppl.l
++++ b/tools/wrc/ppl.l
+@@ -1486 +1486 @@
+-	ppy__switch_to_buffer(ppy__create_buffer(NULL, YY_BUF_SIZE));
++	ppy__switch_to_buffer(ppy__create_buffer(fp, YY_BUF_SIZE));

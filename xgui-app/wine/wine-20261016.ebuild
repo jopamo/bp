@@ -60,6 +60,7 @@ BDEPEND="
 
 PATCHES=(
 	"${FILESDIR}/wine-20260821-builtin-clear-cache.patch"
+	"${FILESDIR}/wine-11.20-wpp-include-buffer.patch"
 )
 
 src_prepare() {

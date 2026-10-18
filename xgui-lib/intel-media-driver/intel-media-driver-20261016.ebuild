@@ -20,7 +20,10 @@ BDEPEND="
 	app-build/llvm
 "
 RDEPEND="${DEPEND}"
-PATCHES=( "${FILESDIR}"/intel-media-driver-ninja-response-file.patch )
+PATCHES=(
+	"${FILESDIR}"/intel-media-driver-ninja-response-file.patch
+	"${FILESDIR}"/intel-media-driver-include-errno.patch
+)
 
 src_configure() {
 	# The media-driver include graph is large enough to exceed the compiler

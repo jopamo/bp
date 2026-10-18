@@ -1,0 +1,9 @@
+Include <errno.h> for the errno reference in mos_query_device_type().
+
+--- a/media_softlet/linux/common/os/i915/include/mos_bufmgr_api.h
++++ b/media_softlet/linux/common/os/i915/include/mos_bufmgr_api.h
+@@ -31,3 +31,4 @@
++#include <errno.h>
+ #include <stdio.h>
+ #include "drm.h"
+ #include "libdrm_macros.h"

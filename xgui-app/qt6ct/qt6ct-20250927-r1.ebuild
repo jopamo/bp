@@ -10,7 +10,16 @@ S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="BSD-2"
 SLOT="0"
-KEYWORDS="amd64"
+KEYWORDS="amd64 arm64"
+
+DEPEND=">=xgui-lib/qtbase-6.2:6="
+RDEPEND="${DEPEND}
+	>=xgui-app/kvantum-20261006
+"
+BDEPEND="
+	>=xgui-lib/qtbase-6.2:6
+	xgui-lib/qttools:6
+"
 
 src_configure() {
 	eqmake6
@@ -25,4 +34,11 @@ src_install() {
 	newenvd - 98${PN} <<-EOF
 		QT_QPA_PLATFORMTHEME=qt6ct
 	EOF
+}
+
+pkg_postinst() {
+	elog "Log in again to load QT_QPA_PLATFORMTHEME=qt6ct."
+	elog "Existing ~/.config/qt6ct/qt6ct.conf files override the system defaults."
+	elog "To use Kvantum's colors and painting, select kvantum-dark in qt6ct,"
+	elog "disable its custom palette, and clear the selected style sheets."
 }

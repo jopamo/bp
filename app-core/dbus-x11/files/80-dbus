@@ -15,5 +15,13 @@ fi
 # activation environment after the bus address and X11 variables are known
 dbusupdate=$(command -v dbus-update-activation-environment 2>/dev/null)
 if [ -n "$dbusupdate" ]; then
-	"$dbusupdate" --systemd DBUS_SESSION_BUS_ADDRESS DISPLAY XAUTHORITY >/dev/null 2>&1 || true
+	# Match the session's Qt/XDG settings, including cleared overrides.
+	"$dbusupdate" --systemd DBUS_SESSION_BUS_ADDRESS DISPLAY XAUTHORITY \
+		"QT_QPA_PLATFORMTHEME=${QT_QPA_PLATFORMTHEME-}" \
+		"QT_STYLE_OVERRIDE=${QT_STYLE_OVERRIDE-}" \
+		"XDG_CONFIG_HOME=${XDG_CONFIG_HOME-}" \
+		"XDG_CONFIG_DIRS=${XDG_CONFIG_DIRS-}" \
+		"XDG_DATA_HOME=${XDG_DATA_HOME-}" \
+		"XDG_DATA_DIRS=${XDG_DATA_DIRS-}" \
+		"XDG_CURRENT_DESKTOP=${XDG_CURRENT_DESKTOP-}" >/dev/null 2>&1 || true
 fi

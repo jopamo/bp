@@ -65,7 +65,7 @@ src_install() {
 	meson_src_install
 
 	exeinto /etc/X11/xinit/xinitrc.d
-	doexe "${FILESDIR}"/80-dbus
+	newexe "${FILESDIR}"/80-dbus 80-dbus.sh
 
 	# keep runtime state out of the image; create it via sysusers/tmpfiles
 	rm -rf "${ED}"/run

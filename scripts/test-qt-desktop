@@ -1,0 +1,221 @@
+#!/usr/bin/env python3
+"""Check staged Qt desktop defaults and private D-Bus activation."""
+
+import argparse
+import configparser
+import json
+import os
+from pathlib import Path
+import select
+import shlex
+import shutil
+import subprocess
+import tempfile
+import time
+
+
+PROBE = r"""
+#include <QApplication>
+#include <QDBusConnection>
+#include <QIcon>
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QLineEdit>
+#include <QPalette>
+#include <QProxyStyle>
+#include <QPushButton>
+#include <QSaveFile>
+#include <QScrollBar>
+#include <QTimer>
+#include <QVBoxLayout>
+
+int main(int argc, char **argv) {
+    QApplication app(argc, argv);
+    if (argc < 2)
+        return 2;
+    const QString output = QString::fromLocal8Bit(argv[1]);
+    if (argc == 3 && !QDBusConnection::sessionBus().registerService("org.oneg4.QtDesktopProbe"))
+        return 3;
+    QWidget window;
+    QVBoxLayout layout(&window);
+    layout.addWidget(new QPushButton("Themed button"));
+    layout.addWidget(new QLineEdit("Themed editor"));
+    layout.addWidget(new QScrollBar(Qt::Horizontal));
+    window.show();
+    QTimer::singleShot(200, &app, [&] {
+        QJsonArray styles;
+        QStyle *style = app.style();
+        while (style) {
+            styles.append(style->objectName());
+            auto *proxy = qobject_cast<QProxyStyle *>(style);
+            style = proxy ? proxy->baseStyle() : nullptr;
+        }
+        QJsonArray colors;
+        for (auto group : {QPalette::Active, QPalette::Inactive, QPalette::Disabled})
+            for (int role = 0; role < QPalette::NColorRoles; ++role)
+                colors.append(app.palette().color(group, QPalette::ColorRole(role)).name(QColor::HexArgb));
+        const QJsonObject result{
+            {"styles", styles}, {"palette", colors}, {"stylesheet", app.styleSheet()},
+            {"icons", QIcon::themeName()}, {"font", app.font().family()},
+            {"rendered", !window.grab().isNull()}
+        };
+        QSaveFile file(output);
+        if (!file.open(QIODevice::WriteOnly) ||
+            file.write(QJsonDocument(result).toJson()) < 0 || !file.commit()) {
+            app.exit(4);
+            return;
+        }
+        app.quit();
+    });
+    return app.exec();
+}
+"""
+
+
+def run(argv, env=None):
+    try:
+        return subprocess.run(argv, env=env, check=True, text=True,
+                              stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=30)
+    except subprocess.CalledProcessError as error:
+        raise RuntimeError(f"{shlex.join(argv)} failed:\n{error.stderr}") from error
+
+
+def read_config(path):
+    config = configparser.ConfigParser(interpolation=None)
+    with path.open() as stream:
+        config.read_file(stream)
+    return config
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("qt6ct_root", type=Path)
+    parser.add_argument("kvantum_root", type=Path)
+    parser.add_argument("dbus_root", type=Path)
+    args = parser.parse_args()
+    qt6ct, kvantum, dbus = (path.resolve() for path in
+                           (args.qt6ct_root, args.kvantum_root, args.dbus_root))
+    defaults = qt6ct / "etc/xdg/qt6ct/qt6ct.conf"
+    config = read_config(defaults)
+    assert config["Appearance"]["style"] == "kvantum-dark"
+    assert not config["Appearance"].getboolean("custom_palette")
+    assert not config["Appearance"].get("color_scheme_path", "")
+    assert config["Appearance"]["standard_dialogs"] == "default"
+    assert not config["Interface"]["stylesheets"]
+    selector = (qt6ct / "etc/env.d/98qt6ct").read_text()
+    assert selector.strip() == "QT_QPA_PLATFORMTHEME=qt6ct"
+    hook = dbus / "etc/X11/xinit/xinitrc.d/80-dbus.sh"
+    assert hook.is_file() and os.access(hook, os.X_OK)
+
+    plugins = Path(run(["/usr/lib/qt6/bin/qtpaths", "--query", "QT_INSTALL_PLUGINS"]).stdout.strip())
+    for root, plugin in ((qt6ct, "platformthemes/libqt6ct.so"),
+                         (qt6ct, "styles/libqt6ct-style.so"),
+                         (kvantum, "styles/libkvantum.so")):
+        assert (root / plugins.relative_to("/") / plugin).is_file()
+
+    with tempfile.TemporaryDirectory(prefix="bp-qt-desktop.") as temporary:
+        work = Path(temporary)
+        source, probe = work / "probe.cpp", work / "probe"
+        source.write_text(PROBE)
+        flags = shlex.split(run(["pkg-config", "--cflags", "--libs", "Qt6Widgets", "Qt6DBus"]).stdout)
+        run([os.environ.get("CXX", "clang++"), "-std=c++17", str(source), "-o", str(probe), *flags])
+        env = os.environ.copy()
+        for key in ("QT_STYLE_OVERRIDE", "QT_QPA_PLATFORM_PLUGIN_PATH", "DISPLAY", "WAYLAND_DISPLAY",
+                    "DBUS_SESSION_BUS_ADDRESS", "DBUS_STARTER_ADDRESS", "DBUS_STARTER_BUS_TYPE"):
+            env.pop(key, None)
+        for key in ("HOME", "XDG_CONFIG_HOME", "XDG_CACHE_HOME", "XDG_DATA_HOME", "XDG_RUNTIME_DIR"):
+            path = work / key
+            path.mkdir(mode=0o700)
+            env[key] = str(path)
+        env.update(
+            QT_QPA_PLATFORM="offscreen", QT_QPA_PLATFORMTHEME="qt6ct",
+            QT_FORCE_STDERR_LOGGING="1", XDG_CURRENT_DESKTOP="",
+            XDG_CONFIG_DIRS=str(qt6ct / "etc/xdg"),
+            XDG_DATA_DIRS=f"{qt6ct}/usr/share:{kvantum}/usr/share:/usr/share",
+            QT_PLUGIN_PATH=f"{qt6ct / plugins.relative_to('/')}:{kvantum / plugins.relative_to('/')}",
+            LD_LIBRARY_PATH=f"{qt6ct}/usr/lib:{dbus}/usr/lib",
+            PATH=f"{dbus}/usr/bin:{env['PATH']}",
+        )
+
+        def launch(name, environment):
+            output = work / f"{name}.json"
+            run([str(probe), str(output)], environment)
+            return json.loads(output.read_text())
+
+        def check_themed(result, expected):
+            assert result["styles"] == ["qt6ct-style", "kvantum-dark"], result
+            assert result["palette"] == expected["palette"], result
+            assert result["stylesheet"] == "", result
+            assert result["icons"] == config["Appearance"]["icon_theme"], result
+            assert result["font"] == config["Fonts"]["general"].strip('"').split(",")[0], result
+            assert result["rendered"]
+
+        direct = dict(env, QT_QPA_PLATFORMTHEME="", QT_STYLE_OVERRIDE="kvantum-dark")
+        expected = launch("direct", direct)
+        check_themed(launch("desktop", env), expected)
+        print("PASS: qt6ct selects Kvantum-dark without palette or stylesheet overrides")
+
+        theme_dir = Path(env["XDG_CONFIG_HOME"]) / "Kvantum"
+        theme_dir.mkdir()
+        shutil.copytree(kvantum / "usr/share/Kvantum/KvArcDark", theme_dir / "KvArcDark")
+        (theme_dir / "kvantum.kvconfig").write_text("[General]\ntheme=KvArcDark\n")
+        custom = launch("direct-custom", direct)
+        assert custom["palette"] != expected["palette"]
+        check_themed(launch("desktop-custom", env), custom)
+        print("PASS: a selected Kvantum theme retains its own palette")
+
+        services = work / "services"
+        services.mkdir()
+        activated_output = work / "activated.json"
+        (services / "org.oneg4.QtDesktopProbe.service").write_text(
+            "[D-BUS Service]\nName=org.oneg4.QtDesktopProbe\n"
+            f"Exec={shlex.join([str(probe), str(activated_output), '--dbus'])}\n"
+        )
+        bus_config = work / "bus.conf"
+        bus_config.write_text(
+            f"<busconfig><type>session</type><listen>unix:tmpdir={work}</listen>"
+            f"<servicedir>{services}</servicedir><policy context=\"default\">"
+            "<allow send_destination=\"*\"/><allow receive_sender=\"*\"/>"
+            "<allow own=\"*\"/></policy></busconfig>"
+        )
+        stale = dict(env, QT_QPA_PLATFORMTHEME="", QT_STYLE_OVERRIDE="Windows",
+                     XDG_CONFIG_HOME=str(work / "stale"), XDG_CONFIG_DIRS=str(work / "missing"))
+        daemon = subprocess.Popen(
+            [str(dbus / "usr/bin/dbus-daemon"), "--nofork", f"--config-file={bus_config}", "--print-address=1"],
+            env=stale, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True,
+        )
+        try:
+            assert select.select([daemon.stdout], [], [], 10)[0], "D-Bus startup timed out"
+            address = daemon.stdout.readline().strip()
+            assert address.startswith("unix:"), address
+            session = dict(env, DBUS_SESSION_BUS_ADDRESS=address)
+            run(["/bin/sh", "-c", '. "$1"', "qt-desktop-test", str(hook)], session)
+            run([str(dbus / "usr/bin/dbus-send"), "--session", "--print-reply",
+                 "--dest=org.freedesktop.DBus", "/org/freedesktop/DBus",
+                 "org.freedesktop.DBus.StartServiceByName",
+                 "string:org.oneg4.QtDesktopProbe", "uint32:0"], session)
+            deadline = time.monotonic() + 10
+            while not activated_output.exists() and time.monotonic() < deadline:
+                time.sleep(0.05)
+            check_themed(json.loads(activated_output.read_text()), custom)
+            print("PASS: X11 hook updates D-Bus activation and clears stale style overrides")
+        finally:
+            daemon.terminate()
+            try:
+                daemon.communicate(timeout=5)
+            except subprocess.TimeoutExpired:
+                daemon.kill()
+                daemon.communicate()
+
+        user_config = Path(env["XDG_CONFIG_HOME"]) / "qt6ct/qt6ct.conf"
+        saved = user_config.read_text().replace("style=kvantum-dark", "style=Fusion")
+        user_config.write_text(saved)
+        user = launch("user-style", env)
+        assert user["styles"] == ["qt6ct-style", "fusion"], user
+        assert user_config.read_text() == saved
+        print("PASS: existing per-user style choices are not replaced by system defaults")
+
+
+if __name__ == "__main__":
+    main()

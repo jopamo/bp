@@ -30,12 +30,12 @@ check_path() {
 }
 
 check_path QT_INSTALL_PREFIX /usr
-check_path QT_INSTALL_ARCHDATA /usr
+check_path QT_INSTALL_ARCHDATA /usr/lib/qt6
 check_path QT_INSTALL_LIBS "$(qt6_get_libdir)"
 check_path QT_INSTALL_BINS "$(qt6_get_bindir)"
 check_path QT_INSTALL_HEADERS "$(qt6_get_headerdir)"
 check_path QT_INSTALL_PLUGINS "$(qt6_get_plugindir)"
-check_path QT_INSTALL_QML /usr/qml
+check_path QT_INSTALL_QML /usr/lib/qt6/qml
 check_path QT_INSTALL_DATA /usr/share/qt6
 check_path QT_INSTALL_TRANSLATIONS /usr/share/qt6/translations
 check_path QT_HOST_DATA "$(dirname "$(qt6_get_mkspecsdir)")"

@@ -55,8 +55,14 @@ for EPREFIX in "" /prefix; do
 	pkg_postinst
 	[[ -d ${query_cache} && ! -e ${query_cache}/old ]]
 	[[ $(stat -c %a "${query_cache}") == 775 ]]
-	grep -qxF "corepkg:corepkg ${query_cache}" "${fixture}/owners"
+	grep -qxF -- "-hR corepkg:corepkg ${query_cache}" "${fixture}/owners"
 	grep -qxF 'user configuration' "${EROOT%/}/etc/coreqrc/custom"
+
+	printf 'existing database\n' > "${query_cache}/corepkg.coreq"
+	: > "${fixture}/owners"
+	pkg_postinst
+	grep -qxF -- "-hR corepkg:corepkg ${query_cache}" "${fixture}/owners"
+	grep -qxF 'existing database' "${query_cache}/corepkg.coreq"
 
 	owner_available=false
 	pkg_postinst

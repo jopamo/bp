@@ -269,7 +269,7 @@ pkg_postinst() {
 	mkdir -p "${distdir}" || die
 	mkdir -p -- "${query_cachedir}" || die
 	chmod 0775 "${query_cachedir}" || die
-	if ! chown corepkg:corepkg "${query_cachedir}" 2>/dev/null ; then
+	if ! chown -hR corepkg:corepkg "${query_cachedir}" 2>/dev/null ; then
 		ewarn "Unable to set owner/group on ${query_cachedir}; ensure it is writable by corepkg."
 	fi
 

@@ -16,7 +16,7 @@ IUSE="build gentoo-dev ipc native-extensions
 	gentoo_repo +rsync-verify selinux sqlite test xattr"
 
 COMMON_DEPEND="
-	app-compression/libarchive
+	app-compression/libarchive[bzip2]
 	app-core/bash
 	app-core/bx
 	app-core/sed

@@ -3,8 +3,8 @@ EAPI=8
 MERGE_MANIFEST_MODE="tree-blake3-v1"
 
 CRATE_NAME="deno_graph"
-CRATE_VERSION="0.111.0"
-CRATE_CHECKSUM="74d39f55639b6bffe4e886d2ea33724606729d3ec9c8e05a48952a56c1cef961"
+CRATE_VERSION="0.111.1"
+CRATE_CHECKSUM="8d88c8fda5602e366ff999b3b246cdbeca6a228f09370d5617eb20bab1ed0411"
 CRATE_SOURCE="registry+https://github.com/rust-lang/crates.io-index"
 CRATE_SOURCE_KIND="registry"
 

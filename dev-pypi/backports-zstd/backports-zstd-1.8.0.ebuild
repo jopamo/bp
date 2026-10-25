@@ -15,8 +15,8 @@ LICENSE="PSF-2.0"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-SRC_URI="https://files.pythonhosted.org/packages/75/f0/9ba1b05811aa5f5434f69768253129460a5744e1814f359efba39a01ce20/backports_zstd-1.7.0.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/backports_zstd-1.7.0"
+SRC_URI="https://files.pythonhosted.org/packages/ff/9c/13569626440e88f09d16f43ec1c2aa0d10a523be2811414580d1cfb7c9f3/backports_zstd-1.8.0.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/backports_zstd-1.8.0"
 
 BDEPEND="
 	dev-pypi/gpep517[${PYTHON_USEDEP}]

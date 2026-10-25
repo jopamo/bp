@@ -4,7 +4,7 @@ inherit meson doins
 
 DESCRIPTION="CCID free software driver"
 HOMEPAGE="https://ccid.apdu.fr https://github.com/LudovicRousseau/CCID"
-SNAPSHOT=662428ff3debc14fe9e7c3d5c0d5282d720ed5c7
+SNAPSHOT=dc2e7ccc36a2dbc27902499fc1f249139afe94f1
 SRC_URI="https://github.com/LudovicRousseau/ccid/archive/${SNAPSHOT}.tar.gz -> ccid-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/CCID-${SNAPSHOT}"
 

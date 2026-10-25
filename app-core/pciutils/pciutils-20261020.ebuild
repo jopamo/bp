@@ -4,7 +4,7 @@ inherit toolchain-funcs flag-o-matic qa-policy
 
 DESCRIPTION="A library and various utilities dealing with the PCI bus"
 HOMEPAGE="http://mj.ucw.cz/sw/pciutils/ https://git.kernel.org/?p=utils/pciutils/pciutils.git"
-SNAPSHOT=6d7fccdf64c14560ffa967b40d1b81bc366da7fb
+SNAPSHOT=f3bf645929ff3224f1abc0ebb2b2f3e947b238d4
 SRC_URI="https://github.com/pciutils/pciutils/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/pciutils-${SNAPSHOT}
 

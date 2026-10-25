@@ -1,0 +1,76 @@
+From: Paul Moses <p@1g4.org>
+Subject: [PATCH] gtk: release icon themes without resurrection
+
+gtk_icon_theme_ref_dispose() acquires a theme reference, clears ref->theme,
+then calls a release helper that can no longer find the reference to drop.
+This resurrects the disposing object and leaves its allocations alive.
+
+Clear the pointer under the mutex without taking another object reference.
+Also release the emptied icon-cache table during finalization.
+
+Add a regression that observes finalization through qdata destruction. Weak
+object pointers are cleared during disposal and do not detect this leak.
+
+Base: gtk 0d41402a077a7504d11c7f52f2ad3806cbd4db62
+
+diff --git a/gtk/gtkicontheme.c b/gtk/gtkicontheme.c
+--- a/gtk/gtkicontheme.c
++++ b/gtk/gtkicontheme.c
+@@ -526,9 +526,9 @@
+ static void
+ gtk_icon_theme_ref_dispose (GtkIconThemeRef *ref)
+ {
+-  gtk_icon_theme_ref_aquire (ref);
++  g_mutex_lock (&ref->lock);
+   ref->theme = NULL;
+-  gtk_icon_theme_ref_release (ref);
++  g_mutex_unlock (&ref->lock);
+ }
+ 
+ static void
+@@ -1336,6 +1336,8 @@
+      technically this is considered "locked" */
+ 
+   icon_cache_clear (self);
++
++  g_hash_table_unref (self->icon_cache);
+ 
+   if (self->theme_changed_idle)
+     g_source_remove (self->theme_changed_idle);
+diff --git a/testsuite/gtk/icontheme.c b/testsuite/gtk/icontheme.c
+--- a/testsuite/gtk/icontheme.c
++++ b/testsuite/gtk/icontheme.c
+@@ -688,6 +688,25 @@
+ }
+ 
+ static void
++theme_finalized (gpointer data)
++{
++  gboolean *finalized = data;
++
++  *finalized = TRUE;
++}
++
++static void
++test_finalize (void)
++{
++  GtkIconTheme *theme = gtk_icon_theme_new ();
++  gboolean finalized = FALSE;
++
++  g_object_set_data_full (G_OBJECT (theme), "finalize-test", &finalized, theme_finalized);
++  g_object_unref (theme);
++  g_assert_true (finalized);
++}
++
++static void
+ require_env (const char *var)
+ {
+   if (g_getenv (var) == NULL)
+@@ -701,6 +720,7 @@
+ 
+   gtk_test_init (&argc, &argv);
+ 
++  g_test_add_func ("/icontheme/finalize", test_finalize);
+   g_test_add_func ("/icontheme/basics", test_basics);
+   g_test_add_func ("/icontheme/generic-fallback", test_generic_fallback);
+   g_test_add_func ("/icontheme/force-symbolic", test_force_symbolic);

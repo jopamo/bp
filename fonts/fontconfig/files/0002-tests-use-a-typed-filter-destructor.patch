@@ -1,0 +1,35 @@
+From: Paul Moses <p@1g4.org>
+Subject: [PATCH] fontconfig tests: use a typed filter destructor
+
+The filter test casts FcPatternDestroy to FcDestroyFunc, then invokes it
+through a void (*)(void *) callback. UBSan reports the incompatible function
+type during configuration destruction. Use a callback with the declared
+signature and call FcPatternDestroy from it. Production behavior is unchanged.
+
+Base: fontconfig ebec29cb759cca828c3ffc043033f470e0af8367
+
+diff --git a/test/test-conf.c b/test/test-conf.c
+--- a/test/test-conf.c
++++ b/test/test-conf.c
+@@ -473,6 +473,12 @@
+     return ret;
+ }
+ 
++static void
++filter_destroy (void *data)
++{
++    FcPatternDestroy (data);
++}
++
+ static FcBool
+ build_fonts (FcConfig *config, json_object *root)
+ {
+@@ -486,7 +492,7 @@
+ 	    return FcFalse;
+ 	}
+ 	filterpat = build_pattern (filter);
+-	FcConfigSetFontSetFilter (config, filter_func, (FcDestroyFunc)FcPatternDestroy, filterpat);
++	FcConfigSetFontSetFilter (config, filter_func, filter_destroy, filterpat);
+     }
+     if (!json_object_object_get_ex (root, "fonts", &fonts) ||
+         json_object_get_type (fonts) != json_type_array) {

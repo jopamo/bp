@@ -70,6 +70,7 @@ PATCHES=(
 	"${FILESDIR}/0003-css-use-typed-parse-option-predicates.patch"
 	"${FILESDIR}/0004-css-release-replaced-calc-terms.patch"
 	"${FILESDIR}/0005-tests-gate-waylandsocket-on-backend.patch"
+	"${FILESDIR}/0006-release-icon-themes-without-resurrection.patch"
 )
 
 pkg_setup() {

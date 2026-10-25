@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-SNAPSHOT=5e00a8b5e17afac346816a60dbe876b1881c6990
+SNAPSHOT=411e58f13a65ac6535f01dd36724815d9769f4d7
 EGIT_REPO_URI="https://github.com/berkeleydb/libdb.git"
 EGIT_COMMIT="${SNAPSHOT}"
 

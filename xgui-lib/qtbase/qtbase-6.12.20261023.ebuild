@@ -9,7 +9,7 @@ inherit flag-o-matic cmake
 DESCRIPTION="Cross-platform application development framework"
 HOMEPAGE="https://www.qt.io/"
 
-SNAPSHOT=af99340b5340a03efc1fe6c2f7e23c7566372e93
+SNAPSHOT=847dc96670bd11409961012a7f98340cf1bc323e
 SRC_URI="https://invent.kde.org/qt/qt/${PN}/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 

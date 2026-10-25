@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-SNAPSHOT=253ba5219172531b719bc14fee6b4aa1a2a5c4a5
+SNAPSHOT=ba47717cc87753f86f24135c17bfaaa82d5daf53
 
 inherit toolchain-funcs
 

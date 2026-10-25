@@ -5,7 +5,7 @@ inherit toolchain-funcs qa-policy
 DESCRIPTION="Utility library for parser development"
 HOMEPAGE="https://www.netsurf-browser.org/projects/libparserutils/ https://github.com/netsurf-browser/libparserutils"
 SNAPSHOT=6b0cbf086ca8eb8fe74b69f0c9ecf274eb2397ca
-BS_SNAPSHOT=0005ae300283ff01c2e2b05e7376b3e55dea21f7
+BS_SNAPSHOT=e429a19d922b52e470fd8a2fd7e84a64b17175c9
 SRC_URI="
 	https://github.com/netsurf-browser/libparserutils/archive/${SNAPSHOT}.tar.gz -> libparserutils-${SNAPSHOT}.tar.gz
 	https://github.com/netsurf-browser/buildsystem/archive/${BS_SNAPSHOT}.tar.gz -> netsurf-buildsystem-${BS_SNAPSHOT}.tar.gz

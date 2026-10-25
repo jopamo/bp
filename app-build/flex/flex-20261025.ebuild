@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-SNAPSHOT=4fcc71489ae298c35b0b786114ad524945f2cf95
+SNAPSHOT=77f7c9eeaf4db796232abdc722ca343e5e4c9837
 
 inherit autotools qa-policy
 
@@ -25,7 +25,6 @@ BDEPEND="
 "
 
 PATCHES=(
-	"${FILESDIR}/bootstrap-compare-dependency.patch"
 	"${FILESDIR}/header-section-three.patch"
 	"${FILESDIR}/extra-type-macro.patch"
 )

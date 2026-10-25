@@ -6,7 +6,7 @@ inherit user autotools
 
 DESCRIPTION="Anonymizing overlay network for TCP"
 HOMEPAGE="http://www.torproject.org/"
-SNAPSHOT=d87395304ab540a61ab26ecfd2dda58e7caee57f
+SNAPSHOT=6edd9de7b2e9a5782b762840d829c24f75469872
 SRC_URI="https://gitlab.torproject.org/tpo/core/tor/-/archive/${SNAPSHOT}/tor-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/tor-${SNAPSHOT}"
 

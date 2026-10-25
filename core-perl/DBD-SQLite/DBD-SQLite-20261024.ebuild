@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-SNAPSHOT=a6c00fcd533ed0f32a18960ecbbcba996f6a1867
+SNAPSHOT=4ee4da7fb030b0ac4a1c0946955618972a5e24c8
 EGIT_REPO_URI="https://github.com/DBD-SQLite/DBD-SQLite.git"
 EGIT_COMMIT="${SNAPSHOT}"
 

@@ -12,7 +12,7 @@ if [[ ${PV} == *9999 ]]; then
 	EGIT_BRANCH="$(ver_cut 1-2)"
 	inherit git-r3
 else
-SNAPSHOT=4d15837ef21bf11e9e4509d8a202098370e59b9d
+SNAPSHOT=f34d4b2d4a2048386f1d8a3b29465d44c225b039
 	SRC_URI="https://github.com/erlang/otp/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 	S=${WORKDIR}/otp-${SNAPSHOT}
 fi
@@ -26,7 +26,6 @@ IUSE="java kpoll odbc sctp ssl systemd tk wxwidgets"
 PATCHES=(
 	"${FILESDIR}"/erlang-27.0-dont-ignore-LDFLAGS.patch
 	"${FILESDIR}"/erlang-24.0.2-serial-configure.patch
-	"${FILESDIR}"/erlang-25.1.2-c99.patch # Bug #882887
 	"${FILESDIR}"/erlang-26.2.4-test-errorinfo.patch
 )
 

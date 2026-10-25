@@ -4,7 +4,7 @@ inherit autotools flag-o-matic qa-policy
 
 DESCRIPTION="Btrfs filesystem utilities"
 HOMEPAGE="https://btrfs.wiki.kernel.org"
-SNAPSHOT=e7e0fc3a952161ead7c2b06b037c5e93f5bf81dd
+SNAPSHOT=96bcc1b7156708f01828cbc32000179206f0fcf9
 SRC_URI="https://github.com/kdave/btrfs-progs/archive/${SNAPSHOT}.tar.gz -> btrfs-progs-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/btrfs-progs-${SNAPSHOT}"
 

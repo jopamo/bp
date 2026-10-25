@@ -15,8 +15,8 @@ LICENSE="BSD-3-Clause"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-SRC_URI="https://files.pythonhosted.org/packages/e7/91/add211b38c357bf1b94900b4f79c34661a92be65c0243d2b0a3393c5092d/flit_core-4.1.0.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/flit_core-4.1.0"
+SRC_URI="https://files.pythonhosted.org/packages/69/59/b6fc2188dfc7ea4f936cd12b49d707f66a1cb7a1d2c16172963534db741b/flit_core-3.12.0.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/flit_core-3.12.0"
 
 BDEPEND="
 	dev-pypi/gpep517[${PYTHON_USEDEP}]

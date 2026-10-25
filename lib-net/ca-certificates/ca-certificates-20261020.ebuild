@@ -4,7 +4,7 @@ inherit python-any-r1
 
 DESCRIPTION="Common CA Certificates PEM files"
 HOMEPAGE="https://packages.debian.org/sid/ca-certificates"
-SNAPSHOT=36f904035c8390db4f0834c644c3e6ceceec01f5
+SNAPSHOT=5bee010adca85eb867534f6445735ad5cc0dc6f3
 SRC_URI="https://salsa.debian.org/debian/ca-certificates/-/archive/${SNAPSHOT}/ca-certificates-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/ca-certificates-${SNAPSHOT}"
 

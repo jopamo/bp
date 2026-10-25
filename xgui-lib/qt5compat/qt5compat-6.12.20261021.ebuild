@@ -7,7 +7,7 @@ inherit cmake
 DESCRIPTION="The module contains unsupported Qt 5 APIs"
 HOMEPAGE="https://www.qt.io/"
 
-SNAPSHOT=f4ad58a3784a865c59a3d245543a4e17abb965de
+SNAPSHOT=3d540aeaa7c6c169157be88eedd940325dacad1e
 SRC_URI="https://invent.kde.org/qt/qt/${PN}/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 

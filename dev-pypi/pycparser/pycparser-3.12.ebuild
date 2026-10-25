@@ -15,8 +15,8 @@ LICENSE="BSD-3-Clause"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-SRC_URI="https://files.pythonhosted.org/packages/da/a8/c5fdbeee588bb8ada9458774f43adf1bdd30bd59157055142183e769a024/pycparser-3.11.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/pycparser-3.11"
+SRC_URI="https://files.pythonhosted.org/packages/cb/27/eeb9f307bf07060f3d9f9aa0fb8c15b01bdfded0a941e4b2719c7f94cacd/pycparser-3.12.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/pycparser-3.12"
 
 BDEPEND="
 	dev-pypi/gpep517[${PYTHON_USEDEP}]

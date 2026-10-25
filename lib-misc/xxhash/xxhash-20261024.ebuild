@@ -4,7 +4,7 @@ inherit toolchain-funcs flag-o-matic qa-policy
 
 DESCRIPTION="Extremely fast non-cryptographic hash algorithm"
 HOMEPAGE="http://www.xxhash.net"
-SNAPSHOT=680bf463fa1ca0461b9a7c2dab7556e1f54cf4cf
+SNAPSHOT=c629a3113f8bf6a2e4dbab151741dbaa776af8fa
 SRC_URI="https://github.com/Cyan4973/xxHash/archive/${SNAPSHOT}.tar.gz -> xxHash-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/xxHash-${SNAPSHOT}"
 

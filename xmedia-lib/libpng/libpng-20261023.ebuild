@@ -4,7 +4,7 @@ inherit autotools qa-policy
 
 DESCRIPTION="Portable Network Graphics library"
 HOMEPAGE="http://www.libpng.org/"
-SNAPSHOT=18ea3e9404a09f42d92f952a4c0d1dd3d688182a
+SNAPSHOT=0b0876829d77db0827a8cc2c4326f63be22b2aa1
 SRC_URI="https://github.com/pnggroup/libpng/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

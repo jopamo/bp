@@ -4,7 +4,7 @@ inherit meson
 
 DESCRIPTION="Provides a standard configuration setup for installing PKCS#11"
 HOMEPAGE="https://p11-glue.freedesktop.org/p11-kit.html https://github.com/p11-glue/p11-kit"
-SNAPSHOT=b4e0b5ac1c3f47932ce5c00bd7f55b6d5c3eb4e2
+SNAPSHOT=7b24bd57a9fe789e053734e9223b0d4322e6484e
 SRC_URI="https://github.com/p11-glue/p11-kit/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

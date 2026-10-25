@@ -24,7 +24,7 @@ BDEPEND=">=app-dev/meson-1.11.0"
 RESTRICT="nostrip"
 
 PATCHES=(
-	"${FILESDIR}/0001-keep-mutable-heap-references-as-pointers.patch"
+	"${FILESDIR}/0001-tests-check-heap-reference-reachability.patch"
 	"${FILESDIR}/0002-tests-use-a-typed-filter-destructor.patch"
 )
 

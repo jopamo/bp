@@ -1,0 +1,85 @@
+From: Paul Moses <p@1g4.org>
+Subject: [PATCH] fontconfig tests: check heap-reference reachability
+
+Check reachability and destruction under ASan, including charset array
+growth. The base snapshot already stores mutable heap references as pointers.
+
+Base: fontconfig b25ffeabd15b76f86c0c6736f6df2f1b89858010
+
+diff --git a/test/meson.build b/test/meson.build
+--- a/test/meson.build
++++ b/test/meson.build
+@@ -47,6 +47,7 @@
+   ['test-y2038.c', {'include_directories': include_directories('../src'), 'dependencies': libintl_dep}],
+   ['test-versioned-conf.c'],
+   ['test-issue77.c'],
++  ['test-heap-references.c'],
+ ]
+ tests_build_only = [
+   ['test-gen-testcache.c', {'include_directories': include_directories('../src'), 'dependencies': libintl_dep}],
+diff --git a/test/test-heap-references.c b/test/test-heap-references.c
+new file mode 100644
+--- /dev/null
++++ b/test/test-heap-references.c
+@@ -0,0 +1,61 @@
++/* SPDX-License-Identifier: HPND */
++#include <assert.h>
++#include <stddef.h>
++#include <fontconfig/fontconfig.h>
++
++#if defined(__has_feature)
++#  if __has_feature(address_sanitizer)
++#    define CHECK_LEAKS 1
++#  endif
++#endif
++#if defined(__SANITIZE_ADDRESS__)
++#  define CHECK_LEAKS 1
++#endif
++
++#ifdef CHECK_LEAKS
++#  include <sanitizer/lsan_interface.h>
++#  define NOINLINE __attribute__((noinline))
++#else
++#  define NOINLINE
++#endif
++
++static FcPattern *pattern;
++static FcCharSet *charset;
++
++static NOINLINE void
++create_objects (void)
++{
++    unsigned int i;
++
++    pattern = FcPatternCreate ();
++    assert (pattern);
++    assert (FcPatternAddString (pattern, FC_FAMILY, (const FcChar8 *)"reachable family"));
++    charset = FcCharSetCreate ();
++    assert (charset);
++    /* Grow both arrays several times and retain every allocated leaf. */
++    for (i = 0; i < 33; i++)
++        assert (FcCharSetAddChar (charset, i * 256));
++}
++
++int
++main (void)
++{
++    unsigned int i;
++    int reachable = 0, released = 0;
++
++    create_objects ();
++    for (i = 0; i < 33; i++)
++        assert (FcCharSetHasChar (charset, i * 256));
++
++#ifdef CHECK_LEAKS
++    reachable = __lsan_do_recoverable_leak_check ();
++#endif
++    FcPatternDestroy (pattern);
++    FcCharSetDestroy (charset);
++    pattern = NULL;
++    charset = NULL;
++#ifdef CHECK_LEAKS
++    released = __lsan_do_recoverable_leak_check ();
++#endif
++    return reachable || released;
++}

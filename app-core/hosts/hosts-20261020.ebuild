@@ -2,7 +2,7 @@
 
 DESCRIPTION="Consolidating and extending hosts files from several well-curated sources"
 HOMEPAGE="https://github.com/StevenBlack/hosts"
-SNAPSHOT=82f0b5086df733a5591fc3f3b44d4990d0c54e97
+SNAPSHOT=7df0d762c34cb964c46f115e17cd9a7bd11aae59
 SRC_URI="https://github.com/StevenBlack/hosts/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 

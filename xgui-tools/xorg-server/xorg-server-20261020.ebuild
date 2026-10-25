@@ -70,7 +70,6 @@ src_prepare() {
 
 	eapply "${FILESDIR}"/${PN}-backtrace-execinfo.patch
 	eapply "${FILESDIR}"/${PN}-nvidia-musl-startup.patch
-	eapply "${FILESDIR}"/${PN}-composite-damage.patch
 	eapply "${FILESDIR}"/${PN}-glyph-sha256.patch
 
 	sed -i -E \

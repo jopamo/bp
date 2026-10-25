@@ -4,7 +4,7 @@ inherit autotools qa-policy
 
 DESCRIPTION="Multi-format archive and compression library"
 HOMEPAGE="http://www.libarchive.org/"
-SNAPSHOT=87dec938e1578901f4919faa76e5f541b4d145b1
+SNAPSHOT=c119b18810ba0b5370a3e213a3705b77d986e53f
 SRC_URI="https://github.com/libarchive/libarchive/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/libarchive-${SNAPSHOT}
 

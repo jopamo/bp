@@ -4,7 +4,7 @@ inherit cmake python-any-r1
 
 DESCRIPTION="Vulkan Installable Client Driver (ICD) Loader"
 HOMEPAGE="https://github.com/KhronosGroup/Vulkan-Loader"
-SNAPSHOT=77406fdfcd5706fd2a5d8f4473a6408fa6218b32
+SNAPSHOT=3172c4859f613576c1811b9e7a25d61230ecaeaa
 SRC_URI="https://github.com/KhronosGroup/Vulkan-Loader/archive/${SNAPSHOT}.tar.gz -> Vulkan-Loader-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/Vulkan-Loader-${SNAPSHOT}"
 

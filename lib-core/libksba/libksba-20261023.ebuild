@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-SNAPSHOT=071c7b84dca96db1fe6a647910dbd5c69ac92e1d
+SNAPSHOT=6d66fba22dc2ccd988958c47eb76646a92e58572
 SHORT=${SNAPSHOT:0:7}
 
 inherit autotools qa-policy

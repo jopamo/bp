@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-SNAPSHOT=37156835e3d725b6d750f000be33ba3814bb2310
+SNAPSHOT=84ec0658c81db4ccc4aabc420d3dc118c2c6a310
 EGIT_REPO_URI="https://github.com/1g4-mirror/sparse.git"
 EGIT_COMMIT="${SNAPSHOT}"
 

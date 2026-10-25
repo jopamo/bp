@@ -4,7 +4,7 @@ inherit toolchain-funcs
 
 DESCRIPTION="Libraries/utilities to handle ELF objects (drop in replacement for libelf)"
 HOMEPAGE="http://elfutils.org/"
-SNAPSHOT=30c3377732052dad3da7aff553dad0ca4a34c86e
+SNAPSHOT=fcd3951fd3649165d98aa5e7fe5b9bc64004e8a6
 SRC_URI="https://github.com/arachsys/libelf/archive/${SNAPSHOT}.tar.gz -> libelf-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/libelf-${SNAPSHOT}"
 

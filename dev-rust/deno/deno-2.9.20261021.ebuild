@@ -47,8 +47,9 @@ CARGO_DEPS="
 	rust-crates/atomic-waker-1.1.2
 	rust-crates/auto_impl-1.2.0
 	rust-crates/autocfg-1.3.0
-	rust-crates/aws-lc-rs-1.16.3
+	rust-crates/aws-lc-rs-1.18.2
 	rust-crates/aws-lc-sys-0.40.0
+	rust-crates/aws-lc-sys-0.46.0
 	rust-crates/backhand-0.25.1
 	rust-crates/backtrace-0.3.74
 	rust-crates/base16ct-0.2.0
@@ -197,7 +198,7 @@ CARGO_DEPS="
 	rust-crates/deno_doc-0.207.0
 	rust-crates/deno_error-0.7.1
 	rust-crates/deno_error_macro-0.7.1
-	rust-crates/deno_graph-0.111.0
+	rust-crates/deno_graph-0.111.1
 	rust-crates/deno_lint-0.84.1
 	rust-crates/deno_media_type-0.4.0
 	rust-crates/deno_native_certs-0.3.0
@@ -341,7 +342,7 @@ CARGO_DEPS="
 	rust-crates/gpu-descriptor-types-0.2.0
 	rust-crates/group-0.13.0
 	rust-crates/gzip-header-1.0.0
-	rust-crates/h2-0.4.7
+	rust-crates/h2-0.4.19
 	rust-crates/half-2.7.1
 	rust-crates/handlebars-6.1.0
 	rust-crates/hash2curve-0.14.0-rc.10
@@ -376,10 +377,10 @@ CARGO_DEPS="
 	rust-crates/httparse-1.10.0
 	rust-crates/httpdate-1.0.3
 	rust-crates/hybrid-array-0.4.7
-	rust-crates/hyper-1.6.0
+	rust-crates/hyper-1.11.1
 	rust-crates/hyper-rustls-0.27.2
 	rust-crates/hyper-timeout-0.5.2
-	rust-crates/hyper-util-0.1.17
+	rust-crates/hyper-util-0.1.21
 	rust-crates/icu_calendar-2.2.1
 	rust-crates/icu_calendar_data-2.2.0
 	rust-crates/icu_collator-2.2.1
@@ -591,7 +592,7 @@ CARGO_DEPS="
 	rust-crates/pkcs5-0.7.1
 	rust-crates/pkcs8-0.10.2
 	rust-crates/pkcs8-0.11.0-rc.11
-	rust-crates/pkg-config-0.3.30
+	rust-crates/pkg-config-0.3.34
 	rust-crates/plist-1.9.0
 	rust-crates/plotters-0.3.7
 	rust-crates/plotters-backend-0.3.7
@@ -631,7 +632,7 @@ CARGO_DEPS="
 	rust-crates/radix_trie-0.2.1
 	rust-crates/rand-0.10.2
 	rust-crates/rand-0.8.5
-	rust-crates/rand-0.9.2
+	rust-crates/rand-0.9.3
 	rust-crates/rand_chacha-0.3.1
 	rust-crates/rand_chacha-0.9.0
 	rust-crates/rand_core-0.10.0
@@ -685,7 +686,7 @@ CARGO_DEPS="
 	rust-crates/rustls-pemfile-2.1.2
 	rust-crates/rustls-pki-types-1.12.0
 	rust-crates/rustls-tokio-stream-0.8.0
-	rust-crates/rustls-webpki-0.103.13
+	rust-crates/rustls-webpki-0.103.16
 	rust-crates/rustversion-1.0.22
 	rust-crates/rusty-fork-0.3.1
 	rust-crates/rustyline-17.0.0
@@ -919,8 +920,9 @@ CARGO_DEPS="
 	rust-crates/web-sys-0.3.99
 	rust-crates/web-time-1.1.0
 	rust-crates/web-transport-proto-0.2.7
-	rust-crates/webpki-root-certs-0.26.6
-	rust-crates/webpki-roots-0.26.1
+	rust-crates/webpki-root-certs-1.0.10
+	rust-crates/webpki-roots-0.26.11
+	rust-crates/webpki-roots-1.0.10
 	rust-crates/weezl-0.1.8
 	rust-crates/wgpu-core-29.0.1
 	rust-crates/wgpu-core-deps-apple-29.0.3
@@ -1057,7 +1059,7 @@ inherit cargo lockstep-cargo
 DESCRIPTION="A modern runtime for JavaScript and TypeScript"
 HOMEPAGE="https://github.com/denoland/deno"
 
-SNAPSHOT=0c071246a412575e07423263404a5d13e7ed6aa2
+SNAPSHOT=fe7ed012d92c642fd8e5607ac5a45d517538b5c5
 SRC_URI="https://github.com/denoland/deno/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-SNAPSHOT=d587fb67e4691ab5a246cd7a4ec45a5ec13b3388
+SNAPSHOT=bf48529b4b71690425553072a1050b0fe52ea3a8
 EPSF_COMMIT=9b87a88f3842b91d8141d60e8ec0e66bf3f554bc
 
 inherit flag-o-matic qa-policy gl

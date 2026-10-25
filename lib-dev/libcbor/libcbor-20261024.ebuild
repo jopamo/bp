@@ -4,7 +4,7 @@ inherit cmake
 
 DESCRIPTION="CBOR protocol implementation for C and others"
 HOMEPAGE="https://github.com/pjk/libcbor"
-SNAPSHOT=ab8c72b1b26c0c3a6a462a11055bf7000a9d2ef5
+SNAPSHOT=64c7bb932b2bee0b0c41e0c75098bbf51ae25547
 SRC_URI="https://github.com/PJK/libcbor/archive/${SNAPSHOT}.tar.gz -> libcbor-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/libcbor-${SNAPSHOT}"
 

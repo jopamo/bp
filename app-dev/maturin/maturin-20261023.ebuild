@@ -38,7 +38,7 @@ CARGO_DEPS="
 	rust-crates/cargo-platform-0.1.9
 	rust-crates/cargo-platform-0.3.2
 	rust-crates/cargo-xwin-0.23.1
-	rust-crates/cargo-zigbuild-0.23.1
+	rust-crates/cargo-zigbuild-0.24.0
 	rust-crates/cargo_metadata-0.18.1
 	rust-crates/cargo_metadata-0.23.1
 	rust-crates/cbindgen-0.29.2
@@ -268,13 +268,13 @@ CARGO_DEPS="
 	rust-crates/rustc-hash-2.1.2
 	rust-crates/rustc_version-0.4.1
 	rust-crates/rustflags-0.1.7
-	rust-crates/rustix-1.1.4
+	rust-crates/rustix-1.1.5
 	rust-crates/rustls-0.23.46
 	rust-crates/rustls-native-certs-0.8.3
 	rust-crates/rustls-pki-types-1.14.0
 	rust-crates/rustls-platform-verifier-0.6.2
 	rust-crates/rustls-platform-verifier-android-0.1.1
-	rust-crates/rustls-webpki-0.103.15
+	rust-crates/rustls-webpki-0.103.16
 	rust-crates/rustversion-1.0.22
 	rust-crates/ruzstd-0.8.2
 	rust-crates/same-file-1.0.6
@@ -394,8 +394,8 @@ CARGO_DEPS="
 	rust-crates/wasm-metadata-0.244.0
 	rust-crates/wasmparser-0.244.0
 	rust-crates/web-time-1.1.0
-	rust-crates/webpki-root-certs-1.0.7
-	rust-crates/webpki-roots-1.0.7
+	rust-crates/webpki-root-certs-1.0.10
+	rust-crates/webpki-roots-1.0.10
 	rust-crates/which-8.0.2
 	rust-crates/wild-2.2.1
 	rust-crates/winapi-0.3.9
@@ -487,7 +487,7 @@ RDEPEND=""
 # lockstep-pypi-deps: end
 DESCRIPTION="Build and publish crates with pyo3, rust-cpython and cffi bindings"
 HOMEPAGE="https://www.maturin.rs/"
-SNAPSHOT=609a8b2c704864e771638143cc84e0e04f7cfcf8
+SNAPSHOT=f2cefaa061c79c500f4660c1e34f75d4eb0a5321
 SRC_URI="https://github.com/PyO3/maturin/archive/${SNAPSHOT}.tar.gz -> maturin-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/maturin-${SNAPSHOT}"
 

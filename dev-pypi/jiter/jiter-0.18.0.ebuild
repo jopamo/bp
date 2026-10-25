@@ -41,6 +41,7 @@ CARGO_DEPS="
 	rust-crates/fastrand-2.5.0
 	rust-crates/find-msvc-tools-0.1.11
 	rust-crates/fnv-1.0.7
+	rust-crates/foldhash-0.2.0
 	rust-crates/funty-2.0.0
 	rust-crates/futures-core-0.3.34
 	rust-crates/futures-task-0.3.34
@@ -78,11 +79,11 @@ CARGO_DEPS="
 	rust-crates/ppv-lite86-0.2.21
 	rust-crates/proc-macro2-1.0.107
 	rust-crates/proptest-1.11.0
-	rust-crates/pyo3-0.29.2
-	rust-crates/pyo3-build-config-0.29.2
-	rust-crates/pyo3-ffi-0.29.2
-	rust-crates/pyo3-macros-0.29.2
-	rust-crates/pyo3-macros-backend-0.29.2
+	rust-crates/pyo3-0.30.1
+	rust-crates/pyo3-build-config-0.30.1
+	rust-crates/pyo3-ffi-0.30.1
+	rust-crates/pyo3-macros-0.30.1
+	rust-crates/pyo3-macros-backend-0.30.1
 	rust-crates/quick-error-1.2.3
 	rust-crates/quote-1.0.47
 	rust-crates/r-efi-5.3.0
@@ -104,7 +105,7 @@ CARGO_DEPS="
 	rust-crates/serde-1.0.229
 	rust-crates/serde_core-1.0.229
 	rust-crates/serde_derive-1.0.229
-	rust-crates/serde_json-1.0.151
+	rust-crates/serde_json-1.0.154
 	rust-crates/shlex-2.0.1
 	rust-crates/slab-0.4.12
 	rust-crates/smallvec-1.15.2
@@ -150,8 +151,8 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-SRC_URI="https://files.pythonhosted.org/packages/9c/1f/8176d92e001f86505424b41664032ae26a882bc9ca41a32c803f373f9195/jiter-0.17.0.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/jiter-0.17.0"
+SRC_URI="https://files.pythonhosted.org/packages/63/5b/f68319f4fe624311a744a33d10fdbcac4c971991e348223cba60d31780b2/jiter-0.18.0.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/jiter-0.18.0"
 
 BDEPEND="
 	app-dev/maturin[${PYTHON_USEDEP}]

@@ -4,7 +4,7 @@ inherit toolchain-funcs autotools qa-policy
 
 DESCRIPTION="International Components for Unicode"
 HOMEPAGE="http://www.icu-project.org/"
-SNAPSHOT=560e6db559a4a836a016b762051eee00d56e3d76
+SNAPSHOT=ad110a2381f1b75bfb875fb0b672b7c38dce4e4b
 SRC_URI="https://github.com/unicode-org/icu/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}/icu4c/source"
 

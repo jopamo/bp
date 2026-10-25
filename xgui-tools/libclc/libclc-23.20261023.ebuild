@@ -1,7 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 BRANCH_NAME="release/$(ver_cut 1).x"
-SNAPSHOT=0cd28174a1f64e5a8df194422ebf46e88cff33ad
+SNAPSHOT=395ba2c4d274e0d81bea69a49aba372e3743d113
 EGIT_REPO_URI="https://github.com/llvm/llvm-project.git"
 EGIT_COMMIT="${SNAPSHOT}"
 

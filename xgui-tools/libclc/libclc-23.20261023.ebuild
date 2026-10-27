@@ -2,14 +2,13 @@
 
 BRANCH_NAME="release/$(ver_cut 1).x"
 SNAPSHOT=395ba2c4d274e0d81bea69a49aba372e3743d113
-EGIT_REPO_URI="https://github.com/llvm/llvm-project.git"
-EGIT_COMMIT="${SNAPSHOT}"
 
-inherit cmake git-snapshot python-any-r1
+inherit cmake python-any-r1
 
 DESCRIPTION="Implementation of OpenCL C built-in libraries for GPU/OpenCL compilers"
 HOMEPAGE="https://llvm.org/"
-S="${WORKDIR}/git-source/libclc"
+SRC_URI="https://github.com/llvm/llvm-project/archive/${SNAPSHOT}.tar.gz -> llvm-project-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/llvm-project-${SNAPSHOT}/libclc"
 
 LICENSE="UoI-NCSA rc BSD public-domain"
 SLOT=0
@@ -75,6 +74,8 @@ src_compile() {
 }
 
 src_install() {
+	dostrip -x /usr/share/clc
+
 	local target
 	for target in "${libclc_targets[@]}"; do
 		local BUILD_DIR="${WORKDIR}/${PN}-${target}_build"

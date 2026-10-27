@@ -1,0 +1,15 @@
+--- a/vendor/cpp-httplib/httplib.cpp
++++ b/vendor/cpp-httplib/httplib.cpp
+@@ -15177,7 +15177,10 @@ ctx_t create_server_context() {
+     // that SSLServer::update_certs_pem() does not wait for
+     SSL_CTX_set_options(ctx, SSL_OP_NO_COMPRESSION |
+-                                 SSL_OP_NO_SESSION_RESUMPTION_ON_RENEGOTIATION |
+-                                 SSL_OP_NO_RENEGOTIATION);
++                                 SSL_OP_NO_SESSION_RESUMPTION_ON_RENEGOTIATION);
++    // LibreSSL rejects peer-initiated renegotiation without an option.
++#ifndef LIBRESSL_VERSION_NUMBER
++    SSL_CTX_set_options(ctx, SSL_OP_NO_RENEGOTIATION);
++#endif
+     SSL_CTX_set_min_proto_version(ctx, TLS1_2_VERSION);
+     // Without one, a client resuming its session is sent a fatal alert once
+     // client certificates are verified.

@@ -5,19 +5,18 @@ inherit cmake qa-policy toolchain-funcs user
 DESCRIPTION="High-performance inference of large language models (llama.cpp)"
 HOMEPAGE="https://github.com/ggml-org/llama.cpp"
 SNAPSHOT=b3fa69955ea81c3b60e77e3c1e2224c4a826ffb9
-SRC_URI="https://github.com/ggml-org/llama.cpp/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+UI_VERSION=b11871
+SRC_URI="
+	https://github.com/ggml-org/llama.cpp/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz
+	https://github.com/ggml-org/llama.cpp/releases/download/${UI_VERSION}/llama-${UI_VERSION}-ui.tar.gz
+"
 S="${WORKDIR}/llama.cpp-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-RESTRICT="network-sandbox"
 
 IUSE="cuda systemd"
-
-BDEPEND="
-	app-server/nodejs
-"
 
 DEPEND="
 	cuda? ( bin/nvidia-cuda )
@@ -25,6 +24,13 @@ DEPEND="
 	systemd? ( app-core/systemd )
 "
 RDEPEND="${DEPEND}"
+
+PATCHES=( "${FILESDIR}/httplib-libressl-renegotiation.patch" )
+
+src_prepare() {
+	cmake_src_prepare
+	mv "${WORKDIR}/llama-${UI_VERSION}" tools/ui/dist || die
+}
 
 src_configure() {
 	addpredict "/proc/self/task"
@@ -34,19 +40,11 @@ src_configure() {
 		export CUDAFLAGS="${CUDAFLAGS:+${CUDAFLAGS} }-allow-unsupported-compiler"
 	fi
 
-	export NODE_ENV=development
-	export npm_config_cache="${T}/npm-cache"
-	export npm_config_include=dev
-	export npm_config_omit=
-	export npm_config_production=false
-	export npm_config_update_notifier=false
-	export npm_config_fund=false
-
 	local mycmakeargs=(
 		-D GGML_CUDA=$(usex cuda ON OFF)
 		-D LLAMA_OPENSSL=ON
-		-D LLAMA_BUILD_UI=ON
-		-D LLAMA_USE_PREBUILT_UI=ON
+		-D LLAMA_BUILD_UI=OFF
+		-D LLAMA_USE_PREBUILT_UI=OFF
 		-D LLAMA_BUILD_TESTS=OFF
 		-D LLAMA_TESTS_INSTALL=OFF
 	)

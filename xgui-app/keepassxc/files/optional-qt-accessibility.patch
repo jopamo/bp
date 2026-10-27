@@ -1,0 +1,39 @@
+--- a/src/gui/entry/EntryView.cpp
++++ b/src/gui/entry/EntryView.cpp
+@@ -23,9 +23,11 @@
+ #include <QDrag>
+ #include <QGuiApplication>
+ #include <QHeaderView>
++#include <QKeyEvent>
+ #include <QListWidget>
+ #include <QMenu>
+ #include <QPainter>
++#include <QScreen>
+ #include <QShortcut>
+ #include <QStyledItemDelegate>
+ #include <QWindow>
+@@ -186,18 +188,24 @@
+ 
+     int last = m_model->rowCount() - 1;
+     if (last > 0) {
++#if QT_CONFIG(accessibility)
+         QAccessibleEvent accessibleEvent(this, QAccessible::PageChanged);
++#endif
+         if (event->key() == Qt::Key_Up && currentIndex().row() == 0) {
+             QModelIndex index = m_sortModel->mapToSource(m_sortModel->index(last, 0));
+             setCurrentEntry(m_model->entryFromIndex(index));
++#if QT_CONFIG(accessibility)
+             QAccessible::updateAccessibility(&accessibleEvent);
++#endif
+             return;
+         }
+ 
+         if (event->key() == Qt::Key_Down && currentIndex().row() == last) {
+             QModelIndex index = m_sortModel->mapToSource(m_sortModel->index(0, 0));
+             setCurrentEntry(m_model->entryFromIndex(index));
++#if QT_CONFIG(accessibility)
+             QAccessible::updateAccessibility(&accessibleEvent);
++#endif
+             return;
+         }
+     }

@@ -15,11 +15,15 @@ IUSE="autotype test"
 DEPEND="
 	app-crypto/vesk
 	app-crypto/botan
-	lib-core/zlib
+	app-crypto/keyutils
+	app-crypto/pcsc-lite
+	lib-core/zlib[minizip]
 	lib-core/libsodium
-	xgui-lib/qtbase:5
-	xgui-lib/qttools:5
-	xgui-lib/qtsvg:5
+	lib-dev/libusb
+	xgui-lib/libxkbcommon
+	xgui-lib/qtbase:6
+	xgui-lib/qttools:6
+	xgui-lib/qtsvg:6
 	xmedia-app/qrencode
 	autotype? (
 		xgui-lib/libX11
@@ -27,25 +31,24 @@ DEPEND="
 		xgui-lib/libXtst
 	)
 "
+RDEPEND="${DEPEND}"
+
+PATCHES=( "${FILESDIR}/optional-qt-accessibility.patch" )
 
 src_configure() {
 	filter-flags -flto*
-
-	 use test || \
-		sed -e "/^find_package(Qt5Test/d" -i CMakeLists.txt || die
 
 	local mycmakeargs=(
 		-DKEEPASSXC_BUILD_TYPE_RELEASE=on
 		-DWITH_GUI_TESTS=OFF
 		-DWITH_TESTS="$(usex test)"
-		-DWITH_XC_AUTOTYPE="$(usex autotype)"
-		-DWITH_XC_DOCS=OFF
-		-DWITH_XC_YUBIKEY=OFF
-		-DWITH_XC_SSHAGENT=ON
-		-DWITH_XC_BROWSER=ON
-		-DWITH_XC_BROWSER_PASSKEYS=ON
-		-DWITH_XC_NETWORKING=OFF
-		-DWITH_XC_UPDATECHECK=OFF
+		-DWITH_X11="$(usex autotype)"
+		-DKPXC_FEATURE_DOCS=OFF
+		-DKPXC_FEATURE_SSHAGENT=ON
+		-DKPXC_FEATURE_BROWSER=ON
+		-DKPXC_FEATURE_FDOSECRETS=OFF
+		-DKPXC_FEATURE_NETWORK=OFF
+		-DKPXC_FEATURE_UPDATES=OFF
 	)
 	cmake_src_configure
 }

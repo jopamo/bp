@@ -1,3 +1,4 @@
 # Preserve unified-diff context.
+app-crypto/keyutils/files/correct-symbol-exports.patch -whitespace
 fonts/fontconfig/files/*.patch -whitespace
 xgui-lib/gtk4/files/0006-release-icon-themes-without-resurrection.patch -whitespace

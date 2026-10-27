@@ -16,6 +16,7 @@ RESTRICT="!test? ( test )"
 
 PATCHES=(
 	"${FILESDIR}"/${PN}-1.5.10-disable-tests.patch
+	"${FILESDIR}"/correct-symbol-exports.patch
 )
 
 src_prepare() {
@@ -50,6 +51,6 @@ src_install() {
 		BINDIR="${ED}"/usr/bin \
 		install
 
-	qa-policy-install
 	dosym -r /usr/lib/libkeyutils.so.1 /usr/lib/libkeyutils.so
+	qa-policy-install
 }

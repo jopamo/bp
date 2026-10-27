@@ -23,7 +23,9 @@ CMAKE_BINARY=record_cmake
 record_cmake() { runtime_command=( "$@" ); }
 FILESDIR=${repo}/app-build/llvm/files
 ED=${fixture}/image/
-source "${repo}/app-build/llvm/llvm-23.20261014.ebuild"
+ebuilds=( "${repo}"/app-build/llvm/llvm-*.ebuild )
+[[ ${#ebuilds[@]} == 1 ]] || die "expected one LLVM ebuild"
+source "${ebuilds[0]}"
 (
 	CXX=clang++
 	_llvm_cxx_link_usable || die "host C++ runtime cannot link <string>"

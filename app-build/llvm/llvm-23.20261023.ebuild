@@ -2,14 +2,13 @@
 
 BRANCH_NAME="release/$(ver_cut 1).x"
 SNAPSHOT=395ba2c4d274e0d81bea69a49aba372e3743d113
-EGIT_REPO_URI="https://github.com/llvm/llvm-project.git"
-EGIT_COMMIT="${SNAPSHOT}"
 
-inherit cmake flag-o-matic git-snapshot qa-policy toolchain-funcs
+inherit cmake flag-o-matic qa-policy toolchain-funcs
 
 DESCRIPTION="Low Level Virtual Machine"
 HOMEPAGE="https://llvm.org/"
-S="${WORKDIR}/git-source/llvm"
+SRC_URI="https://github.com/llvm/llvm-project/archive/${SNAPSHOT}.tar.gz -> llvm-project-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/llvm-project-${SNAPSHOT}/llvm"
 
 LICENSE="Apache-2.0-with-LLVM-exceptions UoI-NCSA rc BSD public-domain"
 SLOT=0

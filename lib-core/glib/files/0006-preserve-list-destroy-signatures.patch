@@ -1,0 +1,150 @@
+From: Paul Moses <p@1g4.org>
+Subject: [PATCH] glist: preserve destroy callback signatures
+
+Call GList and GSList destroy callbacks directly as GDestroyNotify rather
+than casting them to the two-argument GFunc used by foreach. Keep the
+head-to-tail order and free nodes only after every data callback returns.
+
+Adapt the typed public test-case and test-suite destructors to the
+GDestroyNotify interface at their private list call sites. Extend the
+existing free-full test to check empty lists, order, exactly-once calls
+and node lifetime during destruction.
+
+diff --git a/glib/glist.c b/glib/glist.c
+--- a/glib/glist.c
++++ b/glib/glist.c
+@@ -159,7 +159,16 @@
+ g_list_free_full (GList          *list,
+                   GDestroyNotify  free_func)
+ {
+-  g_list_foreach (list, (GFunc) free_func, NULL);
++  GList *node = list;
++
++  while (node)
++    {
++      GList *next = node->next;
++
++      free_func (node->data);
++      node = next;
++    }
++
+   g_list_free (list);
+ }
+ 
+diff --git a/glib/gslist.c b/glib/gslist.c
+--- a/glib/gslist.c
++++ b/glib/gslist.c
+@@ -146,7 +146,16 @@
+ g_slist_free_full (GSList         *list,
+ 		   GDestroyNotify  free_func)
+ {
+-  g_slist_foreach (list, (GFunc) free_func, NULL);
++  GSList *node = list;
++
++  while (node)
++    {
++      GSList *next = node->next;
++
++      free_func (node->data);
++      node = next;
++    }
++
+   g_slist_free (list);
+ }
+ 
+diff --git a/glib/gtestutils.c b/glib/gtestutils.c
+--- a/glib/gtestutils.c
++++ b/glib/gtestutils.c
+@@ -3409,6 +3409,18 @@
+   g_slice_free (GTestCase, test_case);
+ }
+ 
++static void
++test_case_free (gpointer data)
++{
++  g_test_case_free (data);
++}
++
++static void
++test_suite_free (gpointer data)
++{
++  g_test_suite_free (data);
++}
++
+ /**
+  * g_test_suite_free:
+  * @suite: a test suite
+@@ -3420,11 +3432,11 @@
+ void
+ g_test_suite_free (GTestSuite *suite)
+ {
+-  g_slist_free_full (suite->cases, (GDestroyNotify)g_test_case_free);
++  g_slist_free_full (suite->cases, test_case_free);
+ 
+   g_free (suite->name);
+ 
+-  g_slist_free_full (suite->suites, (GDestroyNotify)g_test_suite_free);
++  g_slist_free_full (suite->suites, test_suite_free);
+ 
+   g_slice_free (GTestSuite, suite);
+ }
+diff --git a/glib/tests/list.c b/glib/tests/list.c
+--- a/glib/tests/list.c
++++ b/glib/tests/list.c
+@@ -343,11 +343,22 @@
+   int x;
+ } ListItem;
+ 
++static GList *list_being_freed;
++static GSList *slist_being_freed;
++static int next_free_x;
++
+ static void
+ free_func (gpointer data)
+ {
+   ListItem *item = data;
+ 
++  g_assert_false (item->freed);
++  g_assert_cmpint (item->x, ==, next_free_x);
++  next_free_x--;
++  if (list_being_freed != NULL)
++    g_assert_cmpuint (g_list_length (list_being_freed), ==, 3);
++  if (slist_being_freed != NULL)
++    g_assert_cmpuint (g_slist_length (slist_being_freed), ==, 3);
+   item->freed = TRUE;
+ }
+ 
+@@ -369,6 +380,9 @@
+   ListItem *one, *two, *three;
+   GSList *slist = NULL;
+   GList *list = NULL;
++
++  g_slist_free_full (NULL, NULL);
++  g_list_free_full (NULL, NULL);
+ 
+   slist = g_slist_prepend (slist, one = new_item (1));
+   slist = g_slist_prepend (slist, two = new_item (2));
+@@ -376,7 +390,11 @@
+   g_assert (!one->freed);
+   g_assert (!two->freed);
+   g_assert (!three->freed);
++  next_free_x = 3;
++  slist_being_freed = slist;
+   g_slist_free_full (slist, free_func);
++  slist_being_freed = NULL;
++  g_assert_cmpint (next_free_x, ==, 0);
+   g_assert (one->freed);
+   g_assert (two->freed);
+   g_assert (three->freed);
+@@ -390,7 +408,11 @@
+   g_assert (!one->freed);
+   g_assert (!two->freed);
+   g_assert (!three->freed);
++  next_free_x = 3;
++  list_being_freed = list;
+   g_list_free_full (list, free_func);
++  list_being_freed = NULL;
++  g_assert_cmpint (next_free_x, ==, 0);
+   g_assert (one->freed);
+   g_assert (two->freed);
+   g_assert (three->freed);

@@ -1,0 +1,19 @@
+From: Paul Moses <p@1g4.org>
+Subject: [PATCH] meson: require an explicit gvdb dependency
+
+Remove the unconditional gvdb subproject invocation. Keep the required
+dependency lookup so the private diagnostic build can select an explicitly
+built copylib archive through pkg-config, without a subproject or fallback.
+
+diff --git a/meson.build b/meson.build
+--- a/meson.build
++++ b/meson.build
+@@ -2293,8 +2293,6 @@
+   use_pcre2_static_flag = false
+ endif
+ 
+-# Import the gvdb sources as a subproject to avoid having the copylib in-tree
+-subproject('gvdb', default_options: {'tests': false})
+ gvdb_dep = dependency('gvdb')
+ 
+ libm = cc.find_library('m', required : false)

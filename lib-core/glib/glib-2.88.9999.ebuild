@@ -32,6 +32,17 @@ DEPEND="
     lib-core/zlib
 "
 
+PATCHES=(
+	"${FILESDIR}/0001-keep-pre-cancelled-task-errors-worker-owned.patch"
+	"${FILESDIR}/0002-require-explicit-gvdb.patch"
+	"${FILESDIR}/0003-match-param-type-callbacks.patch"
+	"${FILESDIR}/0004-call-boxed-registration-directly.patch"
+	"${FILESDIR}/0005-preserve-non-fixture-callback-signatures.patch"
+	"${FILESDIR}/0006-preserve-list-destroy-signatures.patch"
+	"${FILESDIR}/0007-call-fixture-registration-directly.patch"
+	"${FILESDIR}/0008-preserve-list-comparator-signatures.patch"
+)
+
 src_configure() {
 	qa-policy-configure
 	filter-flags -Wl,-z,defs
@@ -45,6 +56,7 @@ src_configure() {
 		-Dselinux=disabled
 		-Dxattr=true
 		-Dtests=false
+		-Dgvdb:tests=false
 		-Dnls=disabled
 		$(meson_feature introspection)
 	)

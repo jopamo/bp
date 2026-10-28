@@ -1,0 +1,63 @@
+From: Paul Moses <p@1g4.org>
+Subject: [PATCH] gtype: call boxed registration through a typed helper
+
+The GNU C boxed-type macro assigns g_boxed_type_register_static to a
+function pointer with transparent-union parameters. Clang's function
+sanitizer rejects calls through that pointer.
+
+Keep the transparent-union callback checks on a generated inline helper
+and call g_boxed_type_register_static directly with its declared types.
+Preserve lazy registration and custom code. Leave the C++ and other
+compiler branch unchanged.
+
+diff --git a/gobject/gtype.h b/gobject/gtype.h
+--- a/gobject/gtype.h
++++ b/gobject/gtype.h
+@@ -2475,6 +2475,23 @@
+ #define _G_DEFINE_BOXED_TYPE_BEGIN(TypeName, type_name, copy_func, free_func) \
+ static GType type_name##_get_type_once (void); \
+ \
++static inline GType \
++type_name##_register_boxed (const gchar *name, \
++                           union \
++                             { \
++                               TypeName * (*do_copy_type) (TypeName *); \
++                               TypeName * (*do_const_copy_type) (const TypeName *); \
++                               GBoxedCopyFunc do_copy_boxed; \
++                             } __attribute__((__transparent_union__)) copy, \
++                           union \
++                             { \
++                               void (*do_free_type) (TypeName *); \
++                               GBoxedFreeFunc do_free_boxed; \
++                             } __attribute__((__transparent_union__)) free_func_arg) \
++{ \
++  return g_boxed_type_register_static (name, copy.do_copy_boxed, free_func_arg.do_free_boxed); \
++} \
++\
+ GType \
+ type_name##_get_type (void) \
+ { \
+@@ -2491,22 +2508,8 @@
+ static GType \
+ type_name##_get_type_once (void) \
+ { \
+-  GType (* _g_register_boxed) \
+-    (const gchar *, \
+-     union \
+-       { \
+-         TypeName * (*do_copy_type) (TypeName *); \
+-         TypeName * (*do_const_copy_type) (const TypeName *); \
+-         GBoxedCopyFunc do_copy_boxed; \
+-       } __attribute__((__transparent_union__)), \
+-     union \
+-       { \
+-         void (* do_free_type) (TypeName *); \
+-         GBoxedFreeFunc do_free_boxed; \
+-       } __attribute__((__transparent_union__)) \
+-    ) = g_boxed_type_register_static; \
+   GType g_define_type_id = \
+-    _g_register_boxed (g_intern_static_string (#TypeName), copy_func, free_func); \
++    type_name##_register_boxed (g_intern_static_string (#TypeName), copy_func, free_func); \
+   { /* custom code follows */
+ #else
+ #define _G_DEFINE_BOXED_TYPE_BEGIN(TypeName, type_name, copy_func, free_func) \

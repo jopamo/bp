@@ -1,0 +1,45 @@
+From: Paul Moses <p@1g4.org>
+Subject: [PATCH] gtestutils: call fixture registration directly
+
+The g_test_add macro calls g_test_add_vtable through a function pointer
+with fixture-specific callback parameter types. Clang's function sanitizer
+rejects that registration call.
+
+Check the supplied callbacks using fixture-typed local variables, then
+call g_test_add_vtable directly with its declared parameter types. Keep
+single evaluation of each argument and the existing callback conversions.
+This does not change the later dispatch of typed fixture callbacks.
+
+diff --git a/glib/gtestutils.h b/glib/gtestutils.h
+--- a/glib/gtestutils.h
++++ b/glib/gtestutils.h
+@@ -460,17 +460,18 @@
+  *
+  * Since: 2.16
+  */
+-#define g_test_add(testpath, Fixture, tdata, fsetup, ftest, fteardown) \
+-					G_STMT_START {			\
+-                                         void (*add_vtable) (const char*,       \
+-                                                    gsize,             \
+-                                                    gconstpointer,     \
+-                                                    void (*) (Fixture*, gconstpointer),   \
+-                                                    void (*) (Fixture*, gconstpointer),   \
+-                                                    void (*) (Fixture*, gconstpointer)) =  (void (*) (const gchar *, gsize, gconstpointer, void (*) (Fixture*, gconstpointer), void (*) (Fixture*, gconstpointer), void (*) (Fixture*, gconstpointer))) g_test_add_vtable; \
+-                                         add_vtable \
+-                                          (testpath, sizeof (Fixture), tdata, fsetup, ftest, fteardown); \
+-					} G_STMT_END
++#define g_test_add(testpath, Fixture, tdata, fsetup, ftest, fteardown)     \
++  G_STMT_START                                                             \
++  {                                                                        \
++    void (*_g_test_add_setup) (Fixture *, gconstpointer) = (fsetup);       \
++    void (*_g_test_add_test) (Fixture *, gconstpointer) = (ftest);         \
++    void (*_g_test_add_teardown) (Fixture *, gconstpointer) = (fteardown); \
++    g_test_add_vtable (testpath, sizeof (Fixture), tdata,                  \
++                       (GTestFixtureFunc) _g_test_add_setup,               \
++                       (GTestFixtureFunc) _g_test_add_test,                \
++                       (GTestFixtureFunc) _g_test_add_teardown);           \
++  }                                                                        \
++  G_STMT_END
+ 
+ /* add test messages to the test report */
+ GLIB_AVAILABLE_IN_ALL

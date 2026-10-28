@@ -1,0 +1,41 @@
+From: Paul Moses <p@1g4.org>
+Subject: [PATCH] gtask: avoid storing a pre-cancellation error
+
+Pre-cancelled return-on-cancel tasks still run their worker. Storing a
+cancellation error at startup lets the worker overwrite that allocation
+when it returns its own error. Check the cancellable without writing the
+worker result slot, as the later cancellation path already does.
+
+Return-on-cancel requires check-cancellable, so propagation still reports
+cancellation. Extend the existing async and sync cancellation tests by
+returning an error from the cancelled worker.
+
+diff --git a/gio/gtask.c b/gio/gtask.c
+--- a/gio/gtask.c
++++ b/gio/gtask.c
+@@ -1641,8 +1641,7 @@
+   if (task->cancellable)
+     {
+       if (task->return_on_cancel &&
+-          g_cancellable_set_error_if_cancelled (task->cancellable,
+-                                                &task->error))
++          g_cancellable_is_cancelled (task->cancellable))
+         {
+           task->thread_cancelled = task->thread_complete = TRUE;
+           TRACE (GIO_TASK_AFTER_RUN_IN_THREAD (task, task->thread_cancelled));
+diff --git a/gio/tests/task.c b/gio/tests/task.c
+--- a/gio/tests/task.c
++++ b/gio/tests/task.c
+@@ -1593,7 +1593,11 @@
+       g_task_return_int (task, magic);
+     }
+   else
+-    *state = THREAD_CANCELLED;
++    {
++      *state = THREAD_CANCELLED;
++      g_task_return_new_error (task, G_IO_ERROR, G_IO_ERROR_FAILED,
++                               "Task failed after cancellation");
++    }
+ 
+   g_cond_signal (&roc_finish_cond);
+   g_mutex_unlock (&roc_finish_mutex);

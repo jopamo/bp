@@ -1,0 +1,357 @@
+From: Paul Moses <p@1g4.org>
+Subject: [PATCH] gtestutils: preserve non-fixture callback signatures
+
+Store GTestFunc, GTestDataFunc and GDestroyNotify separately instead of
+casting them to GTestFixtureFunc. Share path registration through a
+private case template and dispatch each callback with its declared type.
+Keep fixture allocation and release tied to the same saved size.
+
+Release owned data after a test or when its case is freed without running.
+Clear the destroy callback before invoking it, including for null data.
+Exercise normal, skipped and never-run ownership through the existing
+testing helper. Public signatures and opaque types remain unchanged.
+
+diff --git a/glib/gtestutils.c b/glib/gtestutils.c
+--- a/glib/gtestutils.c
++++ b/glib/gtestutils.c
+@@ -684,6 +684,9 @@
+   void   (*fixture_test)     (void*, gconstpointer);
+   void   (*fixture_teardown) (void*, gconstpointer);
+   gpointer test_data;
++  GTestFunc test_func;
++  GTestDataFunc data_test_func;
++  GDestroyNotify data_destroy;
+ };
+ struct GTestSuite
+ {
+@@ -2508,32 +2511,9 @@
+   return strcmp (tc->name, str);
+ }
+ 
+-/**
+- * GTestFixtureFunc:
+- * @fixture: (not nullable): the test fixture
+- * @user_data: the data provided when registering the test
+- *
+- * The type used for functions that operate on test fixtures.
+- *
+- * This is used for the fixture setup and teardown functions
+- * as well as for the testcases themselves.
+- *
+- * @user_data is a pointer to the data that was given when
+- * registering the test case.
+- *
+- * @fixture will be a pointer to the area of memory allocated by the
+- * test framework, of the size requested.  If the requested size was
+- * zero then @fixture will be equal to @user_data.
+- *
+- * Since: 2.28
+- */
+-void
+-g_test_add_vtable (const char       *testpath,
+-                   gsize             data_size,
+-                   gconstpointer     test_data,
+-                   GTestFixtureFunc  data_setup,
+-                   GTestFixtureFunc  fixture_test_func,
+-                   GTestFixtureFunc  data_teardown)
++static void
++test_add_case (const char *testpath,
++               const GTestCase *test_case)
+ {
+   gchar **segments;
+   guint ui;
+@@ -2541,7 +2521,6 @@
+ 
+   g_return_if_fail (testpath != NULL);
+   g_return_if_fail (g_path_is_absolute (testpath));
+-  g_return_if_fail (fixture_test_func != NULL);
+   g_return_if_fail (!test_isolate_dirs || strstr (testpath, "/.") == NULL);
+ 
+   suite = g_test_get_root();
+@@ -2577,11 +2556,54 @@
+           if (g_slist_find_custom (suite->cases, seg, find_case))
+             g_error ("duplicate test case path: %s", testpath);
+ 
+-          tc = g_test_create_case (seg, data_size, test_data, data_setup, fixture_test_func, data_teardown);
++          tc = g_slice_dup (GTestCase, test_case);
++          tc->name = g_strdup (seg);
+           g_test_suite_add (suite, tc);
+         }
+     }
+   g_strfreev (segments);
++}
++
++/**
++ * GTestFixtureFunc:
++ * @fixture: (not nullable): the test fixture
++ * @user_data: the data provided when registering the test
++ *
++ * The type used for functions that operate on test fixtures.
++ *
++ * This is used for the fixture setup and teardown functions
++ * as well as for the testcases themselves.
++ *
++ * @user_data is a pointer to the data that was given when
++ * registering the test case.
++ *
++ * @fixture will be a pointer to the area of memory allocated by the
++ * test framework, of the size requested.  If the requested size was
++ * zero then @fixture will be equal to @user_data.
++ *
++ * Since: 2.28
++ */
++void
++g_test_add_vtable (const char *testpath,
++                   gsize data_size,
++                   gconstpointer test_data,
++                   GTestFixtureFunc data_setup,
++                   GTestFixtureFunc fixture_test_func,
++                   GTestFixtureFunc data_teardown)
++{
++  const GTestCase test_case = {
++    .fixture_size = data_size,
++    .fixture_setup = data_setup,
++    .fixture_test = fixture_test_func,
++    .fixture_teardown = data_teardown,
++    .test_data = (gpointer) test_data,
++  };
++
++  g_return_if_fail (testpath != NULL);
++  g_return_if_fail (g_path_is_absolute (testpath));
++  g_return_if_fail (fixture_test_func != NULL);
++
++  test_add_case (testpath, &test_case);
+ }
+ 
+ /**
+@@ -2832,10 +2854,12 @@
+ g_test_add_func (const char *testpath,
+                  GTestFunc   test_func)
+ {
++  const GTestCase test_case = { .test_func = test_func };
++
+   g_return_if_fail (testpath != NULL);
+   g_return_if_fail (testpath[0] == '/');
+   g_return_if_fail (test_func != NULL);
+-  g_test_add_vtable (testpath, 0, NULL, NULL, (GTestFixtureFunc) test_func, NULL);
++  test_add_case (testpath, &test_case);
+ }
+ 
+ /**
+@@ -2877,11 +2901,16 @@
+                       gconstpointer   test_data,
+                       GTestDataFunc   test_func)
+ {
++  const GTestCase test_case = {
++    .test_data = (gpointer) test_data,
++    .data_test_func = test_func,
++  };
++
+   g_return_if_fail (testpath != NULL);
+   g_return_if_fail (testpath[0] == '/');
+   g_return_if_fail (test_func != NULL);
+ 
+-  g_test_add_vtable (testpath, 0, test_data, NULL, (GTestFixtureFunc) test_func, NULL);
++  test_add_case (testpath, &test_case);
+ }
+ 
+ /**
+@@ -2904,13 +2933,17 @@
+                            GTestDataFunc   test_func,
+                            GDestroyNotify  data_free_func)
+ {
++  const GTestCase test_case = {
++    .test_data = test_data,
++    .data_test_func = test_func,
++    .data_destroy = data_free_func,
++  };
++
+   g_return_if_fail (testpath != NULL);
+   g_return_if_fail (testpath[0] == '/');
+   g_return_if_fail (test_func != NULL);
+ 
+-  g_test_add_vtable (testpath, 0, test_data, NULL,
+-                     (GTestFixtureFunc) test_func,
+-                     (GTestFixtureFunc) data_free_func);
++  test_add_case (testpath, &test_case);
+ }
+ 
+ static gboolean
+@@ -3076,6 +3109,18 @@
+ static gboolean test_should_run (const char *test_path,
+                                  const char *cmp_path);
+ 
++static void
++test_case_destroy_data (GTestCase *tc)
++{
++  if (tc->data_destroy != NULL)
++    {
++      GDestroyNotify destroy = tc->data_destroy;
++
++      tc->data_destroy = NULL;
++      destroy (tc->test_data);
++    }
++}
++
+ static gboolean
+ test_case_run (GTestCase  *tc,
+                const char *test_run_name,
+@@ -3106,6 +3151,7 @@
+     {
+       GTimer *test_run_timer = g_timer_new();
+       long double largs[G_TEST_CASE_LARGS_MAX];
++      const guint fixture_size = tc->fixture_size;
+       void *fixture;
+       g_test_log (G_TEST_LOG_START_CASE, test_run_name, NULL, 0, NULL);
+       test_run_forks = 0;
+@@ -3127,11 +3173,16 @@
+           else
+             {
+               g_timer_start (test_run_timer);
+-              fixture = tc->fixture_size ? g_malloc0 (tc->fixture_size) : tc->test_data;
++              fixture = fixture_size ? g_malloc0 (fixture_size) : tc->test_data;
+               test_run_seed (test_run_seedstr);
+               if (tc->fixture_setup)
+                 tc->fixture_setup (fixture, tc->test_data);
+-              tc->fixture_test (fixture, tc->test_data);
++              if (tc->test_func != NULL)
++                tc->test_func ();
++              else if (tc->data_test_func != NULL)
++                tc->data_test_func (tc->test_data);
++              else
++                tc->fixture_test (fixture, tc->test_data);
+               test_trap_clear();
+               while (test_destroy_queue)
+                 {
+@@ -3143,7 +3194,8 @@
+               if (tc->fixture_teardown)
+                 tc->fixture_teardown (fixture, tc->test_data);
+               tc->fixture_teardown = NULL;
+-              if (tc->fixture_size)
++              test_case_destroy_data (tc);
++              if (fixture_size)
+                 g_free (fixture);
+               g_timer_stop (test_run_timer);
+             }
+@@ -3351,6 +3403,7 @@
+    * #GDestroyNotify. */
+   if (test_case->fixture_size == 0 && test_case->fixture_teardown != NULL)
+     test_case->fixture_teardown (test_case->test_data, test_case->test_data);
++  test_case_destroy_data (test_case);
+ 
+   g_free (test_case->name);
+   g_slice_free (GTestCase, test_case);
+diff --git a/glib/tests/testing.c b/glib/tests/testing.c
+--- a/glib/tests/testing.c
++++ b/glib/tests/testing.c
+@@ -571,6 +571,28 @@
+ }
+ 
+ static void
++test_owned_data (void)
++{
++  const gchar *modes[] = { "owned-data", "owned-data-unrun" };
++  const gchar *helper = g_test_get_filename (G_TEST_BUILT, "testing-helper" EXEEXT, NULL);
++  guint i;
++
++  for (i = 0; i < G_N_ELEMENTS (modes); i++)
++    {
++      gchar *argv[] = { (gchar *) helper, (gchar *) modes[i], NULL };
++      GError *error = NULL;
++      gchar *output = NULL;
++      int status;
++
++      g_spawn_sync (NULL, argv, NULL, 0, NULL, NULL, &output, NULL, &status, &error);
++      g_assert_no_error (error);
++      g_spawn_check_wait_status (status, &error);
++      g_assert_no_error (error);
++      g_free (output);
++    }
++}
++
++static void
+ test_random_conversions (void)
+ {
+   /* very simple conversion test using random numbers */
+@@ -2973,6 +2995,7 @@
+   g_test_add_func ("/misc/assertions/subprocess/bad_cmpfloat_epsilon", test_assertions_bad_cmpfloat_epsilon);
+   g_test_add_func ("/misc/assertions/subprocess/bad_no_errno", test_assertions_bad_no_errno);
+   g_test_add_data_func ("/misc/test-data", (void*) 0xc0c0baba, test_data_test);
++  g_test_add_func ("/misc/owned-data", test_owned_data);
+   g_test_add ("/misc/primetoul", Fixturetest, (void*) 0xc0cac01a, fixturetest_setup, fixturetest_test, fixturetest_teardown);
+   if (g_test_perf())
+     g_test_add_func ("/misc/timer", test_timer);
+diff --git a/glib/tests/testing-helper.c b/glib/tests/testing-helper.c
+--- a/glib/tests/testing-helper.c
++++ b/glib/tests/testing-helper.c
+@@ -32,6 +32,31 @@
+ {
+ }
+ 
++static guint owned_data_destroyed[3];
++static guint owned_data_seen;
++
++static void
++test_owned_data (gconstpointer data)
++{
++  if (data == NULL)
++    owned_data_seen |= 2;
++  else
++    {
++      g_assert_cmpuint (*(const guint *) data, ==, 0);
++      owned_data_seen |= 1;
++    }
++}
++
++static void
++destroy_owned_data (gpointer data)
++{
++  guint index = data != NULL ? *(guint *) data : 2;
++
++  g_assert_cmpuint (index, <, G_N_ELEMENTS (owned_data_destroyed));
++  owned_data_destroyed[index]++;
++  g_free (data);
++}
++
+ static void
+ test_skip (void)
+ {
+@@ -192,7 +217,37 @@
+   g_test_init (&argc, &argv, NULL);
+   g_test_set_nonfatal_assertions ();
+ 
+-  if (g_strcmp0 (argv1, "pass") == 0)
++  if (g_strcmp0 (argv1, "owned-data") == 0 ||
++      g_strcmp0 (argv1, "owned-data-unrun") == 0)
++    {
++      gboolean run = g_strcmp0 (argv1, "owned-data") == 0;
++      guint *data = g_new (guint, 1);
++      guint *unrun_data = g_new (guint, 1);
++      int result = 0;
++
++      data[0] = 0;
++      *unrun_data = 1;
++      g_test_add_data_func_full ("/owned", data, test_owned_data, destroy_owned_data);
++      g_test_add_data_func_full ("/subprocess/unrun", unrun_data, test_owned_data, destroy_owned_data);
++      g_test_add_data_func_full ("/null", NULL, test_owned_data, destroy_owned_data);
++
++      if (run)
++        result = g_test_run ();
++      else
++        g_test_suite_free (g_test_get_root ());
++
++      if (owned_data_seen != (run ? 3 : 0) ||
++          owned_data_destroyed[0] != 1 ||
++          owned_data_destroyed[1] != 1 ||
++          owned_data_destroyed[2] != 1)
++        {
++          g_printerr ("Owned test data was not dispatched or destroyed exactly once\n");
++          return 1;
++        }
++
++      return result;
++    }
++  else if (g_strcmp0 (argv1, "pass") == 0)
+     {
+       g_test_add_func ("/pass", test_pass);
+     }

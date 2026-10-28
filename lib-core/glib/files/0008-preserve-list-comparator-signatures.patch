@@ -1,0 +1,418 @@
+From: Paul Moses <p@1g4.org>
+Subject: [PATCH] glist: preserve comparator callback signatures
+
+Use GCompareDataFunc throughout the internal sort and insertion helpers.
+Adapt GCompareFunc with a synchronous wrapper that retains its declared
+two-argument type. Keep the existing null-comparator insertion check.
+
+Use matching callback signatures in the list tests, verify user data and
+empty/singleton sorting, and compare sorted copies in the stability checks.
+Those checks currently compare each original element with itself.
+
+diff --git a/glib/glist.c b/glib/glist.c
+--- a/glib/glist.c
++++ b/glib/glist.c
+@@ -1019,11 +1019,21 @@ g_list_foreach (GList    *list,
+     }
+ }
+ 
+-static GList*
+-g_list_insert_sorted_real (GList    *list,
+-                           gpointer  data,
+-                           GFunc     func,
+-                           gpointer  user_data)
++static gint
++compare_without_data (gconstpointer a,
++                      gconstpointer b,
++                      gpointer user_data)
++{
++  GCompareFunc *compare = user_data;
++
++  return (*compare) (a, b);
++}
++
++static GList *
++g_list_insert_sorted_real (GList *list,
++                           gpointer data,
++                           GCompareDataFunc func,
++                           gpointer user_data)
+ {
+   GList *tmp_list = list;
+   GList *new_list;
+@@ -1037,14 +1047,14 @@ g_list_insert_sorted_real (GList    *list,
+       new_list->data = data;
+       return new_list;
+     }
+-  
+-  cmp = ((GCompareDataFunc) func) (data, tmp_list->data, user_data);
++
++  cmp = func (data, tmp_list->data, user_data);
+ 
+   while ((tmp_list->next) && (cmp > 0))
+     {
+       tmp_list = tmp_list->next;
+ 
+-      cmp = ((GCompareDataFunc) func) (data, tmp_list->data, user_data);
++      cmp = func (data, tmp_list->data, user_data);
+     }
+ 
+   new_list = _g_list_alloc0 ();
+@@ -1095,7 +1105,8 @@ g_list_insert_sorted (GList        *list,
+                       gpointer      data,
+                       GCompareFunc  func)
+ {
+-  return g_list_insert_sorted_real (list, data, (GFunc) func, NULL);
++  return g_list_insert_sorted_real (list, data,
++                                    func ? compare_without_data : NULL, &func);
+ }
+ 
+ /**
+@@ -1126,14 +1137,14 @@ g_list_insert_sorted_with_data (GList            *list,
+                                 GCompareDataFunc  func,
+                                 gpointer          user_data)
+ {
+-  return g_list_insert_sorted_real (list, data, (GFunc) func, user_data);
++  return g_list_insert_sorted_real (list, data, func, user_data);
+ }
+ 
+ static GList *
+-g_list_sort_merge (GList     *l1, 
+-                   GList     *l2,
+-                   GFunc     compare_func,
+-                   gpointer  user_data)
++g_list_sort_merge (GList *l1,
++                   GList *l2,
++                   GCompareDataFunc compare_func,
++                   gpointer user_data)
+ {
+   GList list, *l, *lprev;
+   gint cmp;
+@@ -1143,7 +1154,7 @@ g_list_sort_merge (GList     *l1,
+ 
+   while (l1 && l2)
+     {
+-      cmp = ((GCompareDataFunc) compare_func) (l1->data, l2->data, user_data);
++      cmp = compare_func (l1->data, l2->data, user_data);
+ 
+       if (cmp <= 0)
+         {
+@@ -1165,10 +1176,10 @@ g_list_sort_merge (GList     *l1,
+   return list.next;
+ }
+ 
+-static GList * 
+-g_list_sort_real (GList    *list,
+-                  GFunc     compare_func,
+-                  gpointer  user_data)
++static GList *
++g_list_sort_real (GList *list,
++                  GCompareDataFunc compare_func,
++                  gpointer user_data)
+ {
+   GList *l1, *l2;
+   
+@@ -1226,7 +1237,7 @@ GList *
+ g_list_sort (GList        *list,
+              GCompareFunc  compare_func)
+ {
+-  return g_list_sort_real (list, (GFunc) compare_func, NULL);
++  return g_list_sort_real (list, compare_without_data, &compare_func);
+ }
+ 
+ /**
+@@ -1259,7 +1270,7 @@ g_list_sort_with_data (GList            *list,
+                        GCompareDataFunc  compare_func,
+                        gpointer          user_data)
+ {
+-  return g_list_sort_real (list, (GFunc) compare_func, user_data);
++  return g_list_sort_real (list, compare_func, user_data);
+ }
+ 
+ /**
+diff --git a/glib/gslist.c b/glib/gslist.c
+--- a/glib/gslist.c
++++ b/glib/gslist.c
+@@ -848,11 +848,21 @@ g_slist_foreach (GSList   *list,
+     }
+ }
+ 
+-static GSList*
+-g_slist_insert_sorted_real (GSList   *list,
+-                            gpointer  data,
+-                            GFunc     func,
+-                            gpointer  user_data)
++static gint
++compare_without_data (gconstpointer a,
++                      gconstpointer b,
++                      gpointer user_data)
++{
++  GCompareFunc *compare = user_data;
++
++  return (*compare) (a, b);
++}
++
++static GSList *
++g_slist_insert_sorted_real (GSList *list,
++                            gpointer data,
++                            GCompareDataFunc func,
++                            gpointer user_data)
+ {
+   GSList *tmp_list = list;
+   GSList *prev_list = NULL;
+@@ -869,14 +879,14 @@ g_slist_insert_sorted_real (GSList   *list,
+       return new_list;
+     }
+ 
+-  cmp = ((GCompareDataFunc) func) (data, tmp_list->data, user_data);
++  cmp = func (data, tmp_list->data, user_data);
+ 
+   while ((tmp_list->next) && (cmp > 0))
+     {
+       prev_list = tmp_list;
+       tmp_list = tmp_list->next;
+ 
+-      cmp = ((GCompareDataFunc) func) (data, tmp_list->data, user_data);
++      cmp = func (data, tmp_list->data, user_data);
+     }
+ 
+   new_list = _g_slist_alloc ();
+@@ -920,7 +930,8 @@ g_slist_insert_sorted (GSList       *list,
+                        gpointer      data,
+                        GCompareFunc  func)
+ {
+-  return g_slist_insert_sorted_real (list, data, (GFunc) func, NULL);
++  return g_slist_insert_sorted_real (list, data,
++                                     func ? compare_without_data : NULL, &func);
+ }
+ 
+ /**
+@@ -945,14 +956,14 @@ g_slist_insert_sorted_with_data (GSList           *list,
+                                  GCompareDataFunc  func,
+                                  gpointer          user_data)
+ {
+-  return g_slist_insert_sorted_real (list, data, (GFunc) func, user_data);
++  return g_slist_insert_sorted_real (list, data, func, user_data);
+ }
+ 
+ static GSList *
+-g_slist_sort_merge (GSList   *l1,
+-                    GSList   *l2,
+-                    GFunc     compare_func,
+-                    gpointer  user_data)
++g_slist_sort_merge (GSList *l1,
++                    GSList *l2,
++                    GCompareDataFunc compare_func,
++                    gpointer user_data)
+ {
+   GSList list, *l;
+   gint cmp;
+@@ -961,7 +972,7 @@ g_slist_sort_merge (GSList   *l1,
+ 
+   while (l1 && l2)
+     {
+-      cmp = ((GCompareDataFunc) compare_func) (l1->data, l2->data, user_data);
++      cmp = compare_func (l1->data, l2->data, user_data);
+ 
+       if (cmp <= 0)
+         {
+@@ -980,9 +991,9 @@ g_slist_sort_merge (GSList   *l1,
+ }
+ 
+ static GSList *
+-g_slist_sort_real (GSList   *list,
+-                   GFunc     compare_func,
+-                   gpointer  user_data)
++g_slist_sort_real (GSList *list,
++                   GCompareDataFunc compare_func,
++                   gpointer user_data)
+ {
+   GSList *l1, *l2;
+ 
+@@ -1027,7 +1038,7 @@ GSList *
+ g_slist_sort (GSList       *list,
+               GCompareFunc  compare_func)
+ {
+-  return g_slist_sort_real (list, (GFunc) compare_func, NULL);
++  return g_slist_sort_real (list, compare_without_data, &compare_func);
+ }
+ 
+ /**
+@@ -1045,7 +1056,7 @@ g_slist_sort_with_data (GSList           *list,
+                         GCompareDataFunc  compare_func,
+                         gpointer          user_data)
+ {
+-  return g_slist_sort_real (list, (GFunc) compare_func, user_data);
++  return g_slist_sort_real (list, compare_func, user_data);
+ }
+ 
+ /**
+diff --git a/glib/tests/list.c b/glib/tests/list.c
+--- a/glib/tests/list.c
++++ b/glib/tests/list.c
+@@ -23,13 +23,30 @@ sort (gconstpointer p1, gconstpointer p2)
+ /*
+  * glist sort tests
+  */
++static gint
++sort_with_data (gconstpointer p1, gconstpointer p2, gpointer data)
++{
++  g_assert_true (data == array);
++  return sort (p1, p2);
++}
++
++static gint
++sort_strings (gconstpointer p1, gconstpointer p2)
++{
++  return g_strcmp0 (p1, p2);
++}
++
+ static void
+ test_list_sort (void)
+ {
+   GList *list = NULL;
+   gint   i;
+ 
+-  for (i = 0; i < SIZE; i++)
++  g_assert_null (g_list_sort (NULL, sort));
++  list = g_list_append (list, GINT_TO_POINTER (array[0]));
++  g_assert_true (g_list_sort (list, sort) == list);
++
++  for (i = 1; i < SIZE; i++)
+     list = g_list_append (list, GINT_TO_POINTER (array[i]));
+ 
+   list = g_list_sort (list, sort);
+@@ -55,7 +72,7 @@ test_list_sort_with_data (void)
+   for (i = 0; i < SIZE; i++)
+     list = g_list_append (list, GINT_TO_POINTER (array[i]));
+ 
+-  list = g_list_sort_with_data (list, (GCompareDataFunc)sort, NULL);
++  list = g_list_sort_with_data (list, sort_with_data, array);
+   for (i = 0; i < SIZE - 1; i++)
+     {
+       gpointer p1, p2;
+@@ -83,7 +100,7 @@ test_list_sort_stable (void)
+ 
+   /* Take a copy and sort it. */
+   copy = g_list_copy (list);
+-  copy = g_list_sort (copy, (GCompareFunc) g_strcmp0);
++  copy = g_list_sort (copy, sort_strings);
+ 
+   /* Compare the two lists, checking pointers are equal to ensure the elements
+    * have been kept stable. */
+@@ -92,7 +109,7 @@ test_list_sort_stable (void)
+       gpointer p1, p2;
+ 
+       p1 = g_list_nth_data (list, i);
+-      p2 = g_list_nth_data (list, i);
++      p2 = g_list_nth_data (copy, i);
+ 
+       g_assert (p1 == p2);
+     }
+@@ -107,6 +124,10 @@ test_list_insert_sorted (void)
+   GList *list = NULL;
+   gint   i;
+ 
++  g_test_expect_message ("GLib", G_LOG_LEVEL_CRITICAL, "*func != NULL*");
++  g_assert_null (g_list_insert_sorted (NULL, NULL, NULL));
++  g_test_assert_expected_messages ();
++
+   for (i = 0; i < SIZE; i++)
+     list = g_list_insert_sorted (list, GINT_TO_POINTER (array[i]), sort);
+ 
+@@ -132,8 +153,8 @@ test_list_insert_sorted_with_data (void)
+   for (i = 0; i < SIZE; i++)
+     list = g_list_insert_sorted_with_data (list,
+                                            GINT_TO_POINTER (array[i]),
+-                                           (GCompareDataFunc)sort,
+-                                           NULL);
++                                           sort_with_data,
++                                           array);
+ 
+   for (i = 0; i < SIZE - 1; i++)
+     {
+diff --git a/glib/tests/slist.c b/glib/tests/slist.c
+--- a/glib/tests/slist.c
++++ b/glib/tests/slist.c
+@@ -22,13 +22,30 @@ sort (gconstpointer p1, gconstpointer p2)
+ /*
+  * gslist sort tests
+  */
++static gint
++sort_with_data (gconstpointer p1, gconstpointer p2, gpointer data)
++{
++  g_assert_true (data == array);
++  return sort (p1, p2);
++}
++
++static gint
++sort_strings (gconstpointer p1, gconstpointer p2)
++{
++  return g_strcmp0 (p1, p2);
++}
++
+ static void
+ test_slist_sort (void)
+ {
+   GSList *slist = NULL;
+   gint    i;
+ 
+-  for (i = 0; i < SIZE; i++)
++  g_assert_null (g_slist_sort (NULL, sort));
++  slist = g_slist_append (slist, GINT_TO_POINTER (array[0]));
++  g_assert_true (g_slist_sort (slist, sort) == slist);
++
++  for (i = 1; i < SIZE; i++)
+     slist = g_slist_append (slist, GINT_TO_POINTER (array[i]));
+ 
+   slist = g_slist_sort (slist, sort);
+@@ -54,7 +71,7 @@ test_slist_sort_with_data (void)
+   for (i = 0; i < SIZE; i++)
+     slist = g_slist_append (slist, GINT_TO_POINTER (array[i]));
+ 
+-  slist = g_slist_sort_with_data (slist, (GCompareDataFunc)sort, NULL);
++  slist = g_slist_sort_with_data (slist, sort_with_data, array);
+   for (i = 0; i < SIZE - 1; i++)
+     {
+       gpointer p1, p2;
+@@ -82,7 +99,7 @@ test_slist_sort_stable (void)
+ 
+   /* Take a copy and sort it. */
+   copy = g_slist_copy (list);
+-  copy = g_slist_sort (copy, (GCompareFunc) g_strcmp0);
++  copy = g_slist_sort (copy, sort_strings);
+ 
+   /* Compare the two lists, checking pointers are equal to ensure the elements
+    * have been kept stable. */
+@@ -91,7 +108,7 @@ test_slist_sort_stable (void)
+       gpointer p1, p2;
+ 
+       p1 = g_slist_nth_data (list, i);
+-      p2 = g_slist_nth_data (list, i);
++      p2 = g_slist_nth_data (copy, i);
+ 
+       g_assert (p1 == p2);
+     }
+@@ -106,6 +123,10 @@ test_slist_insert_sorted (void)
+   GSList *slist = NULL;
+   gint    i;
+ 
++  g_test_expect_message ("GLib", G_LOG_LEVEL_CRITICAL, "*func != NULL*");
++  g_assert_null (g_slist_insert_sorted (NULL, NULL, NULL));
++  g_test_assert_expected_messages ();
++
+   for (i = 0; i < SIZE; i++)
+     slist = g_slist_insert_sorted (slist, GINT_TO_POINTER (array[i]), sort);
+ 
+@@ -130,9 +151,9 @@ test_slist_insert_sorted_with_data (void)
+ 
+   for (i = 0; i < SIZE; i++)
+     slist = g_slist_insert_sorted_with_data (slist,
+-                                           GINT_TO_POINTER (array[i]),
+-                                           (GCompareDataFunc)sort,
+-                                           NULL);
++                                             GINT_TO_POINTER (array[i]),
++                                             sort_with_data,
++                                             array);
+ 
+   for (i = 0; i < SIZE - 1; i++)
+     {

@@ -1,0 +1,60 @@
+From: Paul Moses <p@1g4.org>
+Subject: [PATCH] invoke: retain failed results through output cleanup
+
+Output cleanup can refer to boxed wrappers already inserted into the
+result tuple. Keep the partial tuple alive until cleanup finishes when a
+later output fails. If tuple allocation fails, retain the converted return
+value through the same cleanup and release it afterwards.
+
+diff --git a/gi/pygi-invoke.c b/gi/pygi-invoke.c
+--- a/gi/pygi-invoke.c
++++ b/gi/pygi-invoke.c
+@@ -582,7 +582,8 @@
+ 
+ static PyObject *
+ _invoke_marshal_out_args (PyGIInvokeState *state,
+-                          PyGIFunctionCache *function_cache)
++                          PyGIFunctionCache *function_cache,
++                          PyObject **failed_result)
+ {
+     PyGICallableCache *cache = (PyGICallableCache *)function_cache;
+     PyObject *py_out = NULL;
+@@ -644,6 +645,7 @@
+         py_out = pygi_resulttuple_new (cache->resulttuple_type, tuple_len);
+ 
+         if (py_out == NULL) {
++            *failed_result = py_return;
+             return NULL;
+         }
+ 
+@@ -665,8 +667,7 @@
+                 cleanup_data;
+ 
+             if (py_obj == NULL) {
+-                if (cache->has_return) py_arg_index--;
+-                Py_DECREF (py_out);
++                *failed_result = py_out;
+                 return NULL;
+             }
+ 
+@@ -685,6 +686,7 @@
+     PyGICallableCache *cache = (PyGICallableCache *)function_cache;
+     GIFFIReturnValue ffi_return_value = PYGI_ARG_INIT;
+     PyObject *ret = NULL;
++    PyObject *failed_result = NULL;
+ 
+     if (Py_EnterRecursiveCall (" while calling a GICallable")) return NULL;
+     ;
+@@ -726,9 +728,11 @@
+                                                &state->return_arg);
+     }
+ 
+-    ret = _invoke_marshal_out_args (state, function_cache);
++    ret = _invoke_marshal_out_args (state, function_cache, &failed_result);
+     pygi_marshal_cleanup_args_from_py (state, cache, /*success=*/TRUE);
+     pygi_marshal_cleanup_args_to_py (state, cache, /*success=*/ret != NULL);
++    /* Output cleanup can still refer to wrappers in the failed result. */
++    Py_XDECREF (failed_result);
+ 
+ err:
+     _invoke_state_clear (state, function_cache);

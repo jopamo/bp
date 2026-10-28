@@ -1,0 +1,46 @@
+From: Paul Moses <p@1g4.org>
+Subject: [PATCH] array: preserve borrowed containers on failure
+
+Failed output cleanup frees containers for non-simple elements even when
+transfer is none and the invocation did not allocate them. Base failed
+container cleanup on transfer or caller allocation, not element type.
+Preserve the existing release of caller-owned storage on failure.
+
+diff --git a/gi/pygi-cache-array.c b/gi/pygi-cache-array.c
+--- a/gi/pygi-cache-array.c
++++ b/gi/pygi-cache-array.c
+@@ -514,6 +514,7 @@
+                             || borrowed_strings || copy_records;
+     gboolean free_container = arg_cache->transfer != GI_TRANSFER_NOTHING
+                               || (simple_items && caller_allocates);
++    gboolean free_container_on_failure = free_container || caller_allocates;
+ 
+     /* GArrays make it easier to iterate over arrays
+      * with different element sizes but requires that
+@@ -627,7 +628,7 @@
+         pygi_marshal_cleanup_data_init_full (
+             item_cleanups ? &array_cleanup_data : cleanup_data, array_->data,
+             free_container ? (GDestroyNotify)g_free : NULL,
+-            free_container || !simple_items ? (GDestroyNotify)g_free : NULL);
++            free_container_on_failure ? (GDestroyNotify)g_free : NULL);
+         g_array_free (array_, FALSE);
+     } else if (array_type == GI_ARRAY_TYPE_PTR_ARRAY) {
+         GDestroyNotify destroy =
+@@ -637,7 +638,7 @@
+         pygi_marshal_cleanup_data_init_full (
+             item_cleanups ? &array_cleanup_data : cleanup_data, array_,
+             free_container ? destroy : NULL,
+-            free_container || !simple_items ? destroy : NULL);
++            free_container_on_failure ? destroy : NULL);
+     } else {
+         GDestroyNotify destroy =
+             string_items && arg_cache->transfer != GI_TRANSFER_NOTHING
+@@ -646,7 +647,7 @@
+         pygi_marshal_cleanup_data_init_full (
+             item_cleanups ? &array_cleanup_data : cleanup_data, array_,
+             free_container ? destroy : NULL,
+-            free_container || !simple_items ? destroy : NULL);
++            free_container_on_failure ? destroy : NULL);
+     }
+ 
+     if (item_cleanups) {

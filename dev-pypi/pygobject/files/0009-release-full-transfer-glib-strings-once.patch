@@ -1,0 +1,66 @@
+From: Paul Moses <p@1g4.org>
+Subject: [PATCH] array: release full-transfer glib strings once
+
+Full-transfer string marshalling registers g_free for attempted elements.
+Reuse the no-clear container helpers so registered array destructors do
+not free those elements again. Extend suffix cleanup to GArray and
+GPtrArray, using pointer-array indexing and shared container cleanup.
+This also avoids sending a failed GPtrArray through g_array_free.
+
+Keep caller-owned transfer-none containers' element destructors intact.
+
+diff --git a/gi/pygi-cache-array.c b/gi/pygi-cache-array.c
+--- a/gi/pygi-cache-array.c
++++ b/gi/pygi-cache-array.c
+@@ -486,10 +486,11 @@
+         gi_type_info_get_array_type (arg_cache->type_info);
+     GArray *item_cleanups = NULL;
+     PyGIMarshalCleanupData array_cleanup_data = { 0 };
++    gboolean string_items = seq_cache->item_cache->type_tag == GI_TYPE_TAG_UTF8
++                            || seq_cache->item_cache->type_tag
++                                   == GI_TYPE_TAG_FILENAME;
+     gboolean borrowed_strings =
+-        seq_cache->item_cache->transfer == GI_TRANSFER_NOTHING
+-        && (seq_cache->item_cache->type_tag == GI_TYPE_TAG_UTF8
+-            || seq_cache->item_cache->type_tag == GI_TYPE_TAG_FILENAME);
++        seq_cache->item_cache->transfer == GI_TRANSFER_NOTHING && string_items;
+     gboolean simple_items = seq_cache->item_cache->to_py_marshaller
+                                 == pygi_marshal_to_py_basic_type_cache_adapter
+                             || borrowed_strings;
+@@ -609,7 +610,7 @@
+         g_array_free (array_, FALSE);
+     } else if (array_type == GI_ARRAY_TYPE_PTR_ARRAY) {
+         GDestroyNotify destroy =
+-            borrowed_strings && arg_cache->transfer == GI_TRANSFER_CONTAINER
++            string_items && arg_cache->transfer != GI_TRANSFER_NOTHING
+                 ? (GDestroyNotify)free_ptr_array_no_clear
+                 : (GDestroyNotify)g_ptr_array_unref;
+         pygi_marshal_cleanup_data_init_full (
+@@ -618,7 +619,7 @@
+             free_container || !simple_items ? destroy : NULL);
+     } else {
+         GDestroyNotify destroy =
+-            borrowed_strings && arg_cache->transfer == GI_TRANSFER_CONTAINER
++            string_items && arg_cache->transfer != GI_TRANSFER_NOTHING
+                 ? (GDestroyNotify)free_array_no_clear
+                 : (GDestroyNotify)g_array_unref;
+         pygi_marshal_cleanup_data_init_full (
+@@ -639,14 +640,13 @@
+     return py_obj;
+ 
+ err:
+-    if (array_type == GI_ARRAY_TYPE_C
+-        && arg_cache->transfer == GI_TRANSFER_EVERYTHING
+-        && (seq_cache->item_cache->type_tag == GI_TYPE_TAG_UTF8
+-            || seq_cache->item_cache->type_tag == GI_TYPE_TAG_FILENAME)) {
++    if (arg_cache->transfer == GI_TRANSFER_EVERYTHING && string_items) {
+         /* The failed element already has a cleanup record. */
+         for (guint i = item_cleanups ? item_cleanups->len : 0; i < array_->len;
+              i++)
+-            g_free (g_array_index (array_, gpointer, i));
++            g_free (array_type == GI_ARRAY_TYPE_PTR_ARRAY
++                        ? g_ptr_array_index ((GPtrArray *)array_, i)
++                        : g_array_index (array_, gpointer, i));
+         goto cleanup;
+     }
+ 

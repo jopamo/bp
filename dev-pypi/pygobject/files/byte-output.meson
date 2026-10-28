@@ -1,0 +1,21 @@
+
+byte_output = shared_library('byteoutput', 'byte-output.c',
+  dependencies: [glib_dep, gobject_dep],
+  install: false)
+byte_output_gir = gnome.generate_gir(byte_output,
+  sources: ['byte-output.c', 'byte-output.h'],
+  namespace: 'ByteOutput',
+  nsversion: '1.0',
+  identifier_prefix: 'ByteOutput',
+  symbol_prefix: 'byte_output',
+  includes: ['GObject-2.0'],
+  install: false)
+byte_output_env = environment()
+byte_output_env.prepend('PYTHONPATH',
+  meson.project_source_root(), meson.project_build_root())
+byte_output_env.prepend('GI_TYPELIB_PATH', meson.current_build_dir())
+byte_output_env.prepend('LD_LIBRARY_PATH', meson.current_build_dir())
+test('byte-output-cleanup', python,
+  args: files('byte-output.py'),
+  env: byte_output_env,
+  depends: [giext, byte_output_gir[1]])

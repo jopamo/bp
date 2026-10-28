@@ -1,0 +1,105 @@
+From: Paul Moses <p@1g4.org>
+Subject: [PATCH] invoke: release caller allocations before output conversion
+
+Input conversion failure and a raised C error bypass output marshalling.
+Release caller-allocated buffers on both exits, while no Python result owns
+them. Use each allocation's matching destructor and unset initialized
+GValues before freeing their storage. Preserve the pending Python exception.
+Successful ownership transfer stays with the existing output marshallers.
+
+diff --git a/gi/pygi-invoke.c b/gi/pygi-invoke.c
+--- a/gi/pygi-invoke.c
++++ b/gi/pygi-invoke.c
+@@ -691,6 +691,7 @@
+ 
+     if (!_invoke_marshal_in_args (state, function_cache)) {
+         pygi_marshal_cleanup_args_from_py (state, cache, /*success=*/FALSE);
++        pygi_marshal_cleanup_caller_allocates (state, cache);
+         goto err;
+     }
+     Py_BEGIN_ALLOW_THREADS;
+@@ -710,6 +711,7 @@
+             /* even though we errored out, the call itself was successful,
+                so we assume the call processed all of the parameters */
+             pygi_marshal_cleanup_args_from_py (state, cache, /*success=*/TRUE);
++            pygi_marshal_cleanup_caller_allocates (state, cache);
+             goto err;
+         }
+     }
+diff --git a/gi/pygi-marshal-cleanup.c b/gi/pygi-marshal-cleanup.c
+--- a/gi/pygi-marshal-cleanup.c
++++ b/gi/pygi-marshal-cleanup.c
+@@ -30,9 +30,30 @@
+ 
+     if (data == NULL) return;
+ 
++    if (cache->type_tag == GI_TYPE_TAG_ARRAY) {
++        if (was_processed) return;
++        switch (gi_type_info_get_array_type (cache->type_info)) {
++        case GI_ARRAY_TYPE_C:
++            g_free (data);
++            break;
++        case GI_ARRAY_TYPE_ARRAY:
++            g_array_unref (data);
++            break;
++        case GI_ARRAY_TYPE_PTR_ARRAY:
++            g_ptr_array_unref (data);
++            break;
++        case GI_ARRAY_TYPE_BYTE_ARRAY:
++            g_byte_array_unref (data);
++            break;
++        default:
++            g_assert_not_reached ();
++        }
++        return;
++    }
++
+     /* check GValue first because GValue is also a boxed sub-type */
+     if (g_type_is_a (iface_cache->g_type, G_TYPE_VALUE)) {
+-        if (was_processed) g_value_unset (data);
++        if (G_IS_VALUE (data)) g_value_unset (data);
+         g_slice_free (GValue, data);
+     } else if (g_type_is_a (iface_cache->g_type, G_TYPE_BOXED)) {
+         gsize size;
+@@ -50,6 +71,27 @@
+     }
+ }
+ 
++void
++pygi_marshal_cleanup_caller_allocates (PyGIInvokeState *state,
++                                       PyGICallableCache *cache)
++{
++    PyObject *error_type, *error_value, *error_traceback;
++    gboolean have_error = !!PyErr_Occurred ();
++
++    if (have_error) PyErr_Fetch (&error_type, &error_value, &error_traceback);
++
++    for (guint i = 0; i < _pygi_callable_cache_args_len (cache); i++) {
++        PyGIArgCache *arg_cache = _pygi_callable_cache_get_arg (cache, i);
++        if (pygi_arg_cache_is_caller_allocates (arg_cache)) {
++            _cleanup_caller_allocates (
++                state, arg_cache, state->args[i].arg_value.v_pointer, FALSE);
++            state->args[i].arg_value.v_pointer = NULL;
++        }
++    }
++
++    if (have_error) PyErr_Restore (error_type, error_value, error_traceback);
++}
++
+ /**
+  * Cleanup during invoke can happen in multiple
+  * stages, each of which can be the result of a
+diff --git a/gi/pygi-marshal-cleanup.h b/gi/pygi-marshal-cleanup.h
+--- a/gi/pygi-marshal-cleanup.h
++++ b/gi/pygi-marshal-cleanup.h
+@@ -24,6 +24,10 @@
+ 
+ G_BEGIN_DECLS
+ 
++/* Release caller-allocated outputs before output marshalling starts. */
++void pygi_marshal_cleanup_caller_allocates (PyGIInvokeState *state,
++                                            PyGICallableCache *cache);
++
+ void pygi_marshal_cleanup_args_from_py (PyGIInvokeState *state,
+                                         PyGICallableCache *cache,
+                                         gboolean success);

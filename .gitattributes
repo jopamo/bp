@@ -1,5 +1,6 @@
 # Preserve unified-diff context.
 app-dev/meson/files/*.patch -whitespace
+dev-pypi/pygobject/files/*.patch -whitespace
 lib-core/glib/files/*.patch -whitespace
 app-crypto/keyutils/files/correct-symbol-exports.patch -whitespace
 app-dev/llama-cpp/files/httplib-libressl-renegotiation.patch -whitespace

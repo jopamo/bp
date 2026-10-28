@@ -1,0 +1,74 @@
+From: Paul Moses <p@1g4.org>
+Subject: [PATCH] array: release transfer-none string outputs
+
+UTF-8 and filename conversion copies transfer-none strings without
+registering element destructors. Include these arrays in the shared
+cleanup path for independent values. Release caller-owned containers on
+success and failure, preserving borrowed containers when conversion fails.
+Leave container/full-transfer string ownership unchanged.
+
+diff --git a/gi/pygi-cache-array.c b/gi/pygi-cache-array.c
+--- a/gi/pygi-cache-array.c
++++ b/gi/pygi-cache-array.c
+@@ -486,11 +486,15 @@
+         gi_type_info_get_array_type (arg_cache->type_info);
+     GArray *item_cleanups = NULL;
+     PyGIMarshalCleanupData array_cleanup_data = { 0 };
+-    gboolean scalar_items = seq_cache->item_cache->to_py_marshaller
+-                            == pygi_marshal_to_py_basic_type_cache_adapter;
++    gboolean simple_items =
++        seq_cache->item_cache->to_py_marshaller
++            == pygi_marshal_to_py_basic_type_cache_adapter
++        || (arg_cache->transfer == GI_TRANSFER_NOTHING
++            && (seq_cache->item_cache->type_tag == GI_TYPE_TAG_UTF8
++                || seq_cache->item_cache->type_tag == GI_TYPE_TAG_FILENAME));
+     gboolean free_container =
+         arg_cache->transfer != GI_TRANSFER_NOTHING
+-        || (scalar_items && pygi_arg_cache_is_caller_allocates (arg_cache));
++        || (simple_items && pygi_arg_cache_is_caller_allocates (arg_cache));
+ 
+     /* GArrays make it easier to iterate over arrays
+      * with different element sizes but requires that
+@@ -548,7 +552,7 @@
+                                   "Array type is assumed to be a pointer, but "
+                                   "item size is %" G_GSIZE_FORMAT " bytes",
+                                   item_size);
+-                    if (scalar_items) {
++                    if (simple_items) {
+                         Py_CLEAR (py_obj);
+                         goto cleanup;
+                     }
+@@ -600,19 +604,19 @@
+         pygi_marshal_cleanup_data_init_full (
+             item_cleanups ? &array_cleanup_data : cleanup_data, array_->data,
+             free_container ? (GDestroyNotify)g_free : NULL,
+-            free_container || !scalar_items ? (GDestroyNotify)g_free : NULL);
++            free_container || !simple_items ? (GDestroyNotify)g_free : NULL);
+         g_array_free (array_, FALSE);
+     } else if (array_type == GI_ARRAY_TYPE_PTR_ARRAY) {
+         pygi_marshal_cleanup_data_init_full (
+             item_cleanups ? &array_cleanup_data : cleanup_data, array_,
+             free_container ? (GDestroyNotify)g_ptr_array_unref : NULL,
+-            free_container || !scalar_items ? (GDestroyNotify)g_ptr_array_unref
++            free_container || !simple_items ? (GDestroyNotify)g_ptr_array_unref
+                                             : NULL);
+     } else {
+         pygi_marshal_cleanup_data_init_full (
+             item_cleanups ? &array_cleanup_data : cleanup_data, array_,
+             free_container ? (GDestroyNotify)g_array_unref : NULL,
+-            free_container || !scalar_items ? (GDestroyNotify)g_array_unref
++            free_container || !simple_items ? (GDestroyNotify)g_array_unref
+                                             : NULL);
+     }
+ 
+@@ -628,8 +632,8 @@
+     return py_obj;
+ 
+ err:
+-    /* Scalar results never borrow storage or register per-item cleanup. */
+-    if (scalar_items) goto cleanup;
++    /* These conversions produce independent values without element destructors. */
++    if (simple_items) goto cleanup;
+ 
+     if (array_type == GI_ARRAY_TYPE_C) {
+         g_array_free (array_, arg_cache->transfer == GI_TRANSFER_EVERYTHING);

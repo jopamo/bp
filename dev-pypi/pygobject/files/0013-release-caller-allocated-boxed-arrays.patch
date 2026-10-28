@@ -1,0 +1,76 @@
+From: Paul Moses <p@1g4.org>
+Subject: [PATCH] array: release caller-allocated boxed arrays
+
+Transfer-none boxed element cleanup copies its borrowed storage. Release
+the caller-allocated inline C array after those copies are made. On partial
+conversion failure, run element cleanup before dropping the Python list,
+then release the container through the shared cleanup path.
+
+Keep foreign records, GValue and non-caller-allocated arrays unchanged.
+
+diff --git a/gi/pygi-cache-array.c b/gi/pygi-cache-array.c
+--- a/gi/pygi-cache-array.c
++++ b/gi/pygi-cache-array.c
+@@ -488,6 +488,7 @@
+     PyGIMarshalCleanupData array_cleanup_data = { 0 };
+     gboolean caller_allocates = pygi_arg_cache_is_caller_allocates (arg_cache);
+     gboolean copy_records = FALSE;
++    gboolean copy_boxes = FALSE;
+     PyGIInterfaceCache owned_item_cache;
+ 
+     if (caller_allocates && array_type == GI_ARRAY_TYPE_C
+@@ -498,6 +499,11 @@
+         copy_records = iface_cache->g_type == G_TYPE_NONE
+                        && !iface_cache->is_foreign
+                        && GI_IS_STRUCT_INFO (iface_cache->interface_info);
++        copy_boxes = seq_cache->item_cache->transfer == GI_TRANSFER_NOTHING
++                     && !iface_cache->is_foreign
++                     && iface_cache->g_type != G_TYPE_VALUE
++                     && g_type_is_a (iface_cache->g_type, G_TYPE_BOXED)
++                     && GI_IS_STRUCT_INFO (iface_cache->interface_info);
+         if (copy_records) {
+             owned_item_cache = *iface_cache;
+             owned_item_cache.arg_cache.transfer = GI_TRANSFER_EVERYTHING;
+@@ -512,8 +518,9 @@
+     gboolean simple_items = seq_cache->item_cache->to_py_marshaller
+                                 == pygi_marshal_to_py_basic_type_cache_adapter
+                             || borrowed_strings || copy_records;
+-    gboolean free_container = arg_cache->transfer != GI_TRANSFER_NOTHING
+-                              || (simple_items && caller_allocates);
++    gboolean free_container =
++        arg_cache->transfer != GI_TRANSFER_NOTHING
++        || ((simple_items || copy_boxes) && caller_allocates);
+     gboolean free_container_on_failure = free_container || caller_allocates;
+ 
+     /* GArrays make it easier to iterate over arrays
+@@ -615,7 +622,18 @@
+ 
+             if (py_item == NULL) {
+                 if (copy_records) g_free (item_arg.v_pointer);
+-                Py_CLEAR (py_obj);
++                if (copy_boxes) {
++                    PyObject *error_type, *error_value, *error_traceback;
++                    PyErr_Fetch (&error_type, &error_value, &error_traceback);
++                    /* Copy borrowed boxes before dropping their wrappers. */
++                    pygi_marshal_cleanup_data_destroy_array_failed (
++                        item_cleanups);
++                    item_cleanups = NULL;
++                    Py_CLEAR (py_obj);
++                    PyErr_Restore (error_type, error_value, error_traceback);
++                } else {
++                    Py_CLEAR (py_obj);
++                }
+ 
+                 goto err;
+             }
+@@ -672,8 +690,8 @@
+         goto cleanup;
+     }
+ 
+-    /* These conversions produce independent values without element destructors. */
+-    if (simple_items) goto cleanup;
++    /* Element cleanup has made these outputs independent of the container. */
++    if (simple_items || copy_boxes) goto cleanup;
+ 
+     if (array_type == GI_ARRAY_TYPE_C) {
+         g_array_free (array_, arg_cache->transfer == GI_TRANSFER_EVERYTHING);

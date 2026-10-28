@@ -1,0 +1,69 @@
+From: Paul Moses <p@1g4.org>
+Subject: [PATCH] closure: marshal explicit error outputs
+
+Do not discard GError values returned in callback result tuples. Use the
+existing output marshaller and keep Boolean-only callbacks compatible by
+leaving an omitted error unset. Ignore an error output when the C caller
+provides no destination.
+
+Check tuple accesses and honor failed output conversion before returning to
+C. Store cleanup data under the C argument index used by failure cleanup.
+
+diff --git a/gi/pygi-closure.c b/gi/pygi-closure.c
+index 98b0844a..77d00345 100644
+--- a/gi/pygi-closure.c
++++ b/gi/pygi-closure.c
+@@ -415,7 +415,8 @@ _pygi_closure_set_out_arguments (PyGIInvokeState *state,
+         PyObject *item = py_retval;
+ 
+         if (PyTuple_Check (py_retval)) {
+-            item = PyTuple_GET_ITEM (py_retval, 0);
++            item = PyTuple_GetItem (py_retval, 0);
++            if (item == NULL) return FALSE;
+         }
+ 
+         success = cache->return_cache->from_py_marshaller (
+@@ -437,20 +438,29 @@ _pygi_closure_set_out_arguments (PyGIInvokeState *state,
+         if (arg_cache->direction & PYGI_DIRECTION_FROM_PYTHON) {
+             PyObject *item = py_retval;
+ 
+-            if (arg_cache->type_tag == GI_TYPE_TAG_ERROR) {
++            if (arg_cache->type_tag == GI_TYPE_TAG_ERROR
++                && state->args[i].arg_pointer.v_pointer == NULL) {
++                i_py_retval++;
++                continue;
++            }
++
++            if (arg_cache->type_tag == GI_TYPE_TAG_ERROR
++                && (!PyTuple_Check (py_retval)
++                    || PyTuple_GET_SIZE (py_retval) <= i_py_retval)) {
+                 *(GError **)state->args[i].arg_pointer.v_pointer = NULL;
+                 continue;
+             }
+ 
+             if (PyTuple_Check (py_retval)) {
+-                item = PyTuple_GET_ITEM (py_retval, i_py_retval);
++                item = PyTuple_GetItem (py_retval, i_py_retval);
++                if (item == NULL) return FALSE;
+             } else if (i_py_retval != 0) {
+                 return FALSE;
+             }
+ 
+             success = arg_cache->from_py_marshaller (
+                 state, cache, arg_cache, item, &state->args[i].arg_value,
+-                &state->args[i_py_retval].from_py_arg_cleanup_data);
++                &state->args[i].from_py_arg_cleanup_data);
+ 
+             if (!success) {
+                 return FALSE;
+@@ -548,8 +558,8 @@ _pygi_closure_handle (ffi_cif *cif, void *result, void **args, void *data)
+     }
+ 
+     pygi_marshal_cleanup_args_to_py (&state, closure->cache, success);
+-    success |= _pygi_closure_set_out_arguments (&state, closure->cache, retval,
+-                                                result);
++    success = _pygi_closure_set_out_arguments (&state, closure->cache, retval,
++                                               result);
+ 
+     if (!success) {
+         pygi_marshal_cleanup_args_from_py (&state, closure->cache, success);

@@ -1,0 +1,85 @@
+From: Paul Moses <p@1g4.org>
+Subject: [PATCH] array: own copied caller-allocated records
+
+Unregistered inline record wrappers borrow caller-allocated array storage,
+leaving that storage unreleased after successful conversion. Copy these
+records through the existing owned-struct path and release the container
+through shared cleanup. Free an unclaimed copy if wrapper creation fails.
+
+Use a per-invocation item-cache copy to describe ownership without changing
+cached metadata. Leave borrowed arrays, pointer elements, foreign records,
+boxed records and GLib containers unchanged.
+
+diff --git a/gi/pygi-cache-array.c b/gi/pygi-cache-array.c
+--- a/gi/pygi-cache-array.c
++++ b/gi/pygi-cache-array.c
+@@ -486,6 +486,24 @@
+         gi_type_info_get_array_type (arg_cache->type_info);
+     GArray *item_cleanups = NULL;
+     PyGIMarshalCleanupData array_cleanup_data = { 0 };
++    gboolean caller_allocates = pygi_arg_cache_is_caller_allocates (arg_cache);
++    gboolean copy_records = FALSE;
++    PyGIInterfaceCache owned_item_cache;
++
++    if (caller_allocates && array_type == GI_ARRAY_TYPE_C
++        && seq_cache->item_cache->type_tag == GI_TYPE_TAG_INTERFACE
++        && !seq_cache->item_cache->is_pointer) {
++        PyGIInterfaceCache *iface_cache =
++            (PyGIInterfaceCache *)seq_cache->item_cache;
++        copy_records = iface_cache->g_type == G_TYPE_NONE
++                       && !iface_cache->is_foreign
++                       && GI_IS_STRUCT_INFO (iface_cache->interface_info);
++        if (copy_records) {
++            owned_item_cache = *iface_cache;
++            owned_item_cache.arg_cache.transfer = GI_TRANSFER_EVERYTHING;
++        }
++    }
++
+     gboolean string_items = seq_cache->item_cache->type_tag == GI_TYPE_TAG_UTF8
+                             || seq_cache->item_cache->type_tag
+                                    == GI_TYPE_TAG_FILENAME;
+@@ -493,10 +511,9 @@
+         seq_cache->item_cache->transfer == GI_TRANSFER_NOTHING && string_items;
+     gboolean simple_items = seq_cache->item_cache->to_py_marshaller
+                                 == pygi_marshal_to_py_basic_type_cache_adapter
+-                            || borrowed_strings;
+-    gboolean free_container =
+-        arg_cache->transfer != GI_TRANSFER_NOTHING
+-        || (simple_items && pygi_arg_cache_is_caller_allocates (arg_cache));
++                            || borrowed_strings || copy_records;
++    gboolean free_container = arg_cache->transfer != GI_TRANSFER_NOTHING
++                              || (simple_items && caller_allocates);
+ 
+     /* GArrays make it easier to iterate over arrays
+      * with different element sizes but requires that
+@@ -529,7 +546,8 @@
+         item_cleanups = g_array_sized_new (
+             FALSE, TRUE, sizeof (PyGIMarshalCleanupData), array_->len);
+ 
+-        item_arg_cache = seq_cache->item_cache;
++        item_arg_cache = copy_records ? &owned_item_cache.arg_cache
++                                      : seq_cache->item_cache;
+         item_to_py_marshaller = item_arg_cache->to_py_marshaller;
+ 
+         item_size = g_array_get_element_size (array_);
+@@ -567,8 +585,10 @@
+                 /* FIXME: This probably doesn't work with boxed types or gvalues.
+                  * See fx. _pygi_marshal_from_py_array() */
+                 if (GI_IS_STRUCT_INFO (iface_cache->interface_info)) {
+-                    if (arg_cache->transfer == GI_TRANSFER_EVERYTHING
+-                        && !g_type_is_a (iface_cache->g_type, G_TYPE_BOXED)) {
++                    if (copy_records
++                        || (arg_cache->transfer == GI_TRANSFER_EVERYTHING
++                            && !g_type_is_a (iface_cache->g_type,
++                                             G_TYPE_BOXED))) {
+                         /* array elements are structs */
+                         gpointer *_struct = g_malloc (item_size);
+                         memcpy (_struct, array_->data + i * item_size,
+@@ -593,6 +613,7 @@
+             g_array_append_val (item_cleanups, item_cleanup_data);
+ 
+             if (py_item == NULL) {
++                if (copy_records) g_free (item_arg.v_pointer);
+                 Py_CLEAR (py_obj);
+ 
+                 goto err;

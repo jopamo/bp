@@ -1,0 +1,98 @@
+From: Paul Moses <p@1g4.org>
+Subject: [PATCH] invoke: release caller outputs skipped by conversion errors
+
+An invalid return or earlier output can stop conversion before later
+caller-allocated outputs reach their marshallers. Track invocation ownership
+until each output marshaller starts, and reuse the early-exit cleanup for
+allocations still pending after output cleanup. Leave converted outputs with
+their marshallers. C-originated callbacks do not acquire these allocations.
+
+diff --git a/gi/pygi-invoke-state-struct.h b/gi/pygi-invoke-state-struct.h
+--- a/gi/pygi-invoke-state-struct.h
++++ b/gi/pygi-invoke-state-struct.h
+@@ -25,6 +25,9 @@
+ 
+     /* Holds to_py marshaler cleanup data. */
+     PyGIMarshalCleanupData to_py_arg_cleanup_data;
++
++    /* Owned by invoke until the output marshaller starts. */
++    gboolean caller_allocates_pending;
+ } PyGIInvokeArgState;
+ 
+ 
+diff --git a/gi/pygi-invoke.c b/gi/pygi-invoke.c
+--- a/gi/pygi-invoke.c
++++ b/gi/pygi-invoke.c
+@@ -523,6 +523,7 @@
+                     g_free (full_name);
+                     return FALSE;
+                 }
++                state->args[i].caller_allocates_pending = TRUE;
+             } else {
+                 /* Non-caller allocated out args will use arg_pointers as an
+                  * extra level of indirection */
+@@ -623,6 +624,7 @@
+         /* if we get here there is one out arg an no return */
+         PyGIArgCache *arg_cache = (PyGIArgCache *)cache->to_py_args->data;
+         PyGIMarshalCleanupData cleanup_data = { NULL, NULL };
++        state->args[arg_cache->c_arg_index].caller_allocates_pending = FALSE;
+         py_out = arg_cache->to_py_marshaller (
+             state, cache, arg_cache,
+             state->args[arg_cache->c_arg_index].arg_pointer.v_pointer,
+@@ -653,6 +655,8 @@
+         for (; py_arg_index < tuple_len; py_arg_index++) {
+             PyGIArgCache *arg_cache = (PyGIArgCache *)cache_item->data;
+             PyGIMarshalCleanupData cleanup_data = { NULL, NULL };
++            state->args[arg_cache->c_arg_index].caller_allocates_pending =
++                FALSE;
+             PyObject *py_obj = arg_cache->to_py_marshaller (
+                 state, cache, arg_cache,
+                 state->args[arg_cache->c_arg_index].arg_pointer.v_pointer,
+diff --git a/gi/pygi-marshal-cleanup.c b/gi/pygi-marshal-cleanup.c
+--- a/gi/pygi-marshal-cleanup.c
++++ b/gi/pygi-marshal-cleanup.c
+@@ -82,10 +82,11 @@
+ 
+     for (guint i = 0; i < _pygi_callable_cache_args_len (cache); i++) {
+         PyGIArgCache *arg_cache = _pygi_callable_cache_get_arg (cache, i);
+-        if (pygi_arg_cache_is_caller_allocates (arg_cache)) {
++        if (state->args[i].caller_allocates_pending) {
+             _cleanup_caller_allocates (
+                 state, arg_cache, state->args[i].arg_value.v_pointer, FALSE);
+             state->args[i].arg_value.v_pointer = NULL;
++            state->args[i].caller_allocates_pending = FALSE;
+         }
+     }
+ 
+@@ -194,6 +195,11 @@
+         PyGIMarshalCleanupData *cleanup_data =
+             &state->args[arg_cache->c_arg_index].to_py_arg_cleanup_data;
+ 
++        if (state->args[arg_cache->c_arg_index].caller_allocates_pending) {
++            cache_item = cache_item->next;
++            continue;
++        }
++
+         if (cleanup_data->data != NULL
+             && (cleanup_data->destroy != NULL
+                 || cleanup_data->destroy_failed != NULL)) {
+@@ -210,5 +216,7 @@
+         cache_item = cache_item->next;
+     }
+ 
++    pygi_marshal_cleanup_caller_allocates (state, cache);
++
+     if (have_error) PyErr_Restore (error_type, error_value, error_traceback);
+ }
+diff --git a/gi/pygi-marshal-cleanup.h b/gi/pygi-marshal-cleanup.h
+--- a/gi/pygi-marshal-cleanup.h
++++ b/gi/pygi-marshal-cleanup.h
+@@ -24,7 +24,7 @@
+ 
+ G_BEGIN_DECLS
+ 
+-/* Release caller-allocated outputs before output marshalling starts. */
++/* Release caller allocations not yet handed to an output marshaller. */
+ void pygi_marshal_cleanup_caller_allocates (PyGIInvokeState *state,
+                                             PyGICallableCache *cache);
+ 

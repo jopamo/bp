@@ -1,0 +1,84 @@
+From: Paul Moses <p@1g4.org>
+Subject: [PATCH] array: preserve container-transfer string elements
+
+Sequence setup marks container-transfer elements as borrowed. Use that
+item contract to include strings in shared conversion cleanup, releasing
+containers even when an element fails. Reuse the no-clear helpers so
+container destruction does not release borrowed strings.
+
+Wrap null C arrays with zero length before consulting fixed-size metadata.
+Passing null data with a nonzero length violates g_array_new_take's contract.
+
+diff --git a/gi/pygi-cache-array.c b/gi/pygi-cache-array.c
+--- a/gi/pygi-cache-array.c
++++ b/gi/pygi-cache-array.c
+@@ -440,14 +440,14 @@
+ {
+     size_t len = 0;
+ 
+-    if (gi_type_info_get_array_fixed_size (
+-            ((PyGIArgCache *)array_cache)->type_info, &len)) {
++    if (data == NULL) {
++        len = 0;
++    } else if (gi_type_info_get_array_fixed_size (
++                   ((PyGIArgCache *)array_cache)->type_info, &len)) {
+         /* len is set. */
+     } else if (gi_type_info_is_zero_terminated (
+                    ((PyGIArgCache *)array_cache)->type_info)) {
+-        if (data == NULL)
+-            len = 0;
+-        else if (array_cache->item_size == 1)
++        if (array_cache->item_size == 1)
+             len = strlen ((gchar *)data);
+         else if (array_cache->item_size == sizeof (gpointer))
+             len = g_strv_length ((gchar **)data);
+@@ -486,12 +486,13 @@
+         gi_type_info_get_array_type (arg_cache->type_info);
+     GArray *item_cleanups = NULL;
+     PyGIMarshalCleanupData array_cleanup_data = { 0 };
+-    gboolean simple_items =
+-        seq_cache->item_cache->to_py_marshaller
+-            == pygi_marshal_to_py_basic_type_cache_adapter
+-        || (arg_cache->transfer == GI_TRANSFER_NOTHING
+-            && (seq_cache->item_cache->type_tag == GI_TYPE_TAG_UTF8
+-                || seq_cache->item_cache->type_tag == GI_TYPE_TAG_FILENAME));
++    gboolean borrowed_strings =
++        seq_cache->item_cache->transfer == GI_TRANSFER_NOTHING
++        && (seq_cache->item_cache->type_tag == GI_TYPE_TAG_UTF8
++            || seq_cache->item_cache->type_tag == GI_TYPE_TAG_FILENAME);
++    gboolean simple_items = seq_cache->item_cache->to_py_marshaller
++                                == pygi_marshal_to_py_basic_type_cache_adapter
++                            || borrowed_strings;
+     gboolean free_container =
+         arg_cache->transfer != GI_TRANSFER_NOTHING
+         || (simple_items && pygi_arg_cache_is_caller_allocates (arg_cache));
+@@ -607,17 +608,23 @@
+             free_container || !simple_items ? (GDestroyNotify)g_free : NULL);
+         g_array_free (array_, FALSE);
+     } else if (array_type == GI_ARRAY_TYPE_PTR_ARRAY) {
++        GDestroyNotify destroy =
++            borrowed_strings && arg_cache->transfer == GI_TRANSFER_CONTAINER
++                ? (GDestroyNotify)free_ptr_array_no_clear
++                : (GDestroyNotify)g_ptr_array_unref;
+         pygi_marshal_cleanup_data_init_full (
+             item_cleanups ? &array_cleanup_data : cleanup_data, array_,
+-            free_container ? (GDestroyNotify)g_ptr_array_unref : NULL,
+-            free_container || !simple_items ? (GDestroyNotify)g_ptr_array_unref
+-                                            : NULL);
++            free_container ? destroy : NULL,
++            free_container || !simple_items ? destroy : NULL);
+     } else {
++        GDestroyNotify destroy =
++            borrowed_strings && arg_cache->transfer == GI_TRANSFER_CONTAINER
++                ? (GDestroyNotify)free_array_no_clear
++                : (GDestroyNotify)g_array_unref;
+         pygi_marshal_cleanup_data_init_full (
+             item_cleanups ? &array_cleanup_data : cleanup_data, array_,
+-            free_container ? (GDestroyNotify)g_array_unref : NULL,
+-            free_container || !simple_items ? (GDestroyNotify)g_array_unref
+-                                            : NULL);
++            free_container ? destroy : NULL,
++            free_container || !simple_items ? destroy : NULL);
+     }
+ 
+     if (item_cleanups) {

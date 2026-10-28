@@ -1,0 +1,55 @@
+From: Paul Moses <p@1g4.org>
+Subject: [PATCH] array: release caller-owned copied byte outputs
+
+Transfer-none describes ownership supplied by the callee, not buffers the
+binding allocates for it. Python bytes copy that storage. Release those
+containers after conversion even when the callee transfers no ownership.
+Keep borrowed byte arrays and non-byte element ownership unchanged.
+
+diff --git a/gi/pygi-cache-array.c b/gi/pygi-cache-array.c
+--- a/gi/pygi-cache-array.c
++++ b/gi/pygi-cache-array.c
+@@ -486,6 +486,7 @@
+         gi_type_info_get_array_type (arg_cache->type_info);
+     GArray *item_cleanups = NULL;
+     PyGIMarshalCleanupData array_cleanup_data = { 0 };
++    gboolean free_container = arg_cache->transfer != GI_TRANSFER_NOTHING;
+ 
+     /* GArrays make it easier to iterate over arrays
+      * with different element sizes but requires that
+@@ -498,6 +499,8 @@
+     }
+ 
+     if (seq_cache->item_cache->type_tag == GI_TYPE_TAG_UINT8) {
++        /* Python bytes copy the data, including caller-owned output buffers. */
++        free_container |= pygi_arg_cache_is_caller_allocates (arg_cache);
+         if (arg->v_pointer == NULL) {
+             py_obj = PyBytes_FromString ("");
+         } else {
+@@ -589,23 +592,18 @@
+     if (array_type == GI_ARRAY_TYPE_C) {
+         pygi_marshal_cleanup_data_init_full (
+             item_cleanups ? &array_cleanup_data : cleanup_data, array_->data,
+-            arg_cache->transfer != GI_TRANSFER_NOTHING ? (GDestroyNotify)g_free
+-                                                       : NULL,
++            free_container ? (GDestroyNotify)g_free : NULL,
+             (GDestroyNotify)g_free);
+         g_array_free (array_, FALSE);
+     } else if (array_type == GI_ARRAY_TYPE_PTR_ARRAY) {
+         pygi_marshal_cleanup_data_init_full (
+             item_cleanups ? &array_cleanup_data : cleanup_data, array_,
+-            arg_cache->transfer != GI_TRANSFER_NOTHING
+-                ? (GDestroyNotify)g_ptr_array_unref
+-                : NULL,
++            free_container ? (GDestroyNotify)g_ptr_array_unref : NULL,
+             (GDestroyNotify)g_ptr_array_unref);
+     } else {
+         pygi_marshal_cleanup_data_init_full (
+             item_cleanups ? &array_cleanup_data : cleanup_data, array_,
+-            arg_cache->transfer != GI_TRANSFER_NOTHING
+-                ? (GDestroyNotify)g_array_unref
+-                : NULL,
++            free_container ? (GDestroyNotify)g_array_unref : NULL,
+             (GDestroyNotify)g_array_unref);
+     }
+ 

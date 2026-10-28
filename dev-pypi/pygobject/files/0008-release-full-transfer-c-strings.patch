@@ -1,0 +1,31 @@
+From: Paul Moses <p@1g4.org>
+Subject: [PATCH] array: release full-transfer c strings after conversion failure
+
+String conversion records cleanup for each attempted element, including
+the one that fails. Release the unattempted suffix of a full-transfer C
+string array, then use shared cleanup for those records and the container.
+If Python list allocation fails, no element has been attempted yet.
+
+Leave GLib container and interface-element ownership unchanged.
+
+diff --git a/gi/pygi-cache-array.c b/gi/pygi-cache-array.c
+--- a/gi/pygi-cache-array.c
++++ b/gi/pygi-cache-array.c
+@@ -639,6 +639,17 @@
+     return py_obj;
+ 
+ err:
++    if (array_type == GI_ARRAY_TYPE_C
++        && arg_cache->transfer == GI_TRANSFER_EVERYTHING
++        && (seq_cache->item_cache->type_tag == GI_TYPE_TAG_UTF8
++            || seq_cache->item_cache->type_tag == GI_TYPE_TAG_FILENAME)) {
++        /* The failed element already has a cleanup record. */
++        for (guint i = item_cleanups ? item_cleanups->len : 0; i < array_->len;
++             i++)
++            g_free (g_array_index (array_, gpointer, i));
++        goto cleanup;
++    }
++
+     /* These conversions produce independent values without element destructors. */
+     if (simple_items) goto cleanup;
+ 

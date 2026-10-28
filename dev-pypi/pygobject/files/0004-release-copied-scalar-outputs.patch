@@ -1,0 +1,84 @@
+From: Paul Moses <p@1g4.org>
+Subject: [PATCH] array: release copied scalar outputs on conversion failure
+
+Numeric and character marshalling returns independent Python values. Use
+that existing marshaller to identify caller-owned scalar containers, not
+just byte arrays. Route partial scalar conversion failures through the
+registered cleanup so both container storage and cleanup records are freed.
+Do not release borrowed scalar storage when a conversion fails.
+
+diff --git a/gi/pygi-cache-array.c b/gi/pygi-cache-array.c
+--- a/gi/pygi-cache-array.c
++++ b/gi/pygi-cache-array.c
+@@ -486,7 +486,11 @@
+         gi_type_info_get_array_type (arg_cache->type_info);
+     GArray *item_cleanups = NULL;
+     PyGIMarshalCleanupData array_cleanup_data = { 0 };
+-    gboolean free_container = arg_cache->transfer != GI_TRANSFER_NOTHING;
++    gboolean scalar_items = seq_cache->item_cache->to_py_marshaller
++                            == pygi_marshal_to_py_basic_type_cache_adapter;
++    gboolean free_container =
++        arg_cache->transfer != GI_TRANSFER_NOTHING
++        || (scalar_items && pygi_arg_cache_is_caller_allocates (arg_cache));
+ 
+     /* GArrays make it easier to iterate over arrays
+      * with different element sizes but requires that
+@@ -499,8 +503,6 @@
+     }
+ 
+     if (seq_cache->item_cache->type_tag == GI_TYPE_TAG_UINT8) {
+-        /* Python bytes copy the data, including caller-owned output buffers. */
+-        free_container |= pygi_arg_cache_is_caller_allocates (arg_cache);
+         if (arg->v_pointer == NULL) {
+             py_obj = PyBytes_FromString ("");
+         } else {
+@@ -546,6 +548,10 @@
+                                   "Array type is assumed to be a pointer, but "
+                                   "item size is %" G_GSIZE_FORMAT " bytes",
+                                   item_size);
++                    if (scalar_items) {
++                        Py_CLEAR (py_obj);
++                        goto cleanup;
++                    }
+                     return NULL;
+                 }
+             } else if (item_arg_cache->type_tag == GI_TYPE_TAG_INTERFACE) {
+@@ -589,22 +595,25 @@
+         }
+     }
+ 
++cleanup:
+     if (array_type == GI_ARRAY_TYPE_C) {
+         pygi_marshal_cleanup_data_init_full (
+             item_cleanups ? &array_cleanup_data : cleanup_data, array_->data,
+             free_container ? (GDestroyNotify)g_free : NULL,
+-            (GDestroyNotify)g_free);
++            free_container || !scalar_items ? (GDestroyNotify)g_free : NULL);
+         g_array_free (array_, FALSE);
+     } else if (array_type == GI_ARRAY_TYPE_PTR_ARRAY) {
+         pygi_marshal_cleanup_data_init_full (
+             item_cleanups ? &array_cleanup_data : cleanup_data, array_,
+             free_container ? (GDestroyNotify)g_ptr_array_unref : NULL,
+-            (GDestroyNotify)g_ptr_array_unref);
++            free_container || !scalar_items ? (GDestroyNotify)g_ptr_array_unref
++                                            : NULL);
+     } else {
+         pygi_marshal_cleanup_data_init_full (
+             item_cleanups ? &array_cleanup_data : cleanup_data, array_,
+             free_container ? (GDestroyNotify)g_array_unref : NULL,
+-            (GDestroyNotify)g_array_unref);
++            free_container || !scalar_items ? (GDestroyNotify)g_array_unref
++                                            : NULL);
+     }
+ 
+     if (item_cleanups) {
+@@ -619,6 +628,9 @@
+     return py_obj;
+ 
+ err:
++    /* Scalar results never borrow storage or register per-item cleanup. */
++    if (scalar_items) goto cleanup;
++
+     if (array_type == GI_ARRAY_TYPE_C) {
+         g_array_free (array_, arg_cache->transfer == GI_TRANSFER_EVERYTHING);
+     } else {

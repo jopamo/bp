@@ -1,0 +1,61 @@
+From: Paul Moses <p@1g4.org>
+Subject: [PATCH] gnome: delegate sanitizer runtime selection to the compiler
+
+Hard-coded -lasan/-lubsan/-ltsan libraries select GCC runtimes even when
+Clang builds the GIR target. Use the compiler's sanitizer link arguments
+and pass -fsanitize through the scanner's existing compiler environment.
+The scanner uses those flags when compiling and linking its dump helper.
+
+Exercise both address and address,undefined in the existing GIR regression.
+
+diff --git a/mesonbuild/modules/gnome.py b/mesonbuild/modules/gnome.py
+--- a/mesonbuild/modules/gnome.py
++++ b/mesonbuild/modules/gnome.py
+@@ -941,16 +941,7 @@
+                 sanitize = state.environment.coredata.optstore.get_value_for('b_sanitize')
+                 assert isinstance(sanitize, list)
+                 cflags += compiler.sanitizer_compile_args(None, sanitize)
+-                # These must be first in ldflags
+-                if 'address' in sanitize:
+-                    internal_ldflags += ['-lasan']
+-                if 'thread' in sanitize:
+-                    internal_ldflags += ['-ltsan']
+-                if 'undefined' in sanitize:
+-                    internal_ldflags += ['-lubsan']
+-                # FIXME: Linking directly to lib*san is not recommended but g-ir-scanner
+-                # does not understand -f LDFLAGS. https://bugzilla.gnome.org/show_bug.cgi?id=783892
+-                # ldflags += compiler.sanitizer_link_args(None, state.environment, sanitize)
++                internal_ldflags += compiler.sanitizer_link_args(None, sanitize)
+ 
+         return cflags, internal_ldflags, external_ldflags
+ 
+@@ -1129,10 +1120,10 @@
+ 
+     @staticmethod
+     def _get_scanner_ldflags(ldflags: T.Iterable[str]) -> tuple[list[str], list[str]]:
+-        'g-ir-scanner only accepts -L/-l; must ignore -F and other linker flags'
++        'Separate scanner library arguments from compiler environment flags.'
+         return (
+             [f for f in ldflags if f.startswith(('-L', '-l', '--extra-library'))],
+-            [f for f in ldflags if f.startswith(('-Wl,-rpath,'))],
++            [f for f in ldflags if f.startswith(('-Wl,-rpath,', '-fsanitize='))],
+         )
+ 
+     @typed_pos_args('gnome.generate_gir', varargs=(Executable, build.SharedLibrary, build.StaticLibrary), min_varargs=1)
+diff --git a/unittests/linuxliketests.py b/unittests/linuxliketests.py
+--- a/unittests/linuxliketests.py
++++ b/unittests/linuxliketests.py
+@@ -330,8 +330,11 @@
+             raise SkipTest('-fsanitize=address is not supported on OpenBSD')
+ 
+         testdir = os.path.join(self.framework_test_dir, '7 gnome')
+-        self.init(testdir, extra_args=['-Db_sanitize=address', '-Db_lundef=false'])
+-        self.build()
++        for sanitize in ('address', 'address,undefined'):
++            with self.subTest(sanitize=sanitize):
++                self.new_builddir()
++                self.init(testdir, extra_args=[f'-Db_sanitize={sanitize}', '-Db_lundef=false'])
++                self.build()
+ 
+     def test_qt5dependency_no_lrelease(self):
+         '''

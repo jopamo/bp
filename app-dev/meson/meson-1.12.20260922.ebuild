@@ -26,6 +26,10 @@ RESTRICT="test"
 
 DEPEND="dev-pypi/setuptools[${PYTHON_USEDEP}]"
 
+PATCHES=(
+	"${FILESDIR}/0001-use-compiler-sanitizer-flags-for-gir.patch"
+)
+
 python_test() {
 	${EPYTHON} run_tests.py || die
 }

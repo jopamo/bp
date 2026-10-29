@@ -24,6 +24,8 @@ DEPEND="
 	introspection? ( lib-dev/gobject-introspection )
 "
 
+PATCHES=( "${FILESDIR}/${PN}-20261024-unused-state.patch" )
+
 src_configure() {
 	local emesonargs=(
 		$(meson_feature introspection)

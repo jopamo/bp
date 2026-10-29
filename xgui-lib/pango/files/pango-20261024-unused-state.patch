@@ -1,0 +1,51 @@
+Remove write-only boundary-test state. Keep Clang's unused-but-set-global
+diagnostics as warnings: it also diagnoses parent-class variables emitted
+by GLib's G_DEFINE_TYPE macros, which need not be read by every subclass.
+
+--- a/meson.build
++++ b/meson.build
+@@ -149,4 +149,5 @@
+     '-Werror=write-strings',
+     '-Werror=unused-but-set-variable',
++    '-Wno-error=unused-but-set-global',
+     '-Wundef', # FIXME: https://bugzilla.gnome.org/show_bug.cgi?id=792481
+   ]
+--- a/tests/testboundaries.c
++++ b/tests/testboundaries.c
+@@ -43,6 +43,0 @@
+-static int offset = 0;
+-static int line = 0;
+-static gunichar current_wc = 0;
+-static const char *line_start = NULL;
+-static const char *line_end = NULL;
+-
+@@ -78,5 +72,2 @@
+-  offset = 0;
+-  line = 1;
+-
+   prev_type = (GUnicodeType) -1;
+   prev_wc = 0;
+@@ -87,6 +78,3 @@
+-  line_start = text;
+-  line_end = text;
+-
+   while (next_wc != 0)
+     {
+       GUnicodeType type;
+@@ -98,4 +86,1 @@
+-      current_wc = wc;
+-
+       next = g_utf8_next_char (next);
+-      line_end = next;
+@@ -120,11 +105,3 @@
+       ++i;
+-      ++offset;
+-      if (wc == '\n')
+-	{
+-	  ++line;
+-	  offset = 0;
+-	  line_start = next;
+-	  line_end = next;
+-	}
+     }
+ }

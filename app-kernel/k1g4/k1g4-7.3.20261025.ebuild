@@ -21,6 +21,7 @@ KEYWORDS="amd64 arm64"
 BDEPEND="app-core/bx"
 
 src_prepare() {
+	eapply "${FILESDIR}/genksyms-flex-debug.patch"
 	kernel-2_src_prepare
 
 	#eapply "${FILESDIR}"/net-txq-bql-traces.patch

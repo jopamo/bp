@@ -1,0 +1,20 @@
+Use the scanner's debug setter rather than its private variable name.
+Newer Flex snapshots emit yyflexdebug, with yy_flex_debug only defined
+as a macro in the generated scanner.
+
+diff --git a/scripts/genksyms/genksyms.c b/scripts/genksyms/genksyms.c
+--- a/scripts/genksyms/genksyms.c
++++ b/scripts/genksyms/genksyms.c
+@@ -799,10 +799,10 @@ int main(int argc, char **argv)
+ 		}
+ 	{
+ 		extern int yydebug;
+-		extern int yy_flex_debug;
++		extern void yyset_debug(int debug_flag);
+ 
+ 		yydebug = (flag_debug > 1);
+-		yy_flex_debug = (flag_debug > 2);
++		yyset_debug(flag_debug > 2);
+ 
+ 		debugfile = stderr;
+ 		/* setlinebuf(debugfile); */

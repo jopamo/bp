@@ -17,6 +17,8 @@ KEYWORDS="amd64 arm64"
 
 IUSE="gssapi keep-la mysql postgres sqlite systemd opengl vulkan"
 
+PATCHES=( "${FILESDIR}/${PN}-5.15-cxx-standard-headers.patch" )
+
 DEPEND="
 	virtual/dbus
 	lib-core/libpcre2

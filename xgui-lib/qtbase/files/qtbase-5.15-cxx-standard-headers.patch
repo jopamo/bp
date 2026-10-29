@@ -1,0 +1,18 @@
+qt_check_pointer calls std::terminate even when QT_NO_EXCEPTIONS is defined,
+including during the qmake bootstrap. Include its declaration unconditionally.
+Include <cstdlib> for QStdFreeDeleter's std::free rather than relying on
+transitive standard-library includes.
+
+--- a/src/corelib/global/qglobal.cpp
++++ b/src/corelib/global/qglobal.cpp
+@@ -65,4 +65,4 @@
++#include <exception>
+ #ifndef QT_NO_EXCEPTIONS
+ #  include <string>
+-#  include <exception>
+ #endif
+--- a/src/plugins/platforms/xcb/qxcbconnection_basic.h
++++ b/src/plugins/platforms/xcb/qxcbconnection_basic.h
+@@ -57,1 +57,2 @@
++#include <cstdlib>
+ #include <memory>

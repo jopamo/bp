@@ -18,6 +18,8 @@ IUSE="static-libs"
 
 DEPEND="lib-core/libgpg-error"
 
+PATCHES=( "${FILESDIR}/${PN}-20261023-unimplemented-recp-ident.patch" )
+
 src_prepare() {
 	qa-policy-configure
 	default

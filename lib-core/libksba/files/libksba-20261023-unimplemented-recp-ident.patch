@@ -1,0 +1,34 @@
+The snapshot declares and exports ksba_cms_get_recp_ident without an
+implementation. Remove the declaration and export entries rather than
+allowing undefined symbols in the version script.
+
+--- a/src/ksba.h.in
++++ b/src/ksba.h.in
+@@ -393,9 +393,6 @@
+ gpg_error_t ksba_cms_get_content_enc_iv (ksba_cms_t cms, void *iv,
+                                          size_t maxivlen, size_t *ivlen);
+ const char *ksba_cms_get_digest_algo_list (ksba_cms_t cms, int idx);
+-gpg_error_t ksba_cms_get_recp_ident (ksba_cms_t cms, int idx,
+-                                     char **r_issuer, ksba_sexp_t *r_serial,
+-                                     ksba_sexp_t *r_ski);
+ gpg_error_t ksba_cms_get_issuer_serial (ksba_cms_t cms, int idx,
+                                         char **r_issuer,
+                                         ksba_sexp_t *r_serial);
+--- a/src/libksba.vers
++++ b/src/libksba.vers
+@@ -65,7 +65,6 @@
+     ksba_cms_get_content_enc_iv; ksba_cms_get_content_oid;
+     ksba_cms_get_content_type; ksba_cms_get_digest_algo;
+     ksba_cms_get_digest_algo_list; ksba_cms_get_enc_val;
+-    ksba_cms_get_recp_ident;
+     ksba_cms_get_issuer_serial;
+     ksba_cms_get_message_digest;
+     ksba_cms_get_sig_val; ksba_cms_get_sigattr_oids;
+--- a/src/libksba.def
++++ b/src/libksba.def
+@@ -214,5 +214,3 @@
+-      ksba_cms_get_recp_ident         @166
+-
+       _ksba_parser_new                @167
+       _ksba_parser_relase             @168
+       _ksba_parser_next               @169

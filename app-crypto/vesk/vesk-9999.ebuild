@@ -40,6 +40,7 @@ BDEPEND="
 	${PYTHON_DEPS}
 	app-lang/perl
 	dev-pypi/cffi[${PYTHON_USEDEP}]
+	dev-pypi/pytz[${PYTHON_USEDEP}]
 	dev-pypi/setuptools[${PYTHON_USEDEP}]
 	dev-pypi/six[${PYTHON_USEDEP}]
 "

@@ -1,4 +1,3 @@
 app-server/nodejs icu
-lib-core/zlib minizip
 xgui-app/wireshark lua
 xmedia-app/mpv -vulkan lua

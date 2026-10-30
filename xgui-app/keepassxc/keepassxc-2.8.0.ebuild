@@ -13,11 +13,12 @@ KEYWORDS="amd64 arm64"
 IUSE="autotype test"
 
 DEPEND="
+	app-compression/libzip:=
 	app-crypto/vesk
 	app-crypto/botan
 	app-crypto/keyutils
 	app-crypto/pcsc-lite
-	lib-core/zlib[minizip]
+	lib-core/zlib
 	lib-core/libsodium
 	lib-dev/libusb
 	xgui-lib/libxkbcommon
@@ -33,7 +34,15 @@ DEPEND="
 "
 RDEPEND="${DEPEND}"
 
-PATCHES=( "${FILESDIR}/optional-qt-accessibility.patch" )
+PATCHES=(
+	"${FILESDIR}/optional-qt-accessibility.patch"
+	"${FILESDIR}/libzip.patch"
+)
+
+src_prepare() {
+	sed -i 's/\r$//' src/keeshare/Share{Import,Export}.cpp || die
+	cmake_src_prepare
+}
 
 src_configure() {
 	filter-flags -flto*

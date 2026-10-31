@@ -1,0 +1,190 @@
+diff --git a/kernel-open/conftest.sh b/kernel-open/conftest.sh
+--- a/kernel-open/conftest.sh
++++ b/kernel-open/conftest.sh
+@@ -4251,7 +4251,11 @@
+             # in v6.11.
+             #
+             CODE="
++            #if defined(NV_DRM_CLIENTS_DRM_FBDEV_HELPER_H_PRESENT)
++            #include <drm/clients/drm_fbdev_helper.h>
++            #else
+             #include <drm/drm_fb_helper.h>
++            #endif
+             #if defined(NV_DRM_DRM_FBDEV_GENERIC_H_PRESENT)
+             #include <drm/drm_fbdev_generic.h>
+             #endif
+@@ -4271,7 +4275,11 @@
+             # 1000634477d8 ("drm/fbdev-ttm:Convert to client-setup") in v6.13.
+             #
+             CODE="
++            #if defined(NV_DRM_CLIENTS_DRM_FBDEV_HELPER_H_PRESENT)
++            #include <drm/clients/drm_fbdev_helper.h>
++            #else
+             #include <drm/drm_fb_helper.h>
++            #endif
+             #if defined(NV_DRM_DRM_FBDEV_TTM_H_PRESENT)
+             #include <drm/drm_fbdev_ttm.h>
+             #endif
+@@ -4310,7 +4318,11 @@
+             # in linux-next b86711c6d6e2.
+             #
+             CODE="
++            #if defined(NV_DRM_CLIENTS_DRM_FBDEV_HELPER_H_PRESENT)
++            #include <drm/clients/drm_fbdev_helper.h>
++            #else
+             #include <drm/drm_fb_helper.h>
++            #endif
+             #if defined(NV_DRM_DRM_CLIENT_SETUP_H_PRESENT)
+             #include <drm/drm_client_setup.h>
+             #elif defined(NV_DRM_CLIENTS_DRM_CLIENT_SETUP_H_PRESENT)
+@@ -5115,6 +5127,26 @@
+             "
+
+             compile_check_conftest "$CODE" "NV_MEMORY_DEVICE_COHERENT_PRESENT" "" "types"
++        ;;
++
++        drm_plane_funcs_has_atomic_create_state)
++            CODE="
++            #include <drm/drm_plane.h>
++            int conftest_drm_plane_funcs_has_atomic_create_state(void) {
++                return offsetof(struct drm_plane_funcs, atomic_create_state);
++            }"
++
++            compile_check_conftest "$CODE" "NV_DRM_PLANE_FUNCS_HAS_ATOMIC_CREATE_STATE" "" "types"
++        ;;
++
++        drm_crtc_funcs_has_atomic_create_state)
++            CODE="
++            #include <drm/drm_crtc.h>
++            int conftest_drm_crtc_funcs_has_atomic_create_state(void) {
++                return offsetof(struct drm_crtc_funcs, atomic_create_state);
++            }"
++
++            compile_check_conftest "$CODE" "NV_DRM_CRTC_FUNCS_HAS_ATOMIC_CREATE_STATE" "" "types"
+         ;;
+
+         drm_crtc_funcs_has_get_vblank_timestamp)
+diff --git a/kernel-open/header-presence-tests.mk b/kernel-open/header-presence-tests.mk
+--- a/kernel-open/header-presence-tests.mk
++++ b/kernel-open/header-presence-tests.mk
+@@ -14,6 +14,7 @@
+   drm/drm_client_setup.h \
+   drm/drm_probe_helper.h \
+   drm/clients/drm_client_setup.h \
++  drm/clients/drm_fbdev_helper.h \
+   dt-bindings/interconnect/tegra_icc_id.h \
+   generated/autoconf.h \
+   generated/compile.h \
+diff --git a/kernel-open/nvidia-drm/nvidia-drm-crtc.c b/kernel-open/nvidia-drm/nvidia-drm-crtc.c
+--- a/kernel-open/nvidia-drm/nvidia-drm-crtc.c
++++ b/kernel-open/nvidia-drm/nvidia-drm-crtc.c
+@@ -2050,6 +2050,21 @@
+     return -EINVAL;
+ }
+
++#if defined(NV_DRM_PLANE_FUNCS_HAS_ATOMIC_CREATE_STATE)
++static struct drm_plane_state *
++nv_drm_plane_atomic_create_state(struct drm_plane *plane)
++{
++    struct nv_drm_plane_state *nv_plane_state =
++        nv_drm_calloc(1, sizeof(*nv_plane_state));
++
++    if (!nv_plane_state) {
++        return ERR_PTR(-ENOMEM);
++    }
++
++    __drm_atomic_helper_plane_state_init(&nv_plane_state->base, plane);
++    return &nv_plane_state->base;
++}
++#else
+ /**
+  * nv_drm_plane_atomic_reset - plane state reset hook
+  * @plane: DRM plane
+@@ -2080,6 +2095,7 @@
+         kfree(nv_plane_state);
+     }
+ }
++#endif
+
+
+ static struct drm_plane_state *
+@@ -2197,7 +2213,11 @@
+     .update_plane           = drm_atomic_helper_update_plane,
+     .disable_plane          = drm_atomic_helper_disable_plane,
+     .destroy                = nv_drm_plane_destroy,
++#if defined(NV_DRM_PLANE_FUNCS_HAS_ATOMIC_CREATE_STATE)
++    .atomic_create_state    = nv_drm_plane_atomic_create_state,
++#else
+     .reset                  = nv_drm_plane_atomic_reset,
++#endif
+     .atomic_get_property    = nv_drm_plane_atomic_get_property,
+     .atomic_set_property    = nv_drm_plane_atomic_set_property,
+     .atomic_duplicate_state = nv_drm_plane_atomic_duplicate_state,
+@@ -2284,6 +2304,20 @@
+ }
+
+
++#if defined(NV_DRM_CRTC_FUNCS_HAS_ATOMIC_CREATE_STATE)
++static struct drm_crtc_state *
++nv_drm_atomic_crtc_create_state(struct drm_crtc *crtc)
++{
++    struct nv_drm_crtc_state *nv_state = nv_drm_crtc_state_alloc();
++
++    if (!nv_state) {
++        return ERR_PTR(-ENOMEM);
++    }
++
++    __drm_atomic_helper_crtc_state_init(&nv_state->base, crtc);
++    return &nv_state->base;
++}
++#else
+ /**
+  * nv_drm_atomic_crtc_reset - crtc state reset hook
+  * @crtc: DRM crtc
+@@ -2313,6 +2347,7 @@
+         kfree(nv_state);
+     }
+ }
++#endif
+
+ /**
+  * nv_drm_atomic_crtc_duplicate_state - crtc state duplicate hook
+@@ -2459,7 +2494,11 @@
+ static struct drm_crtc_funcs nv_crtc_funcs = {
+     .set_config             = drm_atomic_helper_set_config,
+     .page_flip              = drm_atomic_helper_page_flip,
++#if defined(NV_DRM_CRTC_FUNCS_HAS_ATOMIC_CREATE_STATE)
++    .atomic_create_state    = nv_drm_atomic_crtc_create_state,
++#else
+     .reset                  = nv_drm_atomic_crtc_reset,
++#endif
+     .destroy                = nv_drm_crtc_destroy,
+     .atomic_get_property    = nv_drm_atomic_crtc_get_property,
+     .atomic_set_property    = nv_drm_atomic_crtc_set_property,
+diff --git a/kernel-open/nvidia-drm/nvidia-drm-drv.c b/kernel-open/nvidia-drm/nvidia-drm-drv.c
+--- a/kernel-open/nvidia-drm/nvidia-drm-drv.c
++++ b/kernel-open/nvidia-drm/nvidia-drm-drv.c
+@@ -64,7 +64,11 @@
+ #endif
+
+ #if defined(NV_DRM_FBDEV_AVAILABLE)
++#if defined(NV_DRM_CLIENTS_DRM_FBDEV_HELPER_H_PRESENT)
++#include <drm/clients/drm_fbdev_helper.h>
++#else
+ #include <drm/drm_fb_helper.h>
++#endif
+ #endif
+
+ #if defined(NV_DRM_DRM_CLIENT_SETUP_H_PRESENT)
+diff --git a/kernel-open/nvidia-drm/nvidia-drm-sources.mk b/kernel-open/nvidia-drm/nvidia-drm-sources.mk
+--- a/kernel-open/nvidia-drm/nvidia-drm-sources.mk
++++ b/kernel-open/nvidia-drm/nvidia-drm-sources.mk
+@@ -70,6 +70,8 @@
+ NV_CONFTEST_FUNCTION_COMPILE_TESTS += vm_flags_set
+
+ NV_CONFTEST_TYPE_COMPILE_TESTS += drm_driver_has_legacy_dev_list
++NV_CONFTEST_TYPE_COMPILE_TESTS += drm_plane_funcs_has_atomic_create_state
++NV_CONFTEST_TYPE_COMPILE_TESTS += drm_crtc_funcs_has_atomic_create_state
+ NV_CONFTEST_TYPE_COMPILE_TESTS += vm_ops_fault_removed_vma_arg
+ NV_CONFTEST_TYPE_COMPILE_TESTS += drm_driver_prime_flag_present
+ NV_CONFTEST_TYPE_COMPILE_TESTS += vm_fault_t

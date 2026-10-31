@@ -1,0 +1,294 @@
+Subject: [PATCH] tests: match GObject type-registration callback signatures
+
+Remove callback casts from the shared test registration helpers and give
+all their non-NULL callbacks the signatures required by GType. Keep the
+registration paths and assertions, including optional NULL callbacks.
+
+Match the manually registered dynamic-interface initializer and finalizer
+in the same default-interface test. Signal callbacks and the public dynamic
+type/interface macros remain unchanged.
+
+diff --git a/gobject/tests/testcommon.h b/gobject/tests/testcommon.h
+--- a/gobject/tests/testcommon.h
++++ b/gobject/tests/testcommon.h
+@@ -35,14 +35,14 @@
+       static const GTypeInfo object_info =			\
+ 	{							\
+ 	  sizeof (name ## Class),				\
+-	  (GBaseInitFunc) base_init,				\
++	  base_init,						\
+ 	  (GBaseFinalizeFunc) NULL,				\
+-	  (GClassInitFunc) class_init,				\
++	  class_init,						\
+ 	  (GClassFinalizeFunc) NULL,				\
+ 	  NULL,           /* class_data */			\
+ 	  sizeof (name),					\
+ 	  0,             /* n_prelocs */			\
+-	  (GInstanceInitFunc) instance_init,			\
++	  instance_init,					\
+ 	  (const GTypeValueTable *) NULL,			\
+ 	};							\
+ 								\
+@@ -72,9 +72,9 @@
+       static const GTypeInfo iface_info =			\
+       {								\
+ 	sizeof (name ## Class),					\
+-	(GBaseInitFunc)	base_init,				\
++	base_init,						\
+ 	(GBaseFinalizeFunc) NULL,				\
+-	(GClassInitFunc) dflt_init,				\
++	dflt_init,						\
+ 	(GClassFinalizeFunc) NULL,				\
+ 	(gconstpointer) NULL,					\
+ 	(guint16) 0,						\
+@@ -94,7 +94,7 @@
+ {								\
+   static GInterfaceInfo const iface =				\
+     {								\
+-      (GInterfaceInitFunc) init_func, NULL, NULL		\
++      init_func, NULL, NULL					\
+     };								\
+ 								\
+   g_type_add_interface_static (type, iface_type, &iface);	\
+diff --git a/gobject/tests/testmodule.c b/gobject/tests/testmodule.c
+--- a/gobject/tests/testmodule.c
++++ b/gobject/tests/testmodule.c
+@@ -25,9 +25,10 @@
+ static void     test_module_unload (GTypeModule *module);
+ 
+ static void
+-test_module_class_init (TestModuleClass *class)
++test_module_class_init (gpointer g_class,
++                        gpointer class_data)
+ {
+-  GTypeModuleClass *module_class = G_TYPE_MODULE_CLASS (class);
++  GTypeModuleClass *module_class = G_TYPE_MODULE_CLASS (g_class);
+ 
+   module_class->load = test_module_load;
+   module_class->unload = test_module_unload;
+diff --git a/gobject/tests/basic-signals.c b/gobject/tests/basic-signals.c
+--- a/gobject/tests/basic-signals.c
++++ b/gobject/tests/basic-signals.c
+@@ -87,8 +87,11 @@
+ }
+ 
+ static void
+-test_object_class_init (TestObjectClass *class)
++test_object_class_init (gpointer g_class,
++                        gpointer class_data)
+ {
++  TestObjectClass *class = g_class;
++
+   class->test_signal = test_object_real_signal;
+ 
+   g_signal_new ("test-signal",
+diff --git a/gobject/tests/accumulator.c b/gobject/tests/accumulator.c
+--- a/gobject/tests/accumulator.c
++++ b/gobject/tests/accumulator.c
+@@ -205,8 +205,11 @@
+ }
+ 
+ static void
+-test_object_class_init (TestObjectClass *class)
+-{
++test_object_class_init (gpointer g_class,
++                        gpointer class_data)
++{
++  TestObjectClass *class = g_class;
++
+   class->test_signal1 = test_object_real_signal1;
+   class->test_signal2 = test_object_real_signal2;
+   class->test_signal3 = test_object_real_signal3;
+diff --git a/gobject/tests/ifaceproperties.c b/gobject/tests/ifaceproperties.c
+--- a/gobject/tests/ifaceproperties.c
++++ b/gobject/tests/ifaceproperties.c
+@@ -113,7 +113,8 @@
+ static GParamSpec *inherited_spec1, *inherited_spec2, *inherited_spec3, *inherited_spec4;
+ 
+ static void
+-test_iface_default_init (TestIfaceClass *iface_vtable)
++test_iface_default_init (gpointer iface_vtable,
++                         gpointer class_data)
+ {
+   inherited_spec1 = iface_spec1 = g_param_spec_int ("prop1",
+                                                     "Prop1",
+@@ -276,11 +277,12 @@
+ }
+ 
+ static void
+-base_object_class_init (BaseObjectClass *class)
+-{
+-  GObjectClass *object_class = G_OBJECT_CLASS (class);
+-
+-  base_parent_class= g_type_class_peek_parent (class);
++base_object_class_init (gpointer g_class,
++                        gpointer class_data)
++{
++  GObjectClass *object_class = G_OBJECT_CLASS (g_class);
++
++  base_parent_class= g_type_class_peek_parent (g_class);
+ 
+   object_class->constructor = base_object_constructor;
+   object_class->set_property = base_object_set_property;
+@@ -315,8 +317,11 @@
+ }
+ 
+ static void
+-base_object_init (BaseObject *base_object)
+-{
++base_object_init (GTypeInstance *instance,
++                  gpointer g_class)
++{
++  BaseObject *base_object = (BaseObject *) instance;
++
+   base_object->val1 = 42;
+ }
+ 
+@@ -374,9 +379,10 @@
+ }
+ 
+ static void
+-derived_object_class_init (DerivedObjectClass *class)
+-{
+-  GObjectClass *object_class = G_OBJECT_CLASS (class);
++derived_object_class_init (gpointer g_class,
++                           gpointer class_data)
++{
++  GObjectClass *object_class = G_OBJECT_CLASS (g_class);
+ 
+   object_class->set_property = derived_object_set_property;
+   object_class->get_property = derived_object_get_property;
+diff --git a/gobject/tests/override.c b/gobject/tests/override.c
+--- a/gobject/tests/override.c
++++ b/gobject/tests/override.c
+@@ -52,7 +52,8 @@
+ }
+ 
+ static void
+-test_i_default_init (gpointer g_class)
++test_i_default_init (gpointer g_class,
++                     gpointer class_data)
+ {
+   foo_signal_id = g_signal_newv ("foo",
+                                  TEST_TYPE_I,
+@@ -118,8 +119,11 @@
+ }
+ 
+ static void
+-test_a_class_init (TestAClass *class)
+-{
++test_a_class_init (gpointer g_class,
++                   gpointer class_data)
++{
++  TestAClass *class = g_class;
++
+   class->bar = test_a_bar;
+ 
+   bar_signal_id = g_signal_new ("bar",
+@@ -143,7 +147,8 @@
+ }
+ 
+ static void
+-test_a_interface_init (TestIClass *iface)
++test_a_interface_init (gpointer iface,
++                       gpointer iface_data)
+ {
+   g_signal_override_class_closure (foo_signal_id,
+                                    TEST_TYPE_A,
+@@ -229,7 +234,8 @@
+ }
+ 
+ static void
+-test_b_class_init (TestBClass *class)
++test_b_class_init (gpointer g_class,
++                   gpointer class_data)
+ {
+   g_signal_override_class_closure (foo_signal_id,
+                                    TEST_TYPE_B,
+@@ -321,7 +327,8 @@
+ }
+ 
+ static void
+-test_c_class_init (TestBClass *class)
++test_c_class_init (gpointer g_class,
++                   gpointer class_data)
+ {
+   g_signal_override_class_closure (foo_signal_id,
+                                    TEST_TYPE_C,
+diff --git a/gobject/tests/defaultiface.c b/gobject/tests/defaultiface.c
+--- a/gobject/tests/defaultiface.c
++++ b/gobject/tests/defaultiface.c
+@@ -45,8 +45,11 @@
+ #define TEST_TYPE_STATIC_IFACE (test_static_iface_get_type ())
+ 
+ static void
+-test_static_iface_default_init (TestStaticIfaceClass *iface)
+-{
++test_static_iface_default_init (gpointer g_iface,
++                                gpointer class_data)
++{
++  TestStaticIfaceClass *iface = g_iface;
++
+   iface->val = 42;
+ }
+ 
+@@ -99,14 +102,18 @@
+ #define TEST_TYPE_DYNAMIC_IFACE (test_dynamic_iface_type)
+ 
+ static void
+-test_dynamic_iface_default_init (TestStaticIfaceClass *iface)
+-{
++test_dynamic_iface_default_init (gpointer g_iface,
++                                 gpointer class_data)
++{
++  TestDynamicIfaceClass *iface = g_iface;
++
+   dynamic_iface_init = TRUE;
+   iface->val = 42;
+ }
+ 
+ static void
+-test_dynamic_iface_default_finalize (TestStaticIfaceClass *iface)
++test_dynamic_iface_default_finalize (gpointer g_iface,
++                                     gpointer class_data)
+ {
+   dynamic_iface_init = FALSE;
+ }
+@@ -119,8 +126,8 @@
+       sizeof (TestDynamicIfaceClass),
+       (GBaseInitFunc)      NULL,
+       (GBaseFinalizeFunc)  NULL,
+-      (GClassInitFunc)     test_dynamic_iface_default_init,
+-      (GClassFinalizeFunc) test_dynamic_iface_default_finalize,
++      test_dynamic_iface_default_init,
++      test_dynamic_iface_default_finalize,
+       NULL,
+       0,
+       0,
+diff --git a/gobject/tests/dynamictype.c b/gobject/tests/dynamictype.c
+--- a/gobject/tests/dynamictype.c
++++ b/gobject/tests/dynamictype.c
+@@ -41,19 +41,19 @@
+ typedef struct _TestIface      TestIface;
+ typedef struct _TestIfaceClass TestIfaceClass;
+ 
+-static void test_iface_base_init    (TestIfaceClass *iface);
+-static void test_iface_default_init (TestIfaceClass *iface, gpointer class_data);
++static void test_iface_base_init    (gpointer iface);
++static void test_iface_default_init (gpointer iface, gpointer class_data);
+ 
+ static DEFINE_IFACE(TestIface, test_iface, test_iface_base_init, test_iface_default_init)
+ 
+ static void
+-test_iface_default_init (TestIfaceClass *iface,
++test_iface_default_init (gpointer iface,
+                          gpointer        class_data)
+ {
+ }
+ 
+ static void
+-test_iface_base_init (TestIfaceClass *iface)
++test_iface_base_init (gpointer iface)
+ {
+ }
+ 

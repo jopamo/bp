@@ -1,0 +1,181 @@
+Subject: [PATCH] tests: match manually registered GObject type callbacks
+
+Give the basics test's base/class/instance callbacks their GType signatures
+and remove their registration casts. Match the separate module class
+initializer in the threaded dynamic test as well.
+
+Keep the assertions, registration paths, thread/ref counts and typed signal
+and public-interface callback tests unchanged.
+
+diff --git a/gobject/tests/basics-gobject.c b/gobject/tests/basics-gobject.c
+--- a/gobject/tests/basics-gobject.c
++++ b/gobject/tests/basics-gobject.c
+@@ -35,8 +35,8 @@
+   void (*print_string) (TestIface   *tiobj,
+                         const gchar *string);
+ };
+-static void iface_base_init     (TestIfaceClass *iface);
+-static void iface_base_finalize (TestIfaceClass *iface);
++static void iface_base_init     (gpointer iface);
++static void iface_base_finalize (gpointer iface);
+ static void print_foo           (TestIface *tiobj,
+                                  const gchar *string);
+ static GType
+@@ -49,8 +49,8 @@
+       const GTypeInfo test_iface_info =
+       {
+         sizeof (TestIfaceClass),
+-        (GBaseInitFunc) iface_base_init,          /* base_init */
+-        (GBaseFinalizeFunc) iface_base_finalize,  /* base_finalize */
++        iface_base_init,          /* base_init */
++        iface_base_finalize,      /* base_finalize */
+         NULL,
+         NULL,
+         NULL,
+@@ -68,7 +68,7 @@
+ }
+ static guint iface_base_init_count = 0;
+ static void
+-iface_base_init (TestIfaceClass *iface)
++iface_base_init (gpointer iface)
+ {
+   iface_base_init_count++;
+   if (iface_base_init_count == 1)
+@@ -77,7 +77,7 @@
+     }
+ }
+ static void
+-iface_base_finalize (TestIfaceClass *iface)
++iface_base_finalize (gpointer iface)
+ {
+   iface_base_init_count--;
+   if (iface_base_init_count == 0)
+@@ -152,8 +152,8 @@
+   int     dummy1;
+   gdouble dummy2;
+ };
+-static void     test_object_class_init  (TestObjectClass        *class);
+-static void     test_object_init        (TestObject             *tobject);
++static void     test_object_class_init  (gpointer g_class, gpointer class_data);
++static void     test_object_init        (GTypeInstance *instance, gpointer g_class);
+ static gboolean test_signal_accumulator (GSignalInvocationHint  *ihint,
+                                          GValue                 *return_accu,
+                                          const GValue           *handler_return,
+@@ -180,12 +180,12 @@
+         sizeof (TestObjectClass),
+         NULL,           /* base_init */
+         NULL,           /* base_finalize */
+-        (GClassInitFunc) test_object_class_init,
++        test_object_class_init,
+         NULL,           /* class_finalize */
+         NULL,           /* class_data */
+         sizeof (TestObject),
+         5,              /* n_preallocs */
+-        (GInstanceInitFunc) test_object_init,
++        test_object_init,
+         NULL
+       };
+       GInterfaceInfo iface_info = { test_object_test_iface_init, NULL, GUINT_TO_POINTER (42) };
+@@ -200,8 +200,11 @@
+   return test_object_type;
+ }
+ static void
+-test_object_class_init (TestObjectClass *class)
+-{
++test_object_class_init (gpointer g_class,
++                        gpointer class_data)
++{
++  TestObjectClass *class = g_class;
++
+   /*  GObjectClass *gobject_class = G_OBJECT_CLASS (class); */
+   g_type_class_adjust_private_offset (class, &TestObject_private_offset);
+ 
+@@ -216,8 +219,10 @@
+                 G_TYPE_STRING, 2, TEST_TYPE_IFACE, G_TYPE_POINTER);
+ }
+ static void
+-test_object_init (TestObject *tobject)
+-{
++test_object_init (GTypeInstance *instance,
++                  gpointer g_class)
++{
++  TestObject *tobject = (TestObject *) instance;
+   TestObjectPrivate *priv = test_object_get_instance_private (tobject);
+   g_assert_nonnull (priv);
+ 
+@@ -326,8 +331,8 @@
+ {
+   char dummy;
+ };
+-static void derived_object_class_init (DerivedObjectClass *class);
+-static void derived_object_init       (DerivedObject      *dobject);
++static void derived_object_class_init (gpointer g_class, gpointer class_data);
++static void derived_object_init       (GTypeInstance *instance, gpointer g_class);
+ static gint DerivedObject_private_offset;
+ static inline gpointer
+ derived_object_get_instance_private (DerivedObject *self)
+@@ -346,12 +351,12 @@
+         sizeof (DerivedObjectClass),
+         NULL,           /* base_init */
+         NULL,           /* base_finalize */
+-        (GClassInitFunc) derived_object_class_init,
++        derived_object_class_init,
+         NULL,           /* class_finalize */
+         NULL,           /* class_data */
+         sizeof (DerivedObject),
+         5,              /* n_preallocs */
+-        (GInstanceInitFunc) derived_object_init,
++        derived_object_init,
+         NULL
+       };
+       GInterfaceInfo iface_info = { derived_object_test_iface_init, NULL, GUINT_TO_POINTER (87) };
+@@ -365,13 +370,16 @@
+   return derived_object_type;
+ }
+ static void
+-derived_object_class_init (DerivedObjectClass *class)
+-{
+-  g_type_class_adjust_private_offset (class, &DerivedObject_private_offset);
+-}
+-static void
+-derived_object_init (DerivedObject *dobject)
+-{
++derived_object_class_init (gpointer g_class,
++                           gpointer class_data)
++{
++  g_type_class_adjust_private_offset (g_class, &DerivedObject_private_offset);
++}
++static void
++derived_object_init (GTypeInstance *instance,
++                     gpointer g_class)
++{
++  DerivedObject *dobject = (DerivedObject *) instance;
+   TestObjectPrivate *test_priv;
+   DerivedObjectPrivate *derived_priv;
+ 
+diff --git a/gobject/tests/dynamictests.c b/gobject/tests/dynamictests.c
+--- a/gobject/tests/dynamictests.c
++++ b/gobject/tests/dynamictests.c
+@@ -72,9 +72,10 @@
+ }
+ 
+ static void
+-test_module_class_init (TestModuleClass *class)
+-{
+-  GTypeModuleClass *module_class = G_TYPE_MODULE_CLASS (class);
++test_module_class_init (gpointer g_class,
++                        gpointer class_data)
++{
++  GTypeModuleClass *module_class = G_TYPE_MODULE_CLASS (g_class);
+ 
+   module_class->load = test_module_load;
+   module_class->unload = test_module_unload;
+@@ -90,7 +91,7 @@
+ 	sizeof (TestModuleClass),
+ 	(GBaseInitFunc) NULL,
+ 	(GBaseFinalizeFunc) NULL,
+-	(GClassInitFunc) test_module_class_init,
++	test_module_class_init,
+ 	(GClassFinalizeFunc) NULL,
+ 	NULL,
+ 	sizeof (TestModule),

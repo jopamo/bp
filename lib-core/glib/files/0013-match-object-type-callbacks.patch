@@ -1,0 +1,161 @@
+Subject: [PATCH] gobject: match fundamental type callback signatures
+
+GType invokes the root object's base, class and instance callbacks through
+its generic callback types. Match those private signatures, convert arguments
+inside the functions and remove registration casts. Keep public types and
+initialization/finalization bodies unchanged.
+
+Add a basic object test for the root and a subtype without its own
+initializers, checking reference state, inherited initialization and one
+qdata destruction notification on final release.
+
+diff --git a/gobject/gobject.c b/gobject/gobject.c
+--- a/gobject/gobject.c
++++ b/gobject/gobject.c
+@@ -147,11 +147,12 @@
+ 
+ 
+ /* --- prototypes --- */
+-static void	g_object_base_class_init		(GObjectClass	*class);
+-static void	g_object_base_class_finalize		(GObjectClass	*class);
+-static void	g_object_do_class_init			(GObjectClass	*class);
+-static void	g_object_init				(GObject	*object,
+-							 GObjectClass	*class);
++static void g_object_base_class_init (gpointer g_class);
++static void g_object_base_class_finalize (gpointer g_class);
++static void g_object_do_class_init (gpointer g_class,
++                                    gpointer class_data);
++static void g_object_init (GTypeInstance *instance,
++                           gpointer g_class);
+ static GObject*	g_object_constructor			(GType                  type,
+ 							 guint                  n_construct_properties,
+ 							 GObjectConstructParam *construct_params);
+@@ -899,14 +900,14 @@
+   };
+   GTypeInfo info = {
+     sizeof (GObjectClass),
+-    (GBaseInitFunc) g_object_base_class_init,
+-    (GBaseFinalizeFunc) g_object_base_class_finalize,
+-    (GClassInitFunc) g_object_do_class_init,
++    g_object_base_class_init,
++    g_object_base_class_finalize,
++    g_object_do_class_init,
+     NULL	/* class_destroy */,
+     NULL	/* class_data */,
+     sizeof (GObject),
+     0		/* n_preallocs */,
+-    (GInstanceInitFunc) g_object_init,
++    g_object_init,
+     NULL,	/* value_table */
+   };
+   static const GTypeValueTable value_table = {
+@@ -982,8 +983,9 @@
+ }
+ 
+ static void
+-g_object_base_class_init (GObjectClass *class)
+-{
++g_object_base_class_init (gpointer g_class)
++{
++  GObjectClass *class = g_class;
+   GObjectClass *pclass = g_type_class_peek_parent (class);
+ 
+   /* Don't inherit HAS_DERIVED_CLASS flag from parent class */
+@@ -1002,8 +1004,9 @@
+ }
+ 
+ static void
+-g_object_base_class_finalize (GObjectClass *class)
+-{
++g_object_base_class_finalize (gpointer g_class)
++{
++  GObjectClass *class = g_class;
+   GList *list, *node;
+   GParamSpecPool *param_spec_pool;
+   
+@@ -1025,8 +1028,11 @@
+ }
+ 
+ static void
+-g_object_do_class_init (GObjectClass *class)
+-{
++g_object_do_class_init (gpointer g_class,
++                        gpointer class_data)
++{
++  GObjectClass *class = g_class;
++
+   quark_closure_array = g_quark_from_static_string ("GObject-closure-array");
+   quark_weak_notifies = g_quark_from_static_string ("GObject-weak-notifies");
+   quark_weak_locations = g_quark_from_static_string ("GObject-weak-locations");
+@@ -1760,9 +1766,12 @@
+ }
+ 
+ static void
+-g_object_init (GObject		*object,
+-	       GObjectClass	*class)
+-{
++g_object_init (GTypeInstance *instance,
++               gpointer g_class)
++{
++  GObject *object = (GObject *) instance;
++  GObjectClass *class = g_class;
++
+   object->ref_count = 1;
+   object->qdata = NULL;
+ 
+diff --git a/gobject/tests/basics-gobject.c b/gobject/tests/basics-gobject.c
+--- a/gobject/tests/basics-gobject.c
++++ b/gobject/tests/basics-gobject.c
+@@ -434,12 +434,52 @@
+   g_object_unref (dobject);
+ }
+ 
++static void
++count_finalization (gpointer data)
++{
++  guint *count = data;
++
++  (*count)++;
++}
++
++static void
++test_gobject_inherited_init (void)
++{
++  GType types[2];
++  guint i;
++
++  types[0] = G_TYPE_OBJECT;
++  types[1] = g_type_register_static_simple (G_TYPE_OBJECT, "TestInheritedInit",
++                                           sizeof (GObjectClass), NULL,
++                                           sizeof (GObject), NULL, 0);
++  g_assert_cmpuint (g_type_parent (types[1]), ==, G_TYPE_OBJECT);
++
++  for (i = 0; i < G_N_ELEMENTS (types); i++)
++    {
++      GObject *object = g_object_new (types[i], NULL);
++      guint finalized = 0;
++
++      g_assert_cmpuint (G_OBJECT_TYPE (object), ==, types[i]);
++      g_assert_cmpuint (object->ref_count, ==, 1);
++      g_assert_null (object->qdata);
++      g_assert_false (g_object_is_floating (object));
++      g_object_set_data_full (object, "finalized", &finalized, count_finalization);
++      g_object_ref (object);
++      g_object_unref (object);
++      g_assert_cmpuint (object->ref_count, ==, 1);
++      g_assert_cmpuint (finalized, ==, 0);
++      g_object_unref (object);
++      g_assert_cmpuint (finalized, ==, 1);
++    }
++}
++
+ int
+ main (int argc, char *argv[])
+ {
+   g_test_init (&argc, &argv, NULL);
+ 
+   g_test_add_func ("/gobject/basics", test_gobject_basics);
++  g_test_add_func ("/gobject/inherited-init", test_gobject_inherited_init);
+ 
+   return g_test_run ();
+ }

@@ -1,0 +1,67 @@
+Subject: [PATCH] gobject: match weak-reference callback signatures
+
+Use a GWeakNotify adapter for weak-pointer notification and removal so
+callback identity still matches. Give the private weak-reference data
+release function the GDestroyNotify signature instead of casting it.
+
+Keep weak-reference locking, reference counts and final-release cleanup
+unchanged. Existing reference tests cover removal, retargeting, disposal
+and concurrent access.
+
+diff --git a/gobject/gobject.c b/gobject/gobject.c
+--- a/gobject/gobject.c
++++ b/gobject/gobject.c
+@@ -311,8 +311,10 @@
+ }
+ 
+ static void
+-weak_ref_data_unref (WeakRefData *wrdata)
+-{
++weak_ref_data_unref (gpointer data)
++{
++  WeakRefData *wrdata = data;
++
+   if (!wrdata)
+     return;
+ 
+@@ -377,7 +379,7 @@
+       /* Other fields are left uninitialized. They are only considered with a positive @len. */
+ 
+       *data = wrdata;
+-      *destroy_notify = (GDestroyNotify) weak_ref_data_unref;
++      *destroy_notify = weak_ref_data_unref;
+ 
+       /* Mark the @object that it was ever involved with GWeakRef. This flag
+        * will stick until @object gets destroyed, just like the WeakRefData
+@@ -4084,6 +4086,13 @@
+     }
+ }
+ 
++static void
++weak_pointer_notify (gpointer data,
++                     GObject *where_the_object_was)
++{
++  g_nullify_pointer (data);
++}
++
+ /**
+  * g_object_add_weak_pointer: (skip)
+  * @object: The object that should be weak referenced.
+@@ -4108,7 +4117,7 @@
+   g_return_if_fail (weak_pointer_location != NULL);
+ 
+   g_object_weak_ref (object, 
+-                     (GWeakNotify) g_nullify_pointer, 
++                     weak_pointer_notify,
+                      weak_pointer_location);
+ }
+ 
+@@ -4130,7 +4139,7 @@
+   g_return_if_fail (weak_pointer_location != NULL);
+ 
+   g_object_weak_unref (object, 
+-                       (GWeakNotify) g_nullify_pointer, 
++                       weak_pointer_notify,
+                        weak_pointer_location);
+ }
+ 

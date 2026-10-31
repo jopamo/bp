@@ -1,0 +1,60 @@
+Subject: [PATCH] gvariant: match the type-cache equality callback signature
+
+Use gconstpointer arguments for the private equality helper, matching
+GEqualFunc and the public equality function. Remove the hash-table callback
+casts. Keep type comparison and cache ownership unchanged.
+
+Extend the existing type-info test to verify that equal types in distinct
+storage share an entry and that releasing one reference preserves the other.
+
+diff --git a/glib/gvarianttype-private.h b/glib/gvarianttype-private.h
+--- a/glib/gvarianttype-private.h
++++ b/glib/gvarianttype-private.h
+@@ -27,8 +27,8 @@
+ G_BEGIN_DECLS
+ 
+ static inline gboolean
+-_g_variant_type_equal (const GVariantType *type1,
+-                       const GVariantType *type2)
++_g_variant_type_equal (gconstpointer type1,
++                       gconstpointer type2)
+ {
+   const char *str1 = (const char *)type1;
+   const char *str2 = (const char *)type2;
+diff --git a/glib/gvarianttypeinfo.c b/glib/gvarianttypeinfo.c
+--- a/glib/gvarianttypeinfo.c
++++ b/glib/gvarianttypeinfo.c
+@@ -802,8 +802,8 @@
+ 
+       if (g_variant_type_info_table == NULL)
+         {
+-          g_variant_type_info_table = g_hash_table_new ((GHashFunc)_g_variant_type_hash,
+-                                                        (GEqualFunc)_g_variant_type_equal);
++          g_variant_type_info_table = g_hash_table_new (_g_variant_type_hash,
++                                                       _g_variant_type_equal);
+           g_ignore_leak (g_variant_type_info_table);
+         }
+       info = g_hash_table_lookup (g_variant_type_info_table, type_string);
+diff --git a/glib/tests/gvariant.c b/glib/tests/gvariant.c
+--- a/glib/tests/gvariant.c
++++ b/glib/tests/gvariant.c
+@@ -1026,7 +1026,7 @@
+       GString *type_string, *description;
+       gsize fixed_size1, fixed_size2;
+       guint alignment1, alignment2;
+-      GVariantTypeInfo *info;
++      GVariantTypeInfo *info, *same_info;
+       GVariantType *type;
+       gchar *desc;
+ 
+@@ -1038,6 +1038,10 @@
+ 
+       /* create a typeinfo for it */
+       info = g_variant_type_info_get (type);
++
++      same_info = g_variant_type_info_get (G_VARIANT_TYPE (type_string->str));
++      g_assert_true (same_info == info);
++      g_variant_type_info_unref (same_info);
+ 
+       /* make sure the typeinfo has the right type string */
+       g_assert_cmpstr (g_variant_type_info_get_type_string (info), ==,

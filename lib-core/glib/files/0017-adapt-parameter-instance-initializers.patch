@@ -1,0 +1,154 @@
+Subject: [PATCH] gparam: adapt parameter instance initializers
+
+GParamSpecTypeInfo supplies a one-argument initializer, but GType invokes
+GInstanceInitFunc with an instance and class. Retain the typed callback
+in class-private storage and call it through an exact GInstanceInitFunc
+adapter. Copy the callback before freeing the temporary class metadata.
+
+Keep public class sizes and the optional-initializer contract unchanged.
+Extend the custom parameter test to check inherited initialization, call
+counts, default state and public class size.
+
+diff --git a/gobject/gparam.c b/gobject/gparam.c
+--- a/gobject/gparam.c
++++ b/gobject/gparam.c
+@@ -85,6 +85,11 @@
+   GQuark name_quark;
+ } GParamSpecPrivate;
+ 
++typedef struct
++{
++  void (*instance_init) (GParamSpec *pspec);
++} GParamSpecClassPrivate;
++
+ static gint g_param_private_offset;
+ 
+ /* --- functions --- */
+@@ -138,6 +143,7 @@
+   type = g_type_register_fundamental (G_TYPE_PARAM, g_intern_static_string ("GParam"), &param_spec_info, &finfo, G_TYPE_FLAG_ABSTRACT);
+   g_assert (type == G_TYPE_PARAM);
+   g_param_private_offset = g_type_add_instance_private (type, sizeof (GParamSpecPrivate));
++  g_type_add_class_private (type, sizeof (GParamSpecClassPrivate));
+   g_value_register_transform_func (G_TYPE_PARAM, G_TYPE_PARAM, value_param_transform_value);
+ }
+ 
+@@ -1416,6 +1422,8 @@
+ /* --- auxiliary functions --- */
+ typedef struct
+ {
++  void          (*instance_init)       (GParamSpec   *pspec);
++
+   /* class portion */
+   GType           value_type;
+   void          (*finalize)             (GParamSpec   *pspec);
+@@ -1434,7 +1442,9 @@
+ {
+   GParamSpecClass *class = g_class;
+   ParamSpecClassInfo *info = class_data;
+-
++  GParamSpecClassPrivate *priv = g_type_class_get_private (g_class, G_TYPE_PARAM);
++
++  priv->instance_init = info->instance_init;
+   class->value_type = info->value_type;
+   if (info->finalize)
+     class->finalize = info->finalize;			/* optional */
+@@ -1443,6 +1453,15 @@
+     class->value_validate = info->value_validate;	/* optional */
+   class->values_cmp = info->values_cmp;
+   g_free (class_data);
++}
++
++static void
++param_spec_generic_instance_init (GTypeInstance *instance,
++                                  gpointer g_class)
++{
++  GParamSpecClassPrivate *priv = g_type_class_get_private (instance->g_class, G_TYPE_PARAM);
++
++  priv->instance_init ((GParamSpec *) instance);
+ }
+ 
+ static void
+@@ -1503,8 +1522,9 @@
+ 
+   info.instance_size = pspec_info->instance_size;
+   info.n_preallocs = pspec_info->n_preallocs;
+-  info.instance_init = (GInstanceInitFunc) pspec_info->instance_init;
++  info.instance_init = pspec_info->instance_init ? param_spec_generic_instance_init : NULL;
+   cinfo = g_new (ParamSpecClassInfo, 1);
++  cinfo->instance_init = pspec_info->instance_init;
+   cinfo->value_type = pspec_info->value_type;
+   cinfo->finalize = pspec_info->finalize;
+   cinfo->value_set_default = pspec_info->value_set_default ? pspec_info->value_set_default : default_value_set_default;
+diff --git a/gobject/tests/param.c b/gobject/tests/param.c
+--- a/gobject/tests/param.c
++++ b/gobject/tests/param.c
+@@ -1549,11 +1549,15 @@
+     g_assert_false (g_param_spec_is_valid_name (invalid_names[i]));
+ }
+ 
++static guint custom_init_count;
++static guint derived_init_count;
++
+ static void
+ param_int_init (GParamSpec *pspec)
+ {
+   GParamSpecInt *ispec = (GParamSpecInt *)pspec;
+ 
++  custom_init_count++;
+   ispec->minimum = (int) 0x7fffffff;
+   ispec->maximum = (int) 0x80000000;
+   ispec->default_value = 0;
+@@ -1590,6 +1594,20 @@
+ }
+ 
+ static GType custom_type;
++
++static void
++param_derived_init (GTypeInstance *instance,
++                    gpointer g_class)
++{
++  GParamSpecInt *ispec = (GParamSpecInt *) instance;
++
++  g_assert_cmpuint (G_PARAM_SPEC_TYPE (ispec), ==, G_TYPE_FROM_CLASS (g_class));
++  g_assert_cmpint (ispec->minimum, ==, (int) 0x7fffffff);
++  g_assert_cmpint (ispec->maximum, ==, (int) 0x80000000);
++  g_assert_cmpint (ispec->default_value, ==, 0);
++  ispec->default_value = 42;
++  derived_init_count++;
++}
+ 
+ /* Register a pspec that has a validate vfunc, but not
+  * value_is_valid, to test the fallback in g_param_value_is_valid
+@@ -1638,7 +1656,10 @@
+ {
+   GParamSpec *pspec;
+   GValue value = G_VALUE_INIT;
+-
++  GType derived_type;
++  GTypeQuery query;
++
++  custom_init_count = derived_init_count = 0;
+   register_custom_pspec ();
+ 
+   pspec = g_param_spec_custom ("myint", 10, 30, 20, G_PARAM_READWRITE);
+@@ -1650,6 +1671,20 @@
+   g_assert_false (g_param_value_is_valid (pspec, &value));
+   g_assert_cmpint (g_value_get_int (&value), ==, 40);
+ 
++  g_param_spec_unref (pspec);
++  g_assert_cmpuint (custom_init_count, ==, 1);
++
++  g_type_query (custom_type, &query);
++  g_assert_cmpuint (query.class_size, ==, sizeof (GParamSpecClass));
++  derived_type = g_type_register_static_simple (custom_type, "GParamInt2Derived",
++                                                sizeof (GParamSpecClass) + sizeof (gpointer), NULL,
++                                                sizeof (GParamSpecInt), param_derived_init, 0);
++  pspec = g_param_spec_internal (derived_type, "derived", NULL, NULL, G_PARAM_READWRITE);
++  g_assert_cmpuint (custom_init_count, ==, 2);
++  g_assert_cmpuint (derived_init_count, ==, 1);
++  g_assert_cmpint (((GParamSpecInt *) pspec)->default_value, ==, 42);
++  g_assert_true (g_param_spec_ref_sink (pspec) == pspec);
++  g_assert_cmpuint (pspec->ref_count, ==, 1);
+   g_param_spec_unref (pspec);
+ }
+ 

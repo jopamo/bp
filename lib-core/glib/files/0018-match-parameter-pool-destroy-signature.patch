@@ -1,0 +1,82 @@
+Subject: [PATCH] gparam: match the parameter-pool destructor signature
+
+Release pool keys through a GDestroyNotify adapter instead of casting the
+public g_param_spec_unref function. Retain the pool's reference ownership.
+
+Extend the existing pool test to check retained caller references after
+removal and exactly-once destruction of a pool-owned parameter at teardown.
+
+diff --git a/gobject/gparam.c b/gobject/gparam.c
+--- a/gobject/gparam.c
++++ b/gobject/gparam.c
+@@ -972,6 +972,12 @@
+ 	   strcmp (key1->name, key2->name) == 0));
+ }
+ 
++static void
++param_spec_pool_unref (gpointer data)
++{
++  g_param_spec_unref (data);
++}
++
+ /**
+  * g_param_spec_pool_new:
+  * @type_prefixing: Whether the pool will support type-prefixed property names.
+@@ -995,7 +1001,7 @@
+   pool->type_prefixing = type_prefixing != FALSE;
+   pool->hash_table = g_hash_table_new_full (param_spec_pool_hash,
+                                             param_spec_pool_equals,
+-                                            (GDestroyNotify) g_param_spec_unref,
++                                            param_spec_pool_unref,
+                                             NULL);
+ 
+   return pool;
+diff --git a/gobject/tests/param.c b/gobject/tests/param.c
+--- a/gobject/tests/param.c
++++ b/gobject/tests/param.c
+@@ -1720,21 +1720,42 @@
+ }
+ 
+ static void
++pool_spec_destroyed (gpointer data)
++{
++  guint *count = data;
++
++  (*count)++;
++}
++
++static void
+ test_param_spec_pool (void)
+ {
+   GParamSpecPool *pool = g_param_spec_pool_new (FALSE);
+   GParamSpec *pspec = g_param_spec_ref_sink (g_param_spec_int ("int", NULL, NULL, -1, 100, -1, G_PARAM_READWRITE));
+   GParamSpec *check = NULL;
+-
++  GQuark quark = g_quark_from_static_string ("pool-spec-destroyed");
++  guint destroyed = 0;
++
++  g_param_spec_set_qdata_full (pspec, quark, &destroyed, pool_spec_destroyed);
+   g_param_spec_pool_insert (pool, pspec, G_TYPE_OBJECT);
++  g_assert_cmpuint (pspec->ref_count, ==, 2);
+   check = g_param_spec_pool_lookup (pool, "int", G_TYPE_OBJECT, FALSE);
+   g_assert_true (check->owner_type == G_TYPE_OBJECT);
+ 
+   g_param_spec_pool_remove (pool, pspec);
+   g_assert_null (g_param_spec_pool_lookup (pool, "int", G_TYPE_OBJECT, FALSE));
+-
++  g_assert_cmpuint (pspec->ref_count, ==, 1);
++  g_assert_cmpuint (destroyed, ==, 0);
++  g_param_spec_unref (pspec);
++  g_assert_cmpuint (destroyed, ==, 1);
++
++  pspec = g_param_spec_ref_sink (g_param_spec_int ("pooled", NULL, NULL, -1, 100, -1, G_PARAM_READWRITE));
++  g_param_spec_set_qdata_full (pspec, quark, &destroyed, pool_spec_destroyed);
++  g_param_spec_pool_insert (pool, pspec, G_TYPE_OBJECT);
++  g_param_spec_unref (pspec);
++  g_assert_cmpuint (destroyed, ==, 1);
+   g_param_spec_pool_free (pool);
+-  g_param_spec_unref (pspec);
++  g_assert_cmpuint (destroyed, ==, 2);
+ }
+ 
+ int

@@ -1,0 +1,86 @@
+Subject: [PATCH] gtype: adapt interface default initialization
+
+Generate an exact GClassInitFunc adapter for G_DEFINE_INTERFACE instead
+of casting its typed default initializer. Keep the documented one-argument
+user callback and the interface registration/prerequisite rules unchanged.
+
+Extend the existing smoke test to check shared default-interface state,
+a single initializer invocation and stable interface type identity.
+
+diff --git a/gobject/gtype.h b/gobject/gtype.h
+--- a/gobject/gtype.h
++++ b/gobject/gtype.h
+@@ -2359,6 +2359,13 @@
+ \
+ static void     type_name##_default_init        (TypeName##Interface *klass); \
+ \
++static void \
++type_name##_default_init_intern (gpointer klass, \
++                                gpointer class_data G_GNUC_UNUSED) \
++{ \
++  type_name##_default_init ((TypeName##Interface*) klass); \
++} \
++\
+ GType \
+ type_name##_get_type (void) \
+ { \
+@@ -2369,7 +2376,7 @@
+         g_type_register_static_simple (G_TYPE_INTERFACE, \
+                                        g_intern_static_string (#TypeName), \
+                                        sizeof (TypeName##Interface), \
+-                                       (GClassInitFunc)(void (*)(void)) type_name##_default_init, \
++                                       type_name##_default_init_intern, \
+                                        0, \
+                                        (GInstanceInitFunc)NULL, \
+                                        (GTypeFlags) 0); \
+diff --git a/gobject/tests/cxx.cpp b/gobject/tests/cxx.cpp
+--- a/gobject/tests/cxx.cpp
++++ b/gobject/tests/cxx.cpp
+@@ -111,11 +111,32 @@
+ {
+ }
+ 
++typedef struct _CxxTestIface CxxTestIface;
++typedef struct {
++  GTypeInterface parent;
++  guint initialized;
++} CxxTestIfaceInterface;
++
++static guint interface_init_count;
++
++GType cxx_test_iface_get_type (void);
++
++G_DEFINE_INTERFACE (CxxTestIface, cxx_test_iface, G_TYPE_OBJECT)
++
++static void
++cxx_test_iface_default_init (CxxTestIfaceInterface *iface)
++{
++  g_assert_cmpuint (iface->initialized, ==, 0);
++  iface->initialized = 57;
++  interface_init_count++;
++}
++
+ int
+ main (void)
+ {
+   guint i, j;
+   GType types[2];
++  CxxTestIfaceInterface *iface, *iface2;
+   /* Registered dynamic types require the module to remain alive. */
+   GTypeModule *module = (GTypeModule *) g_object_new (cxx_test_module_get_type (), NULL);
+ 
+@@ -140,5 +161,14 @@
+   g_assert_cmpuint (cxx_test_object_get_type (), ==, types[0]);
+   g_assert_cmpuint (cxx_dynamic_object_get_type (), ==, types[1]);
+ 
++  iface = (CxxTestIfaceInterface *) g_type_default_interface_ref (cxx_test_iface_get_type ());
++  iface2 = (CxxTestIfaceInterface *) g_type_default_interface_ref (cxx_test_iface_get_type ());
++  g_assert_true (iface == iface2);
++  g_assert_cmpuint (iface->initialized, ==, 57);
++  g_assert_cmpuint (interface_init_count, ==, 1);
++  g_assert_cmpuint (G_TYPE_FROM_INTERFACE (iface), ==, cxx_test_iface_get_type ());
++  g_type_default_interface_unref (iface2);
++  g_type_default_interface_unref (iface);
++
+   return 0;
+ }

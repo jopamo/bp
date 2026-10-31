@@ -1,0 +1,32 @@
+Subject: [PATCH] tests: use a matching qdata duplication callback
+
+Call g_strdup through an exact GDuplicateFunc adapter instead of casting
+its public signature. Keep the existing copy, ownership and threaded
+qdata assertions unchanged.
+
+diff --git a/gobject/tests/qdata.c b/gobject/tests/qdata.c
+--- a/gobject/tests/qdata.c
++++ b/gobject/tests/qdata.c
+@@ -84,6 +84,13 @@
+   g_object_unref (object);
+ }
+ 
++static gpointer
++dup_string (gpointer data,
++             gpointer user_data)
++{
++  return g_strdup (data);
++}
++
+ static void
+ test_qdata_dup (void)
+ {
+@@ -96,7 +103,7 @@
+   s = g_strdup ("s");
+   g_object_set_qdata_full (object, quark, s, g_free);
+ 
+-  s2 = g_object_dup_qdata (object, quark, (GDuplicateFunc)g_strdup, NULL);
++  s2 = g_object_dup_qdata (object, quark, dup_string, NULL);
+ 
+   g_assert_cmpstr (s, ==, s2);
+   g_assert (s != s2);

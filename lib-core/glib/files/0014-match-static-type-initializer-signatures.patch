@@ -1,0 +1,188 @@
+Subject: [PATCH] gtype: preserve static type initializer callback signatures
+
+Generate class and instance adapters with GClassInitFunc and
+GInstanceInitFunc signatures, then invoke the existing typed user
+initializers directly. Register the adapters without function-pointer
+casts. The dynamic type macro shares the class adapter; update that
+registration and both expansion examples as well.
+
+Extend the C++ smoke test to construct a type twice and check class/instance
+initialization and reference state. Dynamic instance/finalizer and
+interface callbacks are outside this change.
+
+diff --git a/gobject/gtype.h b/gobject/gtype.h
+--- a/gobject/gtype.h
++++ b/gobject/gtype.h
+@@ -2002,12 +2002,16 @@
+  * static void     gtk_gadget_class_init (GtkGadgetClass *klass);
+  * static gpointer gtk_gadget_parent_class = NULL;
+  * static gint     GtkGadget_private_offset;
+- * static void     gtk_gadget_class_intern_init (gpointer klass)
++ * static void     gtk_gadget_class_intern_init (gpointer klass, gpointer class_data G_GNUC_UNUSED)
+  * {
+  *   gtk_gadget_parent_class = g_type_class_peek_parent (klass);
+  *   if (GtkGadget_private_offset != 0)
+  *     g_type_class_adjust_private_offset (klass, &GtkGadget_private_offset);
+  *   gtk_gadget_class_init ((GtkGadgetClass*) klass);
++ * }
++ * static void     gtk_gadget_instance_intern_init (GTypeInstance *instance, gpointer klass G_GNUC_UNUSED)
++ * {
++ *   gtk_gadget_init ((GtkGadget*) instance);
+  * }
+  * static inline gpointer gtk_gadget_get_instance_private (GtkGadget *self)
+  * {
+@@ -2024,9 +2028,9 @@
+  *         g_type_register_static_simple (GTK_TYPE_WIDGET,
+  *                                        g_intern_static_string ("GtkGadget"),
+  *                                        sizeof (GtkGadgetClass),
+- *                                        (GClassInitFunc) gtk_gadget_class_intern_init,
++ *                                        gtk_gadget_class_intern_init,
+  *                                        sizeof (GtkGadget),
+- *                                        (GInstanceInitFunc) gtk_gadget_init,
++ *                                        gtk_gadget_instance_intern_init,
+  *                                        0);
+  *       {
+  *         GtkGadget_private_offset =
+@@ -2256,7 +2260,7 @@
+  */
+ #if GLIB_VERSION_MAX_ALLOWED >= GLIB_VERSION_2_38
+ #define _G_DEFINE_TYPE_EXTENDED_CLASS_INIT(TypeName, type_name) \
+-static void     type_name##_class_intern_init (gpointer klass) \
++static void     type_name##_class_intern_init (gpointer klass, gpointer class_data G_GNUC_UNUSED) \
+ { \
+   type_name##_parent_class = g_type_class_peek_parent (klass); \
+   if (TypeName##_private_offset != 0) \
+@@ -2266,7 +2270,7 @@
+ 
+ #else
+ #define _G_DEFINE_TYPE_EXTENDED_CLASS_INIT(TypeName, type_name) \
+-static void     type_name##_class_intern_init (gpointer klass) \
++static void     type_name##_class_intern_init (gpointer klass, gpointer class_data G_GNUC_UNUSED) \
+ { \
+   type_name##_parent_class = g_type_class_peek_parent (klass); \
+   type_name##_class_init ((TypeName##Class*) klass); \
+@@ -2293,6 +2297,12 @@
+ static gint     TypeName##_private_offset; \
+ \
+ _G_DEFINE_TYPE_EXTENDED_CLASS_INIT(TypeName, type_name) \
++\
++static void \
++type_name##_instance_intern_init (GTypeInstance *instance, gpointer klass G_GNUC_UNUSED) \
++{ \
++  type_name##_init ((TypeName*) instance); \
++} \
+ \
+ G_GNUC_UNUSED \
+ static inline gpointer \
+@@ -2325,9 +2335,9 @@
+         g_type_register_static_simple (TYPE_PARENT, \
+                                        g_intern_static_string (#TypeName), \
+                                        sizeof (TypeName##Class), \
+-                                       (GClassInitFunc)(void (*)(void)) type_name##_class_intern_init, \
++                                       type_name##_class_intern_init, \
+                                        sizeof (TypeName), \
+-                                       (GInstanceInitFunc)(void (*)(void)) type_name##_init, \
++                                       type_name##_instance_intern_init, \
+                                        (GTypeFlags) flags); \
+     { /* custom code follows */
+ #define _G_DEFINE_TYPE_EXTENDED_END()	\
+diff --git a/gobject/gtypemodule.h b/gobject/gtypemodule.h
+--- a/gobject/gtypemodule.h
++++ b/gobject/gtypemodule.h
+@@ -129,7 +129,7 @@
+  * static gpointer gtk_gadget_parent_class = NULL;
+  * static GType    gtk_gadget_type_id = 0;
+  * 
+- * static void     gtk_gadget_class_intern_init (gpointer klass)
++ * static void     gtk_gadget_class_intern_init (gpointer klass, gpointer class_data G_GNUC_UNUSED)
+  * {
+  *   gtk_gadget_parent_class = g_type_class_peek_parent (klass); 
+  *   gtk_gadget_class_init ((GtkGadgetClass*) klass); 
+@@ -148,7 +148,7 @@
+  *     sizeof (GtkGadgetClass),
+  *     (GBaseInitFunc) NULL,
+  *     (GBaseFinalizeFunc) NULL,
+- *     (GClassInitFunc) gtk_gadget_class_intern_init,
++ *     gtk_gadget_class_intern_init,
+  *     (GClassFinalizeFunc) gtk_gadget_class_finalize,
+  *     NULL,   // class_data
+  *     sizeof (GtkGadget),
+@@ -202,7 +202,7 @@
+     sizeof (TypeName##Class), \
+     (GBaseInitFunc) NULL, \
+     (GBaseFinalizeFunc) NULL, \
+-    (GClassInitFunc)(void (*)(void)) type_name##_class_intern_init, \
++    type_name##_class_intern_init, \
+     (GClassFinalizeFunc)(void (*)(void)) type_name##_class_finalize, \
+     NULL,   /* class_data */ \
+     sizeof (TypeName), \
+diff --git a/gobject/tests/cxx.cpp b/gobject/tests/cxx.cpp
+--- a/gobject/tests/cxx.cpp
++++ b/gobject/tests/cxx.cpp
+@@ -16,13 +16,63 @@
+  * along with this library; if not, see <http://www.gnu.org/licenses/>.
+  */
+ 
+-/* A trivial C++ program to be compiled in C++ mode, which
+- * smoketests that the GObject headers are valid C++ headers. */
++/* A C++ smoke test for GObject headers and type-definition callbacks. */
+ 
+ #include <glib-object.h>
+ 
++typedef struct {
++  GObject parent;
++  guint initialized;
++} CxxTestObject;
++
++typedef struct {
++  GObjectClass parent;
++  guint initialized;
++} CxxTestObjectClass;
++
++static guint class_init_count;
++static guint instance_init_count;
++
++GType cxx_test_object_get_type (void);
++
++G_DEFINE_TYPE (CxxTestObject, cxx_test_object, G_TYPE_OBJECT)
++
++static void
++cxx_test_object_class_init (CxxTestObjectClass *klass)
++{
++  g_assert_cmpuint (klass->initialized, ==, 0);
++  klass->initialized = 42;
++  class_init_count++;
++}
++
++static void
++cxx_test_object_init (CxxTestObject *self)
++{
++  CxxTestObjectClass *klass = (CxxTestObjectClass *) G_OBJECT_GET_CLASS (self);
++
++  g_assert_cmpuint (klass->initialized, ==, 42);
++  g_assert_cmpuint (self->initialized, ==, 0);
++  self->initialized = 23;
++  instance_init_count++;
++}
++
+ int
+-main ()
++main (void)
+ {
++  guint i;
++  GType type = cxx_test_object_get_type ();
++
++  for (i = 0; i < 2; i++)
++    {
++      CxxTestObject *object = (CxxTestObject *) g_object_new (type, NULL);
++
++      g_assert_cmpuint (object->initialized, ==, 23);
++      g_assert_cmpuint (object->parent.ref_count, ==, 1);
++      g_assert_cmpuint (cxx_test_object_get_type (), ==, type);
++      g_object_unref (object);
++    }
++  g_assert_cmpuint (class_init_count, ==, 1);
++  g_assert_cmpuint (instance_init_count, ==, 2);
++
+   return 0;
+ }

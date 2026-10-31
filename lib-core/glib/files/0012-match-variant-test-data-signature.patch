@@ -1,0 +1,27 @@
+Subject: [PATCH] gvariant tests: match the data callback signature
+
+Accept gconstpointer in test_fuzzes to match GTestDataFunc, and pass the
+function directly to registration. The encoded percentage is read only.
+Production code and test inputs are unchanged.
+
+diff --git a/glib/tests/gvariant.c b/glib/tests/gvariant.c
+--- a/glib/tests/gvariant.c
++++ b/glib/tests/gvariant.c
+@@ -2490,7 +2490,7 @@
+ 
+ 
+ static void
+-test_fuzzes (gpointer data)
++test_fuzzes (gconstpointer data)
+ {
+   gdouble fuzziness;
+   int i;
+@@ -6064,7 +6064,7 @@
+ 
+       testname = g_strdup_printf ("/gvariant/serialiser/fuzz/%u%%", i);
+       g_test_add_data_func (testname, GINT_TO_POINTER (i),
+-                            (gpointer) test_fuzzes);
++                            test_fuzzes);
+       g_free (testname);
+     }
+ 

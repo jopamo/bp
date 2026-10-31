@@ -1,0 +1,58 @@
+Subject: [PATCH] gdbusmessage: use the typed variant destructor adapter
+
+Release header values through the existing private GDestroyNotify adapter
+instead of casting g_variant_unref. Ownership and header replacement rules
+are unchanged.
+
+Read headers from the copy in the existing copy test, rather than comparing
+the original with itself. Exercise replacement, removal and original-message
+destruction while retaining usable headers in the copy.
+
+diff --git a/gio/gdbusmessage.c b/gio/gdbusmessage.c
+--- a/gio/gdbusmessage.c
++++ b/gio/gdbusmessage.c
+@@ -54,6 +54,7 @@
+ #include "gioerror.h"
+ #include "gdbusprivate.h"
+ #include "gutilsprivate.h"
++#include "glib/gvariant-core.h"
+ 
+ #ifdef G_OS_UNIX
+ #include "gunixfdlist.h"
+@@ -595,7 +596,7 @@
+   message->headers = g_hash_table_new_full (g_direct_hash,
+                                             g_direct_equal,
+                                             NULL,
+-                                            (GDestroyNotify) g_variant_unref);
++                                            _g_variant_unref);
+ }
+ 
+ /**
+diff --git a/gio/tests/gdbus-message.c b/gio/tests/gdbus-message.c
+--- a/gio/tests/gdbus-message.c
++++ b/gio/tests/gdbus-message.c
+@@ -127,7 +127,7 @@
+       GVariant *m_val;
+       GVariant *copy_val;
+       m_val = g_dbus_message_get_header (m, m_headers[n]);
+-      copy_val = g_dbus_message_get_header (m, m_headers[n]);
++      copy_val = g_dbus_message_get_header (copy, m_headers[n]);
+       g_assert (m_val != NULL);
+       g_assert (copy_val != NULL);
+       g_assert_cmpvariant (m_val, copy_val);
+@@ -137,8 +137,14 @@
+   g_free (m_headers);
+   g_free (copy_headers);
+ 
++  g_dbus_message_set_member (m, "Changed");
++  g_assert_cmpstr (g_dbus_message_get_member (copy), ==, "Method");
++  g_dbus_message_set_header (m, G_DBUS_MESSAGE_HEADER_FIELD_MEMBER, NULL);
++  g_assert_null (g_dbus_message_get_member (m));
++  g_assert_cmpstr (g_dbus_message_get_member (copy), ==, "Method");
++  g_object_unref (m);
++  g_assert_cmpstr (g_dbus_message_get_member (copy), ==, "Method");
+   g_object_unref (copy);
+-  g_object_unref (m);
+ }
+ 
+ /* ---------------------------------------------------------------------------------------------------- */

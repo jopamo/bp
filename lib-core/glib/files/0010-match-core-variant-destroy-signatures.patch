@@ -1,0 +1,75 @@
+Subject: [PATCH] gvariant: adapt core destruction callbacks to GDestroyNotify
+
+Use a shared private adapter with a gpointer parameter instead of calling
+g_variant_unref through a cast function pointer. Migrate dictionary values,
+structured-log values and the variant hash test. Each callback still releases
+one reference; the public function and ownership contracts are unchanged.
+
+diff --git a/glib/gvariant-core.h b/glib/gvariant-core.h
+--- a/glib/gvariant-core.h
++++ b/glib/gvariant-core.h
+@@ -24,6 +24,12 @@
+ #include <glib/gvarianttypeinfo.h>
+ #include <glib/gvariant.h>
+ #include <glib/gbytes.h>
++
++static inline void
++_g_variant_unref (gpointer value)
++{
++  g_variant_unref (value);
++}
+ 
+ #if GLIB_SIZEOF_VOID_P == 8
+ # define G_VARIANT_MAX_PREALLOCATED 64
+diff --git a/glib/gvariant.c b/glib/gvariant.c
+--- a/glib/gvariant.c
++++ b/glib/gvariant.c
+@@ -4071,7 +4071,7 @@
+   gchar *key;
+   GVariant *value;
+ 
+-  GVSD(dict)->values = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, (GDestroyNotify) g_variant_unref);
++  GVSD(dict)->values = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, _g_variant_unref);
+   GVSD(dict)->magic = GVSD_MAGIC;
+ 
+   if (from_asv)
+diff --git a/glib/gmessages.c b/glib/gmessages.c
+--- a/glib/gmessages.c
++++ b/glib/gmessages.c
+@@ -62,6 +62,7 @@
+ #include "gthread.h"
+ #include "gthreadprivate.h"
+ #include "gutilsprivate.h"
++#include "gvariant-core.h"
+ 
+ #ifdef HAVE_SYSLOG_H
+ #include <syslog.h>
+@@ -1838,7 +1839,7 @@
+   g_log_structured_array (log_level, (GLogField *) fields_array->data, fields_array->len);
+ 
+   g_array_free (fields_array, TRUE);
+-  g_slist_free_full (values_list, (GDestroyNotify) g_variant_unref);
++  g_slist_free_full (values_list, _g_variant_unref);
+   g_slist_free_full (print_list, g_free);
+ }
+ 
+diff --git a/glib/tests/gvariant.c b/glib/tests/gvariant.c
+--- a/glib/tests/gvariant.c
++++ b/glib/tests/gvariant.c
+@@ -21,6 +21,7 @@
+ #include <string.h>
+ #include <stdlib.h>
+ #include <glib.h>
++#include <glib/gvariant-core.h>
+ 
+ #define BASIC "bynqiuxthdsog?"
+ #define N_BASIC (G_N_ELEMENTS (BASIC) - 1)
+@@ -3816,7 +3817,7 @@
+   gsize i;
+ 
+   table = g_hash_table_new_full (g_variant_hash, g_variant_equal,
+-                                 (GDestroyNotify ) g_variant_unref,
++                                 _g_variant_unref,
+                                  NULL);
+ 
+   for (i = 0; i < G_N_ELEMENTS (items); i++)

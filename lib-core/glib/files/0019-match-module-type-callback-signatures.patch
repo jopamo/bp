@@ -1,0 +1,179 @@
+Subject: [PATCH] gtypemodule: match type and plugin callback signatures
+
+Give the private class and interface initializers the signatures used by
+GType. Adapt GTypePlugin's unuse callback to g_type_module_unuse instead
+of casting that public function.
+
+Exercise a module with no registered types through failed loading, nested
+plugin use/unuse, reloading and final release. Keep module counts and load
+or unload behavior unchanged.
+
+diff --git a/gobject/gtypemodule.c b/gobject/gtypemodule.c
+--- a/gobject/gtypemodule.c
++++ b/gobject/gtypemodule.c
+@@ -82,6 +82,7 @@
+ };
+ 
+ static void g_type_module_use_plugin              (GTypePlugin     *plugin);
++static void g_type_module_unuse_plugin            (GTypePlugin     *plugin);
+ static void g_type_module_complete_type_info      (GTypePlugin     *plugin,
+ 						   GType            g_type,
+ 						   GTypeInfo       *info,
+@@ -123,8 +124,10 @@
+ }
+ 
+ static void
+-g_type_module_class_init (GTypeModuleClass *class)
+-{
++g_type_module_class_init (gpointer g_class,
++                          gpointer class_data)
++{
++  GTypeModuleClass *class = g_class;
+   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
+ 
+   parent_class = G_OBJECT_CLASS (g_type_class_peek_parent (class));
+@@ -134,10 +137,13 @@
+ }
+ 
+ static void
+-g_type_module_iface_init (GTypePluginClass *iface)
+-{
++g_type_module_iface_init (gpointer g_iface,
++                          gpointer iface_data)
++{
++  GTypePluginClass *iface = g_iface;
++
+   iface->use_plugin = g_type_module_use_plugin;
+-  iface->unuse_plugin = (void (*) (GTypePlugin *))g_type_module_unuse;
++  iface->unuse_plugin = g_type_module_unuse_plugin;
+   iface->complete_type_info = g_type_module_complete_type_info;
+   iface->complete_interface_info = g_type_module_complete_interface_info;
+ }
+@@ -153,7 +159,7 @@
+         sizeof (GTypeModuleClass),
+         NULL,           /* base_init */
+         NULL,           /* base_finalize */
+-        (GClassInitFunc) g_type_module_class_init,
++        g_type_module_class_init,
+         NULL,           /* class_finalize */
+         NULL,           /* class_data */
+         sizeof (GTypeModule),
+@@ -162,7 +168,7 @@
+         NULL,           /* value_table */
+       };
+       const GInterfaceInfo iface_info = {
+-        (GInterfaceInitFunc) g_type_module_iface_init,
++        g_type_module_iface_init,
+         NULL,               /* interface_finalize */
+         NULL,               /* interface_data */
+       };
+@@ -324,6 +330,12 @@
+ }
+ 
+ static void
++g_type_module_unuse_plugin (GTypePlugin *plugin)
++{
++  g_type_module_unuse (G_TYPE_MODULE (plugin));
++}
++
++static void
+ g_type_module_complete_type_info (GTypePlugin     *plugin,
+ 				  GType            g_type,
+ 				  GTypeInfo       *info,
+diff --git a/gobject/tests/basics-gobject.c b/gobject/tests/basics-gobject.c
+--- a/gobject/tests/basics-gobject.c
++++ b/gobject/tests/basics-gobject.c
+@@ -473,6 +473,85 @@
+     }
+ }
+ 
++typedef struct
++{
++  GTypeModule parent;
++  gboolean load_succeeds;
++  guint loads;
++  guint unloads;
++} LifecycleModule;
++
++typedef GTypeModuleClass LifecycleModuleClass;
++
++static GType lifecycle_module_get_type (void);
++
++G_DEFINE_TYPE (LifecycleModule, lifecycle_module, G_TYPE_TYPE_MODULE)
++
++static gboolean
++lifecycle_module_load (GTypeModule *module)
++{
++  LifecycleModule *self = (LifecycleModule *) module;
++
++  self->loads++;
++  return self->load_succeeds;
++}
++
++static void
++lifecycle_module_unload (GTypeModule *module)
++{
++  LifecycleModule *self = (LifecycleModule *) module;
++
++  self->unloads++;
++}
++
++static void
++lifecycle_module_class_init (LifecycleModuleClass *class)
++{
++  class->load = lifecycle_module_load;
++  class->unload = lifecycle_module_unload;
++}
++
++static void
++lifecycle_module_init (LifecycleModule *self)
++{
++}
++
++static void
++test_gobject_module_callbacks (void)
++{
++  LifecycleModule *self = g_object_new (lifecycle_module_get_type (), NULL);
++  GTypeModule *module = G_TYPE_MODULE (self);
++  GTypePlugin *plugin = G_TYPE_PLUGIN (self);
++  guint finalized = 0;
++
++  g_object_set_data_full (G_OBJECT (self), "finalized", &finalized, count_finalization);
++  g_type_module_set_name (module, "callback-test");
++  g_assert_false (g_type_module_use (module));
++  g_assert_cmpuint (module->use_count, ==, 0);
++  g_assert_cmpuint (self->loads, ==, 1);
++  g_assert_cmpuint (self->unloads, ==, 0);
++
++  self->load_succeeds = TRUE;
++  g_type_plugin_use (plugin);
++  g_type_plugin_use (plugin);
++  g_assert_cmpuint (module->use_count, ==, 2);
++  g_assert_cmpuint (self->loads, ==, 2);
++  g_type_plugin_unuse (plugin);
++  g_assert_cmpuint (module->use_count, ==, 1);
++  g_assert_cmpuint (self->unloads, ==, 0);
++  g_type_plugin_unuse (plugin);
++  g_assert_cmpuint (module->use_count, ==, 0);
++  g_assert_cmpuint (self->unloads, ==, 1);
++  g_type_plugin_use (plugin);
++  g_type_plugin_unuse (plugin);
++  g_assert_cmpuint (self->loads, ==, 3);
++  g_assert_cmpuint (self->unloads, ==, 2);
++
++  g_assert_cmpuint (finalized, ==, 0);
++  g_object_unref (self);
++  g_assert_cmpuint (finalized, ==, 1);
++}
++
+ int
+ main (int argc, char *argv[])
+ {
+@@ -480,6 +559,7 @@
+ 
+   g_test_add_func ("/gobject/basics", test_gobject_basics);
+   g_test_add_func ("/gobject/inherited-init", test_gobject_inherited_init);
++  g_test_add_func ("/gobject/module-callbacks", test_gobject_module_callbacks);
+ 
+   return g_test_run ();
+ }

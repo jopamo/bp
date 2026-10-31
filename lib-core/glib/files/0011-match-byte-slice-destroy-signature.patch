@@ -1,0 +1,74 @@
+Subject: [PATCH] gbytes: preserve the slice destructor callback signature
+
+Call g_bytes_unref through a gpointer adapter and use the same callback to
+recognize slices when retaining their root. Keep full-range reuse and
+buffer-transfer decisions unchanged.
+
+Extend the existing custom-destructor test to retain a nested slice after
+releasing its root and intermediate view, then verify exactly-once cleanup.
+
+diff --git a/glib/gbytes.c b/glib/gbytes.c
+--- a/glib/gbytes.c
++++ b/glib/gbytes.c
+@@ -239,6 +239,12 @@
+   return (GBytes *)bytes;
+ }
+ 
++static void
++g_bytes_unref_notify (gpointer bytes)
++{
++  g_bytes_unref (bytes);
++}
++
+ /**
+  * g_bytes_new_from_bytes: (constructor) (not method):
+  * @bytes: a [struct@GLib.Bytes]
+@@ -282,7 +288,7 @@
+   /* Avoid referencing intermediate GBytes. In practice, this should
+    * only loop once.
+    */
+-  while (bytes->free_func == (gpointer)g_bytes_unref)
++  while (bytes->free_func == g_bytes_unref_notify)
+     bytes = bytes->user_data;
+ 
+   g_return_val_if_fail (bytes != NULL, NULL);
+@@ -291,7 +297,7 @@
+   g_return_val_if_fail (length <= (gsize) (((gchar *)bytes->data + bytes->size) - base), NULL);
+ 
+   return g_bytes_new_with_free_func (base, length,
+-                                     (GDestroyNotify)g_bytes_unref, g_bytes_ref (bytes));
++                                     g_bytes_unref_notify, g_bytes_ref (bytes));
+ }
+ 
+ /**
+diff --git a/glib/tests/bytes.c b/glib/tests/bytes.c
+--- a/glib/tests/bytes.c
++++ b/glib/tests/bytes.c
+@@ -179,7 +179,7 @@
+ static void
+ test_new_with_free_func (void)
+ {
+-  GBytes *bytes;
++  GBytes *bytes, *slice, *nested;
+   gchar *data;
+   gint count = 0;
+   gsize size;
+@@ -193,6 +193,18 @@
+   g_assert_cmpuint (g_bytes_get_size (bytes), ==, 4);
+ 
+   g_bytes_unref (bytes);
++  g_assert_cmpuint (count, ==, 1);
++
++  count = 0;
++  bytes = g_bytes_new_with_free_func (data, 4, on_destroy_increment, &count);
++  slice = g_bytes_new_from_bytes (bytes, 1, 3);
++  nested = g_bytes_new_from_bytes (slice, 1, 1);
++  g_assert_true (nested->user_data == bytes);
++  g_bytes_unref (bytes);
++  g_bytes_unref (slice);
++  g_assert_cmpuint (count, ==, 0);
++  g_assert_cmpmem (g_bytes_get_data (nested, NULL), g_bytes_get_size (nested), "s", 1);
++  g_bytes_unref (nested);
+   g_assert_cmpuint (count, ==, 1);
+ }
+ 

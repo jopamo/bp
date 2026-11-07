@@ -32,12 +32,16 @@ IUSE="
 "
 
 DEPEND="
-	app-fs/cryptsetup
+	cryptsetup? ( app-fs/cryptsetup )
 	lib-core/libcap-ng
 	cramfs? ( lib-core/zlib )
 	elibc_musl? ( lib-core/musl-bsd )
 	ncurses? ( virtual/curses )
 	readline? ( lib-core/readline )
+"
+
+RDEPEND="
+	cryptsetup? ( app-fs/cryptsetup )
 "
 
 PATCHES=( "${FILESDIR}"/util-linux-musl-bsd-source.patch )

@@ -18,6 +18,7 @@ KEYWORDS="amd64 arm64"
 IUSE="static-libs utils"
 
 DEPEND="virtual/curses[static-libs?]"
+BDEPEND="app-dev/pkgconf"
 
 src_prepare() {
 	default

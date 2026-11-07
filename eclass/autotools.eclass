@@ -28,6 +28,8 @@ if [[ -z ${_AUTOTOOLS_ECLASS} ]] ; then
 		${AUTOCONF_DEPEND}
 		${_libtool_atom}
 	"
+	[[ ${WANT_LIBTOOL:-} != none ]] &&
+		AUTOTOOLS_DEPEND+=" app-build/libtool"
 	RDEPEND=""
 
 	: "${AUTOTOOLS_AUTO_DEPEND:=yes}"

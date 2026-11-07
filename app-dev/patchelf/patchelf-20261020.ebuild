@@ -2,6 +2,8 @@
 
 SNAPSHOT=3e996dbef1fa0658012f8dd290bddcf0302acade
 
+WANT_LIBTOOL="none"
+
 inherit autotools
 
 DESCRIPTION="a simple utility for modifying existing ELF executables and libraries"

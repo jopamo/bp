@@ -1,0 +1,43 @@
+#!/bin/bash
+set -e
+
+repo=$(cd -- "$(dirname -- "$0")/.." && pwd -P)
+inherit() {
+	local name
+	for name; do
+		case ${name} in
+			gnuconfig|libtool) source "${repo}/eclass/${name}.eclass" ;;
+		esac
+	done
+}
+
+(
+	source "${repo}/eclass/libtool.eclass"
+	[[ ${BDEPEND} != *app-core/corepkg* ]]
+)
+(
+	LIBTOOL_AUTO_DEPEND=yes
+	LIBTOOL_DEPEND=app-build/test-eltpatch
+	source "${repo}/eclass/libtool.eclass"
+	[[ ${BDEPEND} == *app-build/test-eltpatch* ]]
+)
+(
+	source "${repo}/eclass/autotools.eclass"
+	[[ ${BDEPEND} == *app-build/libtool* ]]
+	[[ ${BDEPEND} != *app-core/corepkg* ]]
+)
+(
+	LIBTOOL_AUTO_DEPEND=yes
+	LIBTOOL_DEPEND=app-build/test-eltpatch
+	source "${repo}/eclass/autotools.eclass"
+	[[ ${BDEPEND} == *app-build/test-eltpatch* ]]
+	[[ ${BDEPEND} == *app-build/libtool* ]]
+)
+(
+	WANT_LIBTOOL=none
+	source "${repo}/eclass/autotools.eclass"
+	[[ ${BDEPEND} != *app-build/libtool* ]]
+	[[ ${BDEPEND} != *app-core/corepkg* ]]
+)
+
+echo 'PASS: autotools dependencies distinguish libtoolize from eltpatch'

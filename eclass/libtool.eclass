@@ -22,11 +22,14 @@ if [[ -z ${_LIBTOOL_ECLASS:-} ]]; then
 
 	# @ECLASS_VARIABLE: LIBTOOL_AUTO_DEPEND
 	# @DESCRIPTION:
-	# Set to "no" to disable automatic dependency on app-core/corepkg.
-	: "${LIBTOOL_AUTO_DEPEND:=yes}"
-	_libtool_atom=${LIBTOOL_DEPEND}
+	# Corepkg supplies eltpatch as part of the build environment. Requiring
+	# it here makes its own library dependencies depend on Corepkg again.
+	# Set to "yes" to add LIBTOOL_DEPEND for an external provider.
+	: "${LIBTOOL_AUTO_DEPEND:=no}"
+	_libtool_atom=
 
 	if [[ ${LIBTOOL_AUTO_DEPEND} != "no" ]]; then
+		_libtool_atom=${LIBTOOL_DEPEND}
 		BDEPEND+=" ${LIBTOOL_DEPEND}"
 	fi
 

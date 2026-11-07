@@ -10,15 +10,17 @@ LICENSE="CMake"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="vim"
+IUSE="bootstrap vim"
 
 DEPEND="
+    !bootstrap? (
     app-compression/libarchive
     app-dev/pkgconf
     app-net/curl
     lib-core/expat
     lib-core/zlib
     lib-dev/libuv
+    )
 "
 
 cmake_src_bootstrap() {
@@ -116,7 +118,7 @@ endif()\
         's/\bcurl_proxytype\s+HTTPProxyType\s*;/long HTTPProxyType;/' \
         Source/CTest/cmCTestCurl.h || die "curl proxy member type patch failed"
 
-    if ! has_version \>=${CATEGORY}/${PN}-3.10.0 ; then
+    if use bootstrap || ! has_version \>=${CATEGORY}/${PN}-3.10.0 ; then
         CMAKE_MAKEFILE_GENERATOR=emake
         CMAKE_BINARY="${S}/Bootstrap.cmk/cmake"
         cmake_src_bootstrap
@@ -131,19 +133,21 @@ endif()\
 }
 
 src_configure() {
+    local system_libs=$(usex bootstrap OFF ON)
     local mycmakeargs=(
         -DCMAKE_INSTALL_PREFIX="${EPREFIX}"/usr
         -DCMAKE_DATA_DIR=/share/${PN}
         -DSPHINX_MAN=OFF
         -DSPHINX_HTML=OFF
-        -DCMAKE_USE_SYSTEM_LIBARCHIVE=ON
-        -DCMAKE_USE_SYSTEM_LIBRARY_BZIP2=ON
-        -DCMAKE_USE_SYSTEM_LIBRARY_CURL=ON
-        -DCMAKE_USE_SYSTEM_LIBRARY_EXPAT=ON
-        -DCMAKE_USE_SYSTEM_LIBRARY_LIBLZMA=ON
-        -DCMAKE_USE_SYSTEM_LIBRARY_ZLIB=ON
-        -DCMAKE_USE_SYSTEM_LIBUV=ON
+        -DCMAKE_USE_SYSTEM_LIBARCHIVE=${system_libs}
+        -DCMAKE_USE_SYSTEM_LIBRARY_BZIP2=${system_libs}
+        -DCMAKE_USE_SYSTEM_LIBRARY_CURL=${system_libs}
+        -DCMAKE_USE_SYSTEM_LIBRARY_EXPAT=${system_libs}
+        -DCMAKE_USE_SYSTEM_LIBRARY_LIBLZMA=${system_libs}
+        -DCMAKE_USE_SYSTEM_LIBRARY_ZLIB=${system_libs}
+        -DCMAKE_USE_SYSTEM_LIBUV=${system_libs}
     )
+    use bootstrap && mycmakeargs+=( -DCMAKE_USE_OPENSSL=OFF )
 
     cmake_src_configure
 }

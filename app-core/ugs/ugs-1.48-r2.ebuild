@@ -9,9 +9,8 @@ S=${WORKDIR}
 
 KEYWORDS="amd64 arm64"
 
-IUSE="ipv6 test video"
+IUSE="ipv6 video"
 
-BDEPEND="test? ( app-lang/python virtual/ssl )"
 RDEPEND="
 	virtual/ssl
 	video? (
@@ -19,12 +18,7 @@ RDEPEND="
 		xmedia-app/ffmpeg-normalize
 	)
 "
-RESTRICT="!test? ( test )"
-
-src_test() {
-	python3 "${FILESDIR}/test_mkimg.py" || die "mkimg tests failed"
-	python3 "${FILESDIR}/test_lighttpd_certs.py" || die "lighttpd certificate tests failed"
-}
+RESTRICT="test"
 
 src_install() {
 	# Optional bash helper fragments

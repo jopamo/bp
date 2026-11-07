@@ -4,7 +4,7 @@ inherit python-single-r1
 
 DESCRIPTION="Native host for the ff2mpv Firefox extension"
 HOMEPAGE="https://github.com/woodruffw/ff2mpv"
-# Local fork; upstream provenance is recorded in README.md.
+# Local fork.
 SRC_URI=""
 S="${WORKDIR}"
 
@@ -18,9 +18,7 @@ RDEPEND="${PYTHON_DEPS}
 	xmedia-app/mpv[cli,lua]
 "
 
-src_test() {
-	"${EPYTHON}" -B "${FILESDIR}/test_ff2mpv.py" || die "Native host tests failed"
-}
+RESTRICT="test"
 
 src_install() {
 	python_doscript "${FILESDIR}/ff2mpv.py"

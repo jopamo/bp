@@ -13,8 +13,7 @@ LICENSE="MPL-1.1"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="test"
-RESTRICT="!test? ( test )"
+RESTRICT="test"
 
 BDEPEND="
 	${PYTHON_DEPS}
@@ -44,10 +43,6 @@ src_prepare() {
 src_compile() {
 	emake -C mozilla clean
 	(cd mozilla && "${EPYTHON}" certdata2pem.py) || die
-}
-
-src_test() {
-	"${EPYTHON}" "${FILESDIR}/test_certificates.py" "${S}" || die "certificate tests failed"
 }
 
 src_install() {

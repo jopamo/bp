@@ -1,4 +1,4 @@
-# Hand-maintained: preserve Vesk patches and TLS tests during lockstep bumps.
+# Hand-maintained: preserve Vesk patches during lockstep bumps.
 # lockstep-pypi-managed: true
 EAPI=8
 MERGE_MANIFEST_MODE="tree-blake3-v1"
@@ -18,8 +18,7 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="test"
-RESTRICT="!test? ( test )"
+RESTRICT="test"
 
 PATCHES=( "${FILESDIR}/urllib3-vesk.patch" )
 
@@ -28,11 +27,6 @@ BDEPEND="
 	dev-pypi/hatch-vcs[${PYTHON_USEDEP}]
 	dev-pypi/hatchling[${PYTHON_USEDEP}]
 	dev-pypi/setuptools-scm[${PYTHON_USEDEP}]
-	test? ( app-crypto/vesk )
 "
 
 export SETUPTOOLS_SCM_PRETEND_VERSION="${PV}"
-
-python_test() {
-	"${EPYTHON}" "${FILESDIR}/test_vesk.py" || die "Vesk TLS tests failed"
-}

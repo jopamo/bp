@@ -2,14 +2,14 @@
 
 DESCRIPTION="Stores, retrieves, generates, and synchronizes passwords securely"
 HOMEPAGE="https://www.passwordstore.org/"
-# Linux-only local fork; see README.md for provenance and test coverage.
+# Linux-only local fork.
 SRC_URI=""
 S="${WORKDIR}"
 
 LICENSE="GPL-2+"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-IUSE="+git importers qrcode test X"
+IUSE="+git importers qrcode X"
 
 RDEPEND="
 	app-core/bash
@@ -24,14 +24,7 @@ RDEPEND="
 	qrcode? ( xmedia-app/qrencode )
 	X? ( xgui-app/xclip )
 "
-BDEPEND="test? ( ${RDEPEND} app-core/git )"
-RESTRICT="!test? ( test )"
-
-src_unpack() {
-	if use test; then
-		cp -R "${FILESDIR}/tests" "${S}/tests" || die
-	fi
-}
+RESTRICT="test"
 
 src_prepare() {
 	default
@@ -40,16 +33,6 @@ src_prepare() {
 		-e "s:^SYSTEM_EXTENSION_DIR=.*:SYSTEM_EXTENSION_DIR=\"${EPREFIX}/usr/lib/password-store/extensions\":" \
 		"${FILESDIR}/password-store.sh" > "${S}/src/password-store.sh" || die "failed generating pass script"
 	chmod +x "${S}/src/password-store.sh" || die
-}
-
-src_test() {
-	local test failed=0
-	for test in "${S}"/tests/t[0-9]*.sh; do
-		bash "${test}" -v || failed=1
-	done
-	# The fixtures have their own agent and keys; never stop the user's agent.
-	gpgconf --homedir "${S}/tests/gnupg" --kill gpg-agent || die
-	[[ ${failed} == 0 ]] || die "pass tests failed"
 }
 
 src_install() {

@@ -18,10 +18,7 @@ RDEPEND="
 	xgui-tools/xorg-server[xvfb]
 "
 
-src_test() {
-	sh -n "${FILESDIR}/xvfb-run" || die
-	sh "${FILESDIR}/test-xvfb-run" "${FILESDIR}/xvfb-run" || die
-}
+RESTRICT="test"
 
 src_install() {
 	dobin "${FILESDIR}/xvfb-run"

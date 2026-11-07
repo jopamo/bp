@@ -4,7 +4,7 @@ inherit autotools
 
 DESCRIPTION="A maintained ctags implementation"
 HOMEPAGE="https://ctags.io/"
-SNAPSHOT=82494361bb3e7d4f7cf1d2bdc0d0e9001c926e45
+SNAPSHOT=394badef3b67abfab30841ec1ecc541b030fff13
 SRC_URI="https://github.com/universal-ctags/ctags/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
@@ -28,3 +28,5 @@ src_configure() {
 	)
 	econf "${econfargs[@]}"
 }
+
+PATCHES=( "${FILESDIR}/optscript-valgrind.patch" )

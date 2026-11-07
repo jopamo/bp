@@ -1,0 +1,5 @@
+--- a/Tmain/optscript.d/run.sh
++++ b/Tmain/optscript.d/run.sh
+@@ -18 +18 @@
+-if type valgrind > /dev/null 2>&1; then
++if [ "${VG:-0}" = 1 ]; then

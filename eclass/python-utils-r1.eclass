@@ -1363,9 +1363,6 @@ epytest() {
 		# override filterwarnings=error, we do not really want -Werror
 		# for end users, as it tends to fail on new warnings from deps
 		-Wdefault
-		# however, do error out if the package failed to load
-		# an appropriate async plugin
-		-Werror::pytest.PytestUnhandledCoroutineWarning
 		# override color output
 		"--color=${color}"
 		# count is more precise when we're dealing with a large number
@@ -1377,6 +1374,11 @@ epytest() {
 		-o tmp_path_retention_count=0
 		-o tmp_path_retention_policy=failed
 	)
+
+	# New pytest versions fail unhandled async tests without this warning class.
+	if "${EPYTHON}" -c 'import pytest, sys; sys.exit(not hasattr(pytest, "PytestUnhandledCoroutineWarning"))'; then
+		args+=( -Werror::pytest.PytestUnhandledCoroutineWarning )
+	fi
 
 	if [[ ! ${PYTEST_DISABLE_PLUGIN_AUTOLOAD-} ]]; then
 		args+=(

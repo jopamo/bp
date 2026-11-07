@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-MINOR_VERSION="10156-f737b826c"
+MINOR_VERSION="11079-b3b13e506"
 _FULL_VERSION="${PV}.${MINOR_VERSION}"
 
 URI="https://downloads.plex.tv/plex-media-server-new"

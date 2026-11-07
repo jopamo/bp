@@ -1,0 +1,13 @@
+# Temporary feature reductions for the first source-built toolchain.
+app-build/gettext -acl
+app-build/m4 -nls
+app-build/texinfo -nls
+app-dev/cmake bootstrap
+app-dev/pkgconf build -static-libs
+app-lang/perl build -gdbm
+app-lang/python -ssl -sqlite -readline -ncurses
+app-core/util-linux -cryptsetup -cryptsetup-dlopen -systemd -python -pylibmount
+app-core/procps -systemd
+app-core/dbus -systemd
+app-fs/cryptsetup -udev
+app-fs/lvm2 -systemd -udev

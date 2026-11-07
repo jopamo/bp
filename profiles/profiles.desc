@@ -16,3 +16,7 @@ arm64           core/arm64/glibc/debug           stable
 arm64           core/arm64/musl                  stable
 arm64           core/arm64/musl/gui              stable
 arm64           core/arm64/musl/debug            stable
+
+# Temporary native bootstrap profiles, not final system profiles.
+amd64           bootstrap/amd64/musl            dev
+arm64           bootstrap/arm64/musl            dev

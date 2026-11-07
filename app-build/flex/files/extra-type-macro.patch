@@ -1,15 +1,3 @@
-diff --git a/src/cpp-flex.skl b/src/cpp-flex.skl
---- a/src/cpp-flex.skl
-+++ b/src/cpp-flex.skl
-@@ -1188,6 +1188,6 @@
--m4_ifdef( [[M4_EXTRA_TYPE_DEFS]],
-+m4_ifdef( [[M4_MODE_EXTRA_TYPE]],
- [[
--#define YY_EXTRA_TYPE M4_EXTRA_TYPE_DEFS
-+#define YY_EXTRA_TYPE M4_MODE_EXTRA_TYPE
- ]],
- [[
- #ifndef YY_EXTRA_TYPE
 diff --git a/tests/yyextra_nr.l b/tests/yyextra_nr.l
 --- a/tests/yyextra_nr.l
 +++ b/tests/yyextra_nr.l

@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-SNAPSHOT=77f7c9eeaf4db796232abdc722ca343e5e4c9837
+SNAPSHOT=2826e0cc63aeae2b2d3d96265a56d800fe15abdc
 
 inherit autotools qa-policy
 
@@ -25,8 +25,8 @@ BDEPEND="
 "
 
 PATCHES=(
-	"${FILESDIR}/header-section-three.patch"
 	"${FILESDIR}/extra-type-macro.patch"
+	"${FILESDIR}/gettext-disabled-nls.patch"
 )
 
 src_prepare() {

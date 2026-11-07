@@ -1,0 +1,10 @@
+--- a/src/flexdef.h
++++ b/src/flexdef.h
+@@ -89,2 +89,3 @@
+ #include <strings.h>
++#include "gettext.h"
+ #include "flexint.h"
+@@ -98,3 +99,2 @@
+ #endif /* HAVE_LOCALE_H */
+-#include "gettext.h"
+ #define _(String) gettext (String)

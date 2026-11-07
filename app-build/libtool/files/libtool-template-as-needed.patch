@@ -1,0 +1,10 @@
+Reference both libraries from the template fixture executable so that
+--as-needed retains liba when both libraries are shared.
+
+--- a/tests/template.at
++++ b/tests/template.at
+@@ -206,3 +206,3 @@
+   char *t = &d;
+-  return b(foo) + a3(&foo) + b2(t) - a(s)
++  return b(foo) + a3(&foo) + b2(t) - a2(s)
+          - (sizeof(double) + sizeof(double*));

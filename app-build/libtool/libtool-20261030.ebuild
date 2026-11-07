@@ -1,11 +1,11 @@
 # Distributed under the terms of the GNU General Public License v2
 
-SNAPSHOT=4f47d5565ff3324c3d300a2ae318c9f9981af227
-LIBTOOL_VERSION=2.6.0.14
+SNAPSHOT=181de9efcf38425a4d04561134615343dc893fcb
+LIBTOOL_VERSION=2.6.2.6
 # Upstream generates .serial from `git log --pretty=oneline | wc -l` when
 # making a dist tarball. GitHub snapshots omit that file, so seed the snapshot
 # with the serial for this commit to keep ltversion.m4 valid for aclocal.
-LIBTOOL_SERIAL=2036
+LIBTOOL_SERIAL=4553
 LIBTOOL_BOOTSTRAP_SNAPSHOT=a42785aaa63db8a824292f87bc1a3f8863942601
 
 DESCRIPTION="A shared library tool for developers"
@@ -76,6 +76,7 @@ src_prepare() {
 
 	eapply "${FILESDIR}/libtool-subproject-macro-path.patch"
 	eapply "${FILESDIR}/libtool-test-fixtures.patch"
+	eapply "${FILESDIR}/libtool-template-as-needed.patch"
 
 	sed -i '/^AM_INIT_AUTOMAKE/a AM_MAINTAINER_MODE([disable])' configure.ac || die
 	sed -i '/^AM_INIT_AUTOMAKE/a AM_MAINTAINER_MODE([disable])' libltdl/configure.ac || die

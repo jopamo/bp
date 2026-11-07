@@ -1,5 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
+QA_POLICY_RPATH_CLEAN=0
 inherit qa-policy
 
 DESCRIPTION="GNU macro processor"
@@ -10,7 +11,9 @@ LICENSE="GPL-3+ FDL-1.3+"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-BDEPEND="app-build/gettext"
+IUSE="+nls"
+
+BDEPEND="nls? ( app-build/gettext )"
 
 src_configure() {
 	qa-policy-configure
@@ -18,7 +21,7 @@ src_configure() {
 	# Disable automagic dependency over libsigsegv; see bug #278026
 	export ac_cv_libsigsegv=no
 
-	econf --enable-changeword
+	econf --enable-changeword $(use_enable nls)
 }
 
 src_test() {

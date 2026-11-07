@@ -10,7 +10,7 @@ LICENSE="GPL-3+ FDL-1.3+"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="static test"
+IUSE="+nls static test"
 
 DEPEND="virtual/curses"
 RDEPEND="
@@ -18,7 +18,7 @@ RDEPEND="
 	app-lang/perl
 "
 BDEPEND="
-	app-build/gettext
+	nls? ( app-build/gettext )
 	test? ( app-lang/perl )
 "
 
@@ -26,7 +26,7 @@ src_configure() {
 	qa-policy-configure
 	use static && append-ldflags -static
 
-	local myconf=( --disable-perl-xs )
+	local myconf=( --disable-perl-xs $(use_enable nls) )
 	econf "${myconf[@]}"
 }
 

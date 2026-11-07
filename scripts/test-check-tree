@@ -64,6 +64,18 @@ with tempfile.TemporaryDirectory(prefix="bp-check-tree-test.") as tmp:
     assert result.returncode == 0, result.stdout
     with (selected / "summary.tsv").open() as stream:
         assert len(list(csv.DictReader(stream, delimiter="\t"))) == 1
+    for packages in ([], ["cat/good"]):
+        system = root / ("system-and-package" if packages else "system")
+        result = subprocess.run(
+            [helper, "--profile", "core/amd64/glibc", "--system",
+             "--output", system, *packages],
+            env=env, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, timeout=15,
+        )
+        assert result.returncode == 0, result.stdout
+        with (system / "summary.tsv").open() as stream:
+            rows = {row["atom"]: row for row in csv.DictReader(stream, delimiter="\t")}
+        assert set(rows) == ({"@system", "=cat/good-1::bp"} if packages else {"@system"}), rows
+        assert rows["@system"]["log"] == "logs/system.log", rows
     rejected = root / "rejected"
     result = subprocess.run(
         [helper, "--output", rejected, "--sync"],

@@ -103,6 +103,7 @@ def prepare_environment(repo, profile, output, cache_dir=None):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("packages", nargs="*", help="category/package or relative ebuild path (default: every ebuild)")
+    parser.add_argument("--system", action="store_true", help="also resolve the profile's @system set (alone if no packages are given)")
     parser.add_argument("--profile", default=os.environ.get("BP_TEST_PROFILE"))
     parser.add_argument("--jobs", type=positive_int, default=4)
     parser.add_argument("--timeout", type=positive_int, default=180, help="seconds per ebuild (default: 180)")
@@ -116,8 +117,15 @@ def main():
         profile = (repo / "profiles" / (args.profile or default_profile())).resolve()
         if not profile.is_relative_to(repo / "profiles") or not profile.is_dir():
             raise ValueError("profile must be a directory under this repository's profiles/")
-        ebuilds = select_ebuilds(repo, args.packages)
-        if not ebuilds:
+        ebuilds = select_ebuilds(repo, args.packages) if args.packages or not args.system else []
+        targets = [
+            (f"={path.relative_to(repo).parts[0]}/{path.stem}::bp",
+             path.relative_to(repo).with_suffix(".log"))
+            for path in ebuilds
+        ]
+        if args.system:
+            targets.append(("@system", Path("system.log")))
+        if not targets:
             raise ValueError("no ebuilds selected")
     except ValueError as error:
         parser.error(str(error))
@@ -141,19 +149,18 @@ def main():
         "--color=n", "--nospinner", "--quiet",
     ]
     (output / "invocation.txt").write_text(
-        f"profile: {profile}\nUSE: {env['USE']}\ntargets: {len(ebuilds)}\n"
-        f"command: {shlex.join(command)} <exact-atom>\n"
+        f"profile: {profile}\nUSE: {env['USE']}\ntargets: {len(targets)}\n"
+        f"command: {shlex.join(command)} <target>\n"
     )
-    print(f"check-tree: {len(ebuilds)} ebuilds; profile={profile.relative_to(repo)}", flush=True)
+    print(f"check-tree: {len(targets)} targets; profile={profile.relative_to(repo)}", flush=True)
     print(f"check-tree: results={output}", flush=True)
     active = set()
     lock = threading.Lock()
     stopped = threading.Event()
 
-    def check(path):
-        relative = path.relative_to(repo)
-        atom = f"={relative.parts[0]}/{path.stem}::bp"
-        log = output / "logs" / relative.with_suffix(".log")
+    def check(target):
+        atom, log_path = target
+        log = output / "logs" / log_path
         log.parent.mkdir(parents=True, exist_ok=True)
         started = time.monotonic()
         with log.open("w") as stream:
@@ -183,7 +190,7 @@ def main():
     results = []
     executor = ThreadPoolExecutor(max_workers=args.jobs)
     try:
-        futures = [executor.submit(check, path) for path in ebuilds]
+        futures = [executor.submit(check, target) for target in targets]
         with (output / "summary.tsv").open("w") as stream:
             writer = csv.writer(stream, delimiter="\t")
             writer.writerow(("atom", "status", "exit_code", "seconds", "log"))
@@ -192,8 +199,8 @@ def main():
                 results.append(result)
                 writer.writerow(result)
                 stream.flush()
-                if result[1] != "PASS" or len(results) % 100 == 0 or len(results) == len(ebuilds):
-                    print(f"[{len(results)}/{len(ebuilds)}] {result[1]} {result[0]}", flush=True)
+                if result[1] != "PASS" or len(results) % 100 == 0 or len(results) == len(targets):
+                    print(f"[{len(results)}/{len(targets)}] {result[1]} {result[0]}", flush=True)
     finally:
         stopped.set()
         with lock:

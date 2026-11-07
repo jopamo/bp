@@ -4,7 +4,7 @@ inherit autotools qa-policy
 
 DESCRIPTION="Library implementing the SSH2 protocol"
 HOMEPAGE="http://www.libssh2.org/"
-SNAPSHOT=6e7b2076a6ced2230968b27ee7c1abb77fe5a88d
+SNAPSHOT=6125bfe552b3a8c7340c2fb3b82cdf65b0e16f9d
 SRC_URI="https://github.com/libssh2/libssh2/archive/${SNAPSHOT}.tar.gz -> libssh2-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/libssh2-${SNAPSHOT}"
 
@@ -31,9 +31,6 @@ src_prepare() {
 }
 
 src_configure() {
-	# Disable tests that require extra permissions (bug #333319)
-	use test && local -x ac_cv_path_SSHD=
-
 	local crypto
 	if use gcrypt; then
 		crypto=libgcrypt
@@ -42,7 +39,18 @@ src_configure() {
 	fi
 
 	qa-policy-configure
-	ECONF_SOURCE="${S}" econf --with-crypto=${crypto}
+	local myconf=(
+		--with-crypto=${crypto}
+		--disable-docker-tests
+		--disable-sshd-tests
+	)
+	# The standalone test links internal symbols from the static archive.
+	if use static-libs || use test; then
+		myconf+=( --enable-static )
+	else
+		myconf+=( --disable-static )
+	fi
+	ECONF_SOURCE="${S}" econf "${myconf[@]}"
 }
 
 src_install() {

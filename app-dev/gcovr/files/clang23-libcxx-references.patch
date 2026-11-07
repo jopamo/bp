@@ -1,0 +1,229 @@
+--- a/tests/decisions/reference/decisions/clang-23-libcxx/coverage_summary.json
++++ b/tests/decisions/reference/decisions/clang-23-libcxx/coverage_summary.json
+@@ -28,3 +28,3 @@
+-            "branch_total": 2,
+-            "branch_covered": 1,
+-            "branch_percent": 50.0,
++            "branch_total": 0,
++            "branch_covered": 0,
++            "branch_percent": null,
+@@ -57,2 +57,2 @@
+-    "branch_total": 99,
+-    "branch_covered": 51,
++    "branch_total": 97,
++    "branch_covered": 50,
+--- a/tests/decisions/reference/decisions/clang-23-libcxx/coverage.json
++++ b/tests/decisions/reference/decisions/clang-23-libcxx/coverage.json
+@@ -2538,16 +2538 @@
+-                    "branches": [
+-                        {
+-                            "branchno": 0,
+-                            "count": 1,
+-                            "fallthrough": false,
+-                            "throw": false,
+-                            "source_block_id": 0
+-                        },
+-                        {
+-                            "branchno": 1,
+-                            "count": 0,
+-                            "fallthrough": false,
+-                            "throw": false,
+-                            "source_block_id": 0
+-                        }
+-                    ],
++                    "branches": [],
+@@ -2583 +2568 @@
+-                    "blocks_percent": 50.0
++                    "blocks_percent": 100.0
+--- a/tests/decisions/reference/decisions/clang-23-libcxx/coverage.functions.html
++++ b/tests/decisions/reference/decisions/clang-23-libcxx/coverage.functions.html
+@@ -55,2 +55,2 @@
+-    <div role="gridcell" class="color-fg-muted d-flex flex-justify-end flex-wrap col-2">50.0%</div>
+-    <div role="gridcell" class="color-fg-muted d-flex flex-justify-end flex-wrap col-2">50.0%</div>
++    <div role="gridcell" class="color-fg-muted d-flex flex-justify-end flex-wrap col-2">-%</div>
++    <div role="gridcell" class="color-fg-muted d-flex flex-justify-end flex-wrap col-2">100.0%</div>
+--- a/tests/decisions/reference/decisions/clang-23-libcxx/coverage.html
++++ b/tests/decisions/reference/decisions/clang-23-libcxx/coverage.html
+@@ -50 +50 @@
+-        <div class="mr-2" style="margin: auto;">51 / 99</div>
++        <div class="mr-2" style="margin: auto;">50 / 97</div>
+@@ -138,5 +138,2 @@
+-    <div role="gridcell" class="color-fg-muted d-flex flex-justify-end flex-wrap col-1-5 gcovr-m-l-5" data-sort="50.0">
+-      <span class="text-small color-fg-muted mr-2">1 / 2</span>
+-      <div class="Label--minw">
+-        <span class="Label mr-1 Label--coverage-low">50.0%</span>
+-      </div>
++    <div role="gridcell" class="color-fg-muted d-flex flex-justify-end flex-wrap col-1-5 gcovr-m-l-5" data-sort="-">
++      <span class="text-small color-fg-muted mr-2">-</span>
+--- a/tests/decisions/reference/decisions/clang-23-libcxx/coverage.switch_test.cpp.f9d04ab32823b132a649349d5b0d4f03.html
++++ b/tests/decisions/reference/decisions/clang-23-libcxx/coverage.switch_test.cpp.f9d04ab32823b132a649349d5b0d4f03.html
+@@ -50,2 +50,2 @@
+-        <div class="mr-2" style="margin: auto;">1 / 2</div>
+-        <div class="Label--minw"><span class="coverage-low IssueLabel color-fg-on-emphasis mr-1">50.0%</span></div>
++        <div class="mr-2" style="margin: auto;">-</div>
++        <div class="Label--minw"><span class="coverage-unknown IssueLabel color-fg-on-emphasis mr-1">-%</span></div>
+@@ -84,2 +84,2 @@
+-    <div role="gridcell" class="color-fg-muted d-flex flex-justify-end flex-wrap col-2">50.0%</div>
+-    <div role="gridcell" class="color-fg-muted d-flex flex-justify-end flex-wrap col-2">50.0%</div>
++    <div role="gridcell" class="color-fg-muted d-flex flex-justify-end flex-wrap col-2">-%</div>
++    <div role="gridcell" class="color-fg-muted d-flex flex-justify-end flex-wrap col-2">100.0%</div>
+@@ -103,2 +103 @@
+-      <button type="button" class="button_toggle_coveredLine show_coveredLine" value="coveredLine" title="Toggle covered lines">3 covered</button>
+-      <button type="button" class="button_toggle_partialCoveredLine show_partialCoveredLine" value="partialCoveredLine" title="Toggle partial covered lines">1 partial covered</button>
++      <button type="button" class="button_toggle_coveredLine show_coveredLine" value="coveredLine" title="Toggle covered lines">4 covered</button>
+@@ -160,12 +159,5 @@
+-          <details class="normal details-overlay">
+-            <summary>1/2</summary>
+-            <div class="text-left position-absolute color-bg-subtle p-3 mt-2" style="z-index: 1;">
+-              <div class="color-taken-branch">&check; Branch 0 taken 1 time.</div>
+-              <div class="color-fg-danger">&cross; Branch 1 not taken.</div>
+-            </div>
+-          </details>
+-        </td>
+-        <td class="text-right src linenos ws-unset">
+-        </td>
+-        <td class="linecount partialCoveredLine show_partialCoveredLine pr-2 pl-2 color-fg-muted text-right">1</td>
+-        <td class="src partialCoveredLine show_partialCoveredLine"><span class="n">SwitchTestIssue783</span><span class="o">::</span><span class="n">SwitchTestIssue783</span><span class="p">()</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">_name</span><span class="p">(</span><span class="s">"test"</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span></td>
++        </td>
++        <td class="text-right src linenos ws-unset">
++        </td>
++        <td class="linecount coveredLine show_coveredLine pr-2 pl-2 color-fg-muted text-right">1</td>
++        <td class="src coveredLine show_coveredLine"><span class="n">SwitchTestIssue783</span><span class="o">::</span><span class="n">SwitchTestIssue783</span><span class="p">()</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">_name</span><span class="p">(</span><span class="s">"test"</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span></td>
+--- a/tests/decisions/reference/decisions/clang-23-libcxx/coverage_summary.txt
++++ b/tests/decisions/reference/decisions/clang-23-libcxx/coverage_summary.txt
+@@ -3 +3 @@
+-branches: 51.5% (51 out of 99)
++branches: 51.5% (50 out of 97)
+--- a/tests/decisions/reference/decisions/clang-23-libcxx/coverage_uncovered_summary.txt
++++ b/tests/decisions/reference/decisions/clang-23-libcxx/coverage_uncovered_summary.txt
+@@ -3 +3 @@
+-branches: 51.5% (51 out of 99)
++branches: 51.5% (50 out of 97)
+--- a/tests/decisions/reference/decisions-neg-delta/clang-23-libcxx/coverage.json
++++ b/tests/decisions/reference/decisions-neg-delta/clang-23-libcxx/coverage.json
+@@ -45,16 +45 @@
+-                    "branches": [
+-                        {
+-                            "branchno": 0,
+-                            "count": 1,
+-                            "fallthrough": false,
+-                            "throw": false,
+-                            "source_block_id": 0
+-                        },
+-                        {
+-                            "branchno": 1,
+-                            "count": 0,
+-                            "fallthrough": false,
+-                            "throw": false,
+-                            "source_block_id": 0
+-                        }
+-                    ],
++                    "branches": [],
+@@ -131 +116 @@
+-                    "blocks_percent": 80.0
++                    "blocks_percent": 100.0
+--- a/tests/decisions/reference/decisions-neg-delta/clang-23-libcxx/coverage.html
++++ b/tests/decisions/reference/decisions-neg-delta/clang-23-libcxx/coverage.html
+@@ -50,2 +50,2 @@
+-        <div class="mr-2" style="margin: auto;">4 / 6</div>
+-        <div class="Label--minw"><span class="coverage-low IssueLabel color-fg-on-emphasis mr-1">66.7%</span></div>
++        <div class="mr-2" style="margin: auto;">3 / 4</div>
++        <div class="Label--minw"><span class="coverage-medium IssueLabel color-fg-on-emphasis mr-1">75.0%</span></div>
+@@ -101,2 +101,2 @@
+-    <div role="gridcell" class="color-fg-muted d-flex flex-justify-end flex-wrap col-1-5 gcovr-m-l-5" data-sort="66.7">
+-      <span class="text-small color-fg-muted mr-2">4 / 6</span>
++    <div role="gridcell" class="color-fg-muted d-flex flex-justify-end flex-wrap col-1-5 gcovr-m-l-5" data-sort="75.0">
++      <span class="text-small color-fg-muted mr-2">3 / 4</span>
+@@ -104 +104 @@
+-        <span class="Label mr-1 Label--coverage-low">66.7%</span>
++        <span class="Label mr-1 Label--coverage-medium">75.0%</span>
+--- a/tests/decisions/reference/decisions-neg-delta/clang-23-libcxx/coverage.functions.html
++++ b/tests/decisions/reference/decisions-neg-delta/clang-23-libcxx/coverage.functions.html
+@@ -55,2 +55,2 @@
+-    <div role="gridcell" class="color-fg-muted d-flex flex-justify-end flex-wrap col-2">66.7%</div>
+-    <div role="gridcell" class="color-fg-muted d-flex flex-justify-end flex-wrap col-2">80.0%</div>
++    <div role="gridcell" class="color-fg-muted d-flex flex-justify-end flex-wrap col-2">75.0%</div>
++    <div role="gridcell" class="color-fg-muted d-flex flex-justify-end flex-wrap col-2">100.0%</div>
+--- a/tests/decisions/reference/decisions-neg-delta/clang-23-libcxx/coverage.main.cpp.118fcbaaba162ba17933c7893247df3a.html
++++ b/tests/decisions/reference/decisions-neg-delta/clang-23-libcxx/coverage.main.cpp.118fcbaaba162ba17933c7893247df3a.html
+@@ -50,2 +50,2 @@
+-        <div class="mr-2" style="margin: auto;">4 / 6</div>
+-        <div class="Label--minw"><span class="coverage-low IssueLabel color-fg-on-emphasis mr-1">66.7%</span></div>
++        <div class="mr-2" style="margin: auto;">3 / 4</div>
++        <div class="Label--minw"><span class="coverage-medium IssueLabel color-fg-on-emphasis mr-1">75.0%</span></div>
+@@ -84,2 +84,2 @@
+-    <div role="gridcell" class="color-fg-muted d-flex flex-justify-end flex-wrap col-2">66.7%</div>
+-    <div role="gridcell" class="color-fg-muted d-flex flex-justify-end flex-wrap col-2">80.0%</div>
++    <div role="gridcell" class="color-fg-muted d-flex flex-justify-end flex-wrap col-2">75.0%</div>
++    <div role="gridcell" class="color-fg-muted d-flex flex-justify-end flex-wrap col-2">100.0%</div>
+@@ -103,2 +103,2 @@
+-      <button type="button" class="button_toggle_coveredLine show_coveredLine" value="coveredLine" title="Toggle covered lines">7 covered</button>
+-      <button type="button" class="button_toggle_partialCoveredLine show_partialCoveredLine" value="partialCoveredLine" title="Toggle partial covered lines">2 partial covered</button>
++      <button type="button" class="button_toggle_coveredLine show_coveredLine" value="coveredLine" title="Toggle covered lines">8 covered</button>
++      <button type="button" class="button_toggle_partialCoveredLine show_partialCoveredLine" value="partialCoveredLine" title="Toggle partial covered lines">1 partial covered</button>
+@@ -192,12 +192,5 @@
+-          <details class="normal details-overlay">
+-            <summary>1/2</summary>
+-            <div class="text-left position-absolute color-bg-subtle p-3 mt-2" style="z-index: 1;">
+-              <div class="color-taken-branch">&check; Branch 0 taken 1 time.</div>
+-              <div class="color-fg-danger">&cross; Branch 1 not taken.</div>
+-            </div>
+-          </details>
+-        </td>
+-        <td class="text-right src linenos ws-unset">
+-        </td>
+-        <td class="linecount partialCoveredLine show_partialCoveredLine pr-2 pl-2 color-fg-muted text-right">1</td>
+-        <td class="src partialCoveredLine show_partialCoveredLine"><span class="w">      </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">tmp</span><span class="p">{</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">};</span></td>
++        </td>
++        <td class="text-right src linenos ws-unset">
++        </td>
++        <td class="linecount coveredLine show_coveredLine pr-2 pl-2 color-fg-muted text-right">1</td>
++        <td class="src coveredLine show_coveredLine"><span class="w">      </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">tmp</span><span class="p">{</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">};</span></td>
+--- a/tests/noncode/reference/clang-23-libcxx/coverage.json
++++ b/tests/noncode/reference/clang-23-libcxx/coverage.json
+@@ -10 +10 @@
+-                    "count": 1,
++                    "count": 2,
+@@ -17 +17 @@
+-                    "count": 1,
++                    "count": 2,
+@@ -28 +28 @@
+-                            "count": 0,
++                            "count": 1,
+@@ -35 +35 @@
+-                            "count": 0,
++                            "count": 1,
+@@ -42 +42 @@
+-                            "count": 1,
++                            "count": 0,
+@@ -53,0 +54,22 @@
++                    "branches": [
++                        {
++                            "branchno": 0,
++                            "count": 0,
++                            "fallthrough": false,
++                            "throw": false,
++                            "source_block_id": 0
++                        },
++                        {
++                            "branchno": 1,
++                            "count": 1,
++                            "fallthrough": false,
++                            "throw": false,
++                            "source_block_id": 0
++                        }
++                    ],
++                    "gcovr/md5": "7dca543db65aeb09385b27737ebed8b3"
++                },
++                {
++                    "line_number": 12,
++                    "function_name": "main",
++                    "count": 2,
+@@ -55 +77 @@
+-                    "gcovr/md5": "7dca543db65aeb09385b27737ebed8b3"
++                    "gcovr/md5": "cbb184dd8e05c9709e5dcaedaa0495cf"
+@@ -62,2 +84,2 @@
+-                    "execution_count": 1,
+-                    "blocks_percent": 37.0
++                    "execution_count": 2,
++                    "blocks_percent": 33.0

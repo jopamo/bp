@@ -25,8 +25,8 @@ RDEPEND+="
 # lockstep-pypi-deps: end
 
 BDEPEND="
-	dev-pypi/flit-core[${PYTHON_USEDEP}]
 	dev-pypi/installer[${PYTHON_USEDEP}]
+	dev-pypi/flit-core[${PYTHON_USEDEP}]
 "
 
 python_compile() {

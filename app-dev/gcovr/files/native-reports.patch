@@ -1,0 +1,21 @@
+--- a/src/gcovr/formats/html/write.py
++++ b/src/gcovr/formats/html/write.py
+@@ -480,2 +480,2 @@
+-                cdata.properties["sourcefile"] = str(
+-                    cdata.properties["sourcefile"]
++                cdata.properties["sourcefile"] = os.path.basename(
++                    str(cdata.properties["sourcefile"])
+--- a/tests/conftest.py
++++ b/tests/conftest.py
+@@ -143,0 +144,11 @@
++
++if IS_LINUX and not IS_GCC:
++    cxx_macros = subprocess.run(
++        [CXX, "-dM", "-E", "-x", "c++", "-include", "version", "-"],
++        input="", capture_output=True, text=True, check=True,
++    ).stdout
++    if re.search(r"^#define _LIBCPP_VERSION ", cxx_macros, re.MULTILINE):
++        _REFERENCE_DIR_VERSION_LIST = [
++            variant for reference in _REFERENCE_DIR_VERSION_LIST
++            for variant in (reference, f"{reference}-libcxx")
++        ]

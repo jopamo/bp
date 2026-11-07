@@ -1,5 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
+QA_POLICY_RPATH_CLEAN=0
 inherit flag-o-matic toolchain-funcs qa-policy
 
 MAINPV=1.0.8

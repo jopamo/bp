@@ -15,7 +15,8 @@ _QA_POLICY_ECLASS=1
 
 inherit qa-report qa-linker qa-lto qa-archive qa-shebang qa-perms qa-symlink qa-rpath qa-pkgconfig qa-elf
 
-BDEPEND+=" app-dev/patchelf"
+# RPATH assertions use readelf; only rewriting needs patchelf.
+[[ ${QA_POLICY_RPATH_CLEAN:-1} == 0 ]] || BDEPEND+=" app-dev/patchelf"
 
 _qa-policy-relpath() {
 	local file=$1

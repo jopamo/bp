@@ -2,6 +2,7 @@
 
 BRANCH_NAME="develop"
 
+QA_POLICY_RPATH_CLEAN=0
 inherit toolchain-funcs qa-policy
 
 DESCRIPTION="zlib-ng compression library with the zlib-compatible API"

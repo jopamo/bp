@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-SNAPSHOT=6d66fba22dc2ccd988958c47eb76646a92e58572
+SNAPSHOT=e6bc9245d3ebc3a6eee7c34167c1f17dcb780b36
 SHORT=${SNAPSHOT:0:7}
 
 inherit autotools qa-policy
@@ -17,8 +17,6 @@ KEYWORDS="amd64 arm64"
 IUSE="static-libs"
 
 DEPEND="lib-core/libgpg-error"
-
-PATCHES=( "${FILESDIR}/${PN}-20261023-unimplemented-recp-ident.patch" )
 
 src_prepare() {
 	qa-policy-configure

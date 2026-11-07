@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-inherit python-r1 autotools flag-o-matic prefix qa-policy
+inherit autotools flag-o-matic prefix qa-policy
 
 DESCRIPTION="Version 2 of the library to manipulate XML files"
 HOMEPAGE="http://www.xmlsoft.org/"
@@ -14,14 +14,11 @@ KEYWORDS="amd64 arm64"
 
 IUSE="icu lzma readline static-libs"
 
-REQUIRED_USE="${PYTHON_REQUIRED_USE}"
-
 RDEPEND="
 	lib-core/zlib
 	icu? ( lib-dev/icu )
 	lzma? ( app-compression/xz-utils )
 	readline? ( lib-core/readline )
-	${PYTHON_DEPS}
 "
 
 src_prepare() {
@@ -40,7 +37,7 @@ src_configure() {
 		$(use_enable static-libs static)
 		$(use_with readline)
 		$(use_with readline history)
-		--with-python=${PYTHON}
+		--without-python
 	)
 		ECONF_SOURCE="${S}" econf "${myconf[@]}"
 }

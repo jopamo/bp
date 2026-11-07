@@ -37,9 +37,9 @@ DEPEND="
 	app-compression/bzip2
 	app-compression/xz-utils
 	app-lang/python-exec
+	lib-core/expat
 	lib-core/libffi
 	lib-core/zlib
-	lib-net/libnsl
 	libedit? ( lib-core/libedit )
 	ncurses? ( virtual/curses )
 	readline? ( lib-core/readline )
@@ -48,7 +48,10 @@ DEPEND="
 	tk? ( app-lang/tk )
 "
 
-BDEPEND="app-build/autoconf-archive"
+BDEPEND="
+	app-build/autoconf-archive
+	app-dev/pkgconf
+"
 
 PYVER=${SLOT%/*}
 
@@ -149,7 +152,7 @@ src_configure() {
 		--with-pkg-config=yes
 		--with-platlibdir=lib
 		--with-system-expat
-		--with-system-libmpdec
+		--without-system-libmpdec
 		--with-wheel-pkg-dir="${EPREFIX}"/usr/lib/python/ensurepip
 		--without-ensurepip
 		--without-static-libpython

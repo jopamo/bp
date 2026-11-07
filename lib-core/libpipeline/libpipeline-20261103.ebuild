@@ -5,7 +5,7 @@ inherit qa-policy gl
 DESCRIPTION="a pipeline manipulation library"
 HOMEPAGE="http://libpipeline.nongnu.org/"
 
-SNAPSHOT=08844b33bd0c77c7567caf1641f3aa48045f3e3b
+SNAPSHOT=65a525c549fe7135cd3034218e5844b9cf430695
 SRC_URI="https://gitlab.com/libpipeline/libpipeline/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

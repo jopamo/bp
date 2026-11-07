@@ -12,17 +12,20 @@ LICENSE="|| ( Artistic GPL-1+ )"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="debug gdbm"
+IUSE="build debug gdbm"
 
 DEPEND="
 	gdbm? ( lib-core/gdbm )
+	!build? ( virtual/libcrypt )
 	app-compression/bzip2
 	lib-core/zlib
 "
 
 PDEPEND="
-	app-tex/docbookz
-	app-core/help2man
+	!build? (
+		app-tex/docbookz
+		app-core/help2man
+	)
 "
 
 src_prepare() {
@@ -37,6 +40,12 @@ src_prepare() {
 	chmod +w "${S}"/*.c 2>/dev/null
 
 	default
+	if ! use gdbm; then
+		sed -i '/^libswanted=/s/ gdbm / /' Configure || die
+	fi
+	if use build; then
+		sed -i '/^libswanted=/s/ crypt / /' Configure || die
+	fi
 
 	rm -rf cpan/Compress-Raw-Zlib/zlib-src
 	rm -rf cpan/Compress-Raw-Bzip2/bzip2-src
@@ -107,6 +116,8 @@ src_configure() {
 		-Ud_off64_t
 		-Duse64bitint
 	)
+	use gdbm || common_args+=( -Dnoextensions=GDBM_File )
+	use build && common_args+=( -Ud_crypt )
 
 	if [[ ${CBUILD} != ${CHOST} ]]; then
 		./configure \

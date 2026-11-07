@@ -1,0 +1,67 @@
+Compare localized output with the platform locale data rather than a fixed
+list of translations. Musl can accept locale names without installed data,
+and musl-locales uses different abbreviations from glibc.
+
+--- a/test/chrono-test.cc
++++ b/test/chrono-test.cc
+@@ -783,9 +783,9 @@
+   if (loc != std::locale::classic()) {
+-    auto saturdays = std::vector<std::string>{"sáb", "sá.", "sáb."};
+-    EXPECT_THAT(saturdays, Contains(fmt::format(loc, "{:L}", sat)));
+-    EXPECT_THAT(saturdays, Contains(fmt::format(loc, "{:L%a}", sat)));
+-    EXPECT_THAT(saturdays, Contains(fmt::format(loc, "{:L%a}", tm)));
++    auto saturday = system_strftime("%a", &tm, &loc);
++    EXPECT_EQ(saturday, fmt::format(loc, "{:L}", sat));
++    EXPECT_EQ(saturday, fmt::format(loc, "{:L%a}", sat));
++    EXPECT_EQ(saturday, fmt::format(loc, "{:L%a}", tm));
+     // Without an explicit locale the global one is used.
+-    EXPECT_THAT(saturdays, Contains(fmt::format("{:L}", sat)));
+-    EXPECT_THAT(saturdays, Contains(fmt::format("{:L%a}", tm)));
++    EXPECT_EQ(saturday, fmt::format("{:L}", sat));
++    EXPECT_EQ(saturday, fmt::format("{:L%a}", tm));
+   }
+@@ -1176,6 +1176,8 @@
+   if (loc != std::locale::classic()) {
+-    auto months = std::vector<std::string>{"ene.", "ene"};
+-    EXPECT_THAT(months, Contains(fmt::format(loc, "{:L}", month)));
+-    EXPECT_THAT(months, Contains(fmt::format(loc, "{:L%b}", month)));
+-    EXPECT_THAT(months, Contains(fmt::format("{:L}", month)));
++    auto tm = std::tm();
++    tm.tm_mon = 0;
++    auto january = system_strftime("%b", &tm, &loc);
++    EXPECT_EQ(january, fmt::format(loc, "{:L}", month));
++    EXPECT_EQ(january, fmt::format(loc, "{:L%b}", month));
++    EXPECT_EQ(january, fmt::format("{:L}", month));
+   }
+--- a/test/unicode-test.cc
++++ b/test/unicode-test.cc
+@@ -39,5 +39,6 @@
+   auto wd = os.str();
+-  if (wd == "??") {
+-    EXPECT_EQ(s, "Дзень тыдня: ??");
+-    fmt::print("std::locale gives ?? as a weekday.\n");
++  // A missing locale can use C locale data instead of throwing.
++  if (wd == "??" || wd == "Mon") {
++    EXPECT_EQ(s, "Дзень тыдня: " + wd);
++    fmt::print("std::locale gives {} as a weekday.\n", wd);
+     return;
+--- a/test/xchar-test.cc
++++ b/test/xchar-test.cc
+@@ -10,2 +10,4 @@
+ #include <complex>
++#include <iomanip>
++#include <sstream>
+ #include <vector>
+@@ -424,6 +426,8 @@
+   if (loc != std::locale::classic()) {
+-    // L'\341' is 'á'.
+-    auto saturdays =
+-        std::vector<std::wstring>{L"s\341b", L"s\341.", L"s\341b."};
+-    EXPECT_THAT(saturdays, Contains(fmt::format(loc, L"{:L}", sat)));
++    auto tm = std::tm();
++    tm.tm_wday = static_cast<int>(sat.c_encoding());
++    auto os = std::wostringstream();
++    os.imbue(loc);
++    os << std::put_time(&tm, L"%a");
++    EXPECT_EQ(os.str(), fmt::format(loc, L"{:L}", sat));
+   }

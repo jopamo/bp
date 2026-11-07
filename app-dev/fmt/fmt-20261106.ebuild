@@ -4,10 +4,12 @@ inherit cmake
 
 DESCRIPTION="A modern formatting library"
 HOMEPAGE="https://github.com/fmtlib/fmt"
-SNAPSHOT=88a0ae2020a22c6ced639703b72ad4fd8d9ae1d4
+SNAPSHOT=47fcd357ab6a9583f2307d1f78fdd674060efe61
 SRC_URI="https://github.com/fmtlib/fmt/archive/${SNAPSHOT}.tar.gz -> fmt-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/fmt-${SNAPSHOT}"
 
 LICENSE="apache"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+PATCHES=( "${FILESDIR}/platform-locales.patch" )

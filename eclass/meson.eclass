@@ -39,10 +39,12 @@ _MESON_ECLASS=1
 
 inherit flag-o-matic multiprocessing ninja-utils python-utils-r1 toolchain-funcs
 
-BDEPEND+="
+MESON_DEPEND="
 	>=app-dev/meson-1.2.3
 	${NINJA_DEPEND-}
 "
+# Mixed build systems can add MESON_DEPEND conditionally.
+[[ ${MESON_OPTIONAL:-0} == 1 ]] || BDEPEND+=" ${MESON_DEPEND}"
 
 # @ECLASS_VARIABLE: BUILD_DIR
 # @DEFAULT_UNSET

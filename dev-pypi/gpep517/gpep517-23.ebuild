@@ -5,7 +5,7 @@ MERGE_MANIFEST_MODE="tree-blake3-v1"
 
 PYTHON_COMPAT=( python3_{11..14} )
 
-DISTUTILS_USE_PEP517="flit"
+DISTUTILS_USE_PEP517="no"
 
 inherit distutils-r1
 
@@ -26,4 +26,13 @@ RDEPEND+="
 
 BDEPEND="
 	dev-pypi/flit-core[${PYTHON_USEDEP}]
+	dev-pypi/installer[${PYTHON_USEDEP}]
 "
+
+python_compile() {
+	"${EPYTHON}" -m flit_core.wheel --outdir "${BUILD_DIR}" || die
+	"${EPYTHON}" -m installer --destdir "${BUILD_DIR}/install" \
+		--prefix "${EPREFIX}/usr" \
+		--compile-bytecode 0 --compile-bytecode 1 --compile-bytecode 2 \
+		"${BUILD_DIR}"/*.whl || die
+}

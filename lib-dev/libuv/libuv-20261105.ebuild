@@ -4,7 +4,7 @@ inherit autotools qa-policy
 
 DESCRIPTION="Cross-platform asynchronous I/O and event loop library (libuv)"
 HOMEPAGE="https://github.com/libuv/libuv"
-SNAPSHOT=19bbf90e1a7a1526da6daa1c79eec2e3ff8b6c55
+SNAPSHOT=9e40720a0cdfd99970eacc43b39fa1404c6df38d
 SRC_URI="https://github.com/libuv/libuv/archive/${SNAPSHOT}.tar.gz -> libuv-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/libuv-${SNAPSHOT}"
 

@@ -1,7 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 inherit flag-o-matic
-SNAPSHOT=d7f55275b4e7b704cac4f36994c9267c7b2cd25e
+SNAPSHOT=b9ee8f239125ede03b7367e9a6da75701596b792
 
 DESCRIPTION="Tools and library to manipulate EFI variables"
 HOMEPAGE="https://github.com/rhboot/efivar"

@@ -4,8 +4,8 @@ inherit cmake qa-policy toolchain-funcs user
 
 DESCRIPTION="High-performance inference of large language models (llama.cpp)"
 HOMEPAGE="https://github.com/ggml-org/llama.cpp"
-SNAPSHOT=b3fa69955ea81c3b60e77e3c1e2224c4a826ffb9
-UI_VERSION=b11871
+SNAPSHOT=372dc5ca157276beb6c67b2e92477e8d662e964a
+UI_VERSION=b12199
 SRC_URI="
 	https://github.com/ggml-org/llama.cpp/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz
 	https://github.com/ggml-org/llama.cpp/releases/download/${UI_VERSION}/llama-${UI_VERSION}-ui.tar.gz

@@ -3,8 +3,8 @@ EAPI=8
 MERGE_MANIFEST_MODE="tree-blake3-v1"
 
 CRATE_NAME="speedate"
-CRATE_VERSION="0.17.0"
-CRATE_CHECKSUM="aba069c070b5e213f2a094deb7e5ed50ecb092be36102a4f4042e8d2056d060e"
+CRATE_VERSION="0.18.0"
+CRATE_CHECKSUM="da8f8c5f7f7ea2811a17f99bca4fec7f9ef0b0734713a5cbfc9baee203eba8eb"
 CRATE_SOURCE="registry+https://github.com/rust-lang/crates.io-index"
 CRATE_SOURCE_KIND="registry"
 
@@ -15,3 +15,8 @@ HOMEPAGE="https://github.com/pydantic/speedate/"
 LICENSE="MIT"
 SLOT="${PV}"
 KEYWORDS="amd64 arm64"
+
+CARGO_CRATE_FEATURES=(
+	"default"
+	"std"
+)

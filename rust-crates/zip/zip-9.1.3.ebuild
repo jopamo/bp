@@ -3,8 +3,8 @@ EAPI=8
 MERGE_MANIFEST_MODE="tree-blake3-v1"
 
 CRATE_NAME="zip"
-CRATE_VERSION="8.5.1"
-CRATE_CHECKSUM="dcab981e19633ebcf0b001ddd37dd802996098bc1864f90b7c5d970ce76c1d59"
+CRATE_VERSION="9.1.3"
+CRATE_CHECKSUM="1156b39d142a34b999c2310a50455e0cb3760bf7efad0122f796d813bee26ccb"
 CRATE_SOURCE="registry+https://github.com/rust-lang/crates.io-index"
 CRATE_SOURCE_KIND="registry"
 
@@ -20,6 +20,7 @@ CARGO_CRATE_FEATURES=(
 	"_arbitrary"
 	"_bzip2_any"
 	"_deflate-any"
+	"_miri_compatible_features"
 	"aes-crypto"
 	"bzip2"
 	"bzip2-rs"
@@ -32,7 +33,7 @@ CARGO_CRATE_FEATURES=(
 	"deflate-flate2-zlib-ng-compat"
 	"deflate-flate2-zlib-rs"
 	"deflate-zopfli"
-	"deprecated-time"
+	"getrandom"
 	"jiff-02"
 	"legacy-zip"
 	"lzma"
@@ -41,4 +42,5 @@ CARGO_CRATE_FEATURES=(
 	"time"
 	"unreserved"
 	"xz"
+	"zstd"
 )

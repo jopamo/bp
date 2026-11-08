@@ -82,7 +82,7 @@ CARGO_DEPS="
 	rust-crates/cyclonedx-bom-0.8.1
 	rust-crates/cyclonedx-bom-macros-0.1.0
 	rust-crates/data-encoding-2.10.0
-	rust-crates/der-0.8.0
+	rust-crates/der-0.8.3
 	rust-crates/deranged-0.5.8
 	rust-crates/dialoguer-0.12.0
 	rust-crates/diff-0.1.13
@@ -179,10 +179,10 @@ CARGO_DEPS="
 	rust-crates/litrs-1.0.0
 	rust-crates/lock_api-0.4.14
 	rust-crates/log-0.4.29
-	rust-crates/lzma-rust2-0.16.2
+	rust-crates/lzma-rust2-0.23.0
 	rust-crates/lzma-sys-0.1.20
 	rust-crates/lzxd-0.2.6
-	rust-crates/mailparse-0.16.1
+	rust-crates/mailparse-0.18.0
 	rust-crates/matchers-0.2.0
 	rust-crates/memchr-2.8.0
 	rust-crates/memmap2-0.9.11
@@ -194,7 +194,7 @@ CARGO_DEPS="
 	rust-crates/miniz_oxide-0.8.9
 	rust-crates/msi-0.10.0
 	rust-crates/native-tls-0.2.18
-	rust-crates/nix-0.31.2
+	rust-crates/nix-0.31.3
 	rust-crates/nom-8.0.0
 	rust-crates/normalize-line-endings-0.3.0
 	rust-crates/normpath-1.5.0
@@ -240,7 +240,7 @@ CARGO_DEPS="
 	rust-crates/purl-0.1.6
 	rust-crates/pyo3-introspection-0.30.1
 	rust-crates/pyproject-toml-0.13.7
-	rust-crates/python-pkginfo-0.6.8
+	rust-crates/python-pkginfo-0.7.0
 	rust-crates/quote-1.0.45
 	rust-crates/quoted_printable-0.5.2
 	rust-crates/r-efi-5.3.0
@@ -357,6 +357,7 @@ CARGO_DEPS="
 	rust-crates/trycmd-1.2.0
 	rust-crates/twox-hash-2.1.2
 	rust-crates/typed-path-0.12.3
+	rust-crates/typed-path-0.13.0
 	rust-crates/typenum-1.20.0
 	rust-crates/unicase-2.9.0
 	rust-crates/unicode-ident-1.0.24
@@ -467,13 +468,14 @@ CARGO_DEPS="
 	rust-crates/zerotrie-0.2.4
 	rust-crates/zerovec-0.11.6
 	rust-crates/zerovec-derive-0.11.3
-	rust-crates/zip-8.5.1
+	rust-crates/zip-8.6.0
+	rust-crates/zip-9.1.3
 	rust-crates/zlib-rs-0.6.3
 	rust-crates/zmij-1.0.21
 	rust-crates/zopfli-0.8.3
-	rust-crates/zstd-0.13.3
-	rust-crates/zstd-safe-7.2.4
-	rust-crates/zstd-sys-2.0.16+zstd.1.5.7
+	rust-crates/zstd-0.14.3
+	rust-crates/zstd-safe-8.2.0
+	rust-crates/zstd-sys-2.1.2+zstd.1.5.7
 "
 # lockstep-cargo-deps: end
 DISTUTILS_USE_PEP517=setuptools
@@ -487,7 +489,7 @@ RDEPEND=""
 # lockstep-pypi-deps: end
 DESCRIPTION="Build and publish crates with pyo3, rust-cpython and cffi bindings"
 HOMEPAGE="https://www.maturin.rs/"
-SNAPSHOT=f2cefaa061c79c500f4660c1e34f75d4eb0a5321
+SNAPSHOT=fe3ae413bae518dd625479af01824e82e733cd83
 SRC_URI="https://github.com/PyO3/maturin/archive/${SNAPSHOT}.tar.gz -> maturin-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/maturin-${SNAPSHOT}"
 

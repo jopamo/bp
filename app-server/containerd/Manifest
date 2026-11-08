@@ -1,4 +1,4 @@
-DIST containerd-ede35b7720b6d5c3aa1a2f27dffc13c52f8fe3c1.tar.gz 12246957 BLAKE3 6715e14ae43ed0d83ba06e0dbe2f8155e8627aac6c827a453688946e5371cfd4
+DIST containerd-00477f22802490155912250161b5e7c20924a3c1.tar.gz 12272283 BLAKE3 acb025be37eb8277ffb92d6a4be8b314094b38ee4e6ff2d9db8187d9b3efaf97
 DIST cyphar.com%2Fgo-pathrs%2F@v%2Fv0.2.5.mod 123 BLAKE3 801f343e3d726d0172b5084f2a35d5371ec6df7fe7710c66a52fda9661771daf
 DIST cyphar.com%2Fgo-pathrs%2F@v%2Fv0.2.5.zip 22948 BLAKE3 159fa5ca90f24f2408f3ef5f9b88121625fe9786f63e1881ce81212e508717c4
 DIST dario.cat%2Fmergo%2F@v%2Fv1.0.2.mod 32 BLAKE3 5581e71d159e125c529abafc03bb84998f992d9f4383f98eaa619ab33d9b8070
@@ -186,8 +186,8 @@ DIST github.com%2Fjsimonetti%2Frtnetlink%2Fv2%2F@v%2Fv2.0.1.mod 440 BLAKE3 b4b88
 DIST github.com%2Fjsimonetti%2Frtnetlink%2Fv2%2F@v%2Fv2.0.1.zip 448564 BLAKE3 8c2a213b17383a67303229031cf5f8f62504d4476fd6d12ef3bb7aa52fb02a51
 DIST github.com%2Fjson-iterator%2Fgo%2F@v%2Fv1.1.12.mod 267 BLAKE3 0ff9e719c5febd3fb02d09c3f9d3b420b6c17b38691094cd49cfdc154a3ebd36
 DIST github.com%2Fjson-iterator%2Fgo%2F@v%2Fv1.1.12.zip 139706 BLAKE3 e3e908c9184ad895e1f6f76ab7bba90052c1ba627d1d6d6d0887a06217ed3f97
-DIST github.com%2Fklauspost%2Fcompress%2F@v%2Fv1.20.0.mod 201 BLAKE3 72627bc948036dd6707cf57aab8b38b544497f3eed5ee0b2d866f4bfb7680976
-DIST github.com%2Fklauspost%2Fcompress%2F@v%2Fv1.20.0.zip 40063352 BLAKE3 a6035bde5752167fd4b7c65edf0ade7dbfb0a580459bfbd1ed4a4d303bd69164
+DIST github.com%2Fklauspost%2Fcompress%2F@v%2Fv1.20.3.mod 201 BLAKE3 72627bc948036dd6707cf57aab8b38b544497f3eed5ee0b2d866f4bfb7680976
+DIST github.com%2Fklauspost%2Fcompress%2F@v%2Fv1.20.3.zip 40367092 BLAKE3 b42fde7756dac8513e7ad794dd09ac3913724bde8932eb6a085f2d5e613c4604
 DIST github.com%2Fknqyf263%2Fgo-plugin%2F@v%2Fv0.9.0.mod 360 BLAKE3 fa904acc0a6d7a33237c583991ac639ac74d5d7fd5f4d98957e9c525d9a3d33d
 DIST github.com%2Fknqyf263%2Fgo-plugin%2F@v%2Fv0.9.0.zip 3174383 BLAKE3 a8073e704de33aab20403932ca2354f1843c6cc1dbd288901612b6ce4f3888f3
 DIST github.com%2Fkr%2Fpretty%2F@v%2Fv0.3.1.mod 117 BLAKE3 c42e31e5170ec489d0aeb82a743ed4c7d0768a2d15436fbff3a13fb380fa671c
@@ -420,8 +420,8 @@ DIST google.golang.org%2Fgenproto%2Fgoogleapis%2Fapi%2F@v%2Fv0.0.0-2026082522180
 DIST google.golang.org%2Fgenproto%2Fgoogleapis%2Fapi%2F@v%2Fv0.0.0-20260825221802-da73d73af1c5.zip 241053 BLAKE3 c0bf9a2c132266fe14e895155091f9ad9566c174a414cf6dc8bc5636452929f0
 DIST google.golang.org%2Fgenproto%2Fgoogleapis%2Frpc%2F@v%2Fv0.0.0-20260825221802-da73d73af1c5.mod 105 BLAKE3 badbdfe34dca474339de26871e35692deab545ef33dfe1c30234c0b160d5d553
 DIST google.golang.org%2Fgenproto%2Fgoogleapis%2Frpc%2F@v%2Fv0.0.0-20260825221802-da73d73af1c5.zip 40889 BLAKE3 40afd0aff1b30e4e61cef601267215a5c93a2ded5d9a7cfb5ac012f990185c4f
-DIST google.golang.org%2Fgrpc%2F@v%2Fv1.83.2.mod 2099 BLAKE3 7dcb20e07e982966ae336e937e5d4d5381cc5acdbd1fc40eab9231da780144c2
-DIST google.golang.org%2Fgrpc%2F@v%2Fv1.83.2.zip 3002440 BLAKE3 91c0d30f27d3042c2726587de7081a8000b1b243018b5c415247c4680ecb3de5
+DIST google.golang.org%2Fgrpc%2F@v%2Fv1.85.0.mod 1764 BLAKE3 bfefcf34c3de71f6ccb78b53f7c87d31fb95ceee89b7328a584a0f039f5913c7
+DIST google.golang.org%2Fgrpc%2F@v%2Fv1.85.0.zip 3165341 BLAKE3 5ad8eb4716527eec700b6af74c1e0bfc1e615a26483d1cb11956480f0521525b
 DIST google.golang.org%2Fprotobuf%2F@v%2Fv1.36.12.mod 124 BLAKE3 ba9268489048a47fba4c6c79a719fb52855573b0b3cbd41e057201c1dd78bf23
 DIST google.golang.org%2Fprotobuf%2F@v%2Fv1.36.12.zip 2354385 BLAKE3 1e16504b8d1aaae5a50481f29d41210b7111221bb887287aee277bdd39aceba4
 DIST gopkg.in%2Fevanphx%2Fjson-patch.v4%2F@v%2Fv4.13.0.mod 38 BLAKE3 5623c0e17a283a28df0661a258166d58fae9d06130b69b318acd61352cee4c2e

@@ -6,7 +6,7 @@ inherit go-module
 
 DESCRIPTION="A daemon to control runC"
 HOMEPAGE="https://containerd.io/"
-SNAPSHOT=ede35b7720b6d5c3aa1a2f27dffc13c52f8fe3c1
+SNAPSHOT=00477f22802490155912250161b5e7c20924a3c1
 SRC_URI="https://github.com/containerd/containerd/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 # lockstep-go-managed: true
 # lockstep-go-deps: begin
@@ -198,8 +198,8 @@ EGO_SUM=(
 	"github.com/jsimonetti/rtnetlink/v2 v2.0.1/go.mod"
 	"github.com/json-iterator/go v1.1.12"
 	"github.com/json-iterator/go v1.1.12/go.mod"
-	"github.com/klauspost/compress v1.20.0"
-	"github.com/klauspost/compress v1.20.0/go.mod"
+	"github.com/klauspost/compress v1.20.3"
+	"github.com/klauspost/compress v1.20.3/go.mod"
 	"github.com/knqyf263/go-plugin v0.9.0"
 	"github.com/knqyf263/go-plugin v0.9.0/go.mod"
 	"github.com/kr/pretty v0.3.1"
@@ -432,8 +432,8 @@ EGO_SUM=(
 	"google.golang.org/genproto/googleapis/api v0.0.0-20260825221802-da73d73af1c5/go.mod"
 	"google.golang.org/genproto/googleapis/rpc v0.0.0-20260825221802-da73d73af1c5"
 	"google.golang.org/genproto/googleapis/rpc v0.0.0-20260825221802-da73d73af1c5/go.mod"
-	"google.golang.org/grpc v1.83.2"
-	"google.golang.org/grpc v1.83.2/go.mod"
+	"google.golang.org/grpc v1.85.0"
+	"google.golang.org/grpc v1.85.0/go.mod"
 	"google.golang.org/protobuf v1.36.12"
 	"google.golang.org/protobuf v1.36.12/go.mod"
 	"gopkg.in/evanphx/json-patch.v4 v4.13.0"

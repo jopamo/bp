@@ -1,7 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 BRANCH_NAME="snapshot"
-SNAPSHOT=b07ef573a88491382335cdd5a0f985281b522796
+SNAPSHOT=2cf8157351a736621122a74adfd6c722ae961f6c
 PATCHES=(
 	"${FILESDIR}"/perf-handle-pruned-rust-demangler.patch
 	"${FILESDIR}"/perf-handle-pruned-syscall-tables.patch
@@ -95,7 +95,6 @@ src_compile() {
 		ARCH=${perf_arch}
 		CC="$(tc-getCC)"
 		CXX="$(tc-getCXX)"
-		EXTLIBS="-lstdc++"
 		WERROR=0
 		KBUILD_BUILD_TIMESTAMP="${perf_timestamp}"
 		# this snapshot's rust-backed test workload is broken and rust support
@@ -160,7 +159,6 @@ src_install() {
 		ARCH=${perf_arch}
 		CC="$(tc-getCC)"
 		CXX="$(tc-getCXX)"
-		EXTLIBS="-lstdc++"
 		WERROR=0
 		KBUILD_BUILD_TIMESTAMP="${perf_timestamp}"
 		# keep install in lockstep with compile feature selection

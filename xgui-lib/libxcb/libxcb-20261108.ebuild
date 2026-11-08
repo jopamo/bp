@@ -4,7 +4,7 @@ inherit autotools qa-policy
 
 DESCRIPTION="X C-language Bindings library"
 HOMEPAGE="https://xcb.freedesktop.org/"
-SNAPSHOT=d4e07bab5729c7d7cc3d2b95568cd9a661a53c4f
+SNAPSHOT=0be1b59324900cef08247a9f62636967d9298ebf
 SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libxcb/-/archive/${SNAPSHOT}/libxcb-${SNAPSHOT}.tar.bz2 -> libxcb-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/libxcb-${SNAPSHOT}"
 

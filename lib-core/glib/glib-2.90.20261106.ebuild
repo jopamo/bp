@@ -6,7 +6,7 @@ inherit meson flag-o-matic qa-policy
 
 DESCRIPTION="The GLib 2.90 library of C routines"
 HOMEPAGE="https://www.gtk.org/"
-SNAPSHOT=d809ccfe206949d2a9fffe50a2d1e8760263a028
+SNAPSHOT=2e89ad7634c950c69e9ca87de138a42da4136091
 GVDB_SNAPSHOT=2b42fc75f09dbe1cd1057580b5782b08f2dcb400
 # lockstep-gitlink: GVDB_SNAPSHOT SNAPSHOT subprojects/gvdb
 SRC_URI="

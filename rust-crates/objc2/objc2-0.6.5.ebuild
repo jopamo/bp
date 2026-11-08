@@ -1,0 +1,49 @@
+# lockstep-managed: cargo-crate
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
+
+CRATE_NAME="objc2"
+CRATE_VERSION="0.6.5"
+CRATE_CHECKSUM="08849bbd4767dfae9457696856ae1c84fe4e0281bbe4a7abff2d0e06fb7981f8"
+CRATE_SOURCE="registry+https://github.com/rust-lang/crates.io-index"
+CRATE_SOURCE_KIND="registry"
+
+inherit cargo-crate
+
+DESCRIPTION="Objective-C interface and runtime bindings"
+HOMEPAGE="https://github.com/madsmtm/objc2"
+LICENSE="MIT"
+SLOT="${PV}"
+KEYWORDS="amd64 arm64"
+
+CARGO_CRATE_FEATURES=(
+	"alloc"
+	"catch-all"
+	"default"
+	"disable-encoding-assertions"
+	"exception"
+	"gnustep-1-7"
+	"gnustep-1-8"
+	"gnustep-1-9"
+	"gnustep-2-0"
+	"gnustep-2-1"
+	"objc2-proc-macros"
+	"relax-sign-encoding"
+	"relax-void-encoding"
+	"std"
+	"unstable-apple-new"
+	"unstable-arbitrary-self-types"
+	"unstable-autoreleasesafe"
+	"unstable-coerce-pointee"
+	"unstable-compiler-rt"
+	"unstable-darwin-objc"
+	"unstable-gnustep-strict-apple-compat"
+	"unstable-objfw"
+	"unstable-requires-macos"
+	"unstable-static-class"
+	"unstable-static-class-inlined"
+	"unstable-static-sel"
+	"unstable-static-sel-inlined"
+	"unstable-winobjc"
+	"verify"
+)

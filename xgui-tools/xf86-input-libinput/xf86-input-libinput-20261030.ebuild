@@ -4,7 +4,7 @@ inherit linux-info autotools flag-o-matic
 
 DESCRIPTION="X.org input driver based on libinput"
 HOMEPAGE="https://www.x.org"
-SNAPSHOT=36b7c8d1fc27ccc582cfa55c26fcf03525d2664a
+SNAPSHOT=7fb6bd7a6945fb69820a2b307f6eae413f0114c9
 SRC_URI="https://github.com/X11Libre/xf86-input-libinput/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

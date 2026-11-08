@@ -5,7 +5,7 @@ inherit meson
 DESCRIPTION="A C/C++ implementation of a Sass CSS compiler"
 HOMEPAGE="https://github.com/sass/libsass"
 
-SNAPSHOT=1dea0d3641b22bc6c5577721cba28c28aed1cfa7
+SNAPSHOT=3de4ca3fa1dc7d7a7d91944789bafded2207cfc4
 SRC_URI="https://gitlab.com/pjo/sass/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

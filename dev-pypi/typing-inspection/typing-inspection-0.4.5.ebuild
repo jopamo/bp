@@ -15,8 +15,8 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-SRC_URI="https://files.pythonhosted.org/packages/a3/26/b09b8010994eccc3c09092e6b34058f36a460eea2d4c3e8b910c695975a0/typing_inspection-0.4.4.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/typing_inspection-0.4.4"
+SRC_URI="https://files.pythonhosted.org/packages/ff/50/0195198eb1d75bab716bb0a813abea4cc394bfa17a92a189f021a34859af/typing_inspection-0.4.5.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/typing_inspection-0.4.5"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="

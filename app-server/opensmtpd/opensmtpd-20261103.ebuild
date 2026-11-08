@@ -4,7 +4,7 @@ inherit user toolchain-funcs autotools
 
 DESCRIPTION="Lightweight but featured SMTP daemon from OpenBSD"
 HOMEPAGE="https://www.opensmtpd.org"
-SNAPSHOT=f073a73fe159a9f12b8908bd4dec61d05286c4d3
+SNAPSHOT=028f5b584017cde422ee1c133adfa19842670167
 SRC_URI="https://github.com/OpenSMTPD/OpenSMTPD/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/OpenSMTPD-${SNAPSHOT}
 

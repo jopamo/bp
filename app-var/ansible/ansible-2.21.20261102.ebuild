@@ -12,7 +12,7 @@ RDEPEND=""
 # lockstep-pypi-deps: end
 DESCRIPTION="a radically simple IT automation platform"
 HOMEPAGE="https://ansible.com/"
-SNAPSHOT=bfeb05ba5dec7aa0008f07c33b7accacb13ce7cd
+SNAPSHOT=446d5bb415de5e40a0bf9b23f9ae2a7e2ad16835
 SRC_URI="https://github.com/ansible/ansible/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/ansible-${SNAPSHOT}"
 

@@ -4,7 +4,7 @@ inherit toolchain-funcs qa-policy
 
 DESCRIPTION="Mozilla's Network Security Services library that implements PKI support"
 HOMEPAGE="http://www.mozilla.org/projects/security/pki/nss/"
-SNAPSHOT=5192d65b7ad0403fba067a10327a33f70ac107e7
+SNAPSHOT=4c7edf7d0eab60dcdf960b063af650ba70662b32
 SRC_URI="https://github.com/nss-dev/nss/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

@@ -62,7 +62,6 @@ app-net/iw
 app-net/linuxptp
 app-net/nftables
 app-net/nmap
-app-net/sockperf
 app-net/tcpdump
 app-net/wpa_supplicant
 app-server/lighttpd

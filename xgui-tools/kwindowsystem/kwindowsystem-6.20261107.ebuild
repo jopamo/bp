@@ -6,7 +6,7 @@ inherit cmake
 
 DESCRIPTION="Framework providing access to properties and features of the window manager"
 HOMEPAGE="https://invent.kde.org/frameworks/kwindowsystem"
-SNAPSHOT=dd2f7168b1eff55315510a08f5fb18f089958c7a
+SNAPSHOT=392556f1c802c6ae9015fe5dee6bbc7dad40c43e
 SRC_URI="https://github.com/KDE/kwindowsystem/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/kwindowsystem-${SNAPSHOT}
 

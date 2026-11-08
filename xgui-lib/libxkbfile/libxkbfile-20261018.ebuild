@@ -4,7 +4,7 @@ inherit meson
 
 DESCRIPTION="X.Org xkbfile library"
 HOMEPAGE="https://www.x.org/wiki/"
-SNAPSHOT=6289ef997918cafdaae5ddc17a7442e30dede994
+SNAPSHOT=8c2de01b7fc1ad98067e60a6cd9311c96f5195bb
 SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libxkbfile/-/archive/${SNAPSHOT}/libxkbfile-${SNAPSHOT}.tar.bz2 -> libxkbfile-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/libxkbfile-${SNAPSHOT}"
 

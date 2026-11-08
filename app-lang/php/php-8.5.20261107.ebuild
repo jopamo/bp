@@ -6,7 +6,7 @@ inherit flag-o-matic autotools doins
 
 DESCRIPTION="The PHP language runtime engine"
 HOMEPAGE="https://secure.php.net/"
-SNAPSHOT=c6de4e63c84a4a1832f37d92497c98b4c50ab917
+SNAPSHOT=532fcd118ceda1a2ea8fb77bfef51d4622131e38
 SRC_URI="https://github.com/php/php-src/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/php-src-${SNAPSHOT}"
 

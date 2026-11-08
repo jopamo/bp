@@ -68,10 +68,10 @@ DIST hackage-random-1.2.1.3-r0.cabal 6237 BLAKE3 e1be79af1466b6d98d2a6d1ac19a9b8
 DIST hackage-random-1.2.1.3.tar.gz 47117 BLAKE3 11335e0057b554e2b386aff83a0e32d653b615e09ed573befaad88cec04b849e
 DIST hackage-regex-base-0.94.0.3-r0.cabal 2391 BLAKE3 4a32e54028041319700390f09a71f6d8086bb6ed422b99bac5cf6b4e982ac6d0
 DIST hackage-regex-base-0.94.0.3.tar.gz 10550 BLAKE3 d0e2a517570cbac11dd79108b8dbcea3e59d4c2c128bc33051f04032c589d984
-DIST hackage-regex-tdfa-1.3.2.6-r0.cabal 6484 BLAKE3 06539c263fda1defd64cff853452b6976b513b4c5d8e9dda6cac221b2964ee22
-DIST hackage-regex-tdfa-1.3.2.6.tar.gz 83407 BLAKE3 f9cad5226b398affd07eebeee1f1fd2250b10e75833eadb34e40adc52ab42109
-DIST hackage-scientific-0.3.9.0-r0.cabal 4405 BLAKE3 de09e393f7bfafc235480c18c262e380e86fdd5557df6745966e98c0fb24cfe1
-DIST hackage-scientific-0.3.9.0.tar.gz 25171 BLAKE3 bd59adad64c9b721402effff5ea51181e1df207c40d0bd2a23f3942765df406f
+DIST hackage-regex-tdfa-1.3.2.7-r0.cabal 6470 BLAKE3 579c7bd150fa993b8106d13e8cfeaedb8574e9e04de73a68d32fd2d93f79cec7
+DIST hackage-regex-tdfa-1.3.2.7.tar.gz 83155 BLAKE3 30387dc7f9932f00b0b3574aded311bba30ce8548dc2678ea19e5c10b9b7c936
+DIST hackage-scientific-0.3.10.0-r0.cabal 4406 BLAKE3 30a33770a86612c13758574ff92a0c9f9a402d6aadd665c1ac96b1138c1bb563
+DIST hackage-scientific-0.3.10.0.tar.gz 25767 BLAKE3 fcef024737bf0abb881952d3658a67fc0c436baeb5f6cf35ab4310c749f508f7
 DIST hackage-semialign-1.3.1.1-r0.cabal 2180 BLAKE3 70f7cbcb013f47ad49fa6a74434ef35d04191015737e7a8e86120d3eb5f5e55e
 DIST hackage-semialign-1.3.1.1.tar.gz 10116 BLAKE3 2b7753af4092c3e3326af6760e40328623b1aaac9d4a70d9735208f013199577
 DIST hackage-semigroupoids-6.0.2-r1.cabal 7216 BLAKE3 9513a658afdc6114ccb2c96803aa3bfd5a290a312113a4e9098ea42da2da32d3
@@ -84,8 +84,8 @@ DIST hackage-syb-0.7.2.4-r0.cabal 3872 BLAKE3 d121458f8e7e87288f83d068ba74300621
 DIST hackage-syb-0.7.2.4.tar.gz 41809 BLAKE3 3404f6aedcda56c0b3e583ab9c451d27b324c7bb93c23adb08d901513f0fe366
 DIST hackage-tagged-0.8.9-r0.cabal 2123 BLAKE3 5071f13c6058edece37bc4ce90e1f462caea581c5a5b73628dd9bbf8d6c27b12
 DIST hackage-tagged-0.8.9.tar.gz 8151 BLAKE3 5f36c28e0c7435c9de2bf4def0af024f17d24037d21ed69ea02809c582fe65b4
-DIST hackage-tasty-1.5.4-r1.cabal 2864 BLAKE3 1f8e25c539640f48c9bf8f15480bcb0bd89727c8b6f2ac17644256be2b0ff72a
-DIST hackage-tasty-1.5.4.tar.gz 68529 BLAKE3 447b01888dc9eee71b05194b7e65642f78f41e1e6d256461ea4d3c5e8c22dc0a
+DIST hackage-tasty-1.5.5-r0.cabal 2970 BLAKE3 e908781a7e432e51e816b9fed4f0b2860b0eeac0f9d0797c9ab67d04cba3fda0
+DIST hackage-tasty-1.5.5.tar.gz 68698 BLAKE3 d36f98142a6b3c222c953ad8433636a1b9968db2bf459ddb0cb98e948fe29e4a
 DIST hackage-tasty-bench-0.4.1-r1.cabal 2066 BLAKE3 a2118aba774a60835145a0bac335c1962fbd5236c5ad2dee67986cad9c791b76
 DIST hackage-tasty-bench-0.4.1.tar.gz 38638 BLAKE3 dab9d2bf34c1f2c47f127bf4594c9d288f896327d84c234730f6cb0334991bbf
 DIST hackage-tasty-hunit-0.10.2-r0.cabal 1473 BLAKE3 1a46dca38d1428a52124f11d757a8339a3a8e934586a3ad3ee8cc640ccc8a3da
@@ -96,6 +96,8 @@ DIST hackage-tasty-quickcheck-0.11.1-r7.cabal 1623 BLAKE3 e04b3dbcb7a29af15844f9
 DIST hackage-tasty-quickcheck-0.11.1.tar.gz 7349 BLAKE3 db51233ad21b437c4b8bf7c66705e1f6538fd6c4a3ee68d82ec4a9421217e2af
 DIST hackage-temporary-1.3-r0.cabal 1485 BLAKE3 0ef02cdc02f5313973ab59a64f3d65c269954049ba7ef0e8d1934bd2a880e197
 DIST hackage-temporary-1.3.tar.gz 5686 BLAKE3 9275b1a545c5e9d4b7da19cf42513a673ad9f01639e9cc0656b0e8b5d4612fb5
+DIST hackage-terminal-size-0.3.4-r1.cabal 1364 BLAKE3 d80fd933404bbd75207f7bb99c4c2a670ed5539c57def7d21b517dc564283edf
+DIST hackage-terminal-size-0.3.4.tar.gz 4457 BLAKE3 38cc0f79d4c29323a9b7b50dc88337680d858bccdf19e90588ac43c487c04af3
 DIST hackage-text-iso8601-0.1.1.2-r0.cabal 2390 BLAKE3 a17b6fd74daed1b3a8ff591ceef445e1a6685a5621feb9b10a21ed92de02ab51
 DIST hackage-text-iso8601-0.1.1.2.tar.gz 10174 BLAKE3 77cd4bf45d9a1ff1b31bfc59da2412938b760f2462b0da6a793a004904a7f226
 DIST hackage-text-short-0.1.6.1-r0.cabal 2799 BLAKE3 4de043397ab743110a94ad57b38e7c0d4bd8fdfa401908a4eced96a5155a1e11
@@ -120,4 +122,4 @@ DIST hackage-vector-stream-0.1.0.1-r4.cabal 1642 BLAKE3 ae804f5a85ab0ef89757c022
 DIST hackage-vector-stream-0.1.0.1.tar.gz 12577 BLAKE3 657fd5da8cb742b6439f8daddd8666a1b138eff5020c49ad9fe2b3c128481e6c
 DIST hackage-witherable-0.5-r2.cabal 2355 BLAKE3 79ffc6e18b13e4cc76cb8bd5253f29977f1cbb939ba4e7dda228acfc875c8d6b
 DIST hackage-witherable-0.5.tar.gz 10819 BLAKE3 6a9bbe4e5771b062a4b1b1e8bcaf4db7121982522fc47a86e51c059ccbb14948
-DIST shellcheck-cd9072643932ee2008e454e2cd990e25c1dc9d49.tar.gz 482830 BLAKE3 805a7c20971899a1f27c4fe9b6dbf5c998c441b897c1478f90e8583e1bc043a7
+DIST shellcheck-b8dd508a8b60723356cf5a091e8a9325764465c1.tar.gz 485220 BLAKE3 eee91147ed167c8d7202c110fdceb654edf1e406f6e73b35f3a4db782e107bac

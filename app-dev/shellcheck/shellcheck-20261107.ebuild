@@ -4,7 +4,7 @@ inherit hackage
 
 DESCRIPTION="Shell script analysis tool"
 HOMEPAGE="https://www.shellcheck.net https://github.com/koalaman/shellcheck"
-SNAPSHOT=cd9072643932ee2008e454e2cd990e25c1dc9d49
+SNAPSHOT=b8dd508a8b60723356cf5a091e8a9325764465c1
 SRC_URI="https://github.com/koalaman/shellcheck/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
@@ -40,7 +40,7 @@ HACKAGE_ROOTS=(
 
 # lockstep-hackage-managed: true
 # lockstep-hackage-deps: begin
-HACKAGE_SNAPSHOT="lts-24.64"
+HACKAGE_SNAPSHOT="lts-24.66"
 HACKAGE_DEPS=(
 	"aeson 2.2.5.1 0 a89fd54b802351ebf57a6be451db25c167c3ccb35583b4a9d2bb54d7d1c43de2"
 	"ansi-terminal 1.1.5 0 408d9232e5304efead718f96138d6d7eb2da608c6121c5c0dc6a71a833b14320"
@@ -76,8 +76,8 @@ HACKAGE_DEPS=(
 	"QuickCheck 2.15.0.1 1 0cfd337bb9e6fbf09255bd24bb498a156f1d9bcd465396ac8657b25034b9ee31"
 	"random 1.2.1.3 0 117541ba0a177397a3333f94870f789ef050dca31b0688a19824b2bc401b8823"
 	"regex-base 0.94.0.3 0 d6c0c6d1136f5046207a331114ff4130e70640452096de7719bf03e3fceb7c7b"
-	"regex-tdfa 1.3.2.6 0 66a392fba256bc48c90d427af91809eb785ddc526fd2deefd93cc583bd41bbae"
-	"scientific 0.3.9.0 0 867d3d862acf041cf1540eca4e1d699797e9d8b61ade41a8284c94ad83ff540d"
+	"regex-tdfa 1.3.2.7 0 bf3103a3c989a8ba1d29e5c737acbcdb569b682ebef723f9106c09e9e8efc194"
+	"scientific 0.3.10.0 0 fb34c9282066e7f0450258762634bebe1527209eee71932e1ede7f698578bb9f"
 	"semialign 1.3.1.1 0 e834961b9d22bbd0b6633b644f6005310ca9b883f5c2b3ed216340f946f16a27"
 	"semigroupoids 6.0.2 1 52c5a346fdf74380618f67ff784989ef9078498dbbdff09e4d8e2fed20202e2c"
 	"splitmix 0.1.3.2 0 a557cff65eed1f70f3a3b468423cd58e7a9a9564c5cc00c76a13de64dec9bcbd"
@@ -85,12 +85,13 @@ HACKAGE_DEPS=(
 	"strict 0.5.1 1 58c373b7c7748cbb4a5a6c8c15073f99a1c10a9a9bb6894ac33f43a5cdb901f2"
 	"syb 0.7.2.4 0 936d5a92084ad9d88c5a9dd2e622deab57ce48ce85be93e6273b3f8eb64c12ca"
 	"tagged 0.8.9 0 6aad7d2fd594bd51834450d97850b9959305951993ea739fa2bbc18b55d8767d"
-	"tasty 1.5.4 1 2065ef38e061551c7e3a997c4a4eac1b68dbf0553cc6177f01c8f7982f4cd375"
+	"tasty 1.5.5 0 4bfbc7046382dd8c106a907d30e1cfc068502b91a6cb28a8fb661cc33e20312e"
 	"tasty-bench 0.4.1 1 c38a77747f14e8d26ca99869b879ee56099b04e5381a74a62255dcbab85aab84"
 	"tasty-hunit 0.10.2 0 22bc1122e8256664d7cb1e44c6bcace95676c523179947bf2403db71af43dc6d"
 	"tasty-inspection-testing 0.2.1 4 76ccc2b355a36878145b854f8125cfd5fe9b581af005698084c03777fbb269f2"
 	"tasty-quickcheck 0.11.1 7 5b0517d7743ad201371fdc4443d12c2e581bb71682adce35c91523680ab33072"
 	"temporary 1.3 0 3a66c136f700dbf42f3c5000ca93e80b26dead51e54322c83272b236c1ec8ef1"
+	"terminal-size 0.3.4 1 21d7f1320eeb86177e860ec07a3d8e7510977b1b415a96ebb62ee4ad72955770"
 	"text-iso8601 0.1.1.2 0 8da5b74d6c79eba657ec5f8fd289f1b0aad2463538928c96c6035c52d03ac9ab"
 	"text-short 0.1.6.1 0 330b037a4f74c069e1ecfe0908baf8fb526526ef35f47922bd67ae2b3d886864"
 	"th-abstraction 0.7.2.0 0 380819d6e14645bf66af99b6ea3d3d4309c523c7d0ee376e0678042622f1c272"

@@ -12,7 +12,6 @@ CARGO_DEPS="
 	rust-crates/anstyle-query-1.1.5
 	rust-crates/anstyle-wincon-3.0.11
 	rust-crates/anyhow-1.0.104
-	rust-crates/argfile-1.0.0
 	rust-crates/arrayvec-0.7.8
 	rust-crates/atomic-0.6.1
 	rust-crates/autocfg-1.5.1
@@ -83,7 +82,6 @@ CARGO_DEPS="
 	rust-crates/flate2-1.1.9
 	rust-crates/foldhash-0.1.5
 	rust-crates/foldhash-0.2.0
-	rust-crates/fs-err-3.3.0
 	rust-crates/fsevent-sys-4.1.0
 	rust-crates/fst-0.4.7
 	rust-crates/futures-core-0.3.34
@@ -148,7 +146,6 @@ CARGO_DEPS="
 	rust-crates/once_cell-1.21.4
 	rust-crates/once_cell_polyfill-1.70.2
 	rust-crates/oorandom-11.1.5
-	rust-crates/os_str_bytes-7.2.0
 	rust-crates/parking_lot-0.12.5
 	rust-crates/parking_lot_core-0.9.12
 	rust-crates/pear-0.2.9
@@ -325,7 +322,7 @@ inherit cargo lockstep-cargo
 
 DESCRIPTION="Security Scanner"
 HOMEPAGE="https://github.com/github/codeql"
-SNAPSHOT=9b72529516caf831cfce2a1e2562e9ed717ab067
+SNAPSHOT=682545fdc03e8414d99a469c1f741c157b569740
 SRC_URI="https://github.com/github/codeql/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/codeql-${SNAPSHOT}"
 

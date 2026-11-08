@@ -4,7 +4,7 @@ inherit cmake qa-policy
 
 DESCRIPTION="SMT solver and library"
 HOMEPAGE="https://github.com/Z3Prover/z3"
-SNAPSHOT=0f0cb9a4533cede75f0a8ceb35879d2781de8db4
+SNAPSHOT=ff86ba7d1793b0ffcba6848cc30c039b07a55568
 SRC_URI="https://github.com/Z3Prover/z3/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

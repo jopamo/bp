@@ -6,6 +6,7 @@ EAPI=8
 CARGO_DEPS="
 	rust-crates/ahash-0.8.12
 	rust-crates/aho-corasick-1.1.3
+	rust-crates/arrayvec-0.7.8
 	rust-crates/autocfg-1.3.0
 	rust-crates/base64-0.23.1
 	rust-crates/bitflags-2.9.1
@@ -14,6 +15,7 @@ CARGO_DEPS="
 	rust-crates/cfg-if-1.0.0
 	rust-crates/displaydoc-0.2.5
 	rust-crates/enum_dispatch-0.3.13
+	rust-crates/equivalent-1.0.3
 	rust-crates/foldhash-0.2.0
 	rust-crates/form_urlencoded-1.2.2
 	rust-crates/funty-2.0.0
@@ -33,12 +35,13 @@ CARGO_DEPS="
 	rust-crates/icu_provider_macros-1.5.0
 	rust-crates/idna-1.1.0
 	rust-crates/idna_adapter-1.2.0
+	rust-crates/indexmap-2.14.0
 	rust-crates/itoa-1.0.11
-	rust-crates/jiter-0.16.0
+	rust-crates/jiter-0.18.0
 	rust-crates/js-sys-0.3.77
-	rust-crates/lexical-parse-float-1.0.5
-	rust-crates/lexical-parse-integer-1.0.5
-	rust-crates/lexical-util-1.0.6
+	rust-crates/lexical-parse-float-1.0.6
+	rust-crates/lexical-parse-integer-1.0.6
+	rust-crates/lexical-util-1.0.7
 	rust-crates/libc-0.2.185
 	rust-crates/litemap-0.7.3
 	rust-crates/log-0.4.27
@@ -51,11 +54,11 @@ CARGO_DEPS="
 	rust-crates/percent-encoding-2.3.2
 	rust-crates/portable-atomic-1.6.0
 	rust-crates/proc-macro2-1.0.107
-	rust-crates/pyo3-0.29.2
-	rust-crates/pyo3-build-config-0.29.2
-	rust-crates/pyo3-ffi-0.29.2
-	rust-crates/pyo3-macros-0.29.2
-	rust-crates/pyo3-macros-backend-0.29.2
+	rust-crates/pyo3-0.30.1
+	rust-crates/pyo3-build-config-0.30.1
+	rust-crates/pyo3-ffi-0.30.1
+	rust-crates/pyo3-macros-0.30.1
+	rust-crates/pyo3-macros-backend-0.30.1
 	rust-crates/quote-1.0.44
 	rust-crates/r-efi-5.2.0
 	rust-crates/radium-0.7.0
@@ -67,11 +70,10 @@ CARGO_DEPS="
 	rust-crates/serde_derive-1.0.229
 	rust-crates/serde_json-1.0.151
 	rust-crates/smallvec-1.16.2
-	rust-crates/speedate-0.17.0
+	rust-crates/speedate-0.18.0
 	rust-crates/stable_deref_trait-1.2.0
-	rust-crates/static_assertions-1.1.0
-	rust-crates/strum-0.27.2
-	rust-crates/strum_macros-0.27.2
+	rust-crates/strum-0.28.0
+	rust-crates/strum_macros-0.28.0
 	rust-crates/syn-2.0.82
 	rust-crates/syn-3.0.6
 	rust-crates/synstructure-0.13.1
@@ -119,8 +121,8 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-SRC_URI="https://files.pythonhosted.org/packages/a6/24/af4ec4be49fbc810f35b0bdcacc3d433b56bbfa469fd3bfd4ae116cd9bf1/pydantic_core-2.50.1.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/pydantic_core-2.50.1"
+SRC_URI="https://files.pythonhosted.org/packages/9c/0f/34f9ce4ba701dd0b815033ef94d99b56f66200e578ee6052aa3ac26f064e/pydantic_core-2.50.4.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/pydantic_core-2.50.4"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="

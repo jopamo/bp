@@ -4,7 +4,7 @@ inherit flag-o-matic toolchain-funcs
 
 DESCRIPTION="System performance tools for Linux"
 HOMEPAGE="http://pagesperso-orange.fr/sebastien.godard/"
-SNAPSHOT=73cfff6daf45e560713f725e0e3ac8eacdb75456
+SNAPSHOT=8b298ddfc2917bec543f5344972861913b5d3739
 SRC_URI="https://github.com/sysstat/sysstat/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/sysstat-${SNAPSHOT}"
 

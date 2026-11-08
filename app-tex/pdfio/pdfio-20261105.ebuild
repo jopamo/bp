@@ -6,7 +6,7 @@ inherit autotools flag-o-matic toolchain-funcs qa-policy
 
 DESCRIPTION="C library for reading and writing PDF files"
 HOMEPAGE="https://www.msweet.org/pdfio/"
-SNAPSHOT=8a7707efd51da60faf104eb8aa0aa75118b0aa9f
+SNAPSHOT=9771e42ea0bb7e90f9a327cb08d3426390e23244
 SRC_URI="https://github.com/michaelrsweet/pdfio/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

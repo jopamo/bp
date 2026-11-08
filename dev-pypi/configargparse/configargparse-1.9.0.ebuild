@@ -15,5 +15,5 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-SRC_URI="https://files.pythonhosted.org/packages/5d/ed/33c0ba7f0b5be384ff8a2101ce77728f219e816b2104819f1651477e1ad5/configargparse-1.8.0.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/configargparse-1.8.0"
+SRC_URI="https://files.pythonhosted.org/packages/bc/d9/c591a80cf3335de7820c6762f8ee9298a43da5319803d319e16657b6fdf2/configargparse-1.9.0.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/configargparse-1.9.0"

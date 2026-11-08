@@ -1,7 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 BRANCH_NAME=main
-SNAPSHOT=fe7ed9799b4d0476ac69adc7533ea85a02ce66bf
+SNAPSHOT=1f2d17db7f82aa8191da8659f37b7a2cb77a6075
 
 PROPERTIES+=" source-payload"
 

@@ -8,8 +8,8 @@ inherit flag-o-matic python-any-r1 xdg
 
 DESCRIPTION="QEMU with enhanced support for multiple architectures and options"
 HOMEPAGE="https://www.qemu.org/"
-SNAPSHOT=4fc49f46dc95d4a27de2509e7fceb2931e91faeb
-SOFTFLOAT_SNAPSHOT=497c81c1f5016dc6ef5b3219ece2f3c261d4d8f1
+SNAPSHOT=005c61c0ef6f6ae615283440b4bb7be51b2c6ddd
+SOFTFLOAT_SNAPSHOT=07ebd29db0cfb55723a79fbbffe99103ef38e305
 TESTFLOAT_SNAPSHOT=e7af9751d9f9fd3b47911f51a5cfd08af256a9ab
 SRC_URI="
 	https://github.com/qemu/qemu/archive/${SNAPSHOT}.tar.gz -> qemu-${SNAPSHOT}.tar.gz

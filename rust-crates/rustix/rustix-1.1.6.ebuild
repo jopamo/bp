@@ -1,0 +1,51 @@
+# lockstep-managed: cargo-crate
+EAPI=8
+MERGE_MANIFEST_MODE="tree-blake3-v1"
+
+CRATE_NAME="rustix"
+CRATE_VERSION="1.1.6"
+CRATE_CHECKSUM="e5e76742e5294153d4dde1207dbec5bdd81eef6fabdc0d2118babadabfd858aa"
+CRATE_SOURCE="registry+https://github.com/rust-lang/crates.io-index"
+CRATE_SOURCE_KIND="registry"
+
+inherit cargo-crate
+
+DESCRIPTION="Safe Rust bindings to POSIX/Unix/Linux/Winsock-like syscalls"
+HOMEPAGE="https://github.com/bytecodealliance/rustix"
+LICENSE="|| ( Apache-2.0-with-LLVM-exception Apache-2.0 MIT )"
+SLOT="${PV}"
+KEYWORDS="amd64 arm64"
+
+CARGO_CRATE_FEATURES=(
+	"all-apis"
+	"alloc"
+	"default"
+	"event"
+	"fs"
+	"io_uring"
+	"linux_4_11"
+	"linux_5_1"
+	"linux_5_11"
+	"linux_latest"
+	"mm"
+	"mount"
+	"net"
+	"param"
+	"pipe"
+	"process"
+	"pty"
+	"rand"
+	"runtime"
+	"rustc-dep-of-std"
+	"shm"
+	"std"
+	"stdio"
+	"system"
+	"termios"
+	"thread"
+	"time"
+	"try_close"
+	"use-explicitly-provided-auxv"
+	"use-libc"
+	"use-libc-auxv"
+)

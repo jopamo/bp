@@ -1,7 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 BRANCH_NAME="$(ver_cut 1-2)"
-SNAPSHOT=d9b6c229f233eb26952d81381b375f9d6bb99c19
+SNAPSHOT=aee90465e55101ea1d14b28a2a5670b1802c2f18
 
 WANT_LIBTOOL="none"
 
@@ -21,25 +21,20 @@ fi
 
 LICENSE="PSF-2"
 SLOT="$(ver_cut 1-2)"
-KEYWORDS="amd64 arm64"
+#KEYWORDS="amd64 arm64"
 
 IUSE="bluetooth debug ipv6 libedit ncurses perf pgo readline sqlite ssl static test tk valgrind xml"
 
 RESTRICT="perf? ( strip ) test"
-
-QA_CONFIG_IMPL_DECL_SKIP=(
-	chflags
-	lchflags
-)
 
 DEPEND="
 	app-build/gettext
 	app-compression/bzip2
 	app-compression/xz-utils
 	app-lang/python-exec
-	lib-core/expat
 	lib-core/libffi
 	lib-core/zlib
+	lib-net/libnsl
 	libedit? ( lib-core/libedit )
 	ncurses? ( virtual/curses )
 	readline? ( lib-core/readline )
@@ -48,10 +43,7 @@ DEPEND="
 	tk? ( app-lang/tk )
 "
 
-BDEPEND="
-	app-build/autoconf-archive
-	app-dev/pkgconf
-"
+BDEPEND="app-build/autoconf-archive"
 
 PYVER=${SLOT%/*}
 
@@ -152,7 +144,7 @@ src_configure() {
 		--with-pkg-config=yes
 		--with-platlibdir=lib
 		--with-system-expat
-		--without-system-libmpdec
+		--with-system-libmpdec
 		--with-wheel-pkg-dir="${EPREFIX}"/usr/lib/python/ensurepip
 		--without-ensurepip
 		--without-static-libpython

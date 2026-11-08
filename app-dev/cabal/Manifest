@@ -36,8 +36,8 @@ DIST hackage-hsc2hs-0.68.10-r5.cabal 3131 BLAKE3 692e11a9977d69c17dec83245a49ad1
 DIST hackage-hsc2hs-0.68.10.tar.gz 40517 BLAKE3 bb2df02a7356d9d080f5f6d3cb4dac5c27c8348be351b92439a578259fb81057
 DIST hackage-lukko-0.1.2-r2.cabal 4488 BLAKE3 ef4efa0c093160b3c5b0ef32d2d05841a8e586bd94c119603f1dbbdf116a38e8
 DIST hackage-lukko-0.1.2.tar.gz 28448 BLAKE3 b8fc1db4f473528aa940ef76cfe92796e2e1bfa0af9a3e0d44e9014d6f97191c
-DIST hackage-network-3.2.9.0-r0.cabal 5305 BLAKE3 7e00fb91f936225afee34fa81d7b3ca6c05675065a6cebe669b70d891f3358e5
-DIST hackage-network-3.2.9.0.tar.gz 146197 BLAKE3 8a38a50eeaef9b6afe2e7848d92f4208934dea6f48ec67b42fb797d4359f3d0c
+DIST hackage-network-3.2.12.0-r0.cabal 5532 BLAKE3 13541f981abdc9f50be71d10021191906c64d47ca73faed8faabb63f8a02abf5
+DIST hackage-network-3.2.12.0.tar.gz 165517 BLAKE3 7a3a54a33b1b24d9cb6fe2f551ed20d0e068d0b46a4781921da3476b2a38598a
 DIST hackage-network-uri-2.6.4.2-r1.cabal 3217 BLAKE3 ddf5869081ceed8fd0afe7eb01c7389362b51116648f1d9afb7e4196427df88b
 DIST hackage-network-uri-2.6.4.2.tar.gz 31309 BLAKE3 c1faa6fdbc6197d91a247c9467a1dcd56b1a9d03096ab9e8c9116377621588d2
 DIST hackage-open-browser-0.4.0.0-r0.cabal 1915 BLAKE3 2cf201a9cdf4fa22898b876aeefedb4184d8f55cadfc3d00b8b74260c1fba28e

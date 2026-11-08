@@ -76,7 +76,7 @@ HACKAGE_VERSION_SOURCE="cabal-install-solver"
 
 # lockstep-hackage-managed: true
 # lockstep-hackage-deps: begin
-HACKAGE_SNAPSHOT="lts-24.64"
+HACKAGE_SNAPSHOT="lts-24.66"
 HACKAGE_DEPS=(
 	"async 2.2.6 0 45d5587d8a348a7e2b3f04de963fe633db49b49cde10ca1e6f834bef3baecee9"
 	"atomic-counter 0.1.2.4 0 51c0178c727ef4ccd694514c0a44369eb8593ae83dde42bc5fb5c89d5b4c60b5"
@@ -95,7 +95,7 @@ HACKAGE_DEPS=(
 	"hsc2hs 0.68.10 5 39b25fd929b02b01a3fe59fec7ca8b2da6f0f9e282276b7a84e63a4702c4d725"
 	"HTTP 4000.4.1 6 ad36c6a1b3bc203b02751c8bffae8a684cc755661a2a567362cd4a0da1193c5e"
 	"lukko 0.1.2 2 eca91c02ccdc050cd335224af22a31a7d03f9f799a95227f0b8117be43311e1d"
-	"network 3.2.9.0 0 48a0c4f91e460f892c629b76c9410336a978e9b58aa87c678aee587b4ca37698"
+	"network 3.2.12.0 0 8049eced2bad4005640708aca28119fb5c4f90f2e2d00f0bdec1c1ba52107b3a"
 	"network-uri 2.6.4.2 1 6fffb57373962b5651a2db8b0af732098b3bf029a7ced76a9855615de2026588"
 	"open-browser 0.4.0.0 0 a5effff3d14a0bbfde51dd62e72cff069b56be4298f16a78db7d3cc0c678c859"
 	"random 1.2.1.3 0 117541ba0a177397a3333f94870f789ef050dca31b0688a19824b2bc401b8823"

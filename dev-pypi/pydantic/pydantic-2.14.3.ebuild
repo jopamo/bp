@@ -15,8 +15,8 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-SRC_URI="https://files.pythonhosted.org/packages/7c/0b/8e10b2e693af8ec54346a14caf36221334775975a747c9ceaa3f8371d96d/pydantic-2.14.1.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/pydantic-2.14.1"
+SRC_URI="https://files.pythonhosted.org/packages/b4/fc/1203d011145c98ddce3cd2f505bb54375ef8d43223053df6bfcf3c746f46/pydantic-2.14.3.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/pydantic-2.14.3"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="

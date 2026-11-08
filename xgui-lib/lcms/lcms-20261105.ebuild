@@ -4,7 +4,7 @@ inherit qa-policy
 
 DESCRIPTION="A lightweight, speed optimized color management engine"
 HOMEPAGE="http://www.littlecms.com/"
-SNAPSHOT=d261ab6fda30fd7578a2ce7ace5c0b2c7d3fc0b8
+SNAPSHOT=2ccc18608c50ec09c4a73c4ec06d0ba60221c0ee
 SRC_URI="https://github.com/ImageMagick/lcms/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

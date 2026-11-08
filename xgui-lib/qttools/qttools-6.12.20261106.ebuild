@@ -7,7 +7,7 @@ inherit cmake flag-o-matic
 DESCRIPTION="Qt Tools collection (Assistant, Designer, Linguist, etc.)"
 HOMEPAGE="https://www.qt.io/"
 
-SNAPSHOT=5ca70c5139fe4ca2ff41f1dd49021a053aef68c9
+SNAPSHOT=a078b9f5ce7228723857f9aaa8cf867db0c627a6
 # Follow this qttools commit's gitlinks, not the submodules' branch tips.
 # lockstep-gitlink: QLITEHTML_SNAPSHOT SNAPSHOT src/assistant/qlitehtml
 # lockstep-gitlink: QTTOOLS_LITEHTML_SNAPSHOT QLITEHTML_SNAPSHOT src/3rdparty/litehtml

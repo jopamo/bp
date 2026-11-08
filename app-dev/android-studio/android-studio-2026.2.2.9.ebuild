@@ -12,7 +12,7 @@ QA_PREBUILT="opt/${PN}/*"
 
 DESCRIPTION="Android development environment based on IntelliJ IDEA"
 HOMEPAGE="https://developer.android.com/studio"
-STUDIO_ARCHIVE="android-studio-rabbit1-linux.tar.gz"
+STUDIO_ARCHIVE="android-studio-rabbit2-patch1-linux.tar.gz"
 SRC_URI="https://edgedl.me.gvt1.com/android/studio/ide-zips/${PV}/${STUDIO_ARCHIVE} -> ${P}-linux.tar.gz"
 S=${WORKDIR}/${PN}
 LICENSE="Apache-2.0 android BSD BSD-2 CDDL-1.1 CPL-0.5

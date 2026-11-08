@@ -6,7 +6,7 @@ inherit meson
 
 DESCRIPTION="OpenGL-like graphic library for Linux"
 HOMEPAGE="https://www.mesa3d.org/ https://mesa.freedesktop.org/"
-SNAPSHOT=f25a43cbecf89787409c83bfb96c6b465353155e
+SNAPSHOT=a44c011e2d745b7b0aa9eca84c4fe545c2888231
 SRC_URI="https://gitlab.freedesktop.org/mesa/mesa/-/archive/${SNAPSHOT}/mesa-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/mesa-${SNAPSHOT}"
 

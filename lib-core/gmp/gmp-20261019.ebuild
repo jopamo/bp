@@ -5,7 +5,7 @@ inherit autotools toolchain-funcs flag-o-matic qa-policy
 DESCRIPTION="Library for arbitrary-precision arithmetic on different type of numbers"
 HOMEPAGE="http://gmplib.org/"
 
-SNAPSHOT=de3045f413974f5c28218077c21c134732e65c6c
+SNAPSHOT=e04c3ea1986a2ed46e986c1d5fc6a4f1e5633949
 SRC_URI="https://gitlab.com/pjo/gmp/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

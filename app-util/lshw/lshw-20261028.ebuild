@@ -4,7 +4,7 @@ inherit flag-o-matic toolchain-funcs
 
 DESCRIPTION="Hardware Lister"
 HOMEPAGE="https://www.ezix.org/project/wiki/HardwareLiSter"
-SNAPSHOT=50895cca394621b4014a11b78f2b6b78f353631f
+SNAPSHOT=48dcadf9150f752521756daafdc078f73fe93505
 SRC_URI="https://github.com/lyonel/lshw/archive/${SNAPSHOT}.tar.gz -> lshw-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/lshw-${SNAPSHOT}"
 

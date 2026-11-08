@@ -151,8 +151,8 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-SRC_URI="https://files.pythonhosted.org/packages/63/5b/f68319f4fe624311a744a33d10fdbcac4c971991e348223cba60d31780b2/jiter-0.18.0.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/jiter-0.18.0"
+SRC_URI="https://files.pythonhosted.org/packages/67/de/8dfd06a2153d8ab6a83a8ca8f8ae3ff860ce2fe324ee6a5d05294b621c2a/jiter-0.19.0.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/jiter-0.19.0"
 
 BDEPEND="
 	app-dev/maturin[${PYTHON_USEDEP}]

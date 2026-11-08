@@ -15,8 +15,8 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-SRC_URI="https://files.pythonhosted.org/packages/a9/d2/f4d173e22df740bc37b1db102b386ba719b66e95b0f0d751f556b387e6d2/anyio-4.15.1.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/anyio-4.15.1"
+SRC_URI="https://files.pythonhosted.org/packages/a1/98/7e457a3b014976887a050561955c0b76e1e7e2d6e27b78ecef2ef80518f2/anyio-4.16.0.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/anyio-4.16.0"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="

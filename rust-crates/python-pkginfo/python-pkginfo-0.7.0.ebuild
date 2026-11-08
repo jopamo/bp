@@ -3,8 +3,8 @@ EAPI=8
 MERGE_MANIFEST_MODE="tree-blake3-v1"
 
 CRATE_NAME="python-pkginfo"
-CRATE_VERSION="0.6.8"
-CRATE_CHECKSUM="229fe47647d6602b9b0934b21fab8aece1c5a5aeb0a934196a14355fec656623"
+CRATE_VERSION="0.7.0"
+CRATE_CHECKSUM="ad0f01c29e3af9f28f5cfee9bcd599d8031b8cba40eced8a9ae7aa2d2e5b735c"
 CRATE_SOURCE="registry+https://github.com/rust-lang/crates.io-index"
 CRATE_SOURCE_KIND="registry"
 

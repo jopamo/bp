@@ -12,7 +12,11 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
+REQUIRED_USE="${PYTHON_REQUIRED_USE}"
+
 DEPEND="lib-core/libxml2"
+RDEPEND="${PYTHON_DEPS}"
+BDEPEND="${PYTHON_DEPS}"
 
 src_prepare() {
 	default
@@ -20,7 +24,8 @@ src_prepare() {
 }
 
 src_configure() {
-	PYTHON=python3 default
+	python_setup
+	default
 }
 
 src_compile() {

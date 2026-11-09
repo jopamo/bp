@@ -5,10 +5,10 @@ PYTHON_COMPAT=( python3_{11..14} )
 inherit cmake python-single-r1
 
 DESCRIPTION="pahole (Poke-a-Hole) and other DWARF utilities"
-HOMEPAGE="https://git.kernel.org/cgit/devel/pahole/pahole.git/"
-SNAPSHOT=028149ba6ff52521ec41e776642aa5c54f71c5ab
-SRC_URI="https://github.com/acmel/dwarves/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
-S="${WORKDIR}/dwarves-${SNAPSHOT}"
+HOMEPAGE="https://git.kernel.org/pub/scm/devel/pahole/pahole.git/"
+SNAPSHOT=9eb594d367c1d0fef56cbd37ff9614fa63ac33a1
+SRC_URI="https://git.kernel.org/pub/scm/devel/pahole/pahole.git/snapshot/pahole-${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/pahole-${SNAPSHOT}"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -16,6 +16,10 @@ KEYWORDS="amd64 arm64"
 
 IUSE="debug"
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
+
+PATCHES=(
+	"${FILESDIR}/dwarves-20261104-abi-parameter-registers.patch"
+)
 
 QA_GCC_WARN_SKIP=(
 	# LTO inlining can report this cu__tag_free fallback path as a free-nonheap

@@ -1,0 +1,138 @@
+Restrict non-inline parameter locations to ABI argument registers.
+
+Keep arbitrary registers, dereferences and register pairs for inline locations.
+
+diff --git a/dwarf_loader.c b/dwarf_loader.c
+--- a/dwarf_loader.c
++++ b/dwarf_loader.c
+@@ -1782,17 +1782,31 @@
+ 	return op->number;
+ }
+ 
++static bool cu__is_arg_reg(const struct cu *cu, int reg)
++{
++	if (cu->register_params[0] < 0)
++		return reg >= DW_OP_reg0;
++
++	for (int i = 0; i < cu->nr_register_params; i++) {
++		if (cu->register_params[i] == reg)
++			return true;
++	}
++	return false;
++}
++
+ static void parameter__set_loc_reg(struct parameter *parm, int reg)
+ {
+ 	if (parm->loc_reg == PARAMETER_UNKNOWN_REG)
+ 		parm->loc_reg = reg;
+ }
+ 
+-static void parameter__record_loc_reg(struct parameter *parm, int reg,
+-				      int64_t offset, bool is_deref,
+-				      uint8_t size)
++static void parameter__record_loc_reg(struct parameter *parm, const struct cu *cu,
++				      bool for_inline, int reg, int64_t offset,
++				      bool is_deref, uint8_t size)
+ {
+ 	if (reg < DW_OP_reg0 || !size)
++		return;
++	if (!for_inline && (is_deref || !cu__is_arg_reg(cu, reg)))
+ 		return;
+ 
+ 	parameter__set_loc_reg(parm, reg);
+@@ -1920,7 +1934,8 @@
+  * ABI-preserved or should be replaced by the single used member candidate.
+  */
+ static void parameter__multi_exprs(Dwarf_Op *expr, int loc_num, struct cu *cu,
+-				   size_t exprlen, struct parameter *parm)
++				   size_t exprlen, struct parameter *parm,
++				   bool for_inline)
+ {
+ 	int regs[2], nregs = 0;
+ 	uint64_t piece_size = 0;
+@@ -1951,11 +1966,12 @@
+ 		switch (expr[0].atom) {
+ 		case DW_OP_reg0 ... DW_OP_reg31:
+ 			if (loc_num == 0)
+-				parameter__record_loc_reg(parm, expr[0].atom, 0, false, size);
++				parameter__record_loc_reg(parm, cu, for_inline, expr[0].atom,
++							  0, false, size);
+ 			return;
+ 		case DW_OP_breg0 ... DW_OP_breg31:
+ 			if (loc_num == 0)
+-				parameter__record_loc_reg(parm,
++				parameter__record_loc_reg(parm, cu, for_inline,
+ 							  expr[0].atom - DW_OP_breg0 + DW_OP_reg0,
+ 							  dwarf_op__snumber(&expr[0]),
+ 							  !had_stack_value, size);
+@@ -1994,14 +2010,15 @@
+ 			if (off < cu->addr_size || parm->loc_reg == PARAMETER_UNKNOWN_REG) {
+ 				uint8_t size = parameter__loc_size(parm, cu);
+ 
+-				parameter__record_loc_reg(parm, expr[i].atom, 0, false, size);
++				parameter__record_loc_reg(parm, cu, for_inline, expr[i].atom,
++							  0, false, size);
+ 			}
+ 		} else {
+ 			reg_pieces = false;
+ 		}
+ 	}
+ 
+-	if (loc_num == 0 && reg_pieces && nregs == ARRAY_SIZE(regs) &&
++	if (for_inline && loc_num == 0 && reg_pieces && nregs == ARRAY_SIZE(regs) &&
+ 	    piece_size == parm->type_byte_size)
+ 		parameter__record_loc_reg_pair(parm, DW_OP_reg0 + regs[0],
+ 					       DW_OP_reg0 + regs[1]);
+@@ -2009,7 +2026,7 @@
+ 
+ static void parameter__decode_location(Dwarf_Attribute *attr, struct conf_load *conf,
+ 				       struct cu *cu, Dwarf_Die *die,
+-				       struct parameter *parm)
++				       struct parameter *parm, bool for_inline)
+ {
+ 	Dwarf_Addr base, start, end;
+ 	Dwarf_Op *expr, *entry_ops;
+@@ -2051,7 +2068,7 @@
+ 			continue;
+ 
+ 		if (exprlen != 1) {
+-			parameter__multi_exprs(expr, loc_num, cu, exprlen, parm);
++			parameter__multi_exprs(expr, loc_num, cu, exprlen, parm, for_inline);
+ 			continue;
+ 		}
+ 
+@@ -2060,11 +2077,12 @@
+ 		switch (expr->atom) {
+ 		case DW_OP_reg0 ... DW_OP_reg31:
+ 			if (loc_num == 0)
+-				parameter__record_loc_reg(parm, expr->atom, 0, false, size);
++				parameter__record_loc_reg(parm, cu, for_inline, expr->atom,
++							  0, false, size);
+ 			break;
+ 		case DW_OP_breg0 ... DW_OP_breg31:
+ 			if (loc_num == 0)
+-				parameter__record_loc_reg(parm,
++				parameter__record_loc_reg(parm, cu, for_inline,
+ 							  expr->atom - DW_OP_breg0 + DW_OP_reg0,
+ 							  dwarf_op__snumber(expr),
+ 							  had_deref || !had_stack_value,
+@@ -2103,7 +2121,8 @@
+ 			if (dwarf_getlocation_attr(attr, expr, &entry_attr) == 0 &&
+ 			    dwarf_getlocation(&entry_attr, &entry_ops, &entry_len) == 0 &&
+ 			    entry_len == 1 && dwarf_op__is_reg(entry_ops->atom))
+-				parameter__record_loc_reg(parm, entry_ops->atom, 0, false, size);
++				parameter__record_loc_reg(parm, cu, for_inline, entry_ops->atom,
++							  0, false, size);
+ 			break;
+ 		}
+ 	}
+@@ -2171,7 +2190,8 @@
+ 			parameter__record_attr_const_value(&attr, cu, parm);
+ 		parm->has_loc = dwarf_attr(die, DW_AT_location, &attr) != NULL;
+ 		if (parm->has_loc)
+-			parameter__decode_location(&attr, conf, cu, die, parm);
++			parameter__decode_location(&attr, conf, cu, die, parm,
++						   ftype == NULL);
+ 	}
+ 
+ 	return parm;

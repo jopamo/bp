@@ -1,0 +1,34 @@
+--- a/test/CMakeLists.txt
++++ b/test/CMakeLists.txt
+@@ -1 +1,2 @@
+-find_package(GTestSrc)
++find_package(GTest REQUIRED)
++enable_testing()
+@@ -3,2 +4 @@
+-IF(GTESTSRC_FOUND)
+-    enable_testing()
++set(TEST_LIBRARIES GTest::gtest GTest::gtest_main)
+@@ -6,15 +6,3 @@
+-    if (WIN32 AND (NOT CYGWIN) AND (NOT MINGW))
+-        set(gtest_disable_pthreads ON)
+-        set(gtest_force_shared_crt ON)
+-    endif()
+-
+-    add_subdirectory(${GTEST_SOURCE_DIR} ${CMAKE_BINARY_DIR}/googletest)
+-    include_directories(SYSTEM ${GTEST_INCLUDE_DIR})
+-
+-    set(TEST_LIBRARIES gtest gtest_main)
+-
+-    add_custom_target(tests ALL)
+-    add_subdirectory(perftest)
+-    add_subdirectory(unittest)
+-
+-ENDIF(GTESTSRC_FOUND)
++add_custom_target(tests ALL)
++add_subdirectory(perftest)
++add_subdirectory(unittest)
+--- a/test/unittest/CMakeLists.txt
++++ b/test/unittest/CMakeLists.txt
+@@ -72 +72,2 @@
+ add_library(namespacetest STATIC namespacetest.cpp)
++target_link_libraries(namespacetest PRIVATE GTest::gtest)

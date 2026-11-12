@@ -4,7 +4,7 @@ inherit flag-o-matic qa-policy
 
 DESCRIPTION="User-land utilities for LVM2 (device-mapper) software"
 HOMEPAGE="https://sourceware.org/lvm2/"
-SNAPSHOT=fe7acf8492c98ba22574646c9ad5254f5a8033e7
+SNAPSHOT=2138e0bf8bb11dbfb0bcef6a653efe4a44fc8501
 SRC_URI="https://github.com/1g4-mirror/lvm2/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
@@ -22,7 +22,6 @@ DEPEND="
 
 PATCHES=(
 	"${FILESDIR}"/fix-stdio-usage.patch
-	"${FILESDIR}"/no-libaio.patch
 )
 
 src_configure() {
@@ -48,10 +47,10 @@ src_configure() {
    		--with-default-run-dir="${EPREFIX}"/run/lvm
    		--with-thin=internal
 		--without-libnvme
+		--without-libaio
+		--without-liburing
+		--with-default-io-engine=sync
 	)
-	# configure.ac uses ${AIO_LIBS:--laio}, so an empty string still becomes -laio.
-	AIO_CFLAGS=" " AIO_LIBS=" " \
-	CPPFLAGS="${CPPFLAGS} -DLVM_NO_LIBAIO" \
 	CLDFLAGS="${LDFLAGS}" econf "${myconf[@]}"
 }
 

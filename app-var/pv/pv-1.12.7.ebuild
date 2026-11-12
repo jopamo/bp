@@ -21,6 +21,6 @@ src_configure() {
 }
 
 src_test() {
-	sed -i -e 's:usleep 200000 || ::g' tests/019-remote-cksum || die
+	sed -i -e 's:usleep 200000 || ::g' tests/Integrity_-_When_adjusted_remotely.test || die
 	default
 }

@@ -4,7 +4,7 @@ inherit flag-o-matic qa-policy toolchain-funcs
 
 DESCRIPTION="Free file archiver for extremely high compression"
 HOMEPAGE="https://www.7-zip.org/ https://sourceforge.net/projects/sevenzip/"
-SNAPSHOT=b88c6bc09339de32f7d18bbab900686b244f42ba
+SNAPSHOT=d3296e39e1f1f92c7b41c0c3848e65640428d42d
 SRC_URI="https://github.com/ip7z/7zip/archive/${SNAPSHOT}.tar.gz -> 7zip-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/7zip-${SNAPSHOT}"
 
@@ -20,7 +20,6 @@ BDEPEND="
 
 PATCHES=(
 	"${FILESDIR}"/7zip-26.02-initialize-filter-group-index.patch
-	"${FILESDIR}"/7zip-26.04-wfmo-lifetimebound.patch
 	"${FILESDIR}"/7zip-26.04-initialize-wim-streams.patch
 )
 

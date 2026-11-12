@@ -4,7 +4,7 @@ inherit toolchain-funcs flag-o-matic qa-policy
 
 DESCRIPTION="POSIX 1003.1e capabilities"
 HOMEPAGE="http://www.friedhoff.org/posixfilecaps.html"
-SNAPSHOT=8cab242e8b6b82185b6dc0d77b8ccbe6eac57d40
+SNAPSHOT=7bb5a1d487a94b708ae34a5da7e71fa1fd5aff8b
 SRC_URI="https://github.com/1g4-mirror/libcap/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
@@ -47,14 +47,16 @@ src_compile() {
 	qa-policy-configure
 	append-cppflags -D_GNU_SOURCE
 
-	use pam && append-flags -lpam
-
 	tc-export AR CC RANLIB
 
 	local BUILD_CC
 	tc-export_build_env BUILD_CC
 
 	run_emake
+}
+
+src_test() {
+	run_emake test
 }
 
 src_install() {

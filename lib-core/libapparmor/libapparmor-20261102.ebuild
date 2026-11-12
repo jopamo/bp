@@ -13,7 +13,7 @@ RDEPEND=""
 # lockstep-pypi-deps: end
 DESCRIPTION="Library to support AppArmor userspace utilities"
 HOMEPAGE="https://gitlab.com/apparmor/apparmor/wikis/home"
-SNAPSHOT=8c86289d3428cbba2d60068db839b178a490abe2
+SNAPSHOT=d223f07eae44bff64f8a64a17da83b4728f310e5
 SRC_URI="https://gitlab.com/apparmor/apparmor/-/archive/${SNAPSHOT}/apparmor-${SNAPSHOT}.tar.bz2 -> apparmor-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/apparmor-${SNAPSHOT}/libraries/${PN}"
 
@@ -22,6 +22,13 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 IUSE="+perl +python static-libs"
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
+
+BDEPEND+="
+	app-build/bison
+	app-build/flex
+	perl? ( app-lang/swig )
+	python? ( app-lang/swig )
+"
 
 src_prepare() {
 	qa-policy-configure

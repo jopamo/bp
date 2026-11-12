@@ -12,7 +12,7 @@ if [[ ${PV} == *9999 ]]; then
 	EGIT_BRANCH="$(ver_cut 1-2)"
 	inherit git-r3
 else
-SNAPSHOT=f34d4b2d4a2048386f1d8a3b29465d44c225b039
+SNAPSHOT=24c7f5350a0f80eea9dff979785fae4abd02ca8d
 	SRC_URI="https://github.com/erlang/otp/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 	S=${WORKDIR}/otp-${SNAPSHOT}
 fi
@@ -88,7 +88,6 @@ src_install() {
 	local erl_libdir="/usr/${erl_libdir_rel}"
 	local erl_interface_ver="$(extract_version lib/erl_interface EI_VSN)"
 	local erl_erts_ver="$(extract_version erts VSN)"
-	local my_manpath="/usr/share/erlang/man"
 
 	[[ -z "${erl_erts_ver}" ]] && die "Couldn't determine erts version"
 	[[ -z "${erl_interface_ver}" ]] && die "Couldn't determine interface version"
@@ -102,16 +101,6 @@ src_install() {
 	dosym -r "/usr/${erl_libdir_rel}/erts-${erl_erts_ver}/bin/beam.smp" /usr/bin/beam.smp
 
 	rm "${ED}/${erl_libdir}/Install" || die
-
-	docompress "${my_manpath}"
-
-	insinto "${my_manpath}"
-	doins -r "${WORKDIR}"/man/*
-	# extend MANPATH, so the normal man command can find it
-	# see bug 189639
-	newenvd - "90erlang" <<-_EOF_
-		MANPATH="${my_manpath}"
-	_EOF_
 
 	use systemd && systemd_newunit "${FILESDIR}"/epmd.service-r1 epmd.service
 }

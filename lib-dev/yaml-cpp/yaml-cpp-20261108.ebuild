@@ -4,7 +4,7 @@ inherit cmake
 
 DESCRIPTION="A YAML parser and emitter in C++"
 HOMEPAGE="https://github.com/jbeder/yaml-cpp"
-SNAPSHOT=c5e65360373d1d99d6b6848c991cd4fcee435009
+SNAPSHOT=f473f3bdfed25271ebd3d268caedc1b0b7f5ff50
 SRC_URI="https://github.com/jbeder/yaml-cpp/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
@@ -14,7 +14,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="test"
 
-BDEPEND="test? ( dev-cpp/gtest )"
+BDEPEND="test? ( lib-dev/gtest )"
 
 RESTRICT="!test? ( test )"
 

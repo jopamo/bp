@@ -1,0 +1,21 @@
+--- a/plugins/tls/k5tls/openssl.c
++++ b/plugins/tls/k5tls/openssl.c
+@@ -35,2 +35,3 @@
+ #include <openssl/err.h>
++#include <openssl/pem.h>
+ #include <openssl/ssl.h>
+@@ -154,2 +155,3 @@
+     FILE *fp;
++    BIO *bio;
+     STACK_OF(X509_INFO) *sk = NULL;
+@@ -161,3 +163,9 @@
+         return errno;
+-    sk = PEM_X509_INFO_read(fp, NULL, NULL, NULL);
++    bio = BIO_new_fp(fp, BIO_NOCLOSE);
++    if (bio == NULL) {
++        fclose(fp);
++        return ENOMEM;
++    }
++    sk = PEM_X509_INFO_read_bio(bio, NULL, NULL, NULL);
++    BIO_free(bio);
+     fclose(fp);

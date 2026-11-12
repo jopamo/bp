@@ -4,7 +4,7 @@ inherit autotools
 
 DESCRIPTION="MIT Kerberos V"
 HOMEPAGE="https://web.mit.edu/kerberos/www/"
-SNAPSHOT=5d9782753e2e675a98d1ac139cc085dd760a77d5
+SNAPSHOT=bdf3a4dc3c0b76492a5483e40b2112c801495795
 SRC_URI="https://github.com/krb5/krb5/archive/${SNAPSHOT}.tar.gz -> mit-krb5-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/krb5-${SNAPSHOT}/src"
 
@@ -27,6 +27,7 @@ PATCHES=(
 	"${FILESDIR}/mit-krb5-1.12_warn_cflags.patch"
 	"${FILESDIR}/mit-krb5_dont_create_rundir.patch"
 	"${FILESDIR}/mit-krb5-1.18.2-krb5-config.patch"
+	"${FILESDIR}/mit-krb5-tls-anchor-bio.patch"
 )
 
 src_prepare() {

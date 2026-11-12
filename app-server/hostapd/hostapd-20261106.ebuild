@@ -4,7 +4,7 @@ inherit flag-o-matic toolchain-funcs
 
 DESCRIPTION="IEEE 802.11 wireless LAN Host AP daemon"
 HOMEPAGE="https://w1.fi/ https://w1.fi/cgit/hostap/"
-SNAPSHOT=3758131cfea1b467038d179bff46006912cbb329
+SNAPSHOT=6d3d778451a9329085eab5777386db0b78d56987
 SRC_URI="https://github.com/1g4-mirror/hostap/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/hostap-${SNAPSHOT}/hostapd"
 
@@ -96,9 +96,8 @@ src_compile() {
 
 src_install() {
 	insinto /etc/hostapd
+	insopts -m 0600
 	doins hostapd.{conf,accept,deny,eap_user,radius_clients,sim_db,wpa_psk}
-
-	fperms -R 600 /etc/hostapd
 
 	dobin hostapd
 	dobin hostapd_cli

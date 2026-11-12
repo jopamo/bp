@@ -1,0 +1,8 @@
+--- a/utils/hwloc/test-parsing-flags.sh.in
++++ b/utils/hwloc/test-parsing-flags.sh.in
+@@ -17,4 +17,4 @@
+-IFS=' ' flags=${flags_def}
++flags=${flags_def}
+ for flag in $flags
+ do
+   if ! grep -q "HWLOC_UTILS_PARSING_FLAG($flag)" "$misch"; then

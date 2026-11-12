@@ -1,0 +1,10 @@
+--- a/tests/meson.build
++++ b/tests/meson.build
+@@ -153,6 +153,7 @@
+     '-DFLASHROM_TEST',
+   ],
+   export_dynamic : true,
++  override_options : ['b_lto=false'],
+   link_args : mocks + link_args,
+   dependencies : [cmocka_dep, flashrom_test_dep, threads_dep],
+ )

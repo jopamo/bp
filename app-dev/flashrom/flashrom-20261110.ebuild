@@ -4,7 +4,7 @@ inherit meson
 
 DESCRIPTION="Utility for reading, writing, erasing and verifying flash ROM chips"
 HOMEPAGE="https://flashrom.org/Flashrom"
-SNAPSHOT=93546a16f2e096eab3f67a015dc7487f81a25e29
+SNAPSHOT=35c679c7ecd1db67649b950ee0b0b4f74a540ef1
 SRC_URI="https://github.com/flashrom/flashrom/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/flashrom-${SNAPSHOT}
 
@@ -16,6 +16,10 @@ IUSE_PROGRAMMERS="+internal	+linux-mtd +linux-spi"
 IUSE="${IUSE_PROGRAMMERS} internal-dmi test tools"
 
 RESTRICT="!test? ( test )"
+
+DEPEND="test? ( lib-dev/cmocka )"
+
+PATCHES=( "${FILESDIR}/flashrom-tests-disable-lto.patch" )
 
 src_prepare() {
 	default
@@ -32,9 +36,11 @@ src_prepare() {
 }
 
 src_configure() {
-	local programmers="$(printf '%s,' $(for flag in ${IUSE_PROGRAMMERS//+/}; do usev ${flag}; done))"
+	local programmers="" flag
+	for flag in ${IUSE_PROGRAMMERS//+/}; do
+		use "${flag}" && programmers+="${flag//-/_},"
+	done
 	programmers="${programmers%,}"
-	programmers="${programmers//-/_}"
 	local emesonargs=(
 		-Dclassic_cli="enabled"
 		-Dprogrammer="${programmers}"

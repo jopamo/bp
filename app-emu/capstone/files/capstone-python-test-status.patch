@@ -1,0 +1,8 @@
+--- a/bindings/python/tests/test_all.py
++++ b/bindings/python/tests/test_all.py
+@@ -33,3 +33,5 @@
+ # Run the suite
+ runner = unittest.TextTestRunner(verbosity=2)
+ result = runner.run(suite)
++if not result.wasSuccessful():
++    raise SystemExit(1)

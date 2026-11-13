@@ -4,7 +4,7 @@ inherit autotools
 
 DESCRIPTION="compile XKB keyboard description"
 HOMEPAGE="https://www.x.org"
-SNAPSHOT=53180cf9e3fb28f279f3be067c49fc5d1764257c
+SNAPSHOT=98d99b893c94326a89c4783b710c6b92bc0887e6
 SRC_URI="https://gitlab.freedesktop.org/xorg/app/xkbcomp/-/archive/${SNAPSHOT}/xkbcomp-${SNAPSHOT}.tar.bz2 -> xkbcomp-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/xkbcomp-${SNAPSHOT}"
 

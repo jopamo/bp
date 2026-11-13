@@ -3,8 +3,8 @@
 inherit meson git-r3
 
 DESCRIPTION="GDK Pixbuf image loading and SVG rendering libraries"
-HOMEPAGE="https://gitlab.com/pjo/pigment"
-EGIT_REPO_URI="https://gitlab.com/pjo/pigment"
+HOMEPAGE="https://github.com/jopamo/pigment"
+EGIT_REPO_URI="https://github.com/jopamo/pigment.git"
 
 LICENSE="LGPL-2+ LGPL-2.1+"
 SLOT="0"
@@ -37,7 +37,8 @@ BDEPEND="
 
 src_configure() {
 	local emesonargs=(
-		-Dothers=enabled
+		-Dbmp=enabled
+		-Dico=enabled
 		-Dbuiltin_loaders=all
 		-Dsvg=true
 		-Dgdk_pixbuf_loader=true

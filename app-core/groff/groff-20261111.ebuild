@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-SNAPSHOT=33019731eb5d2c79035b2b352ba77dbe0790f0e3
+SNAPSHOT=0449fccc1c358201aa4c362619172fd81eb920e3
 EPSF_COMMIT=9b87a88f3842b91d8141d60e8ec0e66bf3f554bc
 
 inherit flag-o-matic qa-policy gl
@@ -39,6 +39,7 @@ src_prepare() {
 	cp "${DISTDIR}/${PN}-epsf-${EPSF_COMMIT}.tex" gnulib/build-aux/epsf.tex || die
 	eapply "${FILESDIR}/groff-snapshot-images.patch"
 	eapply "${FILESDIR}/groff-import-test-image-encoding.patch"
+	eapply "${FILESDIR}/groff-grn-curve-test-path.patch"
 
 	./bootstrap --copy --skip-po --no-git --gnulib-srcdir="${S}"/gnulib || die
 

@@ -1,0 +1,19 @@
+Pass the fixture directory through grn's search path. The file directive
+reads only 80 characters, so a long TMPDIR otherwise prevents this test
+from reaching the curve control-point limit.
+
+--- a/src/preproc/grn/tests/avoids-stack-overflow-on-curve-commands.sh
++++ b/src/preproc/grn/tests/avoids-stack-overflow-on-curve-commands.sh
+@@ -250,7 +250,7 @@
+ Here is some text before the graphic.
+ .GS C
+-file '"$gremlin_file"'
++file 68686.grn
+ .GE
+ .pp
+ Here is some text after the graphic.
+ .'
+@@ -258,2 +258,2 @@
+-error=$(printf '%s\n' "$input" | "$grn" -F "$fontdir" 2>&1 > /dev/null)
++error=$(printf '%s\n' "$input" | "$grn" -I "$sandbox_dir" -F "$fontdir" 2>&1 > /dev/null)
+ status=$?

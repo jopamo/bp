@@ -15,8 +15,8 @@ LICENSE="BSD-3-Clause"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-SRC_URI="https://files.pythonhosted.org/packages/69/59/b6fc2188dfc7ea4f936cd12b49d707f66a1cb7a1d2c16172963534db741b/flit_core-3.12.0.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/flit_core-3.12.0"
+SRC_URI="https://files.pythonhosted.org/packages/d3/8b/0370578a456986d6995344967a479dd5c9d4e064681550c2a9594bb58b4a/flit_core-4.2.0.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/flit_core-4.2.0"
 
 python_compile() {
 	"${EPYTHON}" -m flit_core.wheel --outdir "${BUILD_DIR}" || die

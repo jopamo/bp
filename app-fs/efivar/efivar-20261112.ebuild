@@ -1,7 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 inherit flag-o-matic
-SNAPSHOT=b9ee8f239125ede03b7367e9a6da75701596b792
+SNAPSHOT=f5e43805e7de46bf6768969639efa0c2a80c47c2
 
 DESCRIPTION="Tools and library to manipulate EFI variables"
 HOMEPAGE="https://github.com/rhboot/efivar"
@@ -11,6 +11,9 @@ S=${WORKDIR}/efivar-${SNAPSHOT}
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+IUSE="test"
+BDEPEND="test? ( app-fs/grub )"
 
 src_prepare() {
 	filter-flags -Wl,-z,defs
@@ -25,6 +28,10 @@ src_compile() {
 		bindir="/usr/bin/" \
 		mandir="/usr/share/man/" \
 		includedir="/usr/include/"
+}
+
+src_test() {
+	emake GRUB_PREFIX=grub test
 }
 
 src_install() {

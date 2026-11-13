@@ -4,7 +4,7 @@ inherit autotools qa-policy
 
 DESCRIPTION="Minimalistic netlink library"
 HOMEPAGE="http://netfilter.org/projects/libmnl"
-SNAPSHOT=d24c88693be13ae77843e18e3388ca9142efdc31
+SNAPSHOT=c2f0565f4bd6f49033b0de9aab5bfbc3b9a75fe2
 SRC_URI="https://github.com/1g4-mirror/libmnl/archive/${SNAPSHOT}.tar.gz -> libmnl-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/libmnl-${SNAPSHOT}
 

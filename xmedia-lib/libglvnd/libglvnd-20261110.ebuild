@@ -5,13 +5,15 @@ inherit meson qa-policy
 DESCRIPTION="The GL Vendor-Neutral Dispatch library"
 HOMEPAGE="https://gitlab.freedesktop.org/glvnd/libglvnd"
 
-SNAPSHOT=c046a760d845416e98ac4128757b2b356c47fdaa
+SNAPSHOT=8731041dbd78566bffafb5145aec8b8df8b5260e
 SRC_URI="https://gitlab.freedesktop.org/glvnd/libglvnd/-/archive/${SNAPSHOT}/libglvnd-${SNAPSHOT}.tar.bz2 -> libglvnd-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/libglvnd-${SNAPSHOT}"
 
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+IUSE="test"
 
 RDEPEND="
 	xgui-lib/libX11
@@ -21,6 +23,7 @@ DEPEND="
 	${RDEPEND}
 	xgui-tools/xorgproto
 "
+BDEPEND="test? ( xgui-tools/xvfb-run )"
 
 src_configure() {
 	qa-policy-configure
@@ -29,6 +32,12 @@ src_configure() {
 		-Dgles1=false
 	)
 	meson_src_configure
+}
+
+src_test() {
+	xvfb-run -a meson test -C "${BUILD_DIR}" \
+		--print-errorlogs --num-processes "$(makeopts_jobs "${MAKEOPTS}")" \
+		|| die "libglvnd tests failed"
 }
 
 src_install() {

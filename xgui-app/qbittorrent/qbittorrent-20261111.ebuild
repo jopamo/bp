@@ -6,7 +6,7 @@ inherit xdg cmake user flag-o-matic
 
 DESCRIPTION="BitTorrent client in C++ and Qt"
 HOMEPAGE="https://www.qbittorrent.org/"
-SNAPSHOT=49f26f62859f95bf6482ce576dc57cabc9a3ad29
+SNAPSHOT=d56ce79c99dfffcf43954b81142bc8e7cb81a429
 SRC_URI="https://github.com/qbittorrent/qBittorrent/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/qBittorrent-${SNAPSHOT}"
 

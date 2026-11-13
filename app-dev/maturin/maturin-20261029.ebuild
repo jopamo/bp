@@ -497,6 +497,8 @@ LICENSE="|| ( Apache-2.0 MIT )"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
+BDEPEND=">=dev-pypi/setuptools-rust-1.11.0[${PYTHON_USEDEP}]"
+
 RESTRICT="test network-sandbox"
 
 QA_FLAGS_IGNORED="usr/bin/maturin"

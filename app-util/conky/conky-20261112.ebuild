@@ -4,7 +4,7 @@ inherit cmake xdg-utils
 
 DESCRIPTION="An advanced, highly configurable system monitor for X"
 HOMEPAGE="https://github.com/brndnmtthws/conky"
-SNAPSHOT=6b2fa2c56466c56b6f1b731867dff3832cfce9e2
+SNAPSHOT=8ddbf3bec1a42a6ee99e30849f75e7b37689edbb
 SRC_URI="https://github.com/brndnmtthws/conky/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

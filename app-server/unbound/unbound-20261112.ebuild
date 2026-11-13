@@ -4,7 +4,7 @@ inherit flag-o-matic python-single-r1 doins autotools qa-policy
 
 DESCRIPTION="A validating, recursive and caching DNS resolver"
 HOMEPAGE="http://unbound.net/"
-SNAPSHOT=4528910b222be267ce8ad72db2e1662e773682da
+SNAPSHOT=c03454da25d1d5ef049b8691f540d3116139c3d6
 SRC_URI="https://github.com/NLnetLabs/unbound/archive/${SNAPSHOT}.tar.gz -> unbound-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/unbound-${SNAPSHOT}"
 
@@ -15,6 +15,13 @@ KEYWORDS="amd64 arm64"
 IUSE="debug dnscrypt ecdsa gost python static-libs systemd"
 
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
+
+BDEPEND+="
+	app-build/bison
+	app-build/flex
+"
+
+PATCHES=( "${FILESDIR}/unbound-flex-buffer-declaration.patch" )
 
 DEPEND="
 	lib-core/expat

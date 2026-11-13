@@ -4,7 +4,7 @@ inherit flag-o-matic qa-policy
 
 DESCRIPTION="WebM VP8 and VP9 Codec SDK"
 HOMEPAGE="https://www.webmproject.org"
-SNAPSHOT=900b2a52b69e9d4ab72eb855c365da1100c50eb1
+SNAPSHOT=6f4dbb1bc6803cbcdb7f54bd1c11a6228b717705
 SRC_URI="https://github.com/webmproject/libvpx/archive/${SNAPSHOT}.tar.gz -> libvpx-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/libvpx-${SNAPSHOT}"
 
@@ -46,6 +46,12 @@ src_configure() {
 
 src_compile() {
 	emake verbose=yes GEN_EXAMPLES=""
+}
+
+src_test() {
+	# Shared-library tests must use this build, not an installed libvpx.
+	local -x LD_LIBRARY_PATH="${S}${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}"
+	default
 }
 
 src_install() {

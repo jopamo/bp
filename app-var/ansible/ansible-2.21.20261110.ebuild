@@ -12,7 +12,7 @@ RDEPEND=""
 # lockstep-pypi-deps: end
 DESCRIPTION="a radically simple IT automation platform"
 HOMEPAGE="https://ansible.com/"
-SNAPSHOT=446d5bb415de5e40a0bf9b23f9ae2a7e2ad16835
+SNAPSHOT=d273e888b2b8e56fc4ae7ef97f46ccae97a50bf1
 SRC_URI="https://github.com/ansible/ansible/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/ansible-${SNAPSHOT}"
 
@@ -36,6 +36,6 @@ RDEPEND="
 "
 DEPEND="
 	>=dev-pypi/setuptools-77.0.3[${PYTHON_USEDEP}]
-	<=dev-pypi/setuptools-84.0.0[${PYTHON_USEDEP}]
+	<=dev-pypi/setuptools-84.2.1[${PYTHON_USEDEP}]
 	>=dev-pypi/packaging-16.6[${PYTHON_USEDEP}]
 "

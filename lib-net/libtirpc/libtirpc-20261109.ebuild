@@ -1,7 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 inherit flag-o-matic autotools qa-policy
-SNAPSHOT=b2a58e4ac15dd5f45952210ef466e9fd88dda553
+SNAPSHOT=004c0d6da4c587a73b92d2261fbd35782f950d17
 
 DESCRIPTION="Transport Independent RPC library (SunRPC replacement)"
 HOMEPAGE="http://libtirpc.sourceforge.net/"

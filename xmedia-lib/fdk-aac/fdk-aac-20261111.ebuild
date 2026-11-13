@@ -4,7 +4,7 @@ inherit autotools
 
 DESCRIPTION="Fraunhofer AAC codec library"
 HOMEPAGE="https://sourceforge.net/projects/opencore-amr/"
-SNAPSHOT=c41c3c7516ea8d0d78a53b96b30bed3a29745cc6
+SNAPSHOT=5fae93274edb7c5e8af61d726169d3787656d454
 SRC_URI="https://github.com/mstorsjo/fdk-aac/archive/${SNAPSHOT}.tar.gz -> fdk-aac-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/fdk-aac-${SNAPSHOT}"
 

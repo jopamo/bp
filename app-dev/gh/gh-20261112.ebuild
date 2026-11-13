@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-SNAPSHOT=736c68f674113337685e3eb1f908602a03b8f99b
+SNAPSHOT=3d5a9e355a837f2f5ee78d7484c118cc1342ad1a
 SHORT=${SNAPSHOT:0:9}
 
 inherit flag-o-matic go-module
@@ -20,8 +20,8 @@ EGO_SUM=(
 	"charm.land/glamour/v2 v2.0.2-0.20261015065741-010543cac1a0/go.mod"
 	"charm.land/huh/v2 v2.0.3"
 	"charm.land/huh/v2 v2.0.3/go.mod"
-	"charm.land/lipgloss/v2 v2.0.6"
-	"charm.land/lipgloss/v2 v2.0.6/go.mod"
+	"charm.land/lipgloss/v2 v2.1.0"
+	"charm.land/lipgloss/v2 v2.1.0/go.mod"
 	"cloud.google.com/go v0.123.0"
 	"cloud.google.com/go v0.123.0/go.mod"
 	"cloud.google.com/go/auth v0.24.1-0.20261001053825-dbc26066f70a"
@@ -353,8 +353,8 @@ EGO_SUM=(
 	"github.com/joho/godotenv v1.5.1/go.mod"
 	"github.com/kballard/go-shellquote v0.0.0-20180428030007-95032a82bc51"
 	"github.com/kballard/go-shellquote v0.0.0-20180428030007-95032a82bc51/go.mod"
-	"github.com/klauspost/compress v1.20.3"
-	"github.com/klauspost/compress v1.20.3/go.mod"
+	"github.com/klauspost/compress v1.20.4"
+	"github.com/klauspost/compress v1.20.4/go.mod"
 	"github.com/kr/pretty v0.3.1"
 	"github.com/kr/pretty v0.3.1/go.mod"
 	"github.com/kr/text v0.2.0"
@@ -471,9 +471,9 @@ EGO_SUM=(
 	"github.com/spf13/cast v1.10.0/go.mod"
 	"github.com/spf13/cobra v1.10.2"
 	"github.com/spf13/cobra v1.10.2/go.mod"
-	"github.com/spf13/pflag v1.0.10"
-	"github.com/spf13/pflag v1.0.10/go.mod"
 	"github.com/spf13/pflag v1.0.9/go.mod"
+	"github.com/spf13/pflag v1.1.0"
+	"github.com/spf13/pflag v1.1.0/go.mod"
 	"github.com/stretchr/objx v0.1.0/go.mod"
 	"github.com/stretchr/objx v0.4.0/go.mod"
 	"github.com/stretchr/objx v0.5.0/go.mod"
@@ -566,8 +566,8 @@ EGO_SUM=(
 	"golang.org/x/oauth2 v0.37.0/go.mod"
 	"golang.org/x/sync v0.0.0-20190423024810-112230192c58/go.mod"
 	"golang.org/x/sync v0.0.0-20220722155255-886fb9371eb4/go.mod"
-	"golang.org/x/sync v0.24.0"
-	"golang.org/x/sync v0.24.0/go.mod"
+	"golang.org/x/sync v0.25.0"
+	"golang.org/x/sync v0.25.0/go.mod"
 	"golang.org/x/sys v0.0.0-20190215142949-d0b11bdaac8a/go.mod"
 	"golang.org/x/sys v0.0.0-20190222072716-a9d3bda3a223/go.mod"
 	"golang.org/x/sys v0.0.0-20201119102817-f84b799fce68/go.mod"
@@ -575,8 +575,8 @@ EGO_SUM=(
 	"golang.org/x/sys v0.0.0-20210831042530-f4d43177bf5e/go.mod"
 	"golang.org/x/sys v0.0.0-20220520151302-bc2c85ada10a/go.mod"
 	"golang.org/x/sys v0.0.0-20220722155257-8c9f86f7a55f/go.mod"
-	"golang.org/x/sys v0.49.0"
-	"golang.org/x/sys v0.49.0/go.mod"
+	"golang.org/x/sys v0.50.0"
+	"golang.org/x/sys v0.50.0/go.mod"
 	"golang.org/x/term v0.0.0-20201126162022-7de9c90e9dd1/go.mod"
 	"golang.org/x/term v0.0.0-20210927222741-03fcf44c2211/go.mod"
 	"golang.org/x/term v0.47.0"

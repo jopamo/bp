@@ -4,7 +4,7 @@ inherit autotools flag-o-matic qa-policy
 
 DESCRIPTION="Legacy library for PPD files, split out of cups-filters"
 HOMEPAGE="https://github.com/OpenPrinting/libppd"
-SNAPSHOT=4ca95ebd35dd6eb23edaff9c6844bc06a74055c2
+SNAPSHOT=6b132075d8dc580d305cc793db6c11fca66e7ead
 SRC_URI="https://github.com/OpenPrinting/${PN}/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

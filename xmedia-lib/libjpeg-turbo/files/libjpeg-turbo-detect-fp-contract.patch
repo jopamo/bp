@@ -1,0 +1,23 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1156,5 +1156,20 @@
+ if(CPU_TYPE STREQUAL "x86_64")
+   set(DEFAULT_FLOATTEST12 no-fp-contract)
++  if(NOT CMAKE_CROSSCOMPILING)
++    # Target flags can enable FMA even though baseline x86-64 lacks it.
++    include(CheckCSourceRuns)
++    check_c_source_runs("
++      int main(void)
++      {
++        volatile float a = 0x1.000002p0f;
++        volatile float b = 0x1.fffffcp-1f;
++        volatile float c = -1.0f;
++        return a * b + c == 0.0f;
++      }" FLOATTEST12_FP_CONTRACT)
++    if(FLOATTEST12_FP_CONTRACT)
++      set(DEFAULT_FLOATTEST12 fp-contract)
++    endif()
++  endif()
+ elseif(CPU_TYPE STREQUAL "powerpc" OR CPU_TYPE STREQUAL "arm64")
+   if(CMAKE_C_COMPILER_ID MATCHES "Clang")
+     if(CMAKE_C_COMPILER_ID MATCHES "AppleClang")

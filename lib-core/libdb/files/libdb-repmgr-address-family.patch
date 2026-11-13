@@ -1,0 +1,22 @@
+Treat an unavailable address family as an unavailable connection candidate.
+The caller can then try the other resolved addresses and retry later instead
+of panicking the replication environment.
+
+--- a/src/repmgr/repmgr_net.c
++++ b/src/repmgr/repmgr_net.c
+@@ -157,6 +157,15 @@
+ 	if ((s = socket(ai->ai_family,
+ 		    ai->ai_socktype, ai->ai_protocol)) == SOCKET_ERROR) {
+ 		ret = net_errno;
++#ifdef DB_WIN32
++		if (ret == WSAEAFNOSUPPORT) {
++#else
++		if (ret == EAFNOSUPPORT) {
++#endif
++			*err = ret;
++			return (DB_REP_UNAVAIL);
++		}
++
+ 		__db_err(env, ret, "create socket");
+ 		return (ret);
+ 	}

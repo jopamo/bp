@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-SNAPSHOT=411e58f13a65ac6535f01dd36724815d9769f4d7
+SNAPSHOT=b32e16c84d0f2b9e008798aeb17dfb218dbe670a
 EGIT_REPO_URI="https://github.com/berkeleydb/libdb.git"
 EGIT_COMMIT="${SNAPSHOT}"
 
@@ -11,6 +11,8 @@ HOMEPAGE="https://github.com/berkeleydb/libdb"
 LICENSE="Sleepycat"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+
+PATCHES=( "${FILESDIR}/libdb-repmgr-address-family.patch" )
 
 src_configure() {
 	mkdir -p "${WORKDIR}/build" || die
@@ -24,6 +26,10 @@ src_configure() {
 
 src_compile() {
 	emake -C "${WORKDIR}/build"
+}
+
+src_test() {
+	emake -C "${WORKDIR}/build" test
 }
 
 src_install() {

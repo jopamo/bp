@@ -1,0 +1,13 @@
+Keep the test harness assertions active when config.h defines NDEBUG.
+Including assert.h here replaces them and drops the decoder calls.
+
+--- a/p11-kit/test-rpc.c
++++ b/p11-kit/test-rpc.c
+@@ -52,7 +52,6 @@
+ #ifdef OS_UNIX
+ #include <sys/wait.h>
+ #endif
+-#include <assert.h>
+ #include <limits.h>
+ #include <string.h>
+ #include <stdio.h>

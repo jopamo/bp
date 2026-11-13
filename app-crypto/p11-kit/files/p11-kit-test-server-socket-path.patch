@@ -1,0 +1,9 @@
+Use a short socket name directly in the private test directory. The default
+p11-kit/pkcs11-<pid> suffix exceeds the Unix socket path limit in build roots
+where this shorter path fits.
+
+--- a/p11-kit/test-server.sh
++++ b/p11-kit/test-server.sh
+@@ -36 +36 @@ test_server_access() {
+-	"$abs_top_builddir"/p11-kit/p11-kit-server-testable -s --provider "$P11_MODULE_PATH"/mock-one.so pkcs11: > start.env 2> start.err
++	"$abs_top_builddir"/p11-kit/p11-kit-server-testable -s --name "$testdir/socket" --provider "$P11_MODULE_PATH"/mock-one.so pkcs11: > start.env 2> start.err

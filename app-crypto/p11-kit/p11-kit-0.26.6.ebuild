@@ -10,6 +10,11 @@ KEYWORDS="amd64 arm64"
 
 IUSE="debug libffi"
 
+PATCHES=(
+	"${FILESDIR}/p11-kit-test-rpc-assertions.patch"
+	"${FILESDIR}/p11-kit-test-server-socket-path.patch"
+)
+
 DEPEND="
 	app-crypto/vesk
 	libffi? ( lib-core/libffi )

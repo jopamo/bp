@@ -122,4 +122,4 @@ DIST hackage-vector-stream-0.1.0.1-r4.cabal 1642 BLAKE3 ae804f5a85ab0ef89757c022
 DIST hackage-vector-stream-0.1.0.1.tar.gz 12577 BLAKE3 657fd5da8cb742b6439f8daddd8666a1b138eff5020c49ad9fe2b3c128481e6c
 DIST hackage-witherable-0.5-r2.cabal 2355 BLAKE3 79ffc6e18b13e4cc76cb8bd5253f29977f1cbb939ba4e7dda228acfc875c8d6b
 DIST hackage-witherable-0.5.tar.gz 10819 BLAKE3 6a9bbe4e5771b062a4b1b1e8bcaf4db7121982522fc47a86e51c059ccbb14948
-DIST shellcheck-b8dd508a8b60723356cf5a091e8a9325764465c1.tar.gz 485220 BLAKE3 eee91147ed167c8d7202c110fdceb654edf1e406f6e73b35f3a4db782e107bac
+DIST shellcheck-1046c00b61516a64f85a45e5fbdc69c6c1654eb5.tar.gz 487166 BLAKE3 b32b2cf4dc0d989f51b2d999f9cddac827f7598a303a34a28eee9a6960644e21

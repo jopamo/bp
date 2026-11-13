@@ -4,7 +4,7 @@ inherit hackage
 
 DESCRIPTION="Shell script analysis tool"
 HOMEPAGE="https://www.shellcheck.net https://github.com/koalaman/shellcheck"
-SNAPSHOT=b8dd508a8b60723356cf5a091e8a9325764465c1
+SNAPSHOT=1046c00b61516a64f85a45e5fbdc69c6c1654eb5
 SRC_URI="https://github.com/koalaman/shellcheck/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

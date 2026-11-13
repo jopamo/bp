@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-SNAPSHOT=25f88a5677e317e279ae10435b9adf125b0f91d1
+SNAPSHOT=48e5b573a3cf6496c85bdb5c0c26820ff2f9cd06
 EGIT_REPO_URI="https://gitlab.inria.fr/coccinelle/coccinelle.git"
 EGIT_COMMIT="${SNAPSHOT}"
 

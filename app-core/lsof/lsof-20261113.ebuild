@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-SNAPSHOT=1ebf257c64db1b2ece5e4d5e922ed711c692f161
+SNAPSHOT=c08c6ac4319e346b406cb5072aa68e0adf6a83da
 
 inherit flag-o-matic
 
@@ -15,9 +15,14 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static"
 
+PATCHES=( "${FILESDIR}/lsof-tests-noninteractive-ci.patch" )
+
 src_prepare() {
 	default
-	sed -i 's|/\* #define\tHASSECURITY\t1 \*/|#define\tHASSECURITY\t1|' dialects/linux/machine.h
+	sed -i 's|/\* #define\tHASSECURITY\t1 \*/|#define\tHASSECURITY\t1|' \
+		lib/dialects/linux/machine.h || die
+	grep -q '^#define[[:space:]]*HASSECURITY[[:space:]]*1$' \
+		lib/dialects/linux/machine.h || die "HASSECURITY was not enabled"
 	sed -i "s|.so ./version|.ds VN ${PV}|" -i Lsof.8
 }
 
@@ -32,6 +37,10 @@ src_configure() {
 src_compile() {
 	emake DEBUG="" CC="cc ${CFLAGS} ${CPPFLAGS} ${LDFLAGS}"
 
+}
+
+src_test() {
+	CI=1 default
 }
 
 src_install() {

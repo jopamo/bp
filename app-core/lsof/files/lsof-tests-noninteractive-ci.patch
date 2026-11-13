@@ -1,0 +1,17 @@
+Honor the existing CI opt-in before rejecting non-terminal input.
+
+--- a/tests/CkTestDB
++++ b/tests/CkTestDB
+@@ -57,2 +57,6 @@
++if [ x"$CI" = x1 ]; then
++    exit 0
++fi
++
+ # If the standard input is not a TTY, quit, because no interaction
+ # is possible.
+@@ -98,5 +102,1 @@
+-if [ x"$CI" = x1 ]; then
+-    exit 0
+-fi
+-
+ # Display a validation warning.

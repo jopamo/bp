@@ -4,7 +4,7 @@ inherit meson flag-o-matic
 
 DESCRIPTION="A library for configuring and customizing font access"
 HOMEPAGE="http://fontconfig.org/"
-SNAPSHOT=cbf1db7f1bd01e641968ca0818e05b0819ce6c74
+SNAPSHOT=548591665a8e0dcf5c49cc34fb59ad34c503fa1a
 SRC_URI="https://gitlab.freedesktop.org/fontconfig/fontconfig/-/archive/${SNAPSHOT}/fontconfig-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/fontconfig-${SNAPSHOT}"
 
@@ -19,7 +19,11 @@ DEPEND="
 	xgui-lib/freetype
 "
 RDEPEND="${DEPEND}"
-BDEPEND=">=app-dev/meson-1.11.0"
+BDEPEND="
+	>=app-dev/meson-1.11.0
+	dev-pypi/pytest
+	dev-pypi/pytest-tap
+"
 
 RESTRICT="nostrip"
 

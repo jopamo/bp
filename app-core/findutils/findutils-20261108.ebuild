@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-SNAPSHOT=db41ebaf0486e9903745c46a59fed9ccc4d5938b
+SNAPSHOT=71d158fdd51b755fd85cc763435fb675b541acd9
 
 inherit flag-o-matic python-any-r1 qa-policy gl
 
@@ -24,6 +24,8 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="static test"
+
+PATCHES=( "${FILESDIR}/findutils-test-option-range-buffer.patch" )
 
 DEPEND="test? ( ${PYTHON_DEPS} )"
 
@@ -67,6 +69,10 @@ src_configure() {
 src_compile() {
 	emake -C locate dblocation.texi
 	default
+}
+
+src_test() {
+	emake built_programs="find xargs" check
 }
 
 src_install() {

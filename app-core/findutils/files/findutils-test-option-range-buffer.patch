@@ -1,0 +1,15 @@
+Reserve space for both option characters and the terminating NUL in the
+joined-option test inputs.
+
+--- a/tests/xargs/test-option-range.c
++++ b/tests/xargs/test-option-range.c
+@@ -202,3 +202,3 @@
+   char *inrange = value_to_str (limit_value, false);
+-  char *joined = xmalloc (strlen (inrange) + 2);
++  char *joined = xmalloc (strlen (inrange) + 3);
+   sprintf (joined, "-l%s", inrange);
+@@ -210,3 +210,3 @@
+   char *toobig = value_to_str (limit_value, true);
+-  char *toobig_joined = xmalloc (strlen (toobig) + 2);
++  char *toobig_joined = xmalloc (strlen (toobig) + 3);
+   sprintf (toobig_joined, "-l%s", toobig);

@@ -7,7 +7,7 @@ HOMEPAGE="
 	https://www.gnu.org/software/autoconf-archive/
 	https://github.com/autoconf-archive/autoconf-archive
 "
-SNAPSHOT=92c33ce5c3eeabc7c60ca92b1a6e813bb6a5ca05
+SNAPSHOT=0c7f8119abb25dbd738b5a8fe83ce2bef19959b4
 SRC_URI="https://github.com/autoconf-archive/autoconf-archive/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

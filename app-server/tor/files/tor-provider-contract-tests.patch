@@ -1,0 +1,247 @@
+Test provider contracts without changing production crypto behavior.
+
+Vesk denies SHA-1 OAEP. Assert denial and unchanged output, including a valid
+independent ciphertext and both hybrid wrapper paths. Keep signing/key tests
+and the positive OAEP assertions for providers that implement that contract.
+
+Check the initial TLS state separately from provider-specific diagnostic text.
+Allow either documented optional-engine warning; the required-engine fixture
+still requires configuration failure.
+Use POSIX cp -R for the zero-length-key test backup.
+
+--- a/src/test/test_crypto.c
++++ b/src/test/test_crypto.c
+@@ -1091,0 +1092,43 @@
++  /* Published test key from testing_rsakeys.c. RFC 8017 OAEP fixture: SHA-1
++   * for OAEP and MGF1, empty label, seed bytes 00..13, and "Hello whirled."
++   * including its terminating NUL. Generated with Python hashlib and pow. */
++  static const char private_key[] =
++    "-----BEGIN RSA PRIVATE KEY-----\n"
++    "MIICWwIBAAKBgQCZa39BCgq7KWBWFSjGYHhqmTCHvQ7WNEFAb9Mujb6Xn/Zy01fu\n"
++    "WIpVvqmAKeLNEziItUm/gB8GwAN+/ZLwL9pufjIp2Ar+yqVXKySioZQxuCgTP2wm\n"
++    "Ku0OfmAra1Xbtrkc2OCJllxkyNPrJ/kxfwjWR96UP0+VMbOlkBoEH1FtvwIDAQAB\n"
++    "AoGAUXoygeMIYe+OdwkTt48CRHKIwH3aRE5KHSOGPyIOB05vvvmYqD8jcHgqYqNc\n"
++    "DNdZXdkRin9LevU8phObFq4DTXp08XggUx4Kk4AdsFKubQtJ8gHm3xlSKbZXX2m/\n"
++    "ZF0GRaZtVDQ3TRGh+OBLILt/2jT+BaFKGAyJ7al76F2nprECQQDJyLlteLDFBmrd\n"
++    "0kAjNBE50S5YskBCQeQACROfyTKW8lG1J57UBeYjXvbrDFBR4alIS9DEexGai9Gz\n"
++    "wxpgKg2nAkEAwqQmPstjHxvqGQRi41uXO026MLxY7dhEqs1aSw3tuT8v17pW3OEa\n"
++    "Qxv7JINePZ3+sNN+Ic+3RXBR0QuD7lSSKQJAZjVSF21GvMXfY7SX4D0DbLHUNAE2\n"
++    "I1mUz5/JXOpgwazETmpfPS4vwELd93kpRhBz2rbsbFmaNRoVgmSU+5jRiQJAZ1bV\n"
++    "g2NilgKxEGU2x3U6Xt8Oqo9lO6omEvUCKnUTsNWuZf/l3FGbKuQxO5qPr3Ex5tny\n"
++    "zqrEqBZRKgbOHfxCuQJAbJY5C3Nm5koemr031r00MY2YD1b6+hyKZyPdZ21HpyY8\n"
++    "z1kWShL0POjYPX/BnKE1FkpklWcKBb7wkK7dvAKkEQ==\n"
++    "-----END RSA PRIVATE KEY-----\n";
++  static const unsigned char oaep_ciphertext[128] = {
++    0x26, 0x45, 0xf2, 0x4c, 0xdc, 0xde, 0xce, 0x8f,
++    0xe4, 0x10, 0x12, 0x64, 0x44, 0xb1, 0x4c, 0xd9,
++    0x92, 0x28, 0x61, 0xe1, 0xfc, 0xb9, 0x5b, 0x09,
++    0x48, 0xdc, 0x3c, 0xb6, 0xc4, 0xb4, 0x95, 0x93,
++    0x3c, 0xd8, 0x02, 0xab, 0xe3, 0x47, 0xba, 0xa0,
++    0x65, 0x3f, 0x34, 0xe9, 0x02, 0x4c, 0xc9, 0xe5,
++    0x88, 0x8b, 0x52, 0x2a, 0xfe, 0xc7, 0x6d, 0x80,
++    0xa5, 0x6d, 0x60, 0x53, 0x60, 0xeb, 0x12, 0x4d,
++    0x76, 0x90, 0x28, 0xc5, 0x1d, 0xed, 0x95, 0xca,
++    0x40, 0x52, 0x42, 0x4b, 0x68, 0xf5, 0x46, 0x62,
++    0x2f, 0xba, 0x70, 0xf0, 0xe7, 0x62, 0xb3, 0xd7,
++    0x62, 0x02, 0x24, 0x33, 0xe6, 0xaf, 0x10, 0xc7,
++    0xd3, 0x2a, 0x72, 0xcc, 0x89, 0xb6, 0x25, 0x9a,
++    0xfe, 0x09, 0x1b, 0x3a, 0x33, 0x08, 0x51, 0xdc,
++    0xbd, 0xc1, 0x63, 0x58, 0x24, 0xda, 0x97, 0xf1,
++    0xd1, 0x6c, 0x7e, 0x07, 0x36, 0xb4, 0xad, 0x87,
++  };
++#ifdef VESK_VERSION_NUMBER
++  /* Vesk permits legacy hashing, not SHA-1 OAEP. */
++  const int oaep_allowed = 0;
++#else
++  const int oaep_allowed = 1;
++#endif
+@@ -1094 +1137 @@
+-  char data1[1024], data2[1024], data3[1024];
++  char data1[1024], data2[1024], data3[1024], unchanged[1024];
+@@ -1100 +1143 @@
+-  pk1 = pk_generate(0);
++  pk1 = crypto_pk_new();
+@@ -1102,0 +1146,3 @@
++  tt_int_op(crypto_pk_read_private_key_from_string(pk1, private_key,
++                                                sizeof(private_key) - 1),
++            OP_EQ, 0);
+@@ -1117,26 +1163,59 @@
+-  tt_int_op(128,OP_EQ, crypto_pk_public_encrypt(pk2, data1, sizeof(data1),
+-                                        "Hello whirled.", 15,
+-                                        PK_PKCS1_OAEP_PADDING));
+-  tt_int_op(128,OP_EQ, crypto_pk_public_encrypt(pk1, data2, sizeof(data1),
+-                                        "Hello whirled.", 15,
+-                                        PK_PKCS1_OAEP_PADDING));
+-  /* oaep padding should make encryption not match */
+-  tt_mem_op(data1,OP_NE, data2, 128);
+-  tt_int_op(15,OP_EQ,
+-            crypto_pk_private_decrypt(pk1, data3, sizeof(data3), data1, 128,
+-                                        PK_PKCS1_OAEP_PADDING,1));
+-  tt_str_op(data3,OP_EQ, "Hello whirled.");
+-  memset(data3, 0, 1024);
+-  tt_int_op(15,OP_EQ,
+-            crypto_pk_private_decrypt(pk1, data3, sizeof(data3), data2, 128,
+-                                        PK_PKCS1_OAEP_PADDING,1));
+-  tt_str_op(data3,OP_EQ, "Hello whirled.");
+-  /* Can't decrypt with public key. */
+-  tt_int_op(-1,OP_EQ,
+-            crypto_pk_private_decrypt(pk2, data3, sizeof(data3), data2, 128,
+-                                        PK_PKCS1_OAEP_PADDING,1));
+-  /* Try again with bad padding */
+-  memcpy(data2+1, "XYZZY", 5);  /* This has fails ~ once-in-2^40 */
+-  tt_int_op(-1,OP_EQ,
+-            crypto_pk_private_decrypt(pk1, data3, sizeof(data3), data2, 128,
+-                                        PK_PKCS1_OAEP_PADDING,1));
++  memset(unchanged, 0xa5, sizeof(unchanged));
++  memcpy(data1, oaep_ciphertext, sizeof(oaep_ciphertext));
++  memcpy(data3, unchanged, sizeof(data3));
++  /* A valid independent ciphertext distinguishes denial from bad padding. */
++  tt_int_op(crypto_pk_private_decrypt(pk1, data3, sizeof(data3), data1, 128,
++                                     PK_PKCS1_OAEP_PADDING, 1),
++            OP_EQ, oaep_allowed ? 15 : -1);
++  if (oaep_allowed) {
++    tt_mem_op(data3, OP_EQ, "Hello whirled.", 15);
++  } else {
++    tt_mem_op(data3, OP_EQ, unchanged, sizeof(data3));
++    tt_int_op(crypto_pk_private_decrypt(pk2, data3, sizeof(data3), data1, 128,
++                                       PK_PKCS1_OAEP_PADDING, 1), OP_EQ, -1);
++    tt_mem_op(data3, OP_EQ, unchanged, sizeof(data3));
++    data1[1] ^= 1;
++    tt_int_op(crypto_pk_private_decrypt(pk1, data3, sizeof(data3), data1, 128,
++                                       PK_PKCS1_OAEP_PADDING, 1), OP_EQ, -1);
++    tt_mem_op(data3, OP_EQ, unchanged, sizeof(data3));
++    data1[1] ^= 1;
++  }
++
++  if (oaep_allowed) {
++    tt_int_op(128,OP_EQ, crypto_pk_public_encrypt(pk2, data1, sizeof(data1),
++                                          "Hello whirled.", 15,
++                                          PK_PKCS1_OAEP_PADDING));
++    tt_int_op(128,OP_EQ, crypto_pk_public_encrypt(pk1, data2, sizeof(data1),
++                                          "Hello whirled.", 15,
++                                          PK_PKCS1_OAEP_PADDING));
++    /* oaep padding should make encryption not match */
++    tt_mem_op(data1,OP_NE, data2, 128);
++    tt_int_op(15,OP_EQ,
++              crypto_pk_private_decrypt(pk1, data3, sizeof(data3), data1, 128,
++                                          PK_PKCS1_OAEP_PADDING,1));
++    tt_str_op(data3,OP_EQ, "Hello whirled.");
++    memset(data3, 0, 1024);
++    tt_int_op(15,OP_EQ,
++              crypto_pk_private_decrypt(pk1, data3, sizeof(data3), data2, 128,
++                                          PK_PKCS1_OAEP_PADDING,1));
++    tt_str_op(data3,OP_EQ, "Hello whirled.");
++    /* Can't decrypt with public key. */
++    tt_int_op(-1,OP_EQ,
++              crypto_pk_private_decrypt(pk2, data3, sizeof(data3), data2, 128,
++                                          PK_PKCS1_OAEP_PADDING,1));
++    /* Try again with bad padding */
++    memcpy(data2+1, "XYZZY", 5);  /* This has fails ~ once-in-2^40 */
++    tt_int_op(-1,OP_EQ,
++              crypto_pk_private_decrypt(pk1, data3, sizeof(data3), data2, 128,
++                                          PK_PKCS1_OAEP_PADDING,1));
++  } else {
++    memcpy(data2, unchanged, sizeof(data2));
++    tt_int_op(crypto_pk_public_encrypt(pk2, data2, sizeof(data2),
++                                     "Hello whirled.", 15,
++                                     PK_PKCS1_OAEP_PADDING), OP_EQ, -1);
++    tt_mem_op(data2, OP_EQ, unchanged, sizeof(data2));
++    tt_int_op(crypto_pk_public_encrypt(pk1, data2, sizeof(data2),
++                                     "Hello whirled.", 15,
++                                     PK_PKCS1_OAEP_PADDING), OP_EQ, -1);
++    tt_mem_op(data2, OP_EQ, unchanged, sizeof(data2));
++  }
+@@ -1156 +1235,3 @@
+-  tt_int_op(15,OP_EQ,
++  tt_int_op(crypto_pk_cmp_keys(pk1, pk2), OP_EQ, 0);
++  memcpy(data3, unchanged, sizeof(data3));
++  tt_int_op(oaep_allowed ? 15 : -1, OP_EQ,
+@@ -1158,0 +1240,2 @@
++  if (!oaep_allowed)
++    tt_mem_op(data3, OP_EQ, unchanged, sizeof(data3));
+@@ -1190,2 +1273,2 @@
+-    memset(data2,0,1024);
+-    memset(data3,0,1024);
++    memcpy(data2, unchanged, sizeof(data2));
++    memcpy(data3, unchanged, sizeof(data3));
+@@ -1193,0 +1277,12 @@
++    if (!oaep_allowed) {
++      tt_int_op(len, OP_EQ, -1);
++      tt_mem_op(data2, OP_EQ, unchanged, sizeof(data2));
++      memcpy(data2, oaep_ciphertext, sizeof(oaep_ciphertext));
++      /* Exercise both the RSA-only and RSA-plus-AES wrapper paths. */
++      len = i == 85 ? 128 : 144;
++      tt_int_op(crypto_pk_obsolete_private_hybrid_decrypt(pk1, data3,
++                  sizeof(data3), data2, len, PK_PKCS1_OAEP_PADDING, 1),
++                OP_EQ, -1);
++      tt_mem_op(data3, OP_EQ, unchanged, sizeof(data3));
++      continue;
++    }
+--- a/src/test/test_tortls_openssl.c
++++ b/src/test/test_tortls_openssl.c
+@@ -48,2 +47,0 @@
+-
+-#define SSL_STATE_STR "before SSL initialization"
+@@ -139,0 +138,2 @@
++  char expected[256];
++  const char *ssl_state;
+@@ -156,0 +157,5 @@
++  tt_assert(tls->ssl);
++  tt_assert(SSL_in_before(tls->ssl));
++  tt_assert(!SSL_is_init_finished(tls->ssl));
++  ssl_state = SSL_state_string_long(tls->ssl);
++  tt_assert(ssl_state && *ssl_state);
+@@ -158 +163,2 @@
+-  tt_str_op(buf, OP_EQ, SSL_STATE_STR " in HANDSHAKE");
++  tor_snprintf(expected, sizeof(expected), "%s in HANDSHAKE", ssl_state);
++  tt_str_op(buf, OP_EQ, expected);
+@@ -162 +168,2 @@
+-  tt_str_op(buf, OP_EQ, SSL_STATE_STR " in OPEN");
++  tor_snprintf(expected, sizeof(expected), "%s in OPEN", ssl_state);
++  tt_str_op(buf, OP_EQ, expected);
+@@ -166 +173,2 @@
+-  tt_str_op(buf, OP_EQ, SSL_STATE_STR " in GOTCLOSE");
++  tor_snprintf(expected, sizeof(expected), "%s in GOTCLOSE", ssl_state);
++  tt_str_op(buf, OP_EQ, expected);
+@@ -170 +178,2 @@
+-  tt_str_op(buf, OP_EQ, SSL_STATE_STR " in SENTCLOSE");
++  tor_snprintf(expected, sizeof(expected), "%s in SENTCLOSE", ssl_state);
++  tt_str_op(buf, OP_EQ, expected);
+@@ -174 +183,2 @@
+-  tt_str_op(buf, OP_EQ, SSL_STATE_STR " in CLOSED");
++  tor_snprintf(expected, sizeof(expected), "%s in CLOSED", ssl_state);
++  tt_str_op(buf, OP_EQ, expected);
+@@ -178 +188,2 @@
+-  tt_str_op(buf, OP_EQ, SSL_STATE_STR " in RENEGOTIATE");
++  tor_snprintf(expected, sizeof(expected), "%s in RENEGOTIATE", ssl_state);
++  tt_str_op(buf, OP_EQ, expected);
+@@ -182 +193 @@
+-  tt_str_op(buf, OP_EQ, SSL_STATE_STR);
++  tt_str_op(buf, OP_EQ, ssl_state);
+@@ -186 +197,3 @@
+-  tt_str_op(buf, OP_EQ, SSL_STATE_STR " in unknown TLS state");
++  tor_snprintf(expected, sizeof(expected), "%s in unknown TLS state",
++               ssl_state);
++  tt_str_op(buf, OP_EQ, expected);
+@@ -249,0 +263 @@
++  char expected[256];
+@@ -308,0 +323,3 @@
++  tt_assert(tls->ssl);
++  tt_assert(SSL_in_before(tls->ssl));
++  tt_assert(!SSL_is_init_finished(tls->ssl));
+@@ -312,2 +329,3 @@
+-  expect_log_msg("TLS error with 127.hello: (null)"
+-            " (in (null):(null):" SSL_STATE_STR ")\n");
++  tor_snprintf(expected, sizeof(expected), "TLS error with 127.hello: (null)"
++               " (in (null):(null):%s)\n", SSL_state_string_long(tls->ssl));
++  expect_log_msg(expected);
+--- a/src/test/conf_examples/crypto_accel/expected_log
++++ b/src/test/conf_examples/crypto_accel/expected_log
+@@ -1 +1 @@
+-Unable to load dynamic OpenSSL engine "nonexistent_chartreuse_accelerator"
++Unable to load dynamic OpenSSL engine "nonexistent_chartreuse_accelerator"\|No OpenSSL hardware acceleration support enabled\.
+--- a/src/test/zero_length_keys.sh
++++ b/src/test/zero_length_keys.sh
+@@ -76 +76 @@
+-cp -r "$DATA_DIR"/keys "$DATA_DIR"/keys.old
++cp -R "$DATA_DIR"/keys "$DATA_DIR"/keys.old

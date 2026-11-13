@@ -6,7 +6,7 @@ inherit user autotools
 
 DESCRIPTION="Anonymizing overlay network for TCP"
 HOMEPAGE="http://www.torproject.org/"
-SNAPSHOT=6edd9de7b2e9a5782b762840d829c24f75469872
+SNAPSHOT=ad0280dbe33f1ad867d91fbceead3e9583970146
 SRC_URI="https://gitlab.torproject.org/tpo/core/tor/-/archive/${SNAPSHOT}/tor-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/tor-${SNAPSHOT}"
 
@@ -15,6 +15,8 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="lzma scrypt seccomp systemd tor-hardening test zstd"
+
+PATCHES=( "${FILESDIR}/tor-provider-contract-tests.patch" )
 
 DEPEND="
 	lib-dev/libevent[ssl]

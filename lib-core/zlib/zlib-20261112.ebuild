@@ -7,7 +7,7 @@ inherit toolchain-funcs qa-policy
 
 DESCRIPTION="zlib-ng compression library with the zlib-compatible API"
 HOMEPAGE="https://github.com/zlib-ng/zlib-ng"
-SNAPSHOT=b342eef204dc5c15cbe5bbf020d3a4ada26724ca
+SNAPSHOT=da9e0129e55eb475131d7fe26424e00aa93f482f
 SRC_URI="https://github.com/zlib-ng/zlib-ng/archive/${SNAPSHOT}.tar.gz -> zlib-ng-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/zlib-ng-${SNAPSHOT}"
 

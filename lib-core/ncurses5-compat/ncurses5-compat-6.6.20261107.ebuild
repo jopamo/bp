@@ -30,6 +30,10 @@ src_configure() {
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }
 
+src_test() {
+	LD_LIBRARY_PATH="${S}/lib${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}" default
+}
+
 src_install() {
 	mkdir -p "${ED}"/usr/lib || die
 	cp "${S}"/lib/lib*5* "${ED}"/usr/lib/ || die

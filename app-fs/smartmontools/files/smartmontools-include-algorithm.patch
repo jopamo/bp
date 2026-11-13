@@ -1,0 +1,10 @@
+--- a/lib/os_linux.cpp
++++ b/lib/os_linux.cpp
+@@ -88,6 +88,7 @@
+ #include "dev_ata_cmd_set.h"
+ #include "dev_areca.h"
+ 
++#include <algorithm>
+ #include <set>
+ 
+ // "include/uapi/linux/nvme_ioctl.h" from Linux kernel sources

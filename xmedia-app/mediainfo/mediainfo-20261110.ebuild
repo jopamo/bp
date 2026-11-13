@@ -4,7 +4,7 @@ inherit autotools flag-o-matic
 
 DESCRIPTION="MediaInfo supplies technical and tag information about media files"
 HOMEPAGE="https://mediaarea.net/mediainfo/ https://github.com/MediaArea/MediaInfo"
-SNAPSHOT=dd97b50c676ef8d51e9dc3a35aece34252dfed01
+SNAPSHOT=0836084023ec2cb33ff9fd82d42564d48fab15af
 SRC_URI="https://github.com/MediaArea/MediaInfo/archive/${SNAPSHOT}.tar.gz -> MediaInfo-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/MediaInfo-${SNAPSHOT}/Project/GNU/CLI/"
 
@@ -14,7 +14,7 @@ KEYWORDS="amd64 arm64"
 
 DEPEND="
 	xmedia-lib/libmediainfo
-	xmedia-lib/libzen
+	>=xmedia-lib/libzen-20261112
 	lib-core/zlib
 "
 

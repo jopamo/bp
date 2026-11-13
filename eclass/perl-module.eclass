@@ -29,9 +29,8 @@ PERL_EXPF="src_prepare src_configure src_compile src_test src_install"
 # dev-lang/perl is automatically added by the eclass. It defaults to yes.
 # Set to no to disable, set to noslotop to add a perl dependency without
 # slot operator. All packages installing into the vendor_perl
-# path must use yes here. (EAPI=8 and later) Also adds a test useflag,
-# a use-conditional build time dependency on virtual/perl-Test-Simple, and
-# the required RESTRICT setting.
+# path must use yes here. (EAPI=8 and later) Also adds a test useflag and
+# the required RESTRICT setting. Test::Simple is bundled with app-lang/perl.
 
 # @ECLASS_VARIABLE: PERL_USEDEP
 # @OUTPUT_VARIABLE
@@ -93,8 +92,7 @@ case ${EAPI} in
 			yes|noslotop)
 				IUSE+=" ${GENTOO_PERL_USESTRING}"
 				DEPEND+=" ${GENTOO_PERL_DEPSTRING}"
-				BDEPEND+=" ${GENTOO_PERL_DEPSTRING}
-					 test? ( >=virtual/perl-Test-Simple-1 )"
+				BDEPEND+=" ${GENTOO_PERL_DEPSTRING}"
 				IUSE+=" test"
 				RESTRICT+=" !test? ( test )"
 				;;&

@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-SNAPSHOT=3e996dbef1fa0658012f8dd290bddcf0302acade
+SNAPSHOT=2b4b49d36b62690860414dd127f567be4f1f3208
 
 WANT_LIBTOOL="none"
 

@@ -1,0 +1,10 @@
+--- a/cmake/macros.cmake
++++ b/cmake/macros.cmake
+@@ -241,6 +241,2 @@
+-              read_absolute_symlink(subfile_target "${subfile}")
+-              while(IS_SYMLINK "${subfile_target}")
+-                read_absolute_symlink(subfile_target "${subfile_target}")
+-              endwhile()
+-              get_filename_component(subfile_target "${subfile_target}" ABSOLUTE)
++              get_filename_component(subfile_target "${subfile}" REALPATH)
+               if(subfile_target STREQUAL library_path AND subfile MATCHES "${valid_shared_library_regex}")

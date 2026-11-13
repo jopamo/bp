@@ -6,7 +6,7 @@ inherit cmake flag-o-matic
 
 DESCRIPTION="Simple DirectMedia Layer"
 HOMEPAGE="https://libsdl.org/"
-SNAPSHOT=8321804788c27d6d4f3c0431666ace6120c84016
+SNAPSHOT=eac186a84c693d246f6d1eeed51c73dfd3fa7f30
 SRC_URI="https://github.com/libsdl-org/SDL/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/SDL-${SNAPSHOT}"
 
@@ -15,5 +15,7 @@ SLOT=0
 KEYWORDS="amd64 arm64"
 
 DEPEND="xgui-tools/mesa"
+
+PATCHES=( "${FILESDIR}/libsdl3-resolve-library-symlinks.patch" )
 
 append-flags -ffat-lto-objects

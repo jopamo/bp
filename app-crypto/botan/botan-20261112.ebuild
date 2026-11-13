@@ -4,7 +4,7 @@ inherit toolchain-funcs python-utils-r1 qa-policy
 
 DESCRIPTION="C++ crypto library"
 HOMEPAGE="https://botan.randombit.net/"
-SNAPSHOT=ed2948428f5dfcd893e251d0ba44954b135756cf
+SNAPSHOT=d138f9f62f4b44975ac570a060510e948230dcaa
 SRC_URI="https://github.com/randombit/botan/archive/${SNAPSHOT}.tar.gz -> botan-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/botan-${SNAPSHOT}
 

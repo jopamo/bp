@@ -1,0 +1,32 @@
+The JPEG and PNG regression cases require their respective optional decoders.
+Use the same Automake skip convention as the TIFF regression when a decoder
+is not built.
+
+--- a/cupsfilters/test-image-jpeg-no-app-marker.sh
++++ b/cupsfilters/test-image-jpeg-no-app-marker.sh
+@@ -16,6 +16,11 @@
+ #
+ set -euo pipefail
+ 
++if ! grep -q '^#define HAVE_LIBJPEG 1' config.h; then
++  echo "libcupsfilters built without JPEG support; skipping."
++  exit 77
++fi
++
+ TESTIMAGE="./testimage"
+ if [[ ! -x "${TESTIMAGE}" ]]; then
+   echo "testimage program not found at ${TESTIMAGE}" >&2
+--- a/cupsfilters/test-imagetoraster-row-size.sh
++++ b/cupsfilters/test-imagetoraster-row-size.sh
+@@ -6,6 +6,11 @@
+ 
+ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+ BUILD_ROOT="$(cd "${ROOT}/.." && pwd)"
++if ! grep -q '^#define HAVE_LIBPNG 1' "${BUILD_ROOT}/config.h"; then
++  echo "libcupsfilters built without PNG support; skipping."
++  exit 77
++fi
++
+ LIBTOOL="${BUILD_ROOT}/libtool"
+ CC="${CC:-cc}"
+ SAN_FLAGS="${SAN_FLAGS:--fsanitize=address,undefined -fno-omit-frame-pointer}"

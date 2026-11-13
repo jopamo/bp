@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-SNAPSHOT=ea62f9c20b6a84dc579159a2b7b71daaf8f6e493
+SNAPSHOT=13f08104c56a643ad13c823e495a06ffeda63c22
 
 inherit autotools
 
@@ -33,6 +33,12 @@ RDEPEND="
 	tiff? ( xmedia-lib/tiff )
 "
 DEPEND="${RDEPEND}"
+BDEPEND="test? (
+	app-lang/python
+	fonts/liberation-fonts
+)"
+
+PATCHES=( "${FILESDIR}/libcupsfilters-test-image-features.patch" )
 
 src_prepare() {
 	default
@@ -55,6 +61,12 @@ src_configure() {
 		$(use_with png)
 		$(use_with tiff)
 	)
+
+	if use test; then
+		myeconfargs+=(
+			--with-test-font-path="${BROOT}/usr/share/fonts/liberation-fonts/LiberationSans-Regular.ttf"
+		)
+	fi
 
 	econf "${myeconfargs[@]}"
 }

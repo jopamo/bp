@@ -15,6 +15,10 @@ KEYWORDS="amd64 arm64"
 IUSE="test"
 BDEPEND="test? ( app-fs/grub )"
 
+PATCHES=(
+	"${FILESDIR}/${PN}-local-stringification.patch"
+)
+
 src_prepare() {
 	filter-flags -Wl,-z,defs
 	default

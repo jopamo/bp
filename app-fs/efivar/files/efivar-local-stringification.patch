@@ -1,0 +1,15 @@
+Use local stringification macros instead of glibc's __STRING.
+Keep the indirection so macro arguments expand before stringification.
+
+--- a/src/compiler.h
++++ b/src/compiler.h
+@@ -69,7 +69,8 @@
+ #define CONCATENATE(a, b) __CONCAT(a, b)
+ #define CAT(a, b) __CONCAT(a, b)
+ #define CAT3(a, b, c) __CONCAT3(a, b, c)
+-#define STRING(x) __STRING(x)
++#define STRING_(x) #x
++#define STRING(x) STRING_(x)
+ 
+ #define __ALIGN_MASK(x, mask)   (((x) + (mask)) & ~(mask))
+ #define __ALIGN(x, a)           __ALIGN_MASK(x, (typeof(x))(a) - 1)

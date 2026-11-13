@@ -15,8 +15,8 @@ LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-SRC_URI="https://files.pythonhosted.org/packages/7f/ad/6f520aee9cc9618d33430380741e9ef859b2c560b1e7915e755c084f6bc0/josepy-2.2.0.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/josepy-2.2.0"
+SRC_URI="https://files.pythonhosted.org/packages/8d/6f/c1b17c5a4978f80d10fc46257ef84fa09648265df0939639ce50d5896886/josepy-2.3.0.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/josepy-2.3.0"
 
 # lockstep-pypi-deps: begin
 RDEPEND+="

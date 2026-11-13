@@ -4,10 +4,17 @@ PYTHON_COMPAT=( python3_13 )
 DISTUTILS_USE_PEP517=setuptools
 
 inherit distutils-r1
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-pypi/packaging
+	dev-pypi/setuptools
+"
+# lockstep-pypi-deps: end
 
 DESCRIPTION="Python bindings generator for C and C++ libraries"
 HOMEPAGE="https://github.com/Python-SIP/sip"
-SRC_URI="https://files.pythonhosted.org/packages/c9/16/50c3758ae06375796dde6c94592f1bdd80a1ca709f776a09fd763682280d/sip-6.17.2.tar.gz"
+SRC_URI="https://files.pythonhosted.org/packages/cd/65/6bfe13637ee9adfc07c4ee8501aa3e4e2f0555e6163a6cba80f70698a0a0/sip-6.17.3.tar.gz"
 
 LICENSE="BSD-2"
 SLOT="0"

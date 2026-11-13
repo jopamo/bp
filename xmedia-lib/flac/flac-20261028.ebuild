@@ -4,7 +4,7 @@ inherit autotools qa-policy
 
 DESCRIPTION="free lossless audio encoder and decoder"
 HOMEPAGE="https://xiph.org/flac/"
-SNAPSHOT=e94ff9f68b8e7dbd3e9f8b1ac18a8eca1914f181
+SNAPSHOT=59fa3402cb19b6b7c85b916f138cfb03c7b27504
 SRC_URI="https://github.com/xiph/flac/archive/${SNAPSHOT}.tar.gz -> flac-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/flac-${SNAPSHOT}"
 
@@ -35,6 +35,13 @@ src_configure() {
 		--disable-rpath
 	)
 	ECONF_SOURCE="${S}" econf "${myconf[@]}"
+}
+
+src_test() {
+	# The suite needs both tools, but --disable-programs keeps them out of install.
+	emake -C src/flac
+	emake -C src/metaflac
+	default
 }
 
 src_install() {

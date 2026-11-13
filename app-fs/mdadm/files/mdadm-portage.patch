@@ -14,8 +14,7 @@ diff -urN a/Makefile b/Makefile
  # STRIP = -s
  LDLIBS=-ldl
  
--INSTALL = /usr/bin/install
-+INSTALL = "${EROOT}"/usr/bin/install
+ INSTALL = /usr/bin/install
  DESTDIR =
 -BINDIR  = /sbin
 -MANDIR  = /usr/share/man

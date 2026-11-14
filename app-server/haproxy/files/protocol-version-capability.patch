@@ -1,0 +1,69 @@
+--- a/include/haproxy/openssl-compat.h
++++ b/include/haproxy/openssl-compat.h
+@@ -100,6 +100,10 @@
+ #define HA_OPENSSL_VERSION_NUMBER OPENSSL_VERSION_NUMBER
+ #endif
+ 
++#if defined(SSL_CTRL_SET_MIN_PROTO_VERSION) && defined(SSL_CTRL_SET_MAX_PROTO_VERSION)
++#define HAVE_SSL_MIN_MAX_PROTO_VERSION
++#endif
++
+ #ifndef OPENSSL_VERSION
+ #define OPENSSL_VERSION         SSLEAY_VERSION
+ #define OpenSSL_version(x)      SSLeay_version(x)
+--- a/include/haproxy/ssl_sock-t.h
++++ b/include/haproxy/ssl_sock-t.h
+@@ -118,7 +118,7 @@
+ 	SETCERT_ST_FIN,
+ };
+ 
+-#if (HA_OPENSSL_VERSION_NUMBER < 0x1010000fL)
++#ifndef HAVE_SSL_MIN_MAX_PROTO_VERSION
+ typedef enum { SET_CLIENT, SET_SERVER } set_context_func;
+ #else /* openssl >= 1.1.0 */
+ typedef enum { SET_MIN, SET_MAX } set_context_func;
+--- a/src/ssl_sock.c
++++ b/src/ssl_sock.c
+@@ -2492,7 +2492,7 @@
+ }
+ #endif
+ 
+-#if (HA_OPENSSL_VERSION_NUMBER < 0x1010000fL)
++#ifndef HAVE_SSL_MIN_MAX_PROTO_VERSION
+ 
+ static void ctx_set_SSLv3_func(SSL_CTX *ctx, set_context_func c)
+ {
+@@ -2560,13 +2560,13 @@
+ 		: SSL_set_min_proto_version(ssl, TLS1_2_VERSION);
+ }
+ static void ctx_set_TLSv13_func(SSL_CTX *ctx, set_context_func c) {
+-#if (HA_OPENSSL_VERSION_NUMBER >= 0x10101000L)
++#if defined(TLS1_3_VERSION) && !defined(OPENSSL_NO_TLS1_3)
+ 	c == SET_MAX ? SSL_CTX_set_max_proto_version(ctx, TLS1_3_VERSION)
+ 		: SSL_CTX_set_min_proto_version(ctx, TLS1_3_VERSION);
+ #endif
+ }
+ static void ssl_set_TLSv13_func(SSL *ssl, set_context_func c) {
+-#if (HA_OPENSSL_VERSION_NUMBER >= 0x10101000L)
++#if defined(TLS1_3_VERSION) && !defined(OPENSSL_NO_TLS1_3)
+ 	c == SET_MAX ? SSL_set_max_proto_version(ssl, TLS1_3_VERSION)
+ 		: SSL_set_min_proto_version(ssl, TLS1_3_VERSION);
+ #endif
+@@ -4335,7 +4335,7 @@
+ 	conf_ssl_methods->min = min;
+ 	conf_ssl_methods->max = max;
+ 
+-#if (HA_OPENSSL_VERSION_NUMBER < 0x1010000fL)
++#ifndef HAVE_SSL_MIN_MAX_PROTO_VERSION
+ 	/* Keep force-xxx implementation as it is in older haproxy. It's a
+ 	   precautionary measure to avoid any surprise with older openssl version. */
+ 	if (min == max)
+@@ -5631,7 +5631,7 @@
+ 		cfgerr += 1;
+ 	}
+ 
+-#if (HA_OPENSSL_VERSION_NUMBER < 0x1010000fL)
++#ifndef HAVE_SSL_MIN_MAX_PROTO_VERSION
+ 	/* Keep force-xxx implementation as it is in older haproxy. It's a
+ 	   precautionary measure to avoid any surprise with older openssl version. */
+ 	if (min == max)

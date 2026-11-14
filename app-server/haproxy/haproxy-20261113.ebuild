@@ -4,7 +4,7 @@ inherit user toolchain-funcs flag-o-matic linux-info
 
 DESCRIPTION="A TCP/HTTP reverse proxy for high availability environments"
 HOMEPAGE="http://haproxy.1wt.eu"
-SNAPSHOT=86119aad3b44b1b5abec4990286eb298d265d560
+SNAPSHOT=ed3ba6581d2ced912ad296065027fd23d4e30839
 SRC_URI="https://github.com/haproxy/haproxy/archive/${SNAPSHOT}.tar.gz -> haproxy-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/haproxy-${SNAPSHOT}"
 
@@ -12,7 +12,10 @@ LICENSE="GPL-2 LGPL-2.1"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="crypt net_ns pcre2 pcre2-jit ssl systemd tools vim-syntax zlib lua 51degrees wurfl"
+IUSE="crypt net_ns pcre2 pcre2-jit ssl systemd test tools vim-syntax zlib lua 51degrees wurfl"
+RESTRICT="!test? ( test )"
+
+PATCHES=( "${FILESDIR}/protocol-version-capability.patch" )
 
 DEPEND="
     pcre2? (
@@ -83,6 +86,10 @@ src_compile() {
     if use tools; then
         haproxy_emake "${args[@]}" admin/{halog/halog,iprange/ip{,6}range}
     fi
+}
+
+src_test() {
+    haproxy_emake unit-tests
 }
 
 src_install() {

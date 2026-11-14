@@ -1,0 +1,38 @@
+--- a/t/dist-tar-fails.sh
++++ b/t/dist-tar-fails.sh
+@@ -73,7 +73,7 @@
+ ./configure
+ 
+ for fake_tar in tar-fails tar-warns; do
+-  run_make -M -e FAIL dist am__tar=./$fake_tar
++  run_make -M -e FAIL dist am__tar=./$fake_tar AM_DIST_TAR_IGNORE_STDERR=no
+   grep 'cannot archive that' output
+   grep "$distdir\.tar: cannot create the distribution archive" output
+   # No archive, and no leftovers, must have been created.
+--- a/t/tar-override.sh
++++ b/t/tar-override.sh
+@@ -22,6 +22,10 @@
+ # so force that format in our test setup.
+ 
+ . test-init.sh
++
++mkdir tar-probe
++tar chof tar-probe.tar tar-probe || skip_ "tar lacks the v7 creation options"
++rm -rf tar-probe tar-probe.tar
+ 
+ cwd=$(pwd) || fatal_ "getting current working directory"
+ 
+--- a/t/distcheck-no-prefix-or-srcdir-override.sh
++++ b/t/distcheck-no-prefix-or-srcdir-override.sh
+@@ -49,6 +49,11 @@
+ 
+ ./configure
+ run_make -E -O distcheck
++if grep '^am__untar = cpio ' Makefile; then
++  # CPIO reports archive block counts even when extraction succeeds.
++  sed '/^[0-9][0-9]* blocks\{0,1\}$/d' stderr >stderr.filtered
++  mv -f stderr.filtered stderr
++fi
+ test ! -s stderr
+ # Sanity check: the flags have been actually seen.
+ $PERL -e 'undef $/; $_ = <>; s/ \\\n/ /g; print;' <stdout >t

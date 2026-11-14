@@ -10,6 +10,11 @@ LICENSE="GPL-2+"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
+PATCHES=(
+	"${FILESDIR}/cpio-preserve-mtime.patch"
+	"${FILESDIR}/archiver-test-prerequisites.patch"
+)
+
 COMMON_DEPEND="
 	app-build/autoconf
 	app-lang/perl
@@ -21,6 +26,14 @@ RDEPEND="
 BDEPEND="
 	${COMMON_DEPEND}
 "
+
+src_compile() {
+	# Build matching generators before regenerating patched release macros.
+	emake -o aclocal.m4 -o configure -o Makefile.in \
+		bin/aclocal-$(ver_cut 1-2) bin/automake-$(ver_cut 1-2) \
+		lib/Automake/Config.pm
+	default
+}
 
 src_test() {
 	emake check

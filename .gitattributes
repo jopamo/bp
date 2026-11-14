@@ -14,3 +14,4 @@ app-net/iputils/files/*.patch -whitespace
 xmedia-app/phototonic/files/*.patch -whitespace
 app-server/openvpn/files/*.patch -whitespace
 app-server/haproxy/files/*.patch -whitespace
+app-build/automake/files/*.patch -whitespace

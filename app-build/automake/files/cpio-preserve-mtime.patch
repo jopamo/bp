@@ -1,0 +1,11 @@
+--- a/m4/tar.m4
++++ b/m4/tar.m4
+@@ -120,7 +120,7 @@
+     cpio)
+       am__tar='find "$$tardir" -print | cpio -o -H $1 -L'
+       am__tar_='find "$tardir" -print | cpio -o -H $1 -L'
+-      am__untar='cpio -i -H $1 -d'
++      am__untar='cpio -i -H $1 -d -m'
+       am__tar_ignore_stderr=yes
+       ;;
+     none)

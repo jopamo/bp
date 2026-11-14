@@ -4,7 +4,7 @@ inherit meson
 
 DESCRIPTION="Network monitoring tools including ping and ping6"
 HOMEPAGE="https://wiki.linuxfoundation.org/networking/iputils"
-SNAPSHOT=a22bd56c486766d5fadb9ed4821c356936c4854f
+SNAPSHOT=5fe14c68725a326edb54634e92ad7ed76f4c05a4
 SRC_URI="https://github.com/iputils/iputils/archive/${SNAPSHOT}.tar.gz -> iputils-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/iputils-${SNAPSHOT}"
 
@@ -21,6 +21,9 @@ DEPEND="
 	static? ( ${LIB_DEPEND} )
 	virtual/linux-sources
 "
+BDEPEND="core-perl/Test-Command"
+
+PATCHES=( "${FILESDIR}/${PN}-ipv6-tests.patch" )
 
 src_configure() {
 	local emesonargs=(

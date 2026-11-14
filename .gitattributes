@@ -10,3 +10,4 @@ xgui-lib/gtk4/files/0006-release-icon-themes-without-resurrection.patch -whitesp
 xmedia-lib/libopenshot-audio/files/juce-musl.patch -whitespace
 lib-print/cups/files/*.patch -whitespace
 lib-dev/libusb/files/*.patch -whitespace
+app-net/iputils/files/*.patch -whitespace

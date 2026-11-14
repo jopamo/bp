@@ -1,0 +1,89 @@
+--- a/test/lib.pl
++++ b/test/lib.pl
+@@ -3,6 +3,28 @@
+ # Copyright (c) 2025 Petr Vorel <pvorel@suse.cz>
+ 
+ our @EXPORT_OK = qw(get_cmd);
++
++sub skip_ipv6
++{
++	return 1 if $ENV{SKIP_IPV6};
++
++	require Socket;
++	require Errno;
++	my $socket;
++	if (!socket($socket, Socket::AF_INET6(), Socket::SOCK_DGRAM(), 0)) {
++		return 1 if $! == Errno::EAFNOSUPPORT();
++		die "IPv6 socket: $!\n";
++	}
++	my $addr = Socket::sockaddr_in6(0, Socket::inet_pton(Socket::AF_INET6(), '::1'));
++	if (!bind($socket, $addr)) {
++		my $error = 0 + $!;
++		close($socket);
++		return 1 if $error == Errno::EADDRNOTAVAIL();
++		die "IPv6 loopback bind: $error\n";
++	}
++	close($socket);
++	return 0;
++}
+ 
+ sub init
+ {
+--- a/test/ping/ping-01-basics.t
++++ b/test/ping/ping-01-basics.t
+@@ -2,8 +2,7 @@
+ # SPDX-License-Identifier: GPL-2.0-or-later
+ # Copyright (c) 2025 Petr Vorel <pvorel@suse.cz>
+ 
+-use Socket qw(AF_INET AF_INET6 AF_UNSPEC AI_CANONNAME IPPROTO_UDP SOCK_STREAM);
+-use Socket::GetAddrInfo qw(getaddrinfo);
++use Socket qw(AF_INET AF_INET6 AF_UNSPEC AI_CANONNAME IPPROTO_UDP SOCK_STREAM getaddrinfo);
+ use Test::Command tests => 11;
+ use Test::More;
+ 
+@@ -89,7 +88,7 @@
+ 
+ # ::1
+ SKIP: {
+-    if ($ENV{SKIP_IPV6}) {
++    if (skip_ipv6()) {
+         skip 'IPv6 tests', 2;
+     }
+     my $cmd = Test::Command->new(cmd => "$ping -c1 ::1");
+@@ -112,11 +111,8 @@
+ 
+ my $localhost = "localhost";
+ my $localhost_target_ipv4 = get_target($localhost, AF_INET);
+-my $localhost_target_ipv6 = get_target($localhost, AF_INET6);
+ diag("localhost_cannon_ipv4: '$localhost_target_ipv4'");
+-diag("localhost_cannon_ipv6: '$localhost_target_ipv6'");
+ die "Undefined cannonical name for $localhost on IPv4" unless defined $localhost_target_ipv4;
+-die "Undefined cannonical name for $localhost on IPv6" unless defined $localhost_target_ipv6;
+ 
+ # localhost
+ {
+@@ -146,9 +142,12 @@
+ 
+ # -6 localhost
+ SKIP: {
+-    if ($ENV{SKIP_IPV6}) {
++    if (skip_ipv6()) {
+         skip 'IPv6 tests', 2;
+     }
++    my $localhost_target_ipv6 = get_target($localhost, AF_INET6);
++    diag("localhost_cannon_ipv6: '$localhost_target_ipv6'");
++    die "Undefined cannonical name for $localhost on IPv6" unless defined $localhost_target_ipv6;
+     my $cmd = Test::Command->new(cmd => "$ping -c1 -6 $localhost");
+     $cmd->exit_is_num(0);
+ 	subtest 'output' => sub {
+--- a/test/ping/ping-02-errors.t
++++ b/test/ping/ping-02-errors.t
+@@ -46,7 +46,7 @@
+ 
+ # -c1 -i0.001 ::1
+ SKIP: {
+-    if ($ENV{SKIP_IPV6}) {
++    if (skip_ipv6()) {
+         skip 'IPv6 tests', 2;
+     }
+ 	my $cmd = Test::Command->new(cmd => "$ping -c1 -i0.001 ::1", env => { LC_ALL => 'C', LANG   => 'C' });

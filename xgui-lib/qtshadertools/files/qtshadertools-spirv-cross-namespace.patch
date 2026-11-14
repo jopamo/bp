@@ -1,0 +1,8 @@
+--- a/src/SPIRV-Cross/CMakeLists.txt
++++ b/src/SPIRV-Cross/CMakeLists.txt
+@@ -34,2 +34,5 @@
+ qt_disable_warnings(BundledSpirv_Cross)
+ qt_set_symbol_visibility_hidden(BundledSpirv_Cross)
++# ShaderTools uses the C API; keep the C++ enums distinct from glslang's spv enums.
++target_compile_definitions(BundledSpirv_Cross PRIVATE
++    spv=QtSpirvCross)

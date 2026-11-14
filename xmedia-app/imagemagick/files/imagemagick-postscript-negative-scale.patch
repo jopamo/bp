@@ -1,0 +1,8 @@
+--- a/MagickCore/annotate.c
++++ b/MagickCore/annotate.c
+@@ -2288,3 +2288,4 @@
+-  identity=(fabs(draw_info->affine.sx-draw_info->affine.sy) < MagickEpsilon) &&
++  identity=(draw_info->affine.sx > 0.0) &&
++    (fabs(draw_info->affine.sx-draw_info->affine.sy) < MagickEpsilon) &&
+     (fabs(draw_info->affine.rx) < MagickEpsilon) &&
+     (fabs(draw_info->affine.ry) < MagickEpsilon) ? MagickTrue : MagickFalse;

@@ -2,7 +2,7 @@
 
 DESCRIPTION="A collection of tools and libraries for many image formats"
 HOMEPAGE="https://www.imagemagick.org/"
-SNAPSHOT=985d46477077f8047b85c70606ea07e105af27ca
+SNAPSHOT=cf973b410447fc051aa05fb93573e29762e34981
 SRC_URI="https://github.com/ImageMagick/ImageMagick/archive/${SNAPSHOT}.tar.gz -> ImageMagick-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/ImageMagick-${SNAPSHOT}"
 
@@ -23,6 +23,8 @@ DEPEND="
 	tiff? ( xmedia-lib/tiff )
 	webp? ( xmedia-lib/libwebp )
 "
+
+PATCHES=( "${FILESDIR}/${PN}-postscript-negative-scale.patch" )
 
 src_prepare() {
 	default

@@ -456,13 +456,20 @@ cmake_src_configure() {
 		set(CMAKE_ASM-ATT_COMPILER "${myCC/ /;}")
 		set(CMAKE_C_COMPILER "${myCC/ /;}")
 		set(CMAKE_CXX_COMPILER "${myCXX/ /;}")
-		if(NOT DEFINED CMAKE_Fortran_COMPILER)
-			set(CMAKE_Fortran_COMPILER "${myFC/ /;}")
-		endif()
 		set(CMAKE_AR $(type -P $(tc-getAR)) CACHE FILEPATH "Archive manager" FORCE)
 		set(CMAKE_RANLIB $(type -P $(tc-getRANLIB)) CACHE FILEPATH "Archive index generator" FORCE)
 		set(CMAKE_SYSTEM_PROCESSOR "${CHOST%%-*}")
 	_EOF_
+
+	# Do not advertise an absent default compiler to optional-language checks.
+	# Preserve explicit FC requests so a missing requested compiler still fails.
+	if [[ -n ${FC} ]] || type -P "${myFC%% *}" >/dev/null; then
+		cat >> "${toolchain_file}" <<- _EOF_ || die
+			if(NOT DEFINED CMAKE_Fortran_COMPILER)
+				set(CMAKE_Fortran_COMPILER "${myFC/ /;}")
+			endif()
+		_EOF_
+	fi
 
 	# We are using the C compiler for assembly by default.
 	local -x ASMFLAGS=${CFLAGS}

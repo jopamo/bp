@@ -8,3 +8,4 @@ xgui-app/keepassxc/files/optional-qt-accessibility.patch -whitespace
 fonts/fontconfig/files/*.patch -whitespace
 xgui-lib/gtk4/files/0006-release-icon-themes-without-resurrection.patch -whitespace
 xmedia-lib/libopenshot-audio/files/juce-musl.patch -whitespace
+lib-print/cups/files/*.patch -whitespace

@@ -1,0 +1,6 @@
+--- a/cups/testhttp.c
++++ b/cups/testhttp.c
+@@ -392,1 +392,3 @@
++    /* The host's own name need not have a DNS or hosts-file entry. */
++    strlcpy(hostname, "localhost", sizeof(hostname));
+     printf("httpAddrGetList(%s): ", hostname);

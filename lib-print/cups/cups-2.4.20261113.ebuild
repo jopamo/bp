@@ -1,7 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 BRANCH_NAME="$(ver_cut 1-2).x"
-SNAPSHOT=9325ee7133cb8608bc8d983889321683011219b2
+SNAPSHOT=76c737f061efd63417b32f7ab9d8fbb0fae3146e
 
 inherit qa-policy toolchain-funcs user
 
@@ -36,6 +36,9 @@ PDEPEND="lib-print/cups-filters"
 PATCHES=(
 	"${FILESDIR}/cups-2.4.20-container-libs.patch"
 	"${FILESDIR}/cups-2.4.20-no-dnssd.patch"
+	"${FILESDIR}/cups-testhttp-loopback-name.patch"
+	"${FILESDIR}/cups-clean-dangling-symlinks.patch"
+	"${FILESDIR}/cups-testcgi-session.patch"
 )
 
 pkg_setup() {

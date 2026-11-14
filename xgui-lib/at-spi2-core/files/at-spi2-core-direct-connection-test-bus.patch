@@ -1,0 +1,8 @@
+--- a/tests/at-spi2-atk/test-direct-connection.c
++++ b/tests/at-spi2-atk/test-direct-connection.c
+@@ -85,1 +85,5 @@
+   const gchar *address;
++
++  address = g_getenv ("AT_SPI_BUS_ADDRESS");
++  if (address != NULL && *address != '\0')
++    return g_strdup (address);

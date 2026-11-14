@@ -142,8 +142,10 @@ if [[ -z ${_LOCKSTEP_LOCKSTEP_CARGO_ECLASS} ]]; then
 		local dest_dir=${2}
 
 		mkdir -p "${dest_dir}" || die
-		tar -C "${source_dir}" -cf - . | tar -C "${dest_dir}" -xf - \
-			|| die "failed copying cargo crate payload from ${source_dir}"
+		(
+			set -o pipefail
+			tar -C "${source_dir}" -cf - . | tar -C "${dest_dir}" -xf -
+		) || die "failed copying cargo crate payload from ${source_dir}"
 	}
 
 	_lockstep_cargo_package_checksum() {

@@ -1,0 +1,40 @@
+--- a/test/meson.build
++++ b/test/meson.build
+@@ -172,7 +172,7 @@
+
+     exe = executable('libmpv-encode', 'libmpv_encode.c',
+                      include_directories: incdir, dependencies: libmpv_dep)
+-    test('libmpv-encode', exe, suite: 'libmpv')
++    test('libmpv-encode', exe, args: file, suite: 'libmpv')
+
+     mpvlib = libmpv
+     shared = get_option('default_library') == 'shared'
+--- a/test/libmpv_encode.c
++++ b/test/libmpv_encode.c
+@@ -74,6 +74,9 @@
+
+ int main(int argc, char *argv[])
+ {
++    if (argc != 2)
++        fail("expected an input image path\n");
++
+     ctx = mpv_create();
+     if (!ctx)
+         return 1;
+@@ -84,6 +87,7 @@
+     set_property_string("o", out_path);
+     set_property_string("of", "matroska");
+     set_property_string("end", "1.5");
++    set_property_string("image-display-duration", "1.5");
+     set_property_string("terminal", "yes");
+     set_property_string("msg-level", "all=v");
+
+@@ -92,7 +96,7 @@
+
+     set_property_string("idle", "once");
+
+-    const char *cmd[] = {"loadfile", "av://lavfi:testsrc", NULL};
++    const char *cmd[] = {"loadfile", argv[1], NULL};
+     command(cmd);
+
+     wait_done();

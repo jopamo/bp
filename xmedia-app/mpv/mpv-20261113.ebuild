@@ -4,7 +4,7 @@ inherit meson xdg
 
 DESCRIPTION="Media player based on MPlayer and mplayer2"
 HOMEPAGE="https://mpv.io/"
-SNAPSHOT=55d3feb45c3dda1afd02b3087d3463c57d6514f7
+SNAPSHOT=649001d4e2edbfc0d469333898b07c96b977faba
 SRC_URI="https://github.com/mpv-player/mpv/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
@@ -13,7 +13,11 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="alsa cli cuda drm egl iconv jpeg lcms libmpv lua opengl pipewire
-	pulseaudio vaapi vapoursynth vdpau vulkan wayland +X zlib"
+	pulseaudio test vaapi vapoursynth vdpau vulkan wayland +X zlib"
+
+RESTRICT="!test? ( test )"
+
+PATCHES=( "${FILESDIR}/mpv-encode-test-input.patch" )
 
 REQUIRED_USE="
 
@@ -83,6 +87,7 @@ src_configure() {
 		# booleans
 		$(meson_use cli cplayer)
 		$(meson_use libmpv)
+		$(meson_use test tests)
 		-D build-date=false
 
 		#misc

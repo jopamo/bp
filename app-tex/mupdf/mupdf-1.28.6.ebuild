@@ -12,11 +12,13 @@ LICENSE="AGPL-3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="javascript opengl ssl X"
+IUSE="javascript opengl ssl test X"
 
 
 
 LIB_DEPEND="
+	app-compression/brotli
+	lib-core/zlib
 	xgui-lib/freetype
 	xgui-lib/harfbuzz
 	xmedia-lib/jbig2dec
@@ -24,6 +26,7 @@ LIB_DEPEND="
 	xmedia-lib/openjpeg
 	xmedia-lib/libjpeg-turbo
 	lib-misc/gumbo-parser
+	ssl? ( app-crypto/vesk )
 	X? ( xgui-lib/libX11
 		xgui-lib/libXext )
 "
@@ -39,17 +42,15 @@ DEPEND="${RDEPEND}
 
 PATCHES=(
 	"${FILESDIR}"/${PN}-1.15-CFLAGS.patch
-	"${FILESDIR}"/${PN}-1.19.0-Makefile.patch
 	"${FILESDIR}"/${PN}-1.21.0-add-desktop-pc-files.patch
-	# See bugs #662352
-	"${FILESDIR}"/${P}-openssl-x11.patch
-	# General cross fixes from Debian (refreshed)
-	"${FILESDIR}"/${P}-cross-fixes.patch
 	"${FILESDIR}"/${PN}-1.21.1-fix-aliasing-violation.patch
 )
 
 src_prepare() {
 	default
+
+	sed -i 's/pkg-config/$(PKG_CONFIG)/g' Makerules ||
+		die "Failed to use target pkg-config"
 
 	append-cflags "-DFZ_ENABLE_JS=$(usex javascript 1 0)"
 
@@ -65,7 +66,11 @@ src_prepare() {
 	# Adjust MuPDF version in .pc file created by the
 	# mupdf-1.10a-add-desktop-pc-xpm-files.patch file
 	sed -e "s/Version: \(.*\)/Version: ${PV}/" \
+		-e '/^Libs.private:/d' \
 		-i platform/debian/${PN}.pc || die "Failed substituting version in ${PN}.pc"
+	if ! use ssl; then
+		sed -i 's/ libcrypto//' platform/debian/${PN}.pc || die
+	fi
 }
 
 _emake() {
@@ -95,7 +100,9 @@ _emake() {
 	# [0] https://git.ghostscript.com/?p=mupdf.git;a=blob;f=Makethird;h=c4c540fa4a075df0db85e6fdaab809099881f35a;hb=HEAD#l9
 	# [1] https://www.ghostscript.com/doc/lcms2mt/doc/WhyThisFork.txt
 	local myemakeargs=(
-		GENTOO_PV=${PV}
+		shared=yes
+		SO_VERSION=.${PV}
+		PKG_CONFIG="$(tc-getPKG_CONFIG)"
 		HAVE_GLUT=$(usex opengl)
 		HAVE_LIBCRYPTO=$(usex ssl)
 		HAVE_X11=$(usex X)
@@ -115,13 +122,27 @@ src_compile() {
 	_emake XCFLAGS="-fPIC"
 }
 
+src_test() {
+	local mutool="${S}/build/shared-debug/mutool"
+	local -x LD_LIBRARY_PATH="${S}/build/shared-debug${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}"
+
+	printf '%s\n' \
+		'%%MediaBox 0 0 200 200' \
+		'%%Font F0 Helvetica' \
+		'BT /F0 12 Tf 10 100 Td (MuPDF smoke test) Tj ET' > smoke.txt || die
+	"${mutool}" create -o smoke.pdf smoke.txt || die "PDF creation failed"
+	"${mutool}" draw -q -F txt -o smoke.out smoke.pdf || die "Text extraction failed"
+	grep -Fx 'MuPDF smoke test' smoke.out || die "Extracted text differs"
+	"${mutool}" draw -q -F png -o smoke.png smoke.pdf || die "PNG rendering failed"
+}
+
 src_install() {
 	if use opengl || use X ; then
 		insinto /usr/share/applications/
 		doins platform/debian/${PN}.desktop
 
 		insinto /usr/share/icons/
-		doins docs/logo/new-${PN}-icon.svg
+		newins docs/logo/${PN}-icon.svg new-${PN}-icon.svg
 	else
 		rm docs/man/${PN}.1 || die "Failed to remove man page in src_install()"
 	fi
@@ -133,8 +154,6 @@ src_install() {
 		-i Makerules || die "Failed adding liprefix, lilibdir and lidocdir to Makerules in src_install()"
 
 	_emake install
-
-	dosym -r /usr/lib/libmupdf.so.${PV} /usr/lib/lib${PN}.so
 
 	if use opengl ; then
 		einfo "mupdf symlink points to mupdf-gl (bug 616654)"

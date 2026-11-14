@@ -1,13 +1,11 @@
-diff --git a/Makerules b/Makerules
-index 298b5737..71c307e6 100644
 --- a/Makerules
 +++ b/Makerules
-@@ -21,8 +21,6 @@ SANITIZE_FLAGS += -fsanitize=address
- SANITIZE_FLAGS += -fsanitize=leak
+@@ -152,8 +152,6 @@
+ endif
  
  ifeq ($(build),debug)
 -  CFLAGS += -pipe -g
 -  LDFLAGS += -g
  else ifeq ($(build),release)
-   CFLAGS += -pipe -O2 -DNDEBUG -fomit-frame-pointer
+   CFLAGS += -pipe -O2 -DNDEBUG
    LDFLAGS += $(LDREMOVEUNREACH) -Wl,-s

@@ -1,0 +1,13 @@
+--- a/tests/env.test
++++ b/tests/env.test
+@@ -108,6 +108,10 @@
+     PROCESSOR_ARCHITECTURE PROCESSOR_ARCHITEW6432 USERPROFILE
+     WINECONFIGDIR WINEDATADIR WINEDLLDIR0 WINEHOMEDIR
+ }
++
++# The build sandbox restores these variables across exec.
++lappend keep LD_PRELOAD
++lappend keep {*}[array names ::env SANDBOX_*]
+ 
+ variable printenvScript [makeFile [string map [list @keep@ [list $keep]] {
+     encoding system iso8859-1

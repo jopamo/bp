@@ -6,13 +6,14 @@ inherit autotools
 
 DESCRIPTION="tcltk/tcl - Tool Command Language"
 HOMEPAGE="http://www.tcl.tk/"
-SNAPSHOT=af026f8954ff8d826316a6adcb4de5c0051a9a3f
+SNAPSHOT=b7fef4003f39e354534c17cc9a106b55e4cedb63
 SRC_URI="https://github.com/tcltk/tcl/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/tcl-${SNAPSHOT}/unix
 
 LICENSE="tcltk"
 SLOT="0"
 KEYWORDS="amd64 arm64"
+IUSE="test"
 
 DEPEND="lib-core/zlib"
 
@@ -27,11 +28,19 @@ PATCHES=(
 
 src_prepare() {
 	default
+	pushd "${S%/*}" >/dev/null || die
+	eapply "${FILESDIR}"/${PN}-async-socket-replacement.patch
+	eapply "${FILESDIR}"/${PN}-test-sandbox-environment.patch
+	popd >/dev/null || die
 	eautoreconf
 }
 
 src_configure() {
 	ECONF_SOURCE=${S} econf --enable-64bit
+}
+
+src_test() {
+	ERROR_ON_FAILURES=1 emake test
 }
 
 src_install() {

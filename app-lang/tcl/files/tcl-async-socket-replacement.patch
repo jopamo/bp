@@ -1,0 +1,40 @@
+--- a/unix/tclUnixSock.c
++++ b/unix/tclUnixSock.c
+@@ -1211,6 +1211,7 @@
+     int ret = -1, error = EHOSTUNREACH;
+     int async = GOT_BITS(statePtr->flags, TCP_ASYNC_CONNECT);
+     int triedConnect = 0;
++    int sock;
+     static const int reuseaddr = 1;
+ 
+     if (async_callback) {
+@@ -1232,21 +1233,21 @@
+ 	    }
+ 
+ 	    /*
+-	     * Close the socket if it is still open from the last unsuccessful
+-	     * iteration.
++	     * Keep the last socket for error notification if the next address
++	     * family cannot create a socket.
+ 	     */
++
++	    sock = socket(statePtr->addr->ai_family, SOCK_STREAM, 0);
++	    if (sock < 0) {
++		continue;
++	    }
+ 
+ 	    if (statePtr->fds.fd >= 0) {
+ 		close(statePtr->fds.fd);
+-		statePtr->fds.fd = -1;
+ 		errno = 0;
+ 	    }
+ 
+-	    statePtr->fds.fd = socket(statePtr->addr->ai_family, SOCK_STREAM,
+-		    0);
+-	    if (statePtr->fds.fd < 0) {
+-		continue;
+-	    }
++	    statePtr->fds.fd = sock;
+ 
+ 	    /*
+ 	     * Set the close-on-exec flag so that the socket will not get

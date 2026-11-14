@@ -1,0 +1,18 @@
+--- a/tests/stress_mt.c
++++ b/tests/stress_mt.c
+@@ -142,4 +142,5 @@
+ 				int open_err = libusb_open(dev, &dev_handle);
+ 				if (open_err == LIBUSB_ERROR_ACCESS
++				    || open_err == LIBUSB_ERROR_NO_DEVICE
+ #if defined(PLATFORM_WINDOWS)
+ 				    || open_err == LIBUSB_ERROR_NOT_SUPPORTED
+@@ -149,7 +150,7 @@
+ 					/* Use atomic swap to ensure we print warning only once across all threads.
+ 					   This is a warning and not a hard error because it should be fine to run tests
+-					   even if we don't have access to some devices. */
++					   even if some enumerated devices are unavailable to open. */
+ 					if (!atomic_exchange(&no_access[i], true)) {
+-						fprintf(stderr, "No access to device %04x:%04x, skipping transfer tests.\n", desc.idVendor, desc.idProduct);
++						fprintf(stderr, "Cannot open device %04x:%04x (%s), skipping transfer tests.\n", desc.idVendor, desc.idProduct, libusb_error_name(open_err));
+ 					}
+ 					continue;

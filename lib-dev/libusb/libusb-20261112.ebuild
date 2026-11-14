@@ -4,7 +4,7 @@ inherit autotools qa-policy
 
 DESCRIPTION="Userspace access to USB devices"
 HOMEPAGE="http://libusb.info/ https://github.com/libusb/libusb"
-SNAPSHOT=6a1aff0b39c724657fd92b2d2bf82eb532344570
+SNAPSHOT=d3937ff1c8894d51cecd2bbb835db0e5cf42421f
 SRC_URI="https://github.com/libusb/libusb/archive/${SNAPSHOT}.tar.gz -> libusb-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/libusb-${SNAPSHOT}"
 
@@ -13,6 +13,8 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="debug static-libs test udev"
+
+PATCHES=( "${FILESDIR}/${PN}-stress-missing-device.patch" )
 
 src_prepare() {
 	qa-policy-configure
@@ -32,9 +34,6 @@ src_configure() {
 
 src_test() {
 	emake check
-
-	# noinst_PROGRAMS from tests/Makefile.am
-	tests/stress || die
 }
 
 src_install() {

@@ -1,0 +1,9 @@
+--- a/src/qdoc/qdoc/tests/generatedoutput/tst_generatedoutput.cpp
++++ b/src/qdoc/qdoc/tests/generatedoutput/tst_generatedoutput.cpp
+@@ -321,5 +321,6 @@
+ int main(int argc, char *argv[])
+ {
++    QCoreApplication app(argc, argv);
+     tst_generatedOutput tc;
+     // Re-populate expected data and skip tests if option -regenerate is set
+     if (argc == 2 && QByteArray(argv[1]) == "-regenerate") {

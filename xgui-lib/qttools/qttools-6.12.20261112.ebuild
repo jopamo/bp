@@ -7,7 +7,7 @@ inherit cmake flag-o-matic
 DESCRIPTION="Qt Tools collection (Assistant, Designer, Linguist, etc.)"
 HOMEPAGE="https://www.qt.io/"
 
-SNAPSHOT=a078b9f5ce7228723857f9aaa8cf867db0c627a6
+SNAPSHOT=f3b645d940fa65c12fb0653ab71bf5c583e6a14a
 # Follow this qttools commit's gitlinks, not the submodules' branch tips.
 # lockstep-gitlink: QLITEHTML_SNAPSHOT SNAPSHOT src/assistant/qlitehtml
 # lockstep-gitlink: QTTOOLS_LITEHTML_SNAPSHOT QLITEHTML_SNAPSHOT src/3rdparty/litehtml
@@ -24,6 +24,9 @@ LICENSE="|| ( GPL-2 GPL-3 LGPL-3 ) FDL-1.3"
 SLOT="$(ver_cut 1)"
 KEYWORDS="amd64 arm64"
 
+IUSE="test"
+RESTRICT="!test? ( test )"
+
 DEPEND="
 	>=xgui-lib/qtbase-6.12:6=
 	>=xgui-lib/qtdeclarative-6.12:6=
@@ -38,7 +41,21 @@ src_prepare() {
 
 	eapply "${FILESDIR}"/${PN}-litehtml-exceptions.patch
 	eapply "${FILESDIR}"/${PN}-litehtml-atoi.patch
+	eapply "${FILESDIR}"/${PN}-qdoc-test-application.patch
 	cmake_src_prepare
 }
 
 append-flags -ffat-lto-objects
+
+src_configure() {
+	local mycmakeargs=(
+		-DQT_BUILD_TESTS=$(usex test ON OFF)
+		-DCMAKE_PROJECT_QtTools_INCLUDE="${FILESDIR}/qttools-build.cmake"
+	)
+	cmake_src_configure
+}
+
+src_test() {
+	local -x QT_QPA_PLATFORM=offscreen
+	cmake_src_test
+}

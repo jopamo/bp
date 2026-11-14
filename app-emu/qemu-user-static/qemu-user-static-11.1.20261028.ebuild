@@ -6,13 +6,15 @@ inherit flag-o-matic qa-policy
 
 DESCRIPTION="QEMU with enhanced support for multiple architectures and options"
 HOMEPAGE="https://www.qemu.org/"
-SNAPSHOT=4fc49f46dc95d4a27de2509e7fceb2931e91faeb
-SOFTFLOAT_SNAPSHOT=497c81c1f5016dc6ef5b3219ece2f3c261d4d8f1
+SNAPSHOT=005c61c0ef6f6ae615283440b4bb7be51b2c6ddd
+SOFTFLOAT_SNAPSHOT=07ebd29db0cfb55723a79fbbffe99103ef38e305
 TESTFLOAT_SNAPSHOT=e7af9751d9f9fd3b47911f51a5cfd08af256a9ab
+KEYCODEMAPDB_SNAPSHOT=54788039c0b3486a8883090d6736c2500177af29
 SRC_URI="
 	https://github.com/qemu/qemu/archive/${SNAPSHOT}.tar.gz -> qemu-${SNAPSHOT}.tar.gz
 	https://gitlab.com/qemu-project/berkeley-softfloat-3/-/archive/${SOFTFLOAT_SNAPSHOT}/berkeley-softfloat-3-${SOFTFLOAT_SNAPSHOT}.tar.gz
 	https://gitlab.com/qemu-project/berkeley-testfloat-3/-/archive/${TESTFLOAT_SNAPSHOT}/berkeley-testfloat-3-${TESTFLOAT_SNAPSHOT}.tar.gz
+	https://gitlab.com/qemu-project/keycodemapdb/-/archive/${KEYCODEMAPDB_SNAPSHOT}/keycodemapdb-${KEYCODEMAPDB_SNAPSHOT}.tar.gz
 "
 S="${WORKDIR}/qemu-${SNAPSHOT}"
 
@@ -45,6 +47,9 @@ src_prepare() {
 	cp -a "${WORKDIR}/berkeley-testfloat-3-${TESTFLOAT_SNAPSHOT}" subprojects/berkeley-testfloat-3 || die
 	cp -a subprojects/packagefiles/berkeley-testfloat-3/. subprojects/berkeley-testfloat-3/ || die
 
+	rm -rf subprojects/keycodemapdb || die
+	cp -a "${WORKDIR}/keycodemapdb-${KEYCODEMAPDB_SNAPSHOT}" subprojects/keycodemapdb || die
+
 	default
 	mkdir -p build
 }
@@ -76,7 +81,7 @@ src_configure() {
 		$(use_enable xattr attr)
 		--target-list="aarch64-linux-user arm-linux-user x86_64-linux-user"
 	)
-	../configure "${myconf[@]}"
+	../configure "${myconf[@]}" || die "configure failed"
 }
 
 src_compile() {
@@ -84,6 +89,11 @@ src_compile() {
 
 	emake
 
+}
+
+src_test() {
+	cd build || die
+	emake check
 }
 
 src_install() {

@@ -4,8 +4,17 @@ inherit toolchain-funcs qa-policy
 
 DESCRIPTION="The OpenGL Extension Wrangler Library"
 HOMEPAGE="http://glew.sourceforge.net/"
-SNAPSHOT=684c84d407eef11944248315956d3d540959d533
-SRC_URI="https://github.com/nigels-com/glew/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+SNAPSHOT=f1dbf34dec2f728844dc7a79779a29d090ba5afb
+OPENGL_REGISTRY_SNAPSHOT=6af574a14089ccfee87efe230ebcdd8742859813
+EGL_REGISTRY_SNAPSHOT=8e56e86e65687697ef54114cdb1afabdfac756bf
+GLFIXES_SNAPSHOT=b63c8d3e676097d610efda64870cbe6f10543bd3
+# lockstep-branch: GLFIXES_SNAPSHOT glew
+SRC_URI="
+	https://github.com/nigels-com/glew/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz
+	https://github.com/KhronosGroup/OpenGL-Registry/archive/${OPENGL_REGISTRY_SNAPSHOT}.tar.gz -> OpenGL-Registry-${OPENGL_REGISTRY_SNAPSHOT}.tar.gz
+	https://github.com/KhronosGroup/EGL-Registry/archive/${EGL_REGISTRY_SNAPSHOT}.tar.gz -> EGL-Registry-${EGL_REGISTRY_SNAPSHOT}.tar.gz
+	https://github.com/nigels-com/glfixes/archive/${GLFIXES_SNAPSHOT}.tar.gz -> glfixes-${GLFIXES_SNAPSHOT}.tar.gz
+"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
 LICENSE="BSD MIT"
@@ -23,9 +32,17 @@ DEPEND="
 	>=xgui-lib/libXmu-1.1.1-r1
 "
 RDEPEND="${DEPEND}"
+BDEPEND="
+	app-lang/perl
+	app-lang/python
+"
 
 src_prepare() {
-	local PATCHES=( "${FILESDIR}"/${PN}-2.0.0-install-headers.patch )
+	mv "${WORKDIR}/OpenGL-Registry-${OPENGL_REGISTRY_SNAPSHOT}" auto/OpenGL-Registry || die
+	mv "${WORKDIR}/EGL-Registry-${EGL_REGISTRY_SNAPSHOT}" auto/EGL-Registry || die
+	mv "${WORKDIR}/glfixes-${GLFIXES_SNAPSHOT}" auto/glfixes || die
+	# The registries are fetched through SRC_URI, not the generator's git rules.
+	touch auto/OpenGL-Registry/.dummy auto/EGL-Registry/.dummy || die
 
 	sed -i \
 		-e '/INSTALL/s:-s::' \
@@ -35,8 +52,7 @@ src_prepare() {
 
 	if ! use static-libs ; then
 		sed -i \
-			-e '/glew.lib:/s|lib/$(LIB.STATIC) ||' \
-			-e '/glew.lib.mx:/s|lib/$(LIB.STATIC.MX) ||' \
+			-e 's/^glew.lib: .*/glew.lib: glew.lib.shared/' \
 			-e '/INSTALL.*LIB.STATIC/d' \
 			Makefile || die
 	fi
@@ -77,6 +93,9 @@ set_opts() {
 src_compile() {
 	qa-policy-configure
 	set_opts
+	# Other header rules can run before glew.h creates this directory.
+	mkdir -p include/GL || die
+	emake -C auto PYTHON=python3
 	emake \
 		GLEW_PREFIX="${EPREFIX}/usr" \
 		GLEW_DEST="${EPREFIX}/usr" \

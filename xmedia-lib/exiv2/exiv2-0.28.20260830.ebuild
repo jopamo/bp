@@ -16,6 +16,8 @@ KEYWORDS="amd64 arm64"
 
 IUSE="png static-libs webready xmp"
 
+PATCHES=( "${FILESDIR}/${PN}-copy-lens-fixture.patch" )
+
 DEPEND="
 	lib-misc/inih
 	png? ( lib-core/zlib )

@@ -4,15 +4,12 @@ EAPI=8
 
 PYTHON_COMPAT=( python3_13 )
 
-BRANCH_NAME="main"
-SNAPSHOT=be612316b8b0a125004f0ee340116998bec49527
-
-inherit meson python-r1 qa-policy
+inherit meson git-r3 python-r1 qa-policy
 
 DESCRIPTION="Vesk SSL/TLS, crypto, and native password-hashing libraries"
 HOMEPAGE="https://gitlab.com/pjo/vesk"
-SRC_URI="https://gitlab.com/pjo/vesk/-/archive/${SNAPSHOT}/vesk-${SNAPSHOT}.tar.bz2"
-S="${WORKDIR}/vesk-${SNAPSHOT}"
+EGIT_REPO_URI="https://gitlab.com/pjo/vesk.git/"
+EGIT_BRANCH="main"
 
 LICENSE="ISC LGPL-2.1+ LGPL-3+ MIT || ( Apache-2.0 CC0-1.0 ) || ( Apache-2.0 BSD ) PSF-2"
 SLOT="0"

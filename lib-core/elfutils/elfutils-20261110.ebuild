@@ -4,7 +4,7 @@ inherit flag-o-matic autotools toolchain-funcs
 
 DESCRIPTION="Libraries/utilities to handle ELF objects (drop in replacement for libelf)"
 HOMEPAGE="http://elfutils.org/"
-SNAPSHOT=d1e04729ece4d4fa4097a83dbbad541edaf149f7
+SNAPSHOT=ff9e30d30177d2a2b5303a7e1c6c296c01917a4a
 SRC_URI="https://github.com/1g4-mirror/elfutils/archive/${SNAPSHOT}.tar.gz -> elfutils-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/elfutils-${SNAPSHOT}
 
@@ -37,10 +37,14 @@ DEPEND="
 "
 BDEPEND="app-dev/pkgconf"
 
+PATCHES=( "${FILESDIR}/x86_64-half-float-retval.patch" )
+
 src_prepare() {
 	filter-flags -flto*
 	append-flags -Wno-error
 	append-flags -Werror=unused-value
+	# Self-tests read DWARF from the built libraries, tools, and objects.
+	use test && append-flags -g
 
 	default
 

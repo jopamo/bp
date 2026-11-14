@@ -15,3 +15,4 @@ xmedia-app/phototonic/files/*.patch -whitespace
 app-server/openvpn/files/*.patch -whitespace
 app-server/haproxy/files/*.patch -whitespace
 app-build/automake/files/*.patch -whitespace
+lib-core/elfutils/files/x86_64-half-float-retval.patch -whitespace

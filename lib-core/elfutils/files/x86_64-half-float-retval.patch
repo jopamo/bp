@@ -1,0 +1,20 @@
+--- a/backends/x86_64_retval.c
++++ b/backends/x86_64_retval.c
+@@ -133,6 +133,9 @@ x86_64_return_value_location (Dwarf_Die *functypedie, const Dwarf_Op **locp)
+ 	    case DW_ATE_complex_float:
+ 	      switch (size)
+ 		{
++		case 2 * 2:	/* complex _Float16 */
++		  *locp = loc_ssereg;
++		  return nloc_ssereg;
+ 		case 4 * 2:	/* complex float */
+ 		case 8 * 2:	/* complex double */
+ 		  *locp = loc_ssereg;
+@@ -147,6 +150,7 @@ x86_64_return_value_location (Dwarf_Die *functypedie, const Dwarf_Op **locp)
+ 	    case DW_ATE_float:
+ 	      switch (size)
+ 		{
++		case 2:	/* _Float16 */
+ 		case 4:	/* float */
+ 		case 8:	/* double */
+ 		  *locp = loc_ssereg;

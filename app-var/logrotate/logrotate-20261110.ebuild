@@ -4,7 +4,7 @@ inherit autotools
 
 DESCRIPTION="Rotates, compresses, and mails system logs"
 HOMEPAGE="https://github.com/logrotate/logrotate"
-SNAPSHOT=1aba3764602a0a013ac3fb1ee57ed547dff03f88
+SNAPSHOT=4a54194cd93b2854bf2eb82aa9ccdff23c4048d0
 SRC_URI="https://github.com/logrotate/logrotate/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/logrotate-${SNAPSHOT}"
 
@@ -20,6 +20,8 @@ DEPEND="
 	app-net/s-nail
 	acl? ( app-core/acl )
 "
+
+PATCHES=( "${FILESDIR}/${PN}-portable-test-fixtures.patch" )
 
 src_prepare() {
 	eautoreconf

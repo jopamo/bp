@@ -1,0 +1,47 @@
+--- a/test/test-common.sh
++++ b/test/test-common.sh
+@@ -97,0 +98,2 @@
++    uid=$(id -u)
++    gid=$(id -g)
+@@ -99 +101 @@
+-    sed "s,&DIR&,$PWD,g" < $input | sed "s,&USER&,\"$user\",g" | sed "s,&GROUP&,\"$group\",g" | sed "s,&ROOTGROUP&,\"$rootgroup\",g" | sed "s,&CR&,$cr,g" > $output
++    sed "s,&UID&,$uid,g; s,&GID&,$gid,g; s,&DIR&,$PWD,g" < $input | sed "s,&USER&,\"$user\",g" | sed "s,&GROUP&,\"$group\",g" | sed "s,&ROOTGROUP&,\"$rootgroup\",g" | sed "s,&CR&,$cr,g" > $output
+--- a/test/test-config.110.in
++++ b/test/test-config.110.in
+@@ -4 +4 @@
+-    create 0755 1 2
++    create 0755 &UID& &GID&
+@@ -10 +10 @@
+-    create 1 2
++    create &UID& &GID&
+--- a/test/test-0110.sh
++++ b/test/test-0110.sh
+@@ -14,0 +15,2 @@
++chmod 0640 test2.log || exit 1
++
+@@ -17,2 +19,2 @@
+-if ! grep -qE 'test1.log mode = 0755 uid = 1 gid = 2' output.log; then
+-	echo "\"create 0755 1001 1002\" should mean mode 0755 numeric UID 1001 numeric GID 1002"
++if ! grep -qE "test1.log mode = 0755 uid = $uid gid = $gid" output.log; then
++	echo "\"create 0755 $uid $gid\" should mean mode 0755 numeric UID $uid numeric GID $gid"
+@@ -22,2 +24,2 @@
+-if ! grep -qE 'test2.log mode = [0-9]+ uid = 1 gid = 2' output.log; then
+-	echo "\"create 1001 1002\" should mean numeric UID 1001 numeric GID 1002"
++if ! grep -qE "test2.log mode = 0640 uid = $uid gid = $gid" output.log; then
++	echo "\"create $uid $gid\" should preserve mode 0640 with numeric UID $uid numeric GID $gid"
+--- a/test/test-0054.sh
++++ b/test/test-0054.sh
+@@ -16 +16 @@
+-        DATE=$(TZ=UTC date -u -v-${i}d "+%Y-%m-%d")
++        DATE=$(date -v-${i}d "+%Y-%m-%d")
+@@ -18 +18 @@
+-        DATE=$(TZ=UTC date --utc "+%Y-%m-%d" --date "$i day ago")
++        DATE=$(date "+%Y-%m-%d" --date "$i day ago")
+--- a/test/test-0056.sh
++++ b/test/test-0056.sh
+@@ -16 +16 @@
+-        DATE=$(TZ=UTC date -u -v-${i}d "+%d-%m-%Y")
++        DATE=$(date -v-${i}d "+%d-%m-%Y")
+@@ -18 +18 @@
+-        DATE=$(TZ=UTC date --utc "+%d-%m-%Y" --date "$i day ago")
++        DATE=$(date "+%d-%m-%Y" --date "$i day ago")

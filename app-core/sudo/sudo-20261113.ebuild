@@ -4,7 +4,7 @@
 
 DESCRIPTION="Allows users or groups to run commands as other users"
 HOMEPAGE="https://www.sudo.ws/"
-SNAPSHOT=d216858847c0ba52bac3104b8936ded800758ab6
+SNAPSHOT=284836c012052dfa204c4f8bc449f0d05e33f271
 SRC_URI="https://github.com/sudo-project/sudo/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/sudo-${SNAPSHOT}
 
@@ -13,6 +13,8 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="pam ssl"
+
+PATCHES=( "${FILESDIR}/sudo-install-chown-path.patch" )
 
 DEPEND="
 	lib-core/zlib

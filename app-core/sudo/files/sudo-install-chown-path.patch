@@ -1,0 +1,21 @@
+--- a/scripts/install-sh
++++ b/scripts/install-sh
+@@ -21,10 +21,12 @@
+ ##  Some systems don't support -x, so we have to use -f.
+-for d in /sbin /etc /usr/sbin /usr/etc; do
+-    if [ -f $d/chown ]; then
+-	CHOWN=${d}/chown
+-	break
+-    fi
+-done
++if ! command -v "$CHOWN" >/dev/null 2>&1; then
++    for d in /sbin /etc /usr/sbin /usr/etc; do
++	if [ -f $d/chown ]; then
++	    CHOWN=${d}/chown
++	    break
++	fi
++    done
++fi
+
+ for d in /usr/bin /bin /usr/ucb /usr/bsd; do
+     if [ -f $d/whoami ]; then

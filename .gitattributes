@@ -11,3 +11,4 @@ xmedia-lib/libopenshot-audio/files/juce-musl.patch -whitespace
 lib-print/cups/files/*.patch -whitespace
 lib-dev/libusb/files/*.patch -whitespace
 app-net/iputils/files/*.patch -whitespace
+xmedia-app/phototonic/files/*.patch -whitespace

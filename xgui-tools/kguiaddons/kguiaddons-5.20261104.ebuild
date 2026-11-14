@@ -6,7 +6,7 @@ inherit cmake xdg
 
 DESCRIPTION="Framework providing assorted high-level user interface components"
 HOMEPAGE="https://invent.kde.org/frameworks/kguiaddons"
-SNAPSHOT=a86ab29427a3e6a0ed641d12850d3d0455eaac66
+SNAPSHOT=be20defff25e88eb360a728d75c0975709a741d9
 SRC_URI="https://github.com/KDE/kguiaddons/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/kguiaddons-${SNAPSHOT}
 
@@ -14,21 +14,33 @@ LICENSE="LGPL-2+"
 SLOT="$(ver_cut 1)"
 KEYWORDS="amd64 arm64"
 
-IUSE="wayland"
+IUSE="test wayland"
 
-DEPEND="
+RESTRICT="!test? ( test )"
+
+RDEPEND="
 	xgui-lib/qtbase:5
 	xgui-lib/qtx11extras:5
-	xgui-tools/extra-cmake-modules
+	xgui-lib/libX11
 	wayland? ( xgui-lib/qtwayland:5 )
 "
+DEPEND="${RDEPEND}
+	xgui-lib/libxcb
+"
+BDEPEND="xgui-tools/extra-cmake-modules"
 
 src_configure() {
 	local mycmakeargs=(
+		-DBUILD_TESTING=$(usex test ON OFF)
 		$(usex wayland '-DWITH_WAYLAND=ON' '-DWITH_WAYLAND=OFF')
 	)
 
 	cmake_src_configure
+}
+
+src_test() {
+	local -x QT_QPA_PLATFORM=offscreen
+	cmake_src_test
 }
 
 src_install() {

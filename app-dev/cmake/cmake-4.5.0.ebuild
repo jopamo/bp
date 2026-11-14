@@ -49,12 +49,6 @@ cmake_src_bootstrap() {
 }
 
 cmake_src_test() {
-    # fix OutDir and SelectLibraryConfigurations tests
-    # these are altered thanks to our eclass
-    sed -i -e 's:#IGNORE ::g' \
-        "${S}"/Tests/{OutDir,CMakeOnly/SelectLibraryConfigurations}/CMakeLists.txt \
-        || die
-
     pushd "${BUILD_DIR}" > /dev/null
 
     local ctestargs
@@ -81,7 +75,12 @@ src_prepare() {
     append-flags -fno-permissive
     filter-flags -flto*
 
+    eapply "${FILESDIR}/${P}-implicit-link-fixtures.patch"
     cmake_src_prepare
+
+    # Test projects must retain the settings whose behavior they exercise.
+    find Tests -name CMakeLists.txt -exec \
+        sed -i 's/^#_cmake_modify_IGNORE //' {} + || die
 
     # Rolling GCC snapshots can be identified by CMake but fail to publish
     # CMAKE_CXX_STANDARD_COMPUTED_DEFAULT from the compiler-id probe.  Keep
@@ -123,11 +122,6 @@ endif()\
         CMAKE_BINARY="${S}/Bootstrap.cmk/cmake"
         cmake_src_bootstrap
     fi
-
-    #remove default optimizations
-    find ${S} -type f -print0 | xargs -0 sed -i 's/\-Wl,\-O2\ //g'
-    find ${S} -type f -print0 | xargs -0 sed -i 's/\ \-O2//g'
-    find ${S} -type f -print0 | xargs -0 sed -i 's/\-Wl,\-O2//g'
 
     grep -nH "curl_proxytype" Source/CTest/cmCTestCurl.h && die "Leftover curl_proxytype in header"
 }

@@ -1,0 +1,15 @@
+--- a/Tests/RunCMake/ParseImplicitLinkInfo/ParseImplicitLinkInfo.cmake
++++ b/Tests/RunCMake/ParseImplicitLinkInfo/ParseImplicitLinkInfo.cmake
+@@ -130,6 +130,12 @@
+ #
+ # main test loop
+ #
++# Recorded compiler output must not resolve libraries from the test host.
++# Fixtures provide CMAKE_<LANG>_IMPLICIT_LINK_LIBRARY_<NAME> where needed.
++set(CMAKE_FIND_ROOT_PATH "${CMAKE_CURRENT_BINARY_DIR}/empty-root")
++set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
++file(MAKE_DIRECTORY "${CMAKE_FIND_ROOT_PATH}")
++
+ foreach(t ${targets})
+   set(infile "${CMAKE_SOURCE_DIR}/../ParseImplicitData/${t}.input")
+   set(outfile "${CMAKE_SOURCE_DIR}/results/${t}.output")

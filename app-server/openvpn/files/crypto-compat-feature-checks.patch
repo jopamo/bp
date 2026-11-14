@@ -1,0 +1,131 @@
+--- a/configure.ac
++++ b/configure.ac
+@@ -845,6 +845,33 @@
+ 		[AC_MSG_ERROR([OpenSSL check for AES-256-GCM support failed])]
+ 	)
+ 
++	AC_CHECK_HEADERS([openssl/provider.h])
++	AC_CHECK_DECLS([EVP_PKEY_get_group_name, EVP_CIPHER_fetch, EVP_MD_fetch,
++		EVP_CIPHER_free, EVP_MD_free, ERR_get_error_all], [], [], [[
++#include <openssl/evp.h>
++#include <openssl/err.h>
++	]])
++	AC_MSG_CHECKING([for OSSL_LIB_CTX])
++	AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
++#include <openssl/evp.h>
++#ifdef HAVE_OPENSSL_PROVIDER_H
++#include <openssl/provider.h>
++#endif
++	]], [[OSSL_LIB_CTX *ptr = 0; (void)ptr;]])], [
++		AC_MSG_RESULT([yes])
++		AC_DEFINE([HAVE_OSSL_LIB_CTX], [1], [Define if OSSL_LIB_CTX is declared.])
++	], [AC_MSG_RESULT([no])])
++	AC_MSG_CHECKING([for OSSL_PROVIDER])
++	AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
++#include <openssl/evp.h>
++#ifdef HAVE_OPENSSL_PROVIDER_H
++#include <openssl/provider.h>
++#endif
++	]], [[OSSL_PROVIDER *ptr = 0; (void)ptr;]])], [
++		AC_MSG_RESULT([yes])
++		AC_DEFINE([HAVE_OSSL_PROVIDER], [1], [Define if OSSL_PROVIDER is declared.])
++	], [AC_MSG_RESULT([no])])
++
+ 	CFLAGS="${saved_CFLAGS}"
+ 	LIBS="${saved_LIBS}"
+ 
+--- a/src/openvpn/openssl_compat.h
++++ b/src/openvpn/openssl_compat.h
+@@ -44,6 +44,9 @@
+ #include <openssl/ssl.h>
+ #include <openssl/x509.h>
+ #include <openssl/err.h>
++#ifdef HAVE_OPENSSL_PROVIDER_H
++#include <openssl/provider.h>
++#endif
+ 
+ /* Define the type of error. This is something that is less
+  * intrusive than casts everywhere */
+@@ -78,7 +81,7 @@
+ #endif
+ 
+ /* Functionality missing in 1.1.1 */
+-#if OPENSSL_VERSION_NUMBER < 0x30000000L && !defined(OPENSSL_NO_EC)
++#if OPENSSL_VERSION_NUMBER < 0x30000000L && !defined(OPENSSL_NO_EC) && !HAVE_DECL_EVP_PKEY_GET_GROUP_NAME
+ 
+ /* Note that this is not a perfect emulation of the new function but
+  * is good enough for our case of printing certificate details during
+@@ -110,7 +113,7 @@
+     *gname_len = strlen(gname);
+     return 1;
+ }
+-#endif /* if OPENSSL_VERSION_NUMBER < 0x30000000L && !defined(OPENSSL_NO_EC) */
++#endif
+ 
+ #if OPENSSL_VERSION_NUMBER < 0x30000000L
+ #define EVP_MD_get0_name        EVP_MD_name
+@@ -121,11 +124,16 @@
+ #define SSL_CTX_new_ex(libctx, propq, method) SSL_CTX_new((method))
+ 
+ /* Some safe typedefs to avoid too many ifdefs */
++#ifndef HAVE_OSSL_LIB_CTX
+ typedef void OSSL_LIB_CTX;
++#endif
++#ifndef HAVE_OSSL_PROVIDER
+ typedef void OSSL_PROVIDER;
++#endif
+ 
+ /* Mimics the functions but only when the default context without
+  * options is chosen */
++#if !HAVE_DECL_EVP_CIPHER_FETCH
+ static inline const EVP_CIPHER *
+ EVP_CIPHER_fetch(const void *ctx, const char *algorithm, const char *properties)
+ {
+@@ -133,7 +141,9 @@
+     ASSERT(!properties);
+     return EVP_get_cipherbyname(algorithm);
+ }
+-
++#endif
++
++#if !HAVE_DECL_EVP_MD_FETCH
+ static inline const EVP_MD *
+ EVP_MD_fetch(const void *ctx, const char *algorithm, const char *properties)
+ {
+@@ -141,19 +151,25 @@
+     ASSERT(!properties);
+     return EVP_get_digestbyname(algorithm);
+ }
+-
++#endif
++
++#if !HAVE_DECL_EVP_CIPHER_FREE
+ static inline void
+ EVP_CIPHER_free(const EVP_CIPHER *cipher)
+ {
+     /* OpenSSL 1.1.1 and lower use only const EVP_CIPHER, nothing to free */
+ }
+-
++#endif
++
++#if !HAVE_DECL_EVP_MD_FREE
+ static inline void
+ EVP_MD_free(const EVP_MD *md)
+ {
+     /* OpenSSL 1.1.1 and lower use only const EVP_MD, nothing to free */
+ }
+-
++#endif
++
++#if !HAVE_DECL_ERR_GET_ERROR_ALL
+ static inline openssl_err_t
+ ERR_get_error_all(const char **file, int *line, const char **func, const char **data, int *flags)
+ {
+@@ -162,6 +178,7 @@
+     openssl_err_t err = ERR_get_error_line_data(file, line, data, flags);
+     return err;
+ }
++#endif
+ 
+ #endif /* OPENSSL_VERSION_NUMBER < 0x30000000L */
+ 

@@ -1,10 +1,10 @@
 # Distributed under the terms of the GNU General Public License v2
 
-inherit user autotools
+inherit user autotools flag-o-matic
 
 DESCRIPTION="Robust and highly flexible tunneling application compatible with many OSes"
 HOMEPAGE="https://openvpn.net/"
-SNAPSHOT=5b08a76c1a3215c9c927909e695ccd8e83eb6895
+SNAPSHOT=9e9f76c872fc67fe5ed9a11853509cf965c30d79
 SRC_URI="https://github.com/OpenVPN/openvpn/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 	S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
@@ -12,9 +12,17 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="plugins systemd"
+IUSE="plugins systemd test"
+RESTRICT="!test? ( test )"
 
-DEPEND="app-compression/lzo"
+RDEPEND="
+	app-compression/lzo
+	virtual/ssl
+"
+DEPEND="${RDEPEND}"
+BDEPEND="test? ( lib-dev/cmocka )"
+
+PATCHES=( "${FILESDIR}/crypto-compat-feature-checks.patch" )
 
 src_prepare() {
 	default
@@ -27,10 +35,16 @@ src_configure() {
     	--disable-pkcs11
     	$(use_enable plugins)
     	$(use_enable systemd)
-    	--enable-x509-alt-username
+		$(use_enable test unit-tests)
 	)
 
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
+}
+
+src_test() {
+	# LTO resolves calls before the test linker's --wrap can intercept them.
+	filter-lto
+	emake CFLAGS="${CFLAGS}" LDFLAGS="${LDFLAGS}" check
 }
 
 pkg_preinst() {

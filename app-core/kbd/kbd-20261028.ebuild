@@ -4,7 +4,7 @@ inherit autotools qa-policy toolchain-funcs
 
 DESCRIPTION="Keyboard and console utilities"
 HOMEPAGE="http://kbd-project.org/"
-SNAPSHOT=991f1caa678cbb5e486c5d847e1617f275e7184b
+SNAPSHOT=1800ad0b22651fccfdcb10b53ed485a62fea2171
 SRC_URI="https://github.com/1g4-mirror/kbd/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 PATCHES=(
@@ -15,7 +15,10 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="pam test"
+IUSE="pam test valgrind"
+
+REQUIRED_USE="valgrind? ( test )"
+RESTRICT="!test? ( test )"
 
 RDEPEND="
 	pam? ( lib-core/pam )
@@ -26,6 +29,7 @@ DEPEND="
 	app-dev/pkgconf
 	test? ( lib-dev/check )
 "
+BDEPEND="valgrind? ( app-dev/valgrind )"
 
 src_prepare() {
 	default
@@ -44,6 +48,7 @@ src_configure() {
 	econf \
 		--disable-nls \
 		$(use_enable pam vlock) \
+		$(use_enable valgrind memcheck) \
 		$(use_enable test tests)
 }
 

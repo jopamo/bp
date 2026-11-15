@@ -5,7 +5,7 @@ inherit flag-o-matic toolchain-funcs qa-policy
 DESCRIPTION="Stand-alone build of libbpf from the Linux kernel"
 HOMEPAGE="https://github.com/libbpf/libbpf"
 BRANCH_NAME="snapshot"
-SNAPSHOT=1017e177b1a07cef73ecf218bbc74e5260748fed
+SNAPSHOT=3ca4eec9930edc0f4e9a9619471725128e7d59fd
 SRC_URI="https://gitlab.com/pjo/kone/-/archive/${SNAPSHOT}/kone-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/kone-${SNAPSHOT}/tools/lib/bpf"
 

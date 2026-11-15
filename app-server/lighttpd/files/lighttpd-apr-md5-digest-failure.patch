@@ -1,0 +1,88 @@
+--- a/src/mod_authn_file.c
++++ b/src/mod_authn_file.c
+@@ -493,0 +494,18 @@
++#ifdef USE_LIB_CRYPTO_MD5
++static int apr_md5_init(MD5_CTX *ctx) {
++    if (MD5_Init(ctx)) return 1;
++  #if defined(USE_OPENSSL_CRYPTO) && (OPENSSL_VERSION_NUMBER >= 0x30000000L \
++    || LIBRESSL_VERSION_NUMBER >= 0x3080000fL)
++    EVP_MD_CTX_free(*ctx);
++  #endif
++    return 0;
++}
++#define APR_MD5_INIT(ctx) apr_md5_init(ctx)
++#define APR_MD5_UPDATE(ctx, data, len) MD5_Update(ctx, data, len)
++#define APR_MD5_FINAL(out, ctx) MD5_Final(out, ctx)
++#else
++#define APR_MD5_INIT(ctx) (MD5_Init(ctx), 1)
++#define APR_MD5_UPDATE(ctx, data, len) (MD5_Update(ctx, data, len), 1)
++#define APR_MD5_FINAL(out, ctx) (MD5_Final(out, ctx), 1)
++#endif
++
+@@ -531,5 +549,5 @@
+-    MD5_Init(&ctx);
+-    MD5_Update(&ctx, pw, pwlen);
+-    MD5_Update(&ctx, salt, sl);
+-    MD5_Update(&ctx, pw, pwlen);
+-    MD5_Final(final, &ctx);
++    if (!APR_MD5_INIT(&ctx)) goto failed;
++    if (!APR_MD5_UPDATE(&ctx, pw, pwlen)) goto update_failed;
++    if (!APR_MD5_UPDATE(&ctx, salt, sl)) goto update_failed;
++    if (!APR_MD5_UPDATE(&ctx, pw, pwlen)) goto update_failed;
++    if (!APR_MD5_FINAL(final, &ctx)) goto failed;
+@@ -540 +558 @@
+-    MD5_Init(&ctx);
++    if (!APR_MD5_INIT(&ctx)) goto failed;
+@@ -545 +563 @@
+-    MD5_Update(&ctx, pw, pwlen);
++    if (!APR_MD5_UPDATE(&ctx, pw, pwlen)) goto update_failed;
+@@ -551 +569 @@
+-    MD5_Update(&ctx, APR1_ID, sizeof(APR1_ID)-1);
++    if (!APR_MD5_UPDATE(&ctx, APR1_ID, sizeof(APR1_ID)-1)) goto update_failed;
+@@ -556 +574 @@
+-    MD5_Update(&ctx, salt, sl);
++    if (!APR_MD5_UPDATE(&ctx, salt, sl)) goto update_failed;
+@@ -558 +576 @@
+-    MD5_Update(&ctx, result, sizeof(APR1_ID)-1 + sl);
++    if (!APR_MD5_UPDATE(&ctx, result, sizeof(APR1_ID)-1 + sl)) goto update_failed;
+@@ -565,2 +583 @@
+-        MD5_Update(&ctx, final,
+-                   (pl > APR_MD5_DIGESTSIZE) ? APR_MD5_DIGESTSIZE : pl);
++        if (!APR_MD5_UPDATE(&ctx, final, (pl > APR_MD5_DIGESTSIZE) ? APR_MD5_DIGESTSIZE : pl)) goto update_failed;
+@@ -579 +596 @@
+-        MD5_Update(&ctx, (i & 1) ? (char *)final : pw, 1);
++        if (!APR_MD5_UPDATE(&ctx, (i & 1) ? (char *)final : pw, 1)) goto update_failed;
+@@ -581 +598 @@
+-    MD5_Final(final, &ctx);
++    if (!APR_MD5_FINAL(final, &ctx)) goto failed;
+@@ -589 +606 @@
+-        MD5_Init(&ctx);
++        if (!APR_MD5_INIT(&ctx)) goto failed;
+@@ -591 +608 @@
+-            MD5_Update(&ctx, pw, pwlen);
++            if (!APR_MD5_UPDATE(&ctx, pw, pwlen)) goto update_failed;
+@@ -594 +611 @@
+-            MD5_Update(&ctx, final, APR_MD5_DIGESTSIZE);
++            if (!APR_MD5_UPDATE(&ctx, final, APR_MD5_DIGESTSIZE)) goto update_failed;
+@@ -597 +614 @@
+-            MD5_Update(&ctx, salt, sl);
++            if (!APR_MD5_UPDATE(&ctx, salt, sl)) goto update_failed;
+@@ -601 +618 @@
+-            MD5_Update(&ctx, pw, pwlen);
++            if (!APR_MD5_UPDATE(&ctx, pw, pwlen)) goto update_failed;
+@@ -605 +622 @@
+-            MD5_Update(&ctx, final, APR_MD5_DIGESTSIZE);
++            if (!APR_MD5_UPDATE(&ctx, final, APR_MD5_DIGESTSIZE)) goto update_failed;
+@@ -608 +625 @@
+-            MD5_Update(&ctx, pw, pwlen);
++            if (!APR_MD5_UPDATE(&ctx, pw, pwlen)) goto update_failed;
+@@ -610 +627 @@
+-        MD5_Final(final,&ctx);
++        if (!APR_MD5_FINAL(final, &ctx)) goto failed;
+@@ -631,0 +649,6 @@
++
++  update_failed:
++    (void)APR_MD5_FINAL(final, &ctx);
++  failed:
++    ck_memzero(final, sizeof(final));
++    return 0;

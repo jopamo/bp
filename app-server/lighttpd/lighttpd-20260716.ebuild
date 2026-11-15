@@ -38,6 +38,8 @@ DEPEND="
 "
 BDEPEND="app-dev/pkgconf"
 
+PATCHES=( "${FILESDIR}/lighttpd-apr-md5-digest-failure.patch" )
+
 src_configure() {
 	filter-flags -Wl,-z,defs
 

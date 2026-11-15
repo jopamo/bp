@@ -19,7 +19,7 @@ LICENSE="BSD GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="bzip2 dbi fam geoip krb5 ldap libunwind lua mysql php
+IUSE="bzip2 dbi fam geoip krb5 ldap libunwind lua mysql
 postgres ssl static systemd test webdav xattr xxhash zlib
 zstd"
 
@@ -33,7 +33,6 @@ DEPEND="
 	ldap?     ( app-net/openldap )
 	libunwind? ( lib-dev/libunwind )
 	mysql?    ( app-server/mariadb )
-	php?      ( app-lang/php )
 	ssl? ( virtual/ssl )
 	xattr? ( app-core/attr )
 "

@@ -18,3 +18,7 @@ src_prepare() {
 	default
 	eautoreconf
 }
+
+src_configure() {
+	econf --enable-compat-symlinks
+}

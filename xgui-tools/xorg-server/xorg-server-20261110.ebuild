@@ -6,7 +6,7 @@ inherit meson flag-o-matic nvidia-musl-startup
 
 DESCRIPTION="implementation of the X Window System display server"
 HOMEPAGE="https://www.x.org/wiki/"
-SNAPSHOT=ee4bb3f96eec3b21c1961d54fe45cb33dc402d00
+SNAPSHOT=6fc7af13d1b93931470516f0151c6ea13eb1e118
 SRC_URI="https://github.com/X11Libre/xserver/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/xserver-${SNAPSHOT}"
 
@@ -158,7 +158,9 @@ src_configure() {
 
 src_install() {
         meson_src_install
+	if use X; then
 		dosym -r /usr/bin/Xorg /usr/bin/X
+	fi
 
 	nvidia_musl_startup_verify /usr/bin/Xorg
 }

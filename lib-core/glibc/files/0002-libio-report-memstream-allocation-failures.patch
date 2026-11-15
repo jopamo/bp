@@ -1,0 +1,339 @@
+From: Paul Moses <p@1g4.org>
+Subject: [PATCH] libio: report memory stream allocation failures
+
+Set the stream error flag when byte or wide string buffer growth fails.
+Return EOF from memory stream sync before adjusting the write pointer or
+publishing a buffer if writing the terminator fails.
+
+Mark failed close-time reallocations and check non-file stream errors
+after the finish callback.  fclose currently captures the error state
+before finish, so setting the flag in finish alone still returns success.
+Keep the existing failure cleanup, which frees the buffer and clears the
+exported pointer.
+
+Test write, flush/retry, shrinking close, and growing close failures for
+both open_memstream and open_wmemstream with allocator interposition.
+
+diff --git a/libio/Makefile b/libio/Makefile
+--- a/libio/Makefile
++++ b/libio/Makefile
+@@ -146,2 +146,4 @@
+ 
++tests += tst-memstream-alloc-fail tst-wmemstream-alloc-fail
++
+ tests-internal = tst-vtables tst-vtables-interposed
+diff --git a/libio/iofclose.c b/libio/iofclose.c
+--- a/libio/iofclose.c
++++ b/libio/iofclose.c
+@@ -57,2 +57,5 @@
+   _IO_FINISH (fp);
++  /* Memory streams can fail while resizing their buffer in finish.  */
++  if (!(fp->_flags & _IO_IS_FILEBUF) && (fp->_flags & _IO_ERR_SEEN))
++    status = EOF;
+   if (fp->_mode > 0)
+diff --git a/libio/memstream.c b/libio/memstream.c
+--- a/libio/memstream.c
++++ b/libio/memstream.c
+@@ -84,7 +84,8 @@
+ 
+   if (fp->_IO_write_ptr == fp->_IO_write_end)
+     {
+-      _IO_str_overflow (fp, '\0');
++      if (_IO_str_overflow (fp, '\0') == EOF)
++	return EOF;
+       --fp->_IO_write_ptr;
+     }
+ 
+@@ -109,6 +110,8 @@
+ 
+       fp->_IO_buf_base = NULL;
+     }
++  else
++    fp->_flags |= _IO_ERR_SEEN;
+ 
+   _IO_str_finish (fp, 0);
+ }
+diff --git a/libio/strops.c b/libio/strops.c
+--- a/libio/strops.c
++++ b/libio/strops.c
+@@ -25,6 +25,7 @@
+    in files containing the exception.  */
+ 
+ #include <assert.h>
++#include <errno.h>
+ #include "strfile.h"
+ #include "libioP.h"
+ #include <string.h>
+@@ -102,11 +103,15 @@
+ 	  size_t old_blen = _IO_blen (fp);
+ 	  size_t new_size = 2 * old_blen + 100;
+ 	  if (new_size < old_blen)
+-	    return EOF;
++	    {
++	      fp->_flags |= _IO_ERR_SEEN;
++	      __set_errno (ENOMEM);
++	      return EOF;
++	    }
+ 	  new_buf = malloc (new_size);
+ 	  if (new_buf == NULL)
+ 	    {
+-	      /*	  __ferror(fp) = 1; */
++	      fp->_flags |= _IO_ERR_SEEN;
+ 	      return EOF;
+ 	    }
+ 	  if (old_buf)
+diff --git a/libio/tst-memstream-alloc-fail.c b/libio/tst-memstream-alloc-fail.c
+new file mode 100644
+--- /dev/null
++++ b/libio/tst-memstream-alloc-fail.c
+@@ -0,0 +1,191 @@
++/* Memory stream allocation failures during write, flush, and close.
++   Copyright (C) 2026 Free Software Foundation, Inc.
++   This file is part of the GNU C Library.
++
++   The GNU C Library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2.1 of the License, or (at your option) any later version.
++
++   The GNU C Library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with the GNU C Library; if not, see
++   <https://www.gnu.org/licenses/>.  */
++
++#include <errno.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <wchar.h>
++#include <support/check.h>
++
++extern void *__libc_malloc (size_t);
++extern void *__libc_realloc (void *, size_t);
++
++static volatile int fail_malloc;
++static volatile int fail_realloc;
++static unsigned int malloc_failures;
++static unsigned int realloc_failures;
++
++void *
++malloc (size_t size)
++{
++  if (fail_malloc)
++    {
++      ++malloc_failures;
++      errno = ENOMEM;
++      return NULL;
++    }
++  return __libc_malloc (size);
++}
++
++void *
++realloc (void *ptr, size_t size)
++{
++  if (fail_realloc)
++    {
++      ++realloc_failures;
++      errno = ENOMEM;
++      return NULL;
++    }
++  return __libc_realloc (ptr, size);
++}
++
++#ifdef WIDE
++typedef wchar_t char_type;
++# define OPEN open_wmemstream
++# define PUT fputwc
++# define END WEOF
++#else
++typedef char char_type;
++# define OPEN open_memstream
++# define PUT fputc
++# define END EOF
++#endif
++
++static const size_t capacity = BUFSIZ / sizeof (char_type);
++
++static void
++fill (FILE *fp, size_t count)
++{
++  for (size_t i = 0; i < count; ++i)
++    TEST_COMPARE (PUT ('X', fp), 'X');
++}
++
++static void
++check_buffer (const char_type *buf, size_t len)
++{
++  TEST_VERIFY_EXIT (buf != NULL);
++  for (size_t i = 0; i < len; ++i)
++    TEST_COMPARE (buf[i], 'X');
++  TEST_COMPARE (buf[len], 0);
++}
++
++static void
++test_write (void)
++{
++  char_type *buf = NULL;
++  size_t len = 0;
++  FILE *fp = OPEN (&buf, &len);
++  TEST_VERIFY_EXIT (fp != NULL);
++#ifdef WIDE
++  fill (fp, capacity);
++  fail_malloc = 1;
++  errno = 0;
++  wint_t result = PUT ('Y', fp);
++#else
++  char data[2 * BUFSIZ];
++  for (size_t i = 0; i < sizeof (data); ++i)
++    data[i] = 'X';
++  fail_malloc = 1;
++  errno = 0;
++  size_t result = fwrite (data, 1, sizeof (data), fp);
++#endif
++  int saved_errno = errno;
++  fail_malloc = 0;
++#ifdef WIDE
++  TEST_COMPARE (result, END);
++#else
++  TEST_COMPARE (result, capacity);
++#endif
++  TEST_COMPARE (saved_errno, ENOMEM);
++  TEST_VERIFY (ferror (fp));
++  TEST_COMPARE (malloc_failures, 1);
++  malloc_failures = 0;
++  TEST_COMPARE (fclose (fp), EOF);
++  TEST_COMPARE (len, capacity);
++  check_buffer (buf, len);
++  free (buf);
++}
++
++static void
++test_flush (void)
++{
++  char_type *buf = NULL;
++  size_t len = 0;
++  FILE *fp = OPEN (&buf, &len);
++  TEST_VERIFY_EXIT (fp != NULL);
++  TEST_COMPARE (fflush (fp), 0);
++  char_type *published = buf;
++  fill (fp, capacity);
++  fail_malloc = 1;
++  errno = 0;
++  int result = fflush (fp);
++  int saved_errno = errno;
++  fail_malloc = 0;
++  TEST_COMPARE (result, EOF);
++  TEST_COMPARE (saved_errno, ENOMEM);
++  TEST_VERIFY (ferror (fp));
++  TEST_COMPARE (malloc_failures, 1);
++  malloc_failures = 0;
++  TEST_VERIFY (buf == published);
++  TEST_COMPARE (len, 0);
++
++  clearerr (fp);
++  TEST_COMPARE (fflush (fp), 0);
++  TEST_COMPARE (len, capacity);
++  check_buffer (buf, len);
++  TEST_COMPARE (fclose (fp), 0);
++  TEST_COMPARE (len, capacity);
++  check_buffer (buf, len);
++  free (buf);
++}
++
++static void
++test_close (size_t count)
++{
++  char_type *buf = NULL;
++  size_t len = 0;
++  FILE *fp = OPEN (&buf, &len);
++  TEST_VERIFY_EXIT (fp != NULL);
++  fill (fp, count);
++  /* Publish a buffer before the failing shrink, but do not grow the
++     full buffer before testing the failing one-character extension.  */
++  if (count < capacity)
++    TEST_COMPARE (fflush (fp), 0);
++  fail_realloc = 1;
++  errno = 0;
++  int result = fclose (fp);
++  int saved_errno = errno;
++  fail_realloc = 0;
++  TEST_COMPARE (result, EOF);
++  TEST_COMPARE (saved_errno, ENOMEM);
++  TEST_VERIFY (buf == NULL);
++  TEST_COMPARE (realloc_failures, 1);
++  realloc_failures = 0;
++}
++
++static int
++do_test (void)
++{
++  test_write ();
++  test_flush ();
++  test_close (1);
++  test_close (capacity);
++  return 0;
++}
++
++#include <support/test-driver.c>
+diff --git a/libio/tst-wmemstream-alloc-fail.c b/libio/tst-wmemstream-alloc-fail.c
+new file mode 100644
+--- /dev/null
++++ b/libio/tst-wmemstream-alloc-fail.c
+@@ -0,0 +1,2 @@
++#define WIDE 1
++#include "tst-memstream-alloc-fail.c"
+diff --git a/libio/wmemstream.c b/libio/wmemstream.c
+--- a/libio/wmemstream.c
++++ b/libio/wmemstream.c
+@@ -84,7 +84,8 @@
+ 
+   if (fp->_wide_data->_IO_write_ptr == fp->_wide_data->_IO_write_end)
+     {
+-      _IO_wstr_overflow (fp, '\0');
++      if (_IO_wstr_overflow (fp, '\0') == WEOF)
++	return EOF;
+       --fp->_wide_data->_IO_write_ptr;
+     }
+ 
+@@ -114,6 +115,8 @@
+ 
+       fp->_wide_data->_IO_buf_base = NULL;
+     }
++  else
++    fp->_flags |= _IO_ERR_SEEN;
+ 
+   _IO_wstr_finish (fp, 0);
+ }
+diff --git a/libio/wstrops.c b/libio/wstrops.c
+--- a/libio/wstrops.c
++++ b/libio/wstrops.c
+@@ -25,6 +25,7 @@
+    in files containing the exception.  */
+ 
+ #include <assert.h>
++#include <errno.h>
+ #include "strfile.h"
+ #include "libioP.h"
+ #include <string.h>
+@@ -93,12 +94,16 @@
+ 
+ 	  if (__glibc_unlikely (new_size < old_wblen)
+ 	      || __glibc_unlikely (new_size > SIZE_MAX / sizeof (wchar_t)))
+-	    return EOF;
++	    {
++	      fp->_flags |= _IO_ERR_SEEN;
++	      __set_errno (ENOMEM);
++	      return WEOF;
++	    }
+ 
+ 	  new_buf = malloc (new_size * sizeof (wchar_t));
+ 	  if (new_buf == NULL)
+ 	    {
+-	      /*	  __ferror(fp) = 1; */
++	      fp->_flags |= _IO_ERR_SEEN;
+ 	      return WEOF;
+ 	    }
+ 	  if (old_buf)

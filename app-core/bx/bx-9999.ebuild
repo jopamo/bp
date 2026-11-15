@@ -7,14 +7,8 @@ inherit browser-user-agent meson qa-policy
 DESCRIPTION="Native multicall multitool"
 HOMEPAGE="https://github.com/jopamo/bx"
 
-if [[ ${PV} = *9999 ]]; then
-	EGIT_REPO_URI="https://github.com/jopamo/bx"
-	inherit git-r3
-else
-	SNAPSHOT=0cc18f6e46e184bdeee6a049ecc5ddd8caeb3801
-	SRC_URI="https://github.com/jopamo/bx/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
-	S=${WORKDIR}/${PN}-${SNAPSHOT}
-fi
+EGIT_REPO_URI="https://github.com/jopamo/bx"
+inherit git-r3
 
 LICENSE="GPL-2+ GPL-3+ LGPL-2.1+ BSD BSD-2 ISC Info-ZIP MIT vim"
 SLOT="0"
@@ -25,6 +19,7 @@ IUSE="+static"
 RDEPEND="
 	!app-compression/zip-utils
 	!app-net/mira
+	!app-net/rsync
 	!dev-rust/ripgrep
 	static? (
 		app-compression/bzip2[static-libs(+)]

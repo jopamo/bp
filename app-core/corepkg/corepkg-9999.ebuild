@@ -45,7 +45,6 @@ BDEPEND+="
 		dev-pypi/pytest-xdist[${PYTHON_USEDEP}]
 	)
 "
-PDEPEND="app-net/rsync"
 
 pkg_pretend() {
 	local CONFIG_CHECK="~IPC_NS ~PID_NS ~NET_NS ~UTS_NS"

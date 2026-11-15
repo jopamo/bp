@@ -1,60 +1,70 @@
 # Distributed under the terms of the GNU General Public License v2
 
-inherit flag-o-matic
+inherit flag-o-matic toolchain-funcs
 
-DESCRIPTION="File transfer program to keep remote files into sync"
-HOMEPAGE="https://rsync.samba.org/"
-SNAPSHOT=4912b2f32f809b56599ce2c0aebbb0717b28fdd3
-SRC_URI="https://github.com/RsyncProject/rsync/archive/${SNAPSHOT}.tar.gz -> rsync-${SNAPSHOT}.tar.gz"
-S="${WORKDIR}/rsync-${SNAPSHOT}"
+DESCRIPTION="BSD-licensed implementation of the rsync protocol"
+HOMEPAGE="https://github.com/kristapsdz/openrsync"
+SNAPSHOT=8235c68f11b4fad5e24849a01d04ea153c29ee28
+SRC_URI="https://github.com/kristapsdz/openrsync/archive/${SNAPSHOT}.tar.gz -> openrsync-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/openrsync-${SNAPSHOT}"
 
-LICENSE="GPL-3"
+LICENSE="ISC BSD BSD-2 public-domain"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-IUSE="acl iconv ipv6 lz4 static xattr xxhash zstd"
-
-QA_CONFIG_IMPL_DECL_SKIP=(
-	makedev
-)
-
-LIB_DEPEND="
-	lib-core/zlib[static-libs(+)]
-	virtual/ssl[static-libs(+)]
-	acl? ( app-core/acl[static-libs(+)] )
-	lz4? ( app-compression/lz4[static-libs(+)] )
-	xattr? ( app-core/attr[static-libs(+)] )
-	xxhash? ( lib-misc/xxhash[static-libs(+)] )
-	zstd? ( app-compression/zstd[static-libs(+)] )
-"
+IUSE="static"
 
 DEPEND="
-	!static? ( ${LIB_DEPEND//\[static-libs(+)]} )
-	static? ( ${LIB_DEPEND} )
+	!static? ( lib-core/zlib )
+	static? ( lib-core/zlib[static-libs(+)] )
 "
+RDEPEND="!static? ( lib-core/zlib )"
+BDEPEND="app-dev/pkgconf"
 
-src_prepare() {
-	rm zlib/*.{c,h} || die
-	rm config.{guess,sub} || die
-	cp -p "${BROOT}"/usr/share/gnuconfig/* "${S}"/
-	default
-}
+PATCHES=( "${FILESDIR}/openrsync-gnu-make.patch" )
 
 src_configure() {
 	use static && append-ldflags -static
 
-	local myconf=(
-		$(use_enable acl acl-support)
-		$(use_enable iconv)
-		$(use_enable ipv6)
-		$(use_enable lz4)
-		$(use_enable xattr xattr-support)
-		$(use_enable xxhash)
-		$(use_enable zstd)
-		--disable-md2man
-		--without-included-zlib
-		--with-included-popt=no
-		--disable-idn
-	)
-	econf "${myconf[@]}"
+	./configure \
+		CC="$(tc-getCC)" \
+		CFLAGS="${CFLAGS}" \
+		CPPFLAGS="${CPPFLAGS}" \
+		LDFLAGS="${LDFLAGS}" \
+		PREFIX="${EPREFIX}/usr" \
+		MANDIR="${EPREFIX}/usr/share/man" || die
+}
+
+src_compile() {
+	emake PKG_CONFIG="$(tc-getPKG_CONFIG)" LDADD_FTS= CFLAGS_FTS=
+}
+
+src_test() {
+	local test opts
+	for opts in "--protocol 27" "--protocol 27 -z"; do
+		for test in test00_simple test1_minusa test2_minusexclude \
+			test7_symlinks test8_times test19_linkdest test21_delopts; do
+			mkdir -p "${T}/${test}" || die
+			(
+				cd "${T}/${test}" || exit
+				CLIENT_RSYNC=0 SERVER_RSYNC=0 \
+					tstdir="${S}/regress/functional" \
+					rsync="${S}/openrsync ${opts} --rsync-path=${S}/openrsync" \
+					sh "${S}/regress/functional/${test}.test"
+			) || die "${test} failed (${opts})"
+			rm -rf "${T:?}/${test}" || die
+		done
+	done
+}
+
+src_install() {
+	dobin openrsync
+	dosym openrsync /usr/bin/rsync
+	doman openrsync.1 rsync.5 rsyncd.5
+	dosym openrsync.1 /usr/share/man/man1/rsync.1
+}
+
+pkg_postinst() {
+	ewarn "rsync now runs openrsync (protocol 27), not Samba rsync."
+	ewarn "ACLs, xattrs, --files-from and --chmod are not supported."
 }

@@ -231,8 +231,11 @@ esetgroups() {
 
 	local user=$1 groups_raw=$2 root=${ROOT:-}
 	[[ -n $(egetent passwd "${user}") ]] || { ewarn "user missing"; return 1; }
+	[[ -n ${groups_raw} && ${groups_raw} != *$'\n'* ]] || die "invalid group list"
 
-	local IFS=',' g_arr=(${groups_raw})
+	local g
+	local -a g_arr=()
+	IFS=',' read -r -a g_arr <<< "${groups_raw}"
 	for g in "${g_arr[@]}"; do
 		[[ -n $(egetent group "${g}") ]] \
 			|| die "group ${g} missing; add it first"
@@ -242,8 +245,7 @@ esetgroups() {
 	local sup=$(printf '%s\n' "${g_arr[@]:1}" | sort | tr '\n' ',' | sed 's/,$//')
 	[[ $(egetgroups "${user}") == "${groups_raw}" ]] && return 0
 
-	local opts=( -g "${primary}" )
-	[[ -n ${sup} ]] && opts+=( -G "${sup}" )
+	local opts=( -g "${primary}" -G "${sup}" )
 	[[ -n ${root} ]] && opts+=( --prefix "${root}" )
 	_esafe_usermod groups "${opts[@]}" "${user}"
 }

@@ -4,19 +4,23 @@ EAPI=8
 
 inherit browser-user-agent meson qa-policy
 
-DESCRIPTION="Native multicall multitool"
+DESCRIPTION="Multicall command-line utilities"
 HOMEPAGE="https://github.com/jopamo/bx"
 
 EGIT_REPO_URI="https://github.com/jopamo/bx"
 inherit git-r3
 
-LICENSE="GPL-2+ GPL-3+ LGPL-2.1+ BSD BSD-2 ISC Info-ZIP MIT vim"
+LICENSE="Apache-2.0 ZLIB GPL-2+ GPL-3+ LGPL-2.1+ BSD BSD-2 ISC Info-ZIP MIT vim"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="+static"
 
 RDEPEND="
+	!app-compression/pigz
+	!app-var/crunch
+	!app-var/symlinks
+	!app-net/knock
 	!app-compression/zip-utils
 	!app-fs/dosfstools
 	!app-net/mira

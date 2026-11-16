@@ -22,7 +22,7 @@ RESTRICT="!test? ( test )"
 
 RDEPEND="
 	pam? ( lib-core/pam )
-	app-compression/pigz
+	app-core/bx
 "
 DEPEND="
 	${RDEPEND}

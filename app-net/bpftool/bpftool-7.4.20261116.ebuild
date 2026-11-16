@@ -5,9 +5,9 @@ inherit toolchain-funcs
 DESCRIPTION="Tool for inspection and simple manipulation of eBPF programs and maps"
 HOMEPAGE="https://github.com/libbpf/bpftool"
 BRANCH_NAME="snapshot"
-SNAPSHOT=3ca4eec9930edc0f4e9a9619471725128e7d59fd
-SRC_URI="https://gitlab.com/pjo/kone/-/archive/${SNAPSHOT}/kone-${SNAPSHOT}.tar.bz2"
-S="${WORKDIR}/kone-${SNAPSHOT}"
+SNAPSHOT=b576f55cfe947f5f92b3be629f88252bc861c0b2
+SRC_URI="https://github.com/jopamo/k1g4/archive/${SNAPSHOT}.tar.gz -> k1g4-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/k1g4-${SNAPSHOT}"
 
 LICENSE="|| ( GPL-2 BSD-2 )"
 SLOT="0"
@@ -27,36 +27,13 @@ RDEPEND="${DEPEND}"
 
 CONFIG_CHECK="~DEBUG_INFO_BTF"
 
-src_prepare() {
-	default
-
-	# remove -Werror from bpftool feature detection
-	sed -i -e 's/-Werror//g' tools/build/feature/Makefile || die
-
-	sed -i \
-		-e 's#/sbin#/bin#g' \
-		-e '/CFLAGS += -O2/d' \
-		-e '/CFLAGS += -W$/d' \
-		-e '/CFLAGS += -Wextra$/d' \
-		tools/bpf/bpftool/Makefile || die
-
-	if ! use clang; then
-		# remove bpf target & add assembly annotations to fix CO-RE feature detection
-		sed -i -e 's/--target=bpf/-dA/g' tools/build/feature/Makefile || die
-
-		# remove bpf target from skeleton build
-		sed -i -e 's/--target=bpf//g' tools/bpf/bpftool/Makefile || die
-	fi
-
-	# Use rst2man or rst2man.py depending on which one exists (#930076)
-	type -P rst2man >/dev/null || \
-		sed -i -e 's/rst2man/rst2man.py/g' tools/bpf/bpftool/Documentation/Makefile || die
-}
-
 bpftool_make() {
 	tc-export AR CC LD
 	local -a feature_tests=( libelf-zstd )
 	local -a feature_display=()
+	local rst2man
+
+	rst2man=$(type -P rst2man || type -P rst2man.py) || die "rst2man not found"
 
 	use clang && {
 		feature_tests+=( clang-bpf-co-re )
@@ -81,7 +58,13 @@ bpftool_make() {
 		FEATURE_DISPLAY="${feature_display[*]}" \
 		feature-libcap="$(usex caps 1 0)" \
 		feature-llvm="$(usex llvm 1 0)" \
+		SKIP_BPF_SKELS="$(usex clang 0 1)" \
+		WERROR=0 \
+		OPTIMIZATION= \
+		WARNINGS='-Wall -Wformat-signedness -Wno-unused-parameter -Wno-missing-field-initializers $(filter-out -Wswitch-enum -Wnested-externs,$(EXTRA_WARNINGS))' \
+		RST2MAN="${rst2man}" \
 		prefix="${EPREFIX}"/usr \
+		sbindir="${EPREFIX}"/usr/bin \
 		V=1 \
 		"$@"
 }

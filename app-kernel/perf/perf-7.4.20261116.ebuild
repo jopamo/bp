@@ -1,20 +1,15 @@
 # Distributed under the terms of the GNU General Public License v2
 
 BRANCH_NAME="snapshot"
-SNAPSHOT=3ca4eec9930edc0f4e9a9619471725128e7d59fd
-PATCHES=(
-	"${FILESDIR}"/perf-handle-pruned-rust-demangler.patch
-	"${FILESDIR}"/perf-handle-pruned-syscall-tables.patch
-	"${FILESDIR}"/perf-inject-aslr-drain-evlist.patch
-)
+SNAPSHOT=b576f55cfe947f5f92b3be629f88252bc861c0b2
 
 inherit flag-o-matic toolchain-funcs
 
 DESCRIPTION="Userland tools for Linux Performance Counters"
-HOMEPAGE="https://kernel.org/"
+HOMEPAGE="https://github.com/jopamo/k1g4"
 
-SRC_URI="https://gitlab.com/pjo/kone/-/archive/${SNAPSHOT}/kone-${SNAPSHOT}.tar.bz2"
-S="${WORKDIR}/kone-${SNAPSHOT}"
+SRC_URI="https://github.com/jopamo/k1g4/archive/${SNAPSHOT}.tar.gz -> k1g4-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/k1g4-${SNAPSHOT}"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -38,39 +33,6 @@ DEPEND="
 	bpf? ( lib-net/libbpf:= )
 "
 RDEPEND="${DEPEND}"
-
-src_prepare() {
-	default
-
-	# fix missing arch asm headers in the tools header layer for this snapshot
-	local ksrc=${S}
-	local perf_arch=${ARCH}
-	local tools_asm_dir
-	local hdr
-
-	[[ -n ${perf_arch} ]] || perf_arch=$(uname -m)
-
-	case ${perf_arch} in
-		amd64|x86_64)
-			perf_arch=x86
-			;;
-		aarch64)
-			perf_arch=arm64
-			;;
-	esac
-
-	tools_asm_dir=${ksrc}/tools/arch/${perf_arch}/include/asm
-
-	if [[ -d ${tools_asm_dir} ]] && [[ -d ${ksrc}/tools/include/asm ]] ; then
-		for hdr in "${tools_asm_dir}"/* ; do
-			[[ -e ${hdr} ]] || continue
-			[[ -e ${ksrc}/tools/include/asm/${hdr##*/} ]] && continue
-			ln -sf ../../arch/${perf_arch}/include/asm/${hdr##*/} \
-				"${ksrc}"/tools/include/asm/${hdr##*/} || die
-		done
-	fi
-
-}
 
 src_compile() {
 	local perf_arch=${ARCH}
@@ -97,8 +59,6 @@ src_compile() {
 		CXX="$(tc-getCXX)"
 		WERROR=0
 		KBUILD_BUILD_TIMESTAMP="${perf_timestamp}"
-		# this snapshot's rust-backed test workload is broken and rust support
-		# only gates optional perf test workloads here, not the perf tool itself
 		NO_RUST=1
 		NO_AIO=1
 		NO_GTK2=1

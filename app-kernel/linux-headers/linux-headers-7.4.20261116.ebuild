@@ -1,7 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 BRANCH_NAME="snapshot"
-SNAPSHOT=3ca4eec9930edc0f4e9a9619471725128e7d59fd
+SNAPSHOT=b576f55cfe947f5f92b3be629f88252bc861c0b2
 
 K_NOUSENAME="yes"
 K_NOSETEXTRAVERSION="yes"
@@ -12,23 +12,12 @@ inherit kernel-2
 PROPERTIES+=" source-payload"
 
 DESCRIPTION="Linux kernel headers"
-HOMEPAGE="https://kernel.org/"
-SRC_URI="https://gitlab.com/pjo/kone/-/archive/${SNAPSHOT}/kone-${SNAPSHOT}.tar.bz2"
-S="${WORKDIR}/kone-${SNAPSHOT}"
+HOMEPAGE="https://github.com/jopamo/k1g4"
+SRC_URI="https://github.com/jopamo/k1g4/archive/${SNAPSHOT}.tar.gz -> k1g4-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/k1g4-${SNAPSHOT}"
 
 SLOT="0"
 KEYWORDS="amd64 arm64"
-
-[[ -n ${PATCH_VER} ]] && PATCHES=( "${WORKDIR}"/${PATCH_PV} )
-
-src_prepare() {
-	use elibc_musl && PATCHES+=(
-		"${FILESDIR}"/linux-headers-5.15-remove-inclusion-sysinfo.h.patch
-	)
-
-	# Avoid kernel-2_src_prepare
-	default
-}
 
 src_install() {
 	kernel-2_src_install

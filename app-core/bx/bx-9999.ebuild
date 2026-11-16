@@ -22,9 +22,11 @@ RDEPEND="
 	!app-var/symlinks
 	!app-net/knock
 	!app-compression/zip-utils
+	!app-core/grep
 	!app-fs/dosfstools
 	!app-net/mira
 	!app-net/rsync
+	!dev-rust/fd
 	!dev-rust/ripgrep
 	static? (
 		app-compression/bzip2[static-libs(+)]

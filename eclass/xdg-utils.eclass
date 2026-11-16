@@ -35,9 +35,11 @@ xdg_environment_reset() {
 # .desktop cache — supports -q
 xdg_desktop_database_update() {
 	_xdg_assert_post xdg_desktop_database_update
+	local dir="${EROOT%/}${DESKTOP_DATABASE_DIR}"
+	[[ -d ${dir} ]] || return 0
 	_xdg_have update-desktop-database || { log_err "update-desktop-database not found"; return; }
 
-	if update-desktop-database -q "${EROOT%/}${DESKTOP_DATABASE_DIR}"; then
+	if update-desktop-database -q "${dir}"; then
 		log_ok ".desktop cache updated (${EBUILD_PHASE})"
 	else
 		log_err "Failed to update .desktop cache (${EBUILD_PHASE})"
@@ -65,11 +67,13 @@ xdg_icon_cache_update() {
 
 xdg_mimeinfo_database_update() {
 	_xdg_assert_post xdg_mimeinfo_database_update
+	local dir="${EROOT%/}${MIMEINFO_DATABASE_DIR}"
+	[[ -d ${dir} ]] || return 0
 	_xdg_have update-mime-database || { log_err "update-mime-database not found"; return; }
 
 	local -x PKGSYSTEM_ENABLE_FSYNC=0
 
-	if update-mime-database "${EROOT%/}${MIMEINFO_DATABASE_DIR}"; then
+	if update-mime-database "${dir}"; then
 		log_ok "shared MIME database updated (${EBUILD_PHASE})"
 	else
 		log_err "Failed to update shared MIME database (${EBUILD_PHASE})"

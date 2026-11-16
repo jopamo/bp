@@ -1,0 +1,14 @@
+--- a/m4/tar.m4
++++ b/m4/tar.m4
+@@ -112,6 +112,7 @@
+     cpio)
+-      am__tar='find "$$tardir" -print | cpio -o -H $1 -L'
+-      am__tar_='find "$tardir" -print | cpio -o -H $1 -L'
+-      am__untar='cpio -i -H $1 -d'
+-      am__tar_ignore_stderr=yes
++      # Materialize links before tar; bx tar does not dereference sources.
++      am__tar='(am_tmp=$$(bx mktemp -d) || exit 1; trap '"'"'bx chmod -R u+rwX -- "$$am_tmp"; bx rm -rf -- "$$am_tmp"'"'"' 0; trap '"'"'exit 1'"'"' 1 2 3 15; bx cp -RL --parents --preserve=mode,timestamps,links -- "$$tardir" "$$am_tmp" && bx find "$$am_tmp" -exec bx sh -c '"'"'get_stamp() { bx stat -c %Y -- "$$path"; }; for path do stamp=$$(get_stamp) && bx touch -m -d "@$$stamp" -- "$$path" || exit 1; done'"'"' sh {} + && bx tar --format=m4_if([$1], [pax], [posix], [$1]) -cf - -C "$$am_tmp" -- "$$tardir")'
++      am__tar_='(am_tmp=$(bx mktemp -d) || exit 1; trap '"'"'bx chmod -R u+rwX -- "$am_tmp"; bx rm -rf -- "$am_tmp"'"'"' 0; trap '"'"'exit 1'"'"' 1 2 3 15; bx cp -RL --parents --preserve=mode,timestamps,links -- "$tardir" "$am_tmp" && bx find "$am_tmp" -exec bx sh -c '"'"'get_stamp() { bx stat -c %Y -- "$path"; }; for path do stamp=$(get_stamp) && bx touch -m -d "@$stamp" -- "$path" || exit 1; done'"'"' sh {} + && bx tar --format=m4_if([$1], [pax], [posix], [$1]) -cf - -C "$am_tmp" -- "$tardir")'
++      am__untar='bx tar -xf -'
++      am__tar_ignore_stderr=no
+       ;;

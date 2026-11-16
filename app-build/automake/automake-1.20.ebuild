@@ -11,7 +11,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 PATCHES=(
-	"${FILESDIR}/cpio-preserve-mtime.patch"
+	"${FILESDIR}/cpio-tar-fallback.patch"
 	"${FILESDIR}/archiver-test-prerequisites.patch"
 )
 
@@ -21,10 +21,12 @@ COMMON_DEPEND="
 "
 RDEPEND="
 	${COMMON_DEPEND}
+	app-core/bx
 	app-build/gnuconfig
 "
 BDEPEND="
 	${COMMON_DEPEND}
+	app-core/bx
 "
 
 src_compile() {

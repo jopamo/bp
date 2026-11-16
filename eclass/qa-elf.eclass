@@ -252,7 +252,7 @@ qa-elf-check-unused-needed() {
 		sym=${sym%%@*}
 		unresolved[${sym}]=1
 		undefined+=( "${sym}" )
-	done < <("${readelf_cmd}" -W -Ws "${file}" 2>/dev/null | awk '$7 == "UND" { print $8 }' | sed '/^$/d' | sort -u)
+	done < <("${readelf_cmd}" -W --dyn-syms "${file}" 2>/dev/null | awk '$7 == "UND" { print $8 }' | sed '/^$/d' | sort -u)
 
 	[[ ${#undefined[@]} -gt 0 ]] || return 0
 
@@ -268,7 +268,11 @@ qa-elf-check-unused-needed() {
 			[[ -n ${sym} ]] || continue
 			sym=${sym%%@*}
 			exported[${sym}]=1
-		done < <("${readelf_cmd}" -W -Ws "${resolved}" 2>/dev/null | awk '$7 != "UND" { print $8 }' | sed '/^$/d')
+		done < <("${readelf_cmd}" -W --dyn-syms "${resolved}" 2>/dev/null | awk '
+			$7 != "UND" &&
+			($5 == "GLOBAL" || $5 == "WEAK" || $5 == "UNIQUE") &&
+			($6 == "DEFAULT" || $6 == "PROTECTED") { print $8 }
+		' | sed '/^$/d')
 
 		hit=0
 		for sym in "${undefined[@]}"; do

@@ -17,6 +17,7 @@ KEYWORDS="amd64 arm64"
 IUSE="+static"
 
 RDEPEND="
+	!app-compression/cpio
 	!app-compression/pigz
 	!app-var/crunch
 	!app-var/symlinks

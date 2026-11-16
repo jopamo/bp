@@ -1,7 +1,6 @@
 *app-build/binutils
 *app-build/make
 *app-build/llvm
-*app-compression/cpio
 *app-compression/xz-utils
 *app-core/corepkg
 *app-core/diffutils

@@ -198,7 +198,7 @@ if [[ -z ${_AUTOTOOLS_ECLASS} ]] ; then
 		fi
 
 		# normalize to configure.ac if needed
-		if [[ -e configure.in ]]; then
+		if [[ ! -e configure.ac && -e configure.in ]]; then
 			mv configure.{in,ac} || die
 		fi
 

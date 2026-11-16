@@ -1,0 +1,8 @@
+--- a/src/zimg/api/zimg.cpp
++++ b/src/zimg/api/zimg.cpp
+@@ -1,4 +1,5 @@
+ #include <cmath>
++#include <exception>
+ #include <memory>
+ #include <string>
+ #include <tuple>

@@ -16,6 +16,8 @@ KEYWORDS="amd64 arm64"
 
 IUSE="debug static-libs"
 
+PATCHES=( "${FILESDIR}/zimg-include-exception.patch" )
+
 src_prepare() {
 	qa-policy-configure
 	default

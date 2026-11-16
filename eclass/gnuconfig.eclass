@@ -81,30 +81,23 @@ if [[ -z ${_GNUCONFIG_ECLASS:-} ]]; then
 	# Searches known system directories for config.sub with the highest timestamp.
 	# Returns the path of that directory.
 	gnuconfig_findnewest() {
-		local -a candidates=()
-		local candidate
+		local candidate timestamp best= best_timestamp= LC_ALL=C
 		for candidate in \
 			"${BROOT}/usr/share/misc/config.sub" \
 			"${BROOT}/usr/share/gnuconfig/config.sub" \
 			"${BROOT}"/usr/share/automake*/config.sub \
 			"${BROOT}/usr/share/libtool/config.sub"; do
-			[[ -r ${candidate} ]] && candidates+=( "${candidate}" )
+			[[ -r ${candidate} ]] || continue
+			timestamp=$(sed -n "s/^timestamp='\([^']*\)'$/\1/p" "${candidate}" 2>/dev/null) || continue
+			[[ ${timestamp} =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]] || continue
+			if [[ ${timestamp} > ${best_timestamp} ]]; then
+				best_timestamp=${timestamp}
+				best=${candidate%/*}
+			fi
 		done
-		[[ ${#candidates[@]} -gt 0 ]] || die "No valid config.sub found in standard gnuconfig directories"
-
-		local best
-		best="$(
-			grep -Hs '^timestamp' "${candidates[@]}" 2>/dev/null \
-				|| true
-		)"
-		best="$(
-			printf '%s\n' "${best}" \
-				| sort -r -t\' -k2,2 \
-				| sed -n '1{s,/config.sub:.*$,,;p;q}'
-		)"
 
 		[[ -n "${best}" ]] || die "No valid config.sub found in standard gnuconfig directories"
-		echo "${best}"
+		printf '%s\n' "${best}"
 	}
 
 fi

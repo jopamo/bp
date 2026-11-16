@@ -1,0 +1,16 @@
+--- a/src/core/vscore.cpp
++++ b/src/core/vscore.cpp
+@@ -2470,8 +2470,11 @@
+     return pathBuf.data();
+ #else
+     Dl_info info = {};
+-    if (dladdr(&vs_internal_vsapi, &info))
+-        return info.dli_fname;
++    if (dladdr(&vs_internal_vsapi, &info)) {
++        std::error_code ec;
++        auto path = std::filesystem::canonical(info.dli_fname, ec);
++        return ec ? std::filesystem::path(info.dli_fname) : path;
++    }
+ #endif
+     return {};
+ }

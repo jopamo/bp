@@ -4,7 +4,7 @@
   "family": {
     "repository_id": "bp",
     "category": "app-net",
-    "pn": "knock"
+    "pn": "knockd"
   },
   "paths": []
 }

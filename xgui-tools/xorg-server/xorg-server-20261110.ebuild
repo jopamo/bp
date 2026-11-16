@@ -2,7 +2,7 @@
 
 #BRANCH_NAME="maint-$(ver_cut 1).0"
 
-inherit meson flag-o-matic nvidia-musl-startup
+inherit meson flag-o-matic
 
 DESCRIPTION="implementation of the X Window System display server"
 HOMEPAGE="https://www.x.org/wiki/"
@@ -16,8 +16,7 @@ KEYWORDS="amd64 arm64"
 
 IUSE="glamor ipv6 minimal nvidia systemd udev wayland xcsecurity +xephyr +xvfb X"
 REQUIRED_USE="
-	nvidia? ( X )
-	${NVIDIA_MUSL_STARTUP_REQUIRED_USE}
+	nvidia? ( X !elibc_musl )
 "
 
 DEPEND="
@@ -54,7 +53,6 @@ DEPEND="
 		virtual/dbus
 		app-core/systemd
 	)
-	${NVIDIA_MUSL_STARTUP_DEPEND}
 "
 RDEPEND="${DEPEND}"
 BDEPEND="
@@ -69,7 +67,6 @@ src_prepare() {
 	default
 
 	eapply "${FILESDIR}"/${PN}-backtrace-execinfo.patch
-	eapply "${FILESDIR}"/${PN}-nvidia-musl-startup.patch
 	eapply "${FILESDIR}"/${PN}-glyph-sha256.patch
 
 	sed -i -E \
@@ -80,11 +77,6 @@ src_prepare() {
 src_configure() {
   # avoid forcing immediate binding which can break nvidia GL stubs at link time
   filter-flags -Wl,-z,defs -Wl,-z,now
-
-  local nvidia_musl_startup=disabled
-  if use nvidia && use elibc_musl; then
-    nvidia_musl_startup=enabled
-  fi
 
   local emesonargs=(
     # core servers and backends
@@ -137,7 +129,6 @@ src_configure() {
     -Dsha1=libcrypto             # link libcrypto for the glyph-cache hash
     -Dlibunwind=false            # keep unwinder off unless debugging
     -Dlegacy_nvidia_340x=false   # do not export obsolete 340xx driver entrypoints
-    -Dnvidia_musl_startup="${nvidia_musl_startup}"
     -Dlegacy_nvidia_padding=false # old ScreenRec ABI padding, not MIT-SHM pixmap support
 
     # features we explicitly keep off
@@ -161,6 +152,4 @@ src_install() {
 	if use X; then
 		dosym -r /usr/bin/Xorg /usr/bin/X
 	fi
-
-	nvidia_musl_startup_verify /usr/bin/Xorg
 }

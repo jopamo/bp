@@ -29,7 +29,7 @@ KEYWORDS="amd64 arm64"
 IUSE+=" driver kernel-open kms primary-gpu static-libs uvm wayland X"
 REQUIRED_USE="
     kernel-open? ( driver )
-    elibc_musl? ( amd64 )
+    !elibc_musl
 "
 
 S="${WORKDIR}"
@@ -43,11 +43,7 @@ DEPEND+="
     X? ( xgui-lib/libpciaccess )
 "
 BDEPEND+=" app-dev/pkgconf"
-# NVIDIA still ships proprietary glibc-linked userland tools such as
-# nvidia-smi and the CUDA MPS binaries.  Build every version-matched public
-# utility from source below, and retain musl-bsd only for the remaining blobs.
 RDEPEND+="
-    elibc_musl? ( lib-core/musl-bsd )
     lib-net/libtirpc
     virtual/ssl
     X? (
@@ -157,86 +153,12 @@ nvidia_source_build() {
 
 nvidia_source_install() {
     local component=${1}
-    local binary interpreter
+    local binary
 
     binary="$(nvidia_source_output_dir "${component}")/${component}"
     [[ -x ${binary} ]] || die "missing source-built ${component}"
 
-    if use elibc_musl; then
-        interpreter=$(scanelf -qF'%i#F' "${binary}") ||
-            die "cannot inspect source-built ${component}"
-        [[ ${interpreter} == /lib/ld-musl-*.so.1 ]] ||
-            die "${component} is not musl-native: ${interpreter:-no interpreter}"
-    fi
-
     newexe "${binary}" "${component}"
-}
-
-nvidia_musl_startup_build() {
-    nvidia_use_graphics && use elibc_musl || return 0
-
-    local anchor="${T}/libnvidia-musl-startup.so.1"
-    local object="${T}/nvidia-musl-startup.o"
-    local tls="${NV_OBJ}/libnvidia-tls.so.${NV_SOVER}"
-    local tls_dynamic tls_soname
-
-    [[ -f ${tls} ]] || die "missing NVIDIA initial-exec TLS DSO: ${tls}"
-    tls_dynamic=$("$(tc-getREADELF)" -dW "${tls}") ||
-        die "failed to inspect NVIDIA TLS dynamic metadata"
-    tls_soname=$(sed -n 's/.*(SONAME).*\[\(.*\)\].*/\1/p' <<< "${tls_dynamic}")
-    [[ ${tls_soname} == "libnvidia-tls.so.${PV}" ]] ||
-        die "unexpected NVIDIA TLS SONAME: ${tls_soname:-missing}"
-    grep -E '\(FLAGS\).*STATIC_TLS' <<< "${tls_dynamic}" >/dev/null ||
-        die "NVIDIA TLS DSO no longer declares initial-exec static TLS"
-    "$(tc-getREADELF)" -lW "${tls}" |
-        grep -E '^[[:space:]]*TLS[[:space:]]' >/dev/null ||
-        die "NVIDIA TLS DSO has no PT_TLS segment"
-
-    "$(tc-getCC)" ${CFLAGS} \
-        -fPIC \
-        -fvisibility=hidden \
-        -c "${FILESDIR}/nvidia-musl-startup.c" \
-        -o "${object}" ||
-        die "failed to compile NVIDIA musl startup anchor"
-
-    "$(tc-getCC)" ${LDFLAGS} \
-        -nostdlib \
-        -shared \
-        -Wl,-soname,libnvidia-musl-startup.so.1 \
-        -Wl,-z,defs \
-        -Wl,--push-state,--no-as-needed \
-        "${tls}" \
-        -Wl,--pop-state \
-        "${object}" \
-        -o "${anchor}" ||
-        die "failed to link NVIDIA musl startup anchor"
-
-    sed "s/@VERSION@/${PV}/g" \
-        "${FILESDIR}/nvidia-musl-startup.pc.in" \
-        > "${T}/nvidia-musl-startup.pc" ||
-        die "failed to generate NVIDIA musl startup interface"
-}
-
-nvidia_musl_startup_validate() {
-    nvidia_use_graphics && use elibc_musl || return 0
-
-    local anchor="${1}"
-    local dynamic needed soname
-
-    [[ -f ${anchor} ]] || die "missing NVIDIA musl startup anchor: ${anchor}"
-    dynamic=$("$(tc-getREADELF)" -dW "${anchor}") ||
-        die "failed to inspect NVIDIA musl startup anchor"
-    soname=$(sed -n 's/.*(SONAME).*\[\(.*\)\].*/\1/p' <<< "${dynamic}")
-    needed=$(sed -n 's/.*(NEEDED).*\[\(.*\)\].*/\1/p' <<< "${dynamic}")
-
-    [[ ${soname} == libnvidia-musl-startup.so.1 ]] ||
-        die "invalid NVIDIA musl startup SONAME: ${soname:-missing}"
-    [[ ${needed} == "libnvidia-tls.so.${PV}" ]] ||
-        die "NVIDIA musl startup anchor has invalid dependency closure: ${needed:-empty}"
-    grep -Fx \
-        'Libs: -Wl,--push-state,--no-as-needed ${libdir}/libnvidia-musl-startup.so.1 -Wl,--pop-state' \
-        "${T}/nvidia-musl-startup.pc" >/dev/null ||
-        die "invalid NVIDIA musl startup pkg-config interface"
 }
 
 src_prepare() {
@@ -297,7 +219,6 @@ src_compile() {
     nvidia_source_build nvidia-modprobe
     nvidia_source_build nvidia-persistenced
     use X && nvidia_source_build nvidia-xconfig
-    nvidia_musl_startup_build
 
     if use driver; then
         local nv_src
@@ -469,15 +390,6 @@ EOF
     dobin ${NV_OBJ}/nvidia-bug-report.sh
 
     src_install-libs
-
-    if nvidia_use_graphics && use elibc_musl; then
-        nvidia_musl_startup_validate "${T}/libnvidia-musl-startup.so.1"
-        dolib.so "${T}/libnvidia-musl-startup.so.1"
-        insinto /usr/lib/pkgconfig
-        doins "${T}/nvidia-musl-startup.pc"
-        [[ ! -e ${ED}/usr/lib/libnvidia-musl-startup.so ]] ||
-            die "unversioned NVIDIA musl startup linker name must not be installed"
-    fi
 
     insinto usr/share/nvidia/
     doins nvidia-application-profiles-${PV}-rc

@@ -15,7 +15,7 @@ KEYWORDS="amd64 arm64"
 
 DEPEND="
 	app-compression/bzip2
-	app-compression/pigz
+	app-core/bx
 	lib-core/zlib
 	xgui-tools/util-macros
 	xgui-tools/xorgproto

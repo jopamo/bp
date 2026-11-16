@@ -2,7 +2,6 @@
 *app-build/make
 *app-build/llvm
 *app-compression/cpio
-*app-compression/pigz
 *app-compression/xz-utils
 *app-core/corepkg
 *app-core/diffutils

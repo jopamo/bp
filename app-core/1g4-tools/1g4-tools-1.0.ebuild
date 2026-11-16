@@ -38,7 +38,6 @@ app-emu/qemu
 app-emu/radare2
 app-fs/btrfs-progs
 app-fs/cryptsetup
-app-fs/dosfstools
 app-fs/e2fsprogs
 app-fs/grub
 app-fs/mdadm

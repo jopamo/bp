@@ -18,6 +18,7 @@ IUSE="+static"
 
 RDEPEND="
 	!app-compression/zip-utils
+	!app-fs/dosfstools
 	!app-net/mira
 	!app-net/rsync
 	!dev-rust/ripgrep

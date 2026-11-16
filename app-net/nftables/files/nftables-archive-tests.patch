@@ -1,0 +1,71 @@
+--- a/tests/build/run-tests.sh
++++ b/tests/build/run-tests.sh
+@@ -6,6 +6,10 @@
+ dir=../..
+ argument=( --without-cli --with-cli=linenoise --with-cli=editline --enable-debug --with-mini-gmp
+ 	   --enable-man-doc --with-xtables --with-json --with-unitdir --with-unitdir=/lib/systemd/system)
++if [ -n "${NFT_TEST_BUILD_OPTIONS+x}" ]; then
++	read -r -a argument <<< "$NFT_TEST_BUILD_OPTIONS"
++fi
++read -r -a configure_args <<< "${NFT_TEST_CONFIGURE_ARGS:-}"
+ ok=0
+ failed=0
+ 
+@@ -14,11 +18,17 @@
+ tmpdir=$(mktemp -d)
+ if [ ! -w "$tmpdir" ] ; then
+         echo "Failed to create tmp file" >&2
+-        exit 0
++        exit 1
+ fi
+ 
+-git clone "$dir" "$tmpdir" &>>"$log_file"
+-cd "$tmpdir" || exit
++trap 'rm -rf "$tmpdir"' EXIT
++
++if [ -d "$dir/.git" ]; then
++	git clone "$dir" "$tmpdir/source" &>>"$log_file" || exit 1
++else
++	make -C "$dir" distdir distdir="$tmpdir/source" &>>"$log_file" || exit 1
++fi
++cd "$tmpdir/source" || exit 1
+ 
+ # do not leak data from a calling 'make check' run into the new build otherwise
+ # this will defeat the test suite invocation prevention for 'make distcheck'
+@@ -29,13 +39,13 @@
+ 	exit 1
+ fi
+ 
+-if ! ./configure &>>"$log_file" ; then
++if ! ./configure "${configure_args[@]}" &>>"$log_file" ; then
+ 	echo "Something went wrong. Check the log '${log_file}' for details."
+ 	exit 1
+ fi
+ 
+ echo  "Testing build with distcheck"
+-if ! make distcheck &>>"$log_file" ; then
++if ! make distcheck DISTCHECK_CONFIGURE_FLAGS="${configure_args[*]}" &>>"$log_file" ; then
+ 	echo "Something went wrong. Check the log '${log_file}' for details."
+ 	exit 1
+ fi
+@@ -45,7 +55,7 @@
+ 
+ for var in "${argument[@]}" ; do
+ 	echo "[EXECUTING] Testing compile option $var"
+-	./configure "$var" &>>"$log_file"
++	./configure "${configure_args[@]}" "$var" &>>"$log_file" &&
+ 	make -j 8 &>>"$log_file"
+ 	rt=$?
+ 	echo -en "\033[1A\033[K" # clean the [EXECUTING] foobar line
+--- a/tests/shell/run-tests.sh
++++ b/tests/shell/run-tests.sh
+@@ -557,7 +557,8 @@
+ 		fi
+ 	fi
+ 	if [ -z "$NFT_TEST_UNSHARE_CMD" ] ; then
+-		msg_error "Unshare does not work. Run as root with -U/--no-unshare or set NFT_TEST_UNSHARE_CMD"
++		echo "SKIP: no usable namespace isolation for shell tests" >&2
++		exit 77
+ 	fi
+ 	NFT_TEST_HAS_UNSHARED=y
+ fi

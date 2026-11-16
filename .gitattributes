@@ -18,3 +18,4 @@ app-server/haproxy/files/*.patch -whitespace
 app-build/automake/files/*.patch -whitespace
 lib-core/elfutils/files/x86_64-half-float-retval.patch -whitespace
 app-lang/tcl/files/*.patch -whitespace
+app-net/nftables/files/nftables-archive-tests.patch -whitespace

@@ -4,11 +4,12 @@ inherit linux-info autotools qa-policy doins
 
 DESCRIPTION="Linux kernel firewall, NAT and packet mangling tools"
 HOMEPAGE="https://netfilter.org/projects/nftables/"
-SNAPSHOT=0d28604dcf95135ae64a0db88a5e610d4899a33d
+SNAPSHOT=a541198fc1eca8b542b936373cf4d1d7c746e8b9
 SRC_URI="https://github.com/1g4-mirror/nftables/archive/${SNAPSHOT}.tar.gz -> nftables-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/nftables-${SNAPSHOT}
 PATCHES=(
 	"${FILESDIR}"/nftables-99f2b29a16db-flex-ECHO-token.patch
+	"${FILESDIR}"/nftables-archive-tests.patch
 )
 
 LICENSE="GPL-2"
@@ -50,6 +51,14 @@ src_configure() {
 		--disable-man-doc
 	)
 	ECONF_SOURCE=${S} econf "${myconf[@]}"
+}
+
+src_test() {
+	local -x NFT_TEST_CONFIGURE_ARGS="--disable-man-doc $(use_with readline cli=readline) $(use_with !gmp mini_gmp)"
+	local -x NFT_TEST_BUILD_OPTIONS="--enable-debug --disable-debug --without-cli --with-mini-gmp"
+	use readline && NFT_TEST_BUILD_OPTIONS+=" --with-cli=readline"
+	use gmp && NFT_TEST_BUILD_OPTIONS+=" --without-mini-gmp"
+	emake check
 }
 
 src_install() {

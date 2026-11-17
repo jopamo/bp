@@ -20,6 +20,13 @@
 *app-crypto/blake3
 *app-core/bx
 *app-dev/patchelf
+*app-fs/btrfs-progs
+*app-fs/cryptsetup
+*app-fs/e2fsprogs
+*app-fs/lvm2
+*app-fs/mdadm
+*app-fs/xfsprogs
+*app-fs/xorriso
 *app-kernel/linux-firmware
 *app-net/chrony
 *app-net/iproute2

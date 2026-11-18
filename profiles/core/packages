@@ -40,3 +40,24 @@
 *virtual/libelf
 *virtual/linux-sources
 *virtual/service-manager
+
+# Administration and diagnostics.
+*app-core/lsof
+*app-core/sudo
+*app-core/tmux
+*app-crypto/pass
+*app-crypto/tpm2-tools
+*app-dev/strace
+*app-fs/parted
+*app-fs/smartmontools
+*app-kernel/dracut
+*app-net/bind-tools
+*app-net/ethtool
+*app-net/iftop
+*app-net/iperf
+*app-net/iputils
+*app-net/iw
+*app-net/tcpdump
+*app-net/wpa_supplicant
+*app-util/lshw
+*app-var/perl-cleaner

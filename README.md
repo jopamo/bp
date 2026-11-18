@@ -8,3 +8,9 @@
 </div>
 
 bp is short for 'backpack' to denote it being easier to move around on various cloud services or embedded devices.
+
+The core and GUI profiles now select the packages formerly pulled in by
+`app-core/1g4-tools`. After syncing, remove the old metapackage from the world
+file with `emerge --deselect app-core/1g4-tools`, then update `@world`.
+On a non-GUI system, explicitly select any GUI-profile tools you want to keep
+before running depclean.

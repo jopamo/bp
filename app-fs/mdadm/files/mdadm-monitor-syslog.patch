@@ -1,0 +1,16 @@
+diff --git a/systemd/mdmonitor.service b/systemd/mdmonitor.service
+--- a/systemd/mdmonitor.service
++++ b/systemd/mdmonitor.service
+@@ -31 +31 @@
+-ExecStart=BINDIR/mdadm --monitor --scan
++ExecStart=BINDIR/mdadm --monitor --scan --syslog
+diff --git a/systemd/mdmonitor-oneshot.service b/systemd/mdmonitor-oneshot.service
+--- a/systemd/mdmonitor-oneshot.service
++++ b/systemd/mdmonitor-oneshot.service
+@@ -15,5 +15,2 @@
+ [Service]
+-Environment=MDADM_MONITOR_ARGS=--scan
+-EnvironmentFile=-/run/sysconfig/mdadm
+-ExecStartPre=-/usr/lib/mdadm/mdadm_env.sh
+-ExecStart=BINDIR/mdadm --monitor --oneshot $MDADM_MONITOR_ARGS
++ExecStart=BINDIR/mdadm --monitor --scan --oneshot --syslog

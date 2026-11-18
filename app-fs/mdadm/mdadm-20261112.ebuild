@@ -17,11 +17,26 @@ IUSE="static systemd"
 DEPEND="
   app-compression/xz-utils
   app-core/util-linux
+  app-core/systemd[blkid]
 "
+RDEPEND="
+  app-core/bx
+  app-core/systemd[blkid]
+  app-core/util-linux[libblkid]
+  systemd? (
+    app-core/bash
+    app-core/findutils
+    app-core/util-linux[getopt,logger]
+  )
+"
+BDEPEND="app-dev/pkgconf"
 
 RESTRICT="test"
 
-PATCHES=( "${FILESDIR}"/mdadm-portage.patch )
+PATCHES=(
+  "${FILESDIR}"/mdadm-portage.patch
+  "${FILESDIR}"/mdadm-monitor-syslog.patch
+)
 
 mdadm_emake() {
   emake \

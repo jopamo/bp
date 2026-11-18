@@ -10,4 +10,4 @@ app-core/util-linux -cryptsetup -cryptsetup-dlopen -systemd -python -pylibmount
 app-core/procps -systemd
 app-core/dbus -systemd
 app-fs/cryptsetup -udev
-app-fs/lvm2 -systemd -udev
+app-fs/lvm2 dm-only -systemd -udev

@@ -20,7 +20,7 @@ app-crypto/botan boost lzma
 app-emu/capstone diet
 app-emu/radare2 system-capstone
 app-fs/cryptsetup -ssl
-app-fs/lvm2 dm-only
+app-fs/lvm2 -dm-only
 app-fs/smartmontools daemon
 app-lang/python-exec native-symlinks
 dev-pypi/httpx cli

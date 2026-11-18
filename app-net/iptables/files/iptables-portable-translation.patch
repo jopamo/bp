@@ -1,0 +1,26 @@
+Use case-insensitive lookup for built-in IP protocol names and emit the
+bridge NAT MAC in lower-case hex independently of libc ether_ntoa().
+
+--- a/libxtables/xtables.c
++++ b/libxtables/xtables.c
+@@ -2229 +2229 @@
+-		if (strcmp(s, xtables_chain_protos[i].name) == 0)
++		if (strcasecmp(s, xtables_chain_protos[i].name) == 0)
+--- a/extensions/libebt_dnat.c
++++ b/extensions/libebt_dnat.c
+@@ -91,0 +92 @@
++	const unsigned char *mac = natinfo->mac;
+@@ -93,2 +94,2 @@
+-	xt_xlate_add(xl, "ether daddr set %s %s ",
+-		     ether_ntoa((struct ether_addr *)natinfo->mac),
++	xt_xlate_add(xl, "ether daddr set %x:%x:%x:%x:%x:%x %s ",
++		     mac[0], mac[1], mac[2], mac[3], mac[4], mac[5],
+--- a/extensions/libebt_snat.c
++++ b/extensions/libebt_snat.c
+@@ -104,0 +105 @@
++	const unsigned char *mac = natinfo->mac;
+@@ -106,2 +107,2 @@
+-	xt_xlate_add(xl, "ether saddr set %s ",
+-		     ether_ntoa((struct ether_addr *)natinfo->mac));
++	xt_xlate_add(xl, "ether saddr set %x:%x:%x:%x:%x:%x ",
++		     mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);

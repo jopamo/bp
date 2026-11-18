@@ -1,0 +1,16 @@
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -37 +37,6 @@
+-TESTS = xlate-test.py iptables-test.py iptables/tests/shell/run-tests.sh
++TESTS = iptables-test.py iptables/tests/shell/run-tests.sh
++if ENABLE_NFTABLES
++TESTS += xlate-test.py
++# Do not run fixtures for xt extensions excluded by configure.
++TESTS_ENVIRONMENT = XTABLES_TEST_EXCLUDE='$(addsuffix .txlate,$(addprefix libxt_,$(blacklist_modules)))'
++endif
+--- a/xlate-test.py
++++ b/xlate-test.py
+@@ -192 +192,2 @@
+-    tests = sorted(os.listdir(tests_path))
++    excluded = set(os.environ.get("XTABLES_TEST_EXCLUDE", "").split())
++    tests = sorted(set(os.listdir(tests_path)) - excluded)

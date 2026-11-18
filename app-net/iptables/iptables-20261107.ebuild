@@ -4,7 +4,7 @@ inherit toolchain-funcs autotools flag-o-matic qa-policy
 
 DESCRIPTION="Linux kernel firewall, NAT and packet mangling tools"
 HOMEPAGE="http://www.netfilter.org/projects/iptables/"
-SNAPSHOT=68ce4eda65cbbba7588976979577bb7e48a8368a
+SNAPSHOT=4ff539651269640ebaa912e256e671aacfb977b7
 SRC_URI="https://github.com/1g4-mirror/iptables/archive/${SNAPSHOT}.tar.gz -> iptables-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/iptables-${SNAPSHOT}
 
@@ -13,6 +13,11 @@ SLOT="0/12"
 KEYWORDS="amd64 arm64"
 
 IUSE="ipv6 nftables pcap static-libs"
+
+PATCHES=(
+	"${FILESDIR}/iptables-conditional-xlate-tests.patch"
+	"${FILESDIR}/iptables-portable-translation.patch"
+)
 
 RDEPEND="
 	nftables? (
@@ -66,8 +71,6 @@ src_configure() {
 }
 
 src_compile() {
-	# Deal with parallel build errors.
-	use nftables && emake -C iptables xtables-config-parser.h
 	emake V=1
 }
 
@@ -75,6 +78,7 @@ src_install() {
 	default
 
 	dobin iptables/iptables-apply
+	dosym -r /usr/bin/xtables-legacy-multi /usr/bin/iptables-xml
 	dosym -r /usr/bin/iptables-apply /usr/bin/ip6tables-apply
 	doman iptables/iptables-apply.8
 

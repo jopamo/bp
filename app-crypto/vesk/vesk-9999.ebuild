@@ -47,6 +47,9 @@ BDEPEND="
 "
 
 src_configure() {
+	if use static-libs; then
+		local LP_ENABLE_GC_SECTIONS=1
+	fi
 	qa-policy-configure
 	python_setup
 

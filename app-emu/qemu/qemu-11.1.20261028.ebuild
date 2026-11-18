@@ -121,6 +121,8 @@ python_check_deps() {
 		">=dev-pypi/wheel-0.34.2[${PYTHON_USEDEP}]"
 }
 
+PATCHES=( "${FILESDIR}/qemu-x86-masked-load.patch" )
+
 src_prepare() {
 	filter-flags -Wl,-z,defs -flto*
 

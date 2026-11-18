@@ -1,0 +1,139 @@
+target/i386/tcg: load only active lanes of AVX masked loads
+
+WM preloads the entire memory operand before the helper sees the mask.
+Pass the effective address instead. Stage selected lanes before writing
+the destination, including when it aliases the mask register.
+
+--- a/target/i386/ops_sse.h
++++ b/target/i386/ops_sse.h
+@@ -2339,21 +2339,33 @@
+     }
+ }
+
+-void glue(helper_vpmaskmovd, SUFFIX)(CPUX86State *env, Reg *d, Reg *v, Reg *s)
+-{
+-    int i;
+-
+-    for (i = 0; i < (2 << SHIFT); i++) {
+-        d->L(i) = (v->L(i) >> 31) ? s->L(i) : 0;
+-    }
+-}
+-
+-void glue(helper_vpmaskmovq, SUFFIX)(CPUX86State *env, Reg *d, Reg *v, Reg *s)
+-{
+-    int i;
+-
+-    for (i = 0; i < (1 << SHIFT); i++) {
+-        d->Q(i) = (v->Q(i) >> 63) ? s->Q(i) : 0;
++void glue(helper_vpmaskmovd, SUFFIX)(CPUX86State *env, Reg *d, Reg *v,
++                                     target_ulong a0)
++{
++    uint32_t result[2 << SHIFT];
++
++    for (int i = 0; i < ARRAY_SIZE(result); i++) {
++        result[i] = (v->L(i) >> 31) ?
++            cpu_ldl_le_data_ra(env, a0 + i * 4, GETPC()) : 0;
++    }
++    /* Commit the destination only after every selected load succeeds. */
++    for (int i = 0; i < ARRAY_SIZE(result); i++) {
++        d->L(i) = result[i];
++    }
++}
++
++void glue(helper_vpmaskmovq, SUFFIX)(CPUX86State *env, Reg *d, Reg *v,
++                                     target_ulong a0)
++{
++    uint64_t result[1 << SHIFT];
++
++    for (int i = 0; i < ARRAY_SIZE(result); i++) {
++        result[i] = (v->Q(i) >> 63) ?
++            cpu_ldq_le_data_ra(env, a0 + i * 8, GETPC()) : 0;
++    }
++    /* Commit the destination only after every selected load succeeds. */
++    for (int i = 0; i < ARRAY_SIZE(result); i++) {
++        d->Q(i) = result[i];
+     }
+ }
+
+--- a/target/i386/tcg/ops_sse_header.h.inc
++++ b/target/i386/tcg/ops_sse_header.h.inc
+@@ -386,8 +386,8 @@
+ DEF_HELPER_3(glue(vtestpd, SUFFIX), void, env, Reg, Reg)
+ DEF_HELPER_4(glue(vpmaskmovd_st, SUFFIX), void, env, Reg, Reg, tl)
+ DEF_HELPER_4(glue(vpmaskmovq_st, SUFFIX), void, env, Reg, Reg, tl)
+-DEF_HELPER_4(glue(vpmaskmovd, SUFFIX), void, env, Reg, Reg, Reg)
+-DEF_HELPER_4(glue(vpmaskmovq, SUFFIX), void, env, Reg, Reg, Reg)
++DEF_HELPER_4(glue(vpmaskmovd, SUFFIX), void, env, Reg, Reg, tl)
++DEF_HELPER_4(glue(vpmaskmovq, SUFFIX), void, env, Reg, Reg, tl)
+ DEF_HELPER_7(glue(vpgatherdd, SUFFIX), void, env, Reg, Reg, Reg, tl, i32, tl)
+ DEF_HELPER_7(glue(vpgatherdq, SUFFIX), void, env, Reg, Reg, Reg, tl, i32, tl)
+ DEF_HELPER_7(glue(vpgatherqd, SUFFIX), void, env, Reg, Reg, Reg, tl, i32, tl)
+--- a/target/i386/tcg/decode-new.c.inc
++++ b/target/i386/tcg/decode-new.c.inc
+@@ -794,8 +794,8 @@
+     [0x29] = X86_OP_ENTRY3(PCMPEQQ,       V,x, H,x,       W,x,  vex4 cpuid(SSE41) avx2_256 p_66),
+     [0x2a] = X86_OP_ENTRY3(MOVDQ,         V,x, None,None, WM,x, vex1 cpuid(SSE41) avx2_256 p_66), /* movntdqa */
+     [0x2b] = X86_OP_ENTRY3(VPACKUSDW,     V,x, H,x,       W,x,  vex4 cpuid(SSE41) avx2_256 p_66),
+-    [0x2c] = X86_OP_ENTRY3(VMASKMOVPS,    V,x, H,x,       WM,x, vex6 chk(W0) cpuid(AVX) p_66),
+-    [0x2d] = X86_OP_ENTRY3(VMASKMOVPD,    V,x, H,x,       WM,x, vex6 chk(W0) cpuid(AVX) p_66),
++    [0x2c] = X86_OP_ENTRY3(VMASKMOVPS,    V,x, H,x,        M,x, vex6 chk(W0) cpuid(AVX) p_66),
++    [0x2d] = X86_OP_ENTRY3(VMASKMOVPD,    V,x, H,x,        M,x, vex6 chk(W0) cpuid(AVX) p_66),
+     /* Incorrectly listed as Mx,Hx,Vx in the manual */
+     [0x2e] = X86_OP_ENTRY3(VMASKMOVPS_st, M,x, V,x,       H,x,  vex6 chk(W0) cpuid(AVX) p_66),
+     [0x2f] = X86_OP_ENTRY3(VMASKMOVPD_st, M,x, V,x,       H,x,  vex6 chk(W0) cpuid(AVX) p_66),
+@@ -817,7 +817,7 @@
+     [0x78] = X86_OP_ENTRY3(VPBROADCASTB,   V,x,  None,None, W,b,  vex6 chk(W0) cpuid(AVX2) p_66),
+     [0x79] = X86_OP_ENTRY3(VPBROADCASTW,   V,x,  None,None, W,w,  vex6 chk(W0) cpuid(AVX2) p_66),
+
+-    [0x8c] = X86_OP_ENTRY3(VPMASKMOV,    V,x,  H,x, WM,x, vex6 cpuid(AVX2) p_66),
++    [0x8c] = X86_OP_ENTRY3(VPMASKMOV,    V,x,  H,x,  M,x, vex6 cpuid(AVX2) p_66),
+     [0x8e] = X86_OP_ENTRY3(VPMASKMOV_st, M,x,  V,x, H,x,  vex6 cpuid(AVX2) p_66),
+
+     /* Should be exception type 2 or 3 but they do not have legacy SSE equivalents? */
+--- a/target/i386/tcg/emit.c.inc
++++ b/target/i386/tcg/emit.c.inc
+@@ -957,8 +957,6 @@
+ BINARY_INT_SSE(VPACKUSDW,  packusdw)
+ BINARY_INT_SSE(VPERMILPS,  vpermilps)
+ BINARY_INT_SSE(VPERMILPD,  vpermilpd)
+-BINARY_INT_SSE(VMASKMOVPS, vpmaskmovd)
+-BINARY_INT_SSE(VMASKMOVPD, vpmaskmovq)
+
+ BINARY_INT_SSE(PMULDQ,    pmuldq)
+
+@@ -1096,7 +1094,6 @@
+ VEXW_AVX(VPSLLV,    vpsllv)
+ VEXW_AVX(VPSRLV,    vpsrlv)
+ VEXW_AVX(VPSRAV,    vpsrav)
+-VEXW_AVX(VPMASKMOV, vpmaskmov)
+
+ /* Same as above, but with extra arguments to the helper.  */
+ static inline void gen_vsib_avx(DisasContext *s, X86DecodedInsn *decode,
+@@ -4477,6 +4474,27 @@
+     }
+ }
+
++static void gen_VMASKMOVPD(DisasContext *s, X86DecodedInsn *decode)
++{
++    SSEFunc_0_eppt fn = s->vex_l ? gen_helper_vpmaskmovq_ymm : gen_helper_vpmaskmovq_xmm;
++    fn(tcg_env, OP_PTR0, OP_PTR1, s->A0);
++}
++
++static void gen_VMASKMOVPS(DisasContext *s, X86DecodedInsn *decode)
++{
++    SSEFunc_0_eppt fn = s->vex_l ? gen_helper_vpmaskmovd_ymm : gen_helper_vpmaskmovd_xmm;
++    fn(tcg_env, OP_PTR0, OP_PTR1, s->A0);
++}
++
++static void gen_VPMASKMOV(DisasContext *s, X86DecodedInsn *decode)
++{
++    if (s->vex_w) {
++        gen_VMASKMOVPD(s, decode);
++    } else {
++        gen_VMASKMOVPS(s, decode);
++    }
++}
++
+ static void gen_VMASKMOVPD_st(DisasContext *s, X86DecodedInsn *decode)
+ {
+     gen_maskmov(s, decode, gen_helper_vpmaskmovq_st_xmm, gen_helper_vpmaskmovq_st_ymm);

@@ -4,9 +4,11 @@ inherit qa-policy
 
 DESCRIPTION="xfs filesystem utilities"
 HOMEPAGE="https://xfs.wiki.kernel.org/"
-SRC_URI="https://www.kernel.org/pub/linux/utils/fs/xfs/${PN}/${P}.tar.xz"
+SNAPSHOT=e02d0a8efd81d454481641c9bd5680b5febb1261
+SRC_URI="https://git.kernel.org/pub/scm/fs/xfs/xfsprogs-dev.git/snapshot/xfsprogs-dev-${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/xfsprogs-dev-${SNAPSHOT}"
 
-LICENSE="LGPL-2.1"
+LICENSE="GPL-2 LGPL-2.1"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
@@ -14,10 +16,17 @@ IUSE="libedit systemd"
 
 DEPEND="
 	lib-misc/inih
+	lib-net/userspace-rcu
 	app-core/util-linux
 	libedit? ( lib-core/libedit )
 "
-BDEPEND="app-dev/patchelf"
+BDEPEND="
+	app-build/autoconf
+	app-build/automake
+	app-build/libtool
+	app-dev/patchelf
+	app-dev/pkgconf
+"
 
 src_prepare() {
 	default
@@ -29,6 +38,8 @@ src_prepare() {
 
 	# Don't install compressed docs
 	sed 's@\(CHANGES\)\.gz[[:space:]]@\1 @' -i doc/Makefile || die
+
+	emake configure
 }
 
 src_configure() {
@@ -42,7 +53,9 @@ src_configure() {
 	export ac_cv_search_dm_task_create=no
 
 	local myconf=(
-		--enable-blkid
+		--sbindir="${EPREFIX}/usr/bin"
+		--libdir="${EPREFIX}/usr/lib"
+		--disable-lib64
 		--enable-lto
 		--with-crond-dir="${EPREFIX}/etc/cron.d"
 		--with-systemd-unit-dir=$(usex systemd "${EPREFIX}/usr/lib/systemd/system" "false")
@@ -59,13 +72,10 @@ src_compile() {
 }
 
 src_install() {
-	emake DIST_ROOT="${ED}" PKG_ROOT_SBIN_DIR=/usr/bin install
-	emake DIST_ROOT="${ED}" PKG_ROOT_SBIN_DIR=/usr/bin install-dev
+	emake DIST_ROOT="${ED}" install
+	emake DIST_ROOT="${ED}" install-dev
 
 	patchelf --remove-rpath "${ED}"/usr/bin/xfs_{io,scrub,fsr}
-
-	cp -rp "${ED}"/lib/* "${ED}"/usr/lib/ || die
-	rm -rf "${ED}"/lib || die
 
 	cleanup_install
 

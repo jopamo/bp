@@ -4,7 +4,7 @@ inherit autotools flag-o-matic
 
 DESCRIPTION="An open-source memory debugger for GNU/Linux"
 HOMEPAGE="http://www.valgrind.org"
-SNAPSHOT=5a4657de12a8ed16b07175e1769df4dad31f80f2
+SNAPSHOT=b7a20e0e18a0406d45806cadd71955fc3abe2b29
 SRC_URI="https://github.com/1g4-mirror/valgrind/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 
@@ -27,6 +27,9 @@ src_prepare() {
 
 	eapply "${FILESDIR}"/${PN}-20260416-use-compiler-rtlib-path.patch
 	eapply "${FILESDIR}"/${PN}-3.7.0-respect-flags.patch
+
+	eapply "${FILESDIR}"/valgrind-check-secure-malloc-done.patch
+	eapply "${FILESDIR}"/valgrind-test-linux-dirent64.patch
 
 	eapply_user
 	eautoreconf

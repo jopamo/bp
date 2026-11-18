@@ -1,0 +1,13 @@
+--- a/none/tests/linux/getdents_filter.c
++++ b/none/tests/linux/getdents_filter.c
+@@ -3,2 +3,3 @@
+ #define _GNU_SOURCE
++#include <stdint.h>
+ #include <stdio.h>
+@@ -16,4 +17,4 @@
+ struct linux_dirent64 {
+-    ino64_t  d_ino;
+-    off64_t  d_off;
++    uint64_t d_ino;
++    int64_t  d_off;
+     unsigned short d_reclen;

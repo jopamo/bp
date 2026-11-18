@@ -1,0 +1,2 @@
+# Apply Closet policy when the private overlay is enabled.
+private-overlay:core

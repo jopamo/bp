@@ -1,0 +1,7 @@
+--- a/t/t0610-reftable-basics.sh
++++ b/t/t0610-reftable-basics.sh
+@@ -253,2 +253,2 @@
+-	update refs/heads/main $A
+-	update refs/heads/main $A
++	update refs/heads/main A
++	update refs/heads/main A

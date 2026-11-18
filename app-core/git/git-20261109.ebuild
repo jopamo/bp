@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-SNAPSHOT=7e34d8174dcda3435d1404c9a30bef46afe6c13e
+SNAPSHOT=1891de46f79dc444a47db1c87bd0c8c76b5463f2
 
 inherit autotools qa-policy
 
@@ -35,6 +35,11 @@ DEPEND="
 	app-build/gettext
 	app-lang/python
 "
+
+PATCHES=(
+	"${FILESDIR}/git-reftable-test-tag.patch"
+	"${FILESDIR}/git-blame-test-expr.patch"
+)
 
 src_prepare() {
 	default

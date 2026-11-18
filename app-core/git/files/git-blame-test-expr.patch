@@ -1,0 +1,5 @@
+--- a/t/t8006-blame-textconv.sh
++++ b/t/t8006-blame-textconv.sh
+@@ -82 +82 @@
+-	expr "$(find_blame <blame)" : "^$expect"
++	expr "$(find_blame <blame)" : "$expect"

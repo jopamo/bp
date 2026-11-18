@@ -9,7 +9,7 @@ inherit flag-o-matic cmake
 DESCRIPTION="Cross-platform application development framework"
 HOMEPAGE="https://www.qt.io/"
 
-SNAPSHOT=847dc96670bd11409961012a7f98340cf1bc323e
+SNAPSHOT=0553a71c48dab4334a1e3946d001892a7dd8b552
 SRC_URI="https://invent.kde.org/qt/qt/${PN}/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 
@@ -34,10 +34,6 @@ DEPEND="
 	vulkan? ( xmedia-lib/vulkan-loader )
 	xkbcommon? ( xgui-lib/libxkbcommon )
 "
-
-PATCHES=(
-	"${FILESDIR}/printdialog-accessibility.patch"
-)
 
 src_prepare() {
 	filter-flags -flto*

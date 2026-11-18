@@ -1,0 +1,97 @@
+--- a/internal/dialer/dialer_pinning_test.go
++++ b/internal/dialer/dialer_pinning_test.go
+@@ -21,0 +22,8 @@
++	"crypto/ed25519"
++	"crypto/rand"
++	"crypto/sha256"
++	"crypto/tls"
++	"crypto/x509"
++	"encoding/base64"
++	"net/http/httptest"
++
+@@ -27,0 +36 @@
++	"github.com/ProtonMail/proton-bridge/v3/internal/certs"
+@@ -84,0 +94,32 @@
++// Use a loopback leaf signed by a test CA instead of a public endpoint with rotating pins.
++func signedPinServer(t *testing.T) *httptest.Server {
++	t.Helper()
++	ca, err := certs.NewTLSTemplate()
++	r.NoError(t, err)
++	certPEM, keyPEM, err := certs.GenerateCert(ca)
++	r.NoError(t, err)
++	issuer, err := tls.X509KeyPair(certPEM, keyPEM)
++	r.NoError(t, err)
++	parent, err := x509.ParseCertificate(issuer.Certificate[0])
++	r.NoError(t, err)
++	leaf, err := certs.NewTLSTemplate()
++	r.NoError(t, err)
++	leaf.IsCA = false
++	leaf.KeyUsage = x509.KeyUsageDigitalSignature
++	leaf.Subject.CommonName = "pin-test leaf"
++	pub, key, err := ed25519.GenerateKey(rand.Reader)
++	r.NoError(t, err)
++	der, err := x509.CreateCertificate(rand.Reader, leaf, parent, pub, issuer.PrivateKey)
++	r.NoError(t, err)
++	srv := httptest.NewUnstartedServer(nil)
++	srv.TLS = &tls.Config{Certificates: []tls.Certificate{{Certificate: [][]byte{der, issuer.Certificate[0]}, PrivateKey: key}}}
++	srv.StartTLS()
++	t.Cleanup(srv.Close)
++	return srv
++}
++
++func serverPin(srv *httptest.Server) string {
++	sum := sha256.Sum256(srv.Certificate().RawSubjectPublicKeyInfo)
++	return `pin-sha256="` + base64.StdEncoding.EncodeToString(sum[:]) + `"`
++}
++
+@@ -86,17 +127,6 @@
+-	skipIfProxyIsSet(t)
+-
+-	_, dialer, _, _, _ := createClientWithPinningDialer("") //nolint:dogsled
+-	_, err := dialer.DialTLSContext(context.Background(), "tcp", "rsa4096.badssl.com:443")
+-	r.Error(t, err, "expected dial to fail because of wrong public key")
+-}
+-
+-/*
+-For the following test the SSL pin rotates from time to time. Thus, the pin needs to be updated accordingly.
+-A new pin can be extracted by running the following command:
+-
+-		echo | openssl s_client -connect rsa4096.badssl.com:443 2>/dev/null | \
+-	  	openssl x509 -pubkey -noout | \
+-		openssl pkey -pubin -outform DER | \
+-		openssl dgst -sha256 -binary | \
+-		base64
+-*/
++	srv := signedPinServer(t)
++	dialer := NewPinningTLSDialer(NewBasicTLSDialer(""), nil, NewTLSPinChecker(TrustedAPIPins))
++	_, err := dialer.DialTLSContext(context.Background(), "tcp", srv.Listener.Addr().String())
++	r.ErrorIs(t, err, ErrTLSMismatch)
++}
++
+@@ -104,7 +134,5 @@
+-	skipIfProxyIsSet(t)
+-
+-	_, dialer, _, checker, _ := createClientWithPinningDialer("")
+-	copyTrustedPins(checker)
+-	checker.trustedPins = append(checker.trustedPins, `pin-sha256="6ldn7wqGt9/ux7GDsd4gTtx8DcuW7xv/Ke3X9gDSjkc="`)
+-	_, err := dialer.DialTLSContext(context.Background(), "tcp", "rsa4096.badssl.com:443")
+-	r.NoError(t, err, "expected dial to succeed because public key is known and cert is signed by CA")
++	srv := signedPinServer(t)
++	dialer := NewPinningTLSDialer(NewBasicTLSDialer(""), nil, NewTLSPinChecker([]string{serverPin(srv)}))
++	conn, err := dialer.DialTLSContext(context.Background(), "tcp", srv.Listener.Addr().String())
++	r.NoError(t, err)
++	r.NoError(t, conn.Close())
+@@ -114,7 +142,6 @@
+-	skipIfProxyIsSet(t)
+-
+-	_, dialer, _, checker, _ := createClientWithPinningDialer("")
+-	copyTrustedPins(checker)
+-	checker.trustedPins = append(checker.trustedPins, `pin-sha256="9SLklscvzMYj8f+52lp5ze/hY0CFHyLSPQzSpYYIBm8="`)
+-	_, err := dialer.DialTLSContext(context.Background(), "tcp", "self-signed.badssl.com:443")
+-	r.NoError(t, err, "expected dial to succeed because public key is known despite cert being self-signed")
++	srv := httptest.NewTLSServer(nil)
++	defer srv.Close()
++	dialer := NewPinningTLSDialer(NewBasicTLSDialer(""), nil, NewTLSPinChecker([]string{serverPin(srv)}))
++	conn, err := dialer.DialTLSContext(context.Background(), "tcp", srv.Listener.Addr().String())
++	r.NoError(t, err)
++	r.NoError(t, conn.Close())

@@ -4,7 +4,7 @@ inherit go-module
 
 DESCRIPTION="Proton Mail Bridge application (CLI only)"
 HOMEPAGE="https://github.com/ProtonMail/proton-bridge"
-SNAPSHOT=b9c5dac1651437100c40896dacd778a0518a26f2
+SNAPSHOT=36d7b6a63256bbf4cf0b3fba9bb7854db32abff2
 SRC_URI="https://github.com/ProtonMail/proton-bridge/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 # lockstep-go-managed: true
 # lockstep-go-deps: begin
@@ -752,6 +752,7 @@ BDEPEND="
 
 PATCHES=(
 	"${FILESDIR}/${PN}-no-gui-nolibsecret-nofido.patch"
+	"${FILESDIR}/bridge-local-pin-tests.patch"
 )
 
 src_prepare() {
@@ -763,6 +764,11 @@ src_prepare() {
 
 src_compile() {
 	emake BUILD_TAGS="nolibsecret nofido" build-nogui
+}
+
+src_test() {
+	local -x GOFLAGS="${GOFLAGS:+${GOFLAGS} }-tags=nolibsecret,nofido"
+	emake test
 }
 
 src_install() {

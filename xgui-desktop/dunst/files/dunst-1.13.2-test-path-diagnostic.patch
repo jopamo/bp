@@ -1,0 +1,15 @@
+Use the existing string assertion to report path mismatches. The unit
+test formats both expanded paths into a 256-byte buffer before deciding
+whether the assertion failed; long build directories trip FORTIFY even
+when the two paths match.
+
+--- a/test/option_parser.c
++++ b/test/option_parser.c
+@@ -559,6 +559,5 @@ TEST test_string_to_path(void)
+                 sprintf(buf, "Failed in round %zu", i);
+                 ASSERTm(buf, set_from_string(&val, s, inputs[i]));
+-                sprintf(buf, "Failed in round %zu. %s should be %s", i, val, results[i]);
+-                ASSERTm(buf, STR_EQ(val, results[i]));
++                ASSERT_STR_EQm(buf, results[i], val);
+                 for (size_t j = 0; results2[i][j] != NULL; j++) {
+                         ASSERT_STR_EQ(results2[i][j], val2[j]);

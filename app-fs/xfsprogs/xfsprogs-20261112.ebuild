@@ -56,7 +56,8 @@ src_configure() {
 		--sbindir="${EPREFIX}/usr/bin"
 		--libdir="${EPREFIX}/usr/lib"
 		--disable-lib64
-		--enable-lto
+		# qa-policy supplies LTO flags and tools; upstream requires GCC wrappers.
+		--disable-lto
 		--with-crond-dir="${EPREFIX}/etc/cron.d"
 		--with-systemd-unit-dir=$(usex systemd "${EPREFIX}/usr/lib/systemd/system" "false")
 		--disable-libicu

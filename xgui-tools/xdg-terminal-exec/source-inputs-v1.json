@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "record_type": "source_related_inputs",
+  "family": {
+    "repository_id": "bp",
+    "category": "xgui-tools",
+    "pn": "xdg-terminal-exec"
+  },
+  "paths": [
+    "files/strict-selection.sh"
+  ]
+}

@@ -57,6 +57,9 @@ BDEPEND="
 "
 
 src_configure() {
+	if use static; then
+		local LP_ENABLE_GC_SECTIONS=1
+	fi
 	qa-policy-configure
 	bp_browser_versions
 

@@ -18,16 +18,16 @@ IUSE="
     agetty audit bash-completion bfs bits blkdiscard blkpr blkzone blockdev
     btrfs cal chcpu chfn-chsh chmem choom col colcrt colrm cramfs cryptsetup
     cryptsetup-dlopen ctrlaltdel dmesg econf eject enosys exch fadvise fallocate
-    fdformat fdisks findfs findmnt flock fsck fsfreeze fstrim getopt hardlink
+    fdformat fdisks findfs findmnt fsck fsfreeze fstrim getopt hardlink
     hexdump hwclock ipcmk ipcrm ipcs irqtop isosize kill ldattach libblkid
     libfdisk libmount libpcre2-posix libsmartcols libuser libutil
     libuuid libutempter line logger login look losetup lsblk lsclocks lsfd lsirq
     lslocks lslogins lsmem lsns magic mcookie mesg minix mkfs more mount
-    mountpoint namei ncurses newgrp nls nologin nsenter partx pg pipesz pivot_root
+    namei ncurses newgrp nls nologin nsenter partx pg pipesz pivot_root
     pylibmount python raw readline rename rev rfkill rtcwake runuser schedutils
     script scriptutils selinux setarch setpriv setterm slang smack su sulogin
-    swapoff swapon switch_root systemd sysvinit test tinfo translate-docs tunelp
-    ul unshare utmpdump uuidd vipw waitpid wall wdctl whereis widechar wipefs write
+    swapon switch_root systemd sysvinit test tinfo translate-docs tunelp
+    ul utmpdump uuidd vipw waitpid wall wdctl whereis widechar wipefs write
     zlib zramctl
 "
 
@@ -109,7 +109,7 @@ src_configure() {
     $(meson_feature fdisks          build-fdisks)
     $(meson_feature findfs          build-findfs)
     $(meson_feature findmnt         build-findmnt)
-    $(meson_feature flock           build-flock)
+    -Dbuild-flock=disabled
     $(meson_feature fsck            build-fsck)
     $(meson_feature fsfreeze        build-fsfreeze)
     $(meson_feature fstrim          build-fstrim)
@@ -148,7 +148,7 @@ src_configure() {
     $(meson_feature mkfs            build-mkfs)
     $(meson_feature more            build-more)
     $(meson_feature mount           build-mount)
-    $(meson_feature mountpoint      build-mountpoint)
+    -Dbuild-mountpoint=disabled
     $(meson_feature namei           build-namei)
     $(meson_feature newgrp          build-newgrp)
     $(meson_feature nologin         build-nologin)
@@ -172,12 +172,12 @@ src_configure() {
     $(meson_feature setterm         build-setterm)
     $(meson_feature su              build-su)
     $(meson_feature sulogin         build-sulogin)
-    $(meson_feature swapoff         build-swapoff)
+    -Dbuild-swapoff=disabled
     $(meson_feature swapon          build-swapon)
     $(meson_feature switch_root     build-switch_root)
     $(meson_feature tunelp          build-tunelp)
     $(meson_feature ul              build-ul)
-    $(meson_feature unshare         build-unshare)
+    -Dbuild-unshare=disabled
     $(meson_feature utmpdump        build-utmpdump)
     $(meson_feature uuidd           build-uuidd)
     $(meson_feature vipw            build-vipw)

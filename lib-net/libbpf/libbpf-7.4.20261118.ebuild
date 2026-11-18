@@ -5,7 +5,7 @@ inherit flag-o-matic toolchain-funcs qa-policy
 DESCRIPTION="Stand-alone build of libbpf from the Linux kernel"
 HOMEPAGE="https://github.com/libbpf/libbpf"
 BRANCH_NAME="snapshot"
-SNAPSHOT=b576f55cfe947f5f92b3be629f88252bc861c0b2
+SNAPSHOT=22bab4552f13dacb5a4facc93642108640f56034
 SRC_URI="https://github.com/jopamo/k1g4/archive/${SNAPSHOT}.tar.gz -> k1g4-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/k1g4-${SNAPSHOT}/tools/lib/bpf"
 

@@ -38,7 +38,10 @@ DEPEND="${CDEPEND}
 	app-tex/docbookz
 "
 
-PATCHES=( "${FILESDIR}/dracut-require-individual-boot-providers.patch" )
+PATCHES=(
+	"${FILESDIR}/dracut-require-individual-boot-providers.patch"
+	"${FILESDIR}/dracut-honor-dmsquash-overlay-selection.patch"
+)
 
 src_configure() {
 	local myconf=(

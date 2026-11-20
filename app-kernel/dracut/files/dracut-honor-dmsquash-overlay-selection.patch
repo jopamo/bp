@@ -1,0 +1,22 @@
+diff --git a/modules.d/70overlayfs/prepare-overlayfs.sh b/modules.d/70overlayfs/prepare-overlayfs.sh
+--- a/modules.d/70overlayfs/prepare-overlayfs.sh
++++ b/modules.d/70overlayfs/prepare-overlayfs.sh
+@@ -6,3 +6,6 @@
+ getargbool 0 rd.overlay -d rd.live.overlay.overlayfs || return 0
+-
++# dmsquash-live can switch from the requested OverlayFS mode to a
++# device-mapper root. Do not prepare an upper over that root.
++[ ! -e /xor_overlayfs ] || return 0
++
+ getargbool 0 rd.overlay.reset -d rd.live.overlay.reset && reset_overlay="yes"
+diff --git a/modules.d/70overlayfs/mount-overlayfs.sh b/modules.d/70overlayfs/mount-overlayfs.sh
+--- a/modules.d/70overlayfs/mount-overlayfs.sh
++++ b/modules.d/70overlayfs/mount-overlayfs.sh
+@@ -6,2 +6,7 @@
+ getargbool 0 rd.overlay -d rd.live.overlay.overlayfs && overlayfs="yes"
++# The live generator has already selected the device-mapper root.
++if [ -n "$overlayfs" ] && [ -e /xor_overlayfs ]; then
++    return 0
++fi
++
+ getargbool 0 rd.overlay.readonly -d rd.live.overlayfs.readonly && readonly_overlay="--readonly" || readonly_overlay=""

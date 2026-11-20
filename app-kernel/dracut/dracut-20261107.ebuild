@@ -38,6 +38,8 @@ DEPEND="${CDEPEND}
 	app-tex/docbookz
 "
 
+PATCHES=( "${FILESDIR}/dracut-require-individual-boot-providers.patch" )
+
 src_configure() {
 	local myconf=(
 		--prefix="${EPREFIX}/usr"

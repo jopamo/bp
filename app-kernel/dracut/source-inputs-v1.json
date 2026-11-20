@@ -6,5 +6,7 @@
     "category": "app-kernel",
     "pn": "dracut"
   },
-  "paths": []
+  "paths": [
+    "files/dracut-require-individual-boot-providers.patch"
+  ]
 }

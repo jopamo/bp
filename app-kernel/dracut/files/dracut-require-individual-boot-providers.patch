@@ -1,0 +1,112 @@
+Use dracut-install to select NBD and squash loader providers without BusyBox.
+
+Preserve root ownership inside SquashFS for unprivileged image builders.
+
+--- a/dracut-functions.sh
++++ b/dracut-functions.sh
+@@ -1466,6 +1466,18 @@
+     return "$_ret"
+ }
+
++# Check the installer closure rather than executing the candidate binaries.
++# This also catches aliases and script interpreters inside a supplied sysroot.
++require_non_busybox_binaries() {
++    local _files _module_name="${moddir##*/}"
++    require_binaries "$@" || return 1
++    _files=$($DRACUT_INSTALL ${dracutsysrootdir:+-r "$dracutsysrootdir"} -n -l -a "$@") || return 1
++    if [[ $'\n'$_files$'\n' == *"/busybox"$'\n'* ]]; then
++        dinfo "Module '${_module_name#[0-9][0-9]}' requires individual providers for: $*"
++        return 1
++    fi
++}
++
+ require_any_binary() {
+     local _module_name="${moddir##*/}"
+     local _ret=1
+--- a/modules.d/74nbd/module-setup.sh
++++ b/modules.d/74nbd/module-setup.sh
+@@ -11,7 +11,8 @@
+         [[ -b /dev/block/$_rootdev ]] || return 1
+         check_block_and_slaves block_is_nbd "$_rootdev" || return 255
+     }
+-    require_binaries nbd-client || return 1
++    # The dracut hooks use -check and -systemd-mark, not supported by BusyBox.
++    require_non_busybox_binaries nbd-client || return 1
+
+     return 0
+ }
+--- a/modules.d/74squash-squashfs/module-setup.sh
++++ b/modules.d/74squash-squashfs/module-setup.sh
+@@ -19,6 +19,10 @@
+ squashfs_installpost() {
+     local _img="$squashdir/squashfs-root.img"
+     local _comp
++    local -a _ownership=()
++
++    # Match the outer cpio archive when building without root privileges.
++    [[ $EUID == 0 ]] || _ownership=(-all-root)
+
+     # shellcheck disable=SC2086
+     if [[ $squash_compress ]]; then
+@@ -32,7 +36,7 @@
+     # shellcheck disable=SC2086
+     if ! mksquashfs "$initdir" "$_img" \
+         -no-xattrs -no-exports -noappend -no-recovery -always-use-fragments \
+-        -no-progress ${_comp:+-comp $_comp} \
++        -no-progress "${_ownership[@]}" ${_comp:+-comp $_comp} \
+         -e "$squashdir" 1> /dev/null; then
+         dfatal "Failed making squash image"
+         exit 1
+--- a/modules.d/88squash-lib/module-setup.sh
++++ b/modules.d/88squash-lib/module-setup.sh
+@@ -1,6 +1,9 @@
+ #!/bin/bash
+
++squash_tools=(sh mount modprobe mkdir switch_root grep umount)
++
+ check() {
++    require_non_busybox_binaries "${squash_tools[@]}" || return 1
+     require_kernel_modules loop overlay || return 1
+
+     return 255
+@@ -32,13 +35,11 @@
+ }
+
+ squash_install() {
+-    local _busybox _dir
++    local _dir
+
+     # verify that there is a valid handler before doing anything
+     squash_get_handler > /dev/null || return 1
+
+-    _busybox=$(find_binary busybox)
+-
+     # Create mount points for squash loader and basic directories
+     mkdir -p "$initdir"/squash
+     for _dir in squash usr/bin usr/sbin usr/lib; do
+@@ -58,17 +59,16 @@
+     done
+
+     # Install required modules and binaries for the squash image init script.
+-    if [[ $_busybox ]]; then
+-        module_install "busybox"
+-    else
+-        DRACUT_RESOLVE_LAZY="" inst_multiple sh mount modprobe mkdir switch_root grep umount
++    if ! DRACUT_RESOLVE_LAZY="" inst_multiple "${squash_tools[@]}"; then
++        dfatal "Failed to install the squash loader tools"
++        exit 1
++    fi
+
+-        # libpthread workaround: pthread_cancel wants to dlopen libgcc_s.so
+-        inst_libdir_file "libgcc_s.so*"
++    # libpthread workaround: pthread_cancel wants to dlopen libgcc_s.so
++    inst_libdir_file "libgcc_s.so*"
+
+-        # FIPS workaround for Fedora/RHEL: libcrypto needs libssl when FIPS is enabled
+-        [[ $DRACUT_FIPS_MODE ]] && inst_libdir_file "libssl.so*"
+-    fi
++    # FIPS workaround for Fedora/RHEL: libcrypto needs libssl when FIPS is enabled
++    [[ $DRACUT_FIPS_MODE ]] && inst_libdir_file "libssl.so*"
+
+     hostonly="" instmods "loop" "overlay"
+     dracut_kernel_post

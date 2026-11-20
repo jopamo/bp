@@ -1,6 +1,6 @@
 Use dracut-install to select NBD and squash loader providers without BusyBox.
 
-Preserve root ownership inside SquashFS for unprivileged image builders.
+Normalize root ownership inside SquashFS and EROFS when building without root.
 
 --- a/dracut-functions.sh
 +++ b/dracut-functions.sh
@@ -35,6 +35,20 @@ Preserve root ownership inside SquashFS for unprivileged image builders.
 
      return 0
  }
+--- a/modules.d/74squash-erofs/module-setup.sh
++++ b/modules.d/74squash-erofs/module-setup.sh
+@@ -18,7 +18,10 @@
+
+ erofs_installpost() {
+     local _img="$squashdir/erofs-root.img"
+-    local -a _erofs_args
++    local -a _erofs_args=()
++
++    # Match the outer cpio archive when building without root privileges.
++    [[ $EUID == 0 ]] || _erofs_args+=("--all-root")
+
+     # --exclude-path requires a relative path
+     _erofs_args+=("--exclude-path=${squashdir#"$initdir"/}")
 --- a/modules.d/74squash-squashfs/module-setup.sh
 +++ b/modules.d/74squash-squashfs/module-setup.sh
 @@ -19,6 +19,10 @@

@@ -21,7 +21,7 @@ DEPEND+="
 "
 BDEPEND+="
 	app-dev/rebar
-	app-core/gawk
+	app-core/bx
 "
 
 # @FUNCTION: erebar

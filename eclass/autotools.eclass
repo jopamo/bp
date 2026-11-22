@@ -140,7 +140,10 @@ if [[ -z ${_AUTOTOOLS_ECLASS} ]] ; then
 		for amflags_file in GNUmakefile.am Makefile.am GNUmakefile.in Makefile.in; do
 			[[ -e ${amflags_file} ]] || continue
 			# capture multi-line ACLOCAL_AMFLAGS with trailing backslashes
-			aclocal_opts=$(sed -n "/^ACLOCAL_AMFLAGS[[:space:]]*=/{s:[^=]*=::p;: nextline /\\\\$/{n;p;b nextline;}}" "${amflags_file}")
+			aclocal_opts=$(awk '/^ACLOCAL_AMFLAGS[[:space:]]*=/ {
+				sub(/^[^=]*=/, ""); print
+				while (/\\$/ && (getline) > 0) print
+			}' "${amflags_file}")
 			# expand any make-style variables in a safe way
 			eval aclocal_opts=\""${aclocal_opts}"\"
 			break
@@ -370,7 +373,7 @@ if [[ -z ${_AUTOTOOLS_ECLASS} ]] ; then
 		local macro
 		for macro; do
 			autotools_check_macro "${macro}" | \
-				gawk -v macro="${macro}" '($0 !~ /^[[:space:]]*(#|dnl)/) { if (match($0, macro ":(.*)$", res)) print res[1] }' | uniq
+				awk -v macro="${macro}" '!/^[[:space:]]*(#|dnl)/ { pos = index($0, macro ":"); if (pos) print substr($0, pos + length(macro) + 1) }' | uniq
 		done
 		return 0
 	}

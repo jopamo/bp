@@ -63,6 +63,18 @@ rebar_disable_coverage() {
 		|| die "failed to disable coverage in ${rebar_config}"
 }
 
+# Run a stream transformation without truncating its input on failure.
+_rebar_edit_config() (
+	local config=$1 tmp
+	shift
+	[[ -f ${config} && ! -L ${config} ]] || return 1
+	tmp=$(mktemp -- "${config}.XXXXXX") || return 1
+	trap 'rm -f -- "${tmp}"' EXIT
+	awk "$@" < "${config}" > "${tmp}" &&
+		chmod --reference="${config}" -- "${tmp}" &&
+		mv -fT -- "${tmp}" "${config}"
+)
+
 # @FUNCTION: rebar_fix_include_path
 # @USAGE: <project_name> [rebar_config]
 # @DESCRIPTION:
@@ -78,7 +90,7 @@ rebar_fix_include_path() {
 
 	p="$(_rebar_find_dep "${pn}")" || die "failed to unambiguously resolve dependency of '${pn}'"
 
-	gawk -i inplace \
+	_rebar_edit_config "${rebar_config}" \
 		-v erl_libs="${erl_libs}" -v pn="${pn}" -v p="${p}" '
 /^{[[:space:]]*erl_opts[[:space:]]*,/, /}[[:space:]]*\.$/ {
 	pattern = "\"(./)?deps/" pn "/include\"";
@@ -89,7 +101,7 @@ rebar_fix_include_path() {
 	next;
 }
 1
-' "${rebar_config}" || die "failed to fix include paths in ${rebar_config} for '${pn}'"
+' || die "failed to fix include paths in ${rebar_config} for '${pn}'"
 }
 
 # @FUNCTION: rebar_remove_deps
@@ -102,7 +114,7 @@ rebar_remove_deps() {
 	local rebar_config="${1:-rebar.config}"
 
 	mkdir -p "${S}/deps" && :>"${S}/deps/.got" && :>"${S}/deps/.built" || die
-	gawk -i inplace '
+	_rebar_edit_config "${rebar_config}" '
 /^{[[:space:]]*deps[[:space:]]*,/, /}[[:space:]]*\.$/ {
 	if ($0 ~ /}[[:space:]]*\.$/) {
 		print "{deps, []}.";
@@ -110,7 +122,7 @@ rebar_remove_deps() {
 	next;
 }
 1
-' "${rebar_config}" || die "failed to remove deps from ${rebar_config}"
+' || die "failed to remove deps from ${rebar_config}"
 }
 
 # @FUNCTION: rebar_set_vsn

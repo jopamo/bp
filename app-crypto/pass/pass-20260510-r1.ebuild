@@ -17,7 +17,6 @@ RDEPEND="
 	app-core/diffutils
 	app-core/findutils
 	app-core/procps
-	app-core/sed
 	app-core/util-linux[getopt]
 	app-crypto/gnupg
 	git? ( app-core/git )

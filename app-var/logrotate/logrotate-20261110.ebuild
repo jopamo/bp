@@ -16,7 +16,7 @@ IUSE="acl systemd"
 
 DEPEND="
 	lib-core/popt
-	app-core/sed
+	app-core/bx
 	app-net/s-nail
 	acl? ( app-core/acl )
 "

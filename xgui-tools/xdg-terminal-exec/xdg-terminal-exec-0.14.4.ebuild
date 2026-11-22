@@ -13,7 +13,6 @@ KEYWORDS="amd64 arm64"
 RDEPEND="
 	app-core/bx
 	app-core/findutils
-	app-core/gawk
 "
 BDEPEND="app-tex/scdoc"
 

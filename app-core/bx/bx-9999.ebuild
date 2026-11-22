@@ -24,6 +24,8 @@ RDEPEND="
 	!app-net/knock
 	!app-compression/zip-utils
 	!app-core/grep
+	!app-core/gawk
+	!app-core/sed
 	!app-fs/dosfstools
 	!app-net/mira
 	!app-net/rsync
@@ -74,5 +76,9 @@ src_configure() {
 
 src_install() {
 	meson_src_install
+	local cmd
+	for cmd in awk sed; do
+		[[ -x ${ED}/usr/bin/${cmd} ]] || die "missing bx shortcut: ${cmd}"
+	done
 	qa-policy-install
 }

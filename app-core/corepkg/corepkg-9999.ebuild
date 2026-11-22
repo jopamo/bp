@@ -19,7 +19,6 @@ COMMON_DEPEND="
 	app-compression/libarchive[bzip2]
 	app-core/bash
 	app-core/bx
-	app-core/sed
 	app-crypto/blake3
 	app-crypto/gnupg
 	app-crypto/vesk

@@ -22,6 +22,14 @@ def version_sort(lines, unique=False):
                           env=dict(os.environ, LC_ALL='C')).stdout.splitlines()
 
 
+def library_name(name):
+    # Library keys become filenames under the staging directory. Accept the
+    # same library-name alphabet as the glibc Versions.def reader.
+    if not re.fullmatch('[a-zA-Z0-9_.]+', name):
+        raise ValueError('invalid library name: ' + name)
+    return name
+
+
 def definitions(lines):
     libs, versions = set(), set()
     lib = version = None
@@ -31,7 +39,7 @@ def definitions(lines):
             continue
         if len(fields) == 2 and fields[1] == '{':
             if lib is None:
-                lib = fields[0]
+                lib = library_name(fields[0])
                 libs.add(lib)
             else:
                 version = fields[0]
@@ -64,7 +72,7 @@ def maps(lines, defs, dest):
     for line in defs:
         fields = line.split()
         if fields[1:] == ['{']:
-            lib = fields[0]
+            lib = library_name(fields[0])
             aliases[lib] = {}
         elif fields and fields[0] != '}':
             aliases[lib][fields[0]] = fields[-1]

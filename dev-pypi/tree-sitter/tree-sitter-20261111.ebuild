@@ -21,8 +21,9 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
+# The legacy 20250901-r9 version sorts above 0.27 but lacks ts_point_edit.
+DEPEND="=lib-dev/tree-sitter-0.27*:0="
 # setuptools is needed for distutils import
-DEPEND=">=lib-dev/tree-sitter-0.27.0:="
 RDEPEND="${DEPEND}
 	$(python_gen_cond_dep '
 		dev-pypi/setuptools[${PYTHON_USEDEP}]

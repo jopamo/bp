@@ -1,0 +1,501 @@
+From: Paul Moses <p@1g4.org>
+Subject: [PATCH] glibc: build with awk and sed selected by capability
+
+Keep shell commands out of awk. Generate version maps in the build tree
+using version-maps.py, retaining the upstream sort keys and avoiding
+mtime changes for unchanged maps. Keep configure in sync with configure.ac
+using Autoconf 2.72.
+
+--- a/Makeconfig
++++ b/Makeconfig
+@@ -1294,9 +1294,9 @@
+ FORCE:
+ endif
+ 
+-$(common-objpfx)Versions.def: $(..)scripts/versionlist.awk \
++$(common-objpfx)Versions.def: $(..)scripts/version-maps.py \
+ 			      $(common-objpfx)Versions.v
+-	LC_ALL=C $(AWK) -f $^ > $@T
++	LC_ALL=C $(PYTHON) $^ > $@T
+ 	mv -f $@T $@
+ 
+ $(common-objpfx)Versions.all: $(..)scripts/firstversions.awk \
+@@ -1320,12 +1320,9 @@
+ $(common-objpfx)sysd-versions: $(common-objpfx)versions.stmp
+ $(common-objpfx)versions.stmp: $(common-objpfx)Versions.all \
+ 			       $(common-objpfx)Versions.v \
+-			       $(..)scripts/versions.awk
++			       $(..)scripts/version-maps.py
+ 	( echo 'sysd-versions-subdirs = $(subdirs) $(config-sysdirs)' ; \
+-	  cat $(word 2,$^) \
+-	  | LC_ALL=C $(AWK) -v buildroot=$(common-objpfx) -v defsfile=$< \
+-			    -v move_if_change='$(move-if-change)' \
+-			    -f $(word 3,$^); \
++	  LC_ALL=C $(PYTHON) $(word 3,$^) --maps $< $(common-objpfx) $(word 2,$^); \
+ 	) > $(common-objpfx)sysd-versionsT
+ 	mv -f $(common-objpfx)sysd-versionsT $(common-objpfx)sysd-versions
+ 	touch $@
+@@ -1406,6 +1403,7 @@
+ 	$(AWK) -f $< \
+ 	       -v subdirs='$(all-subdirs)' \
+ 	       -v srcpfx='$(..)' \
++	       -v srcdirs='$(notdir $(patsubst %/,%,$(wildcard $(..)*/)))' \
+ 	       $(filter %/Subdirs %/Depend,$^) > $@-tmp
+ 	mv -f $@-tmp $@
+ $(all-Depend-files): ;
+--- a/Makerules
++++ b/Makerules
+@@ -993,7 +993,7 @@
+ 			    $(common-objpfx)config.h $(..)Makerules
+ 	$(LINK.o) -shared -nostdlib -nostartfiles \
+ 		  -x assembler /dev/null -o $@.so
+-	$(OBJDUMP) -f $@.so | sed -n 's/.*file format \(.*\)/OUTPUT_FORMAT(\1)/;T;p' > $@
++	$(OBJDUMP) -f $@.so | sed -n 's/.*file format \(.*\)/OUTPUT_FORMAT(\1)/p' > $@
+ 	rm -f $@.so
+ common-generated += format.lds
+ 
+--- a/configure.ac
++++ b/configure.ac
+@@ -551,13 +551,12 @@
+   [GNU texinfo.* \([0-9][0-9.]*\)],
+   [4.[7-9]*|4.[1-9][0-9]*|[5-9].*],
+   MAKEINFO=: aux_missing="$aux_missing makeinfo")
+-AC_CHECK_PROG_VER(SED, sed, --version,
+-  [GNU sed[^0-9]* \([0-9]*\.[0-9.]*\)],
+-  [3.0[2-9]*|3.[1-9]*|[4-9]*],
+-  SED=: aux_missing="$aux_missing sed")
+-AC_CHECK_PROG_VER(AWK, gawk, --version,
+-  [GNU Awk[^0-9]*\([0-9][0-9.]*\)],
+-  [3.1.[2-9]*|3.[2-9]*|[4-9]*], critic_missing="$critic_missing gawk")
++AC_CHECK_PROGS(SED, sed)
++AC_CHECK_PROGS(AWK, awk)
++AS_IF([test "x`printf '%s\n' abc | $SED -n 's/^a/b/p'`" != xbbc],
++      [critic_missing="$critic_missing sed"])
++AS_IF([test "x`$AWK 'BEGIN { split("a:b", a, ":"); print a[[2]] }'`" != xb],
++      [critic_missing="$critic_missing awk"])
+ AC_CHECK_PROG_VER(BISON, bison, --version,
+   [bison (GNU Bison) \([0-9]*\.[0-9.]*\)],
+   [2.7*|[3-9].*|[1-9][0-9]*], critic_missing="$critic_missing bison")
+--- a/configure
++++ b/configure
+@@ -5579,28 +5579,7 @@
+   test -n "$SED" && break
+ done
+ 
+-if test -z "$SED"; then
+-  ac_verc_fail=yes
+-else
+-  # Found it, now check the version.
+-  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking version of $SED" >&5
+-printf %s "checking version of $SED... " >&6; }
+-  ac_prog_version=`$SED --version 2>&1 | sed -n 's/^.*GNU sed[^0-9]* \([0-9]*\.[0-9.]*\).*$/\1/p'`
+-  case $ac_prog_version in
+-    '') ac_prog_version="v. ?.??, bad"; ac_verc_fail=yes;;
+-    3.0[2-9]*|3.[1-9]*|[4-9]*)
+-       ac_prog_version="$ac_prog_version, ok"; ac_verc_fail=no;;
+-    *) ac_prog_version="$ac_prog_version, bad"; ac_verc_fail=yes;;
+-
+-  esac
+-  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $ac_prog_version" >&5
+-printf "%s\n" "$ac_prog_version" >&6; }
+-fi
+-if test $ac_verc_fail = yes; then
+-  SED=: aux_missing="$aux_missing sed"
+-fi
+-
+-for ac_prog in gawk
++for ac_prog in awk
+ do
+   # Extract the first word of "$ac_prog", so it can be a program name with args.
+ set dummy $ac_prog; ac_word=$2
+@@ -5648,27 +5627,14 @@
+   test -n "$AWK" && break
+ done
+ 
+-if test -z "$AWK"; then
+-  ac_verc_fail=yes
+-else
+-  # Found it, now check the version.
+-  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking version of $AWK" >&5
+-printf %s "checking version of $AWK... " >&6; }
+-  ac_prog_version=`$AWK --version 2>&1 | sed -n 's/^.*GNU Awk[^0-9]*\([0-9][0-9.]*\).*$/\1/p'`
+-  case $ac_prog_version in
+-    '') ac_prog_version="v. ?.??, bad"; ac_verc_fail=yes;;
+-    3.1.[2-9]*|3.[2-9]*|[4-9]*)
+-       ac_prog_version="$ac_prog_version, ok"; ac_verc_fail=no;;
+-    *) ac_prog_version="$ac_prog_version, bad"; ac_verc_fail=yes;;
+-
+-  esac
+-  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $ac_prog_version" >&5
+-printf "%s\n" "$ac_prog_version" >&6; }
++if test "x`printf '%s\n' abc | $SED -n 's/^a/b/p'`" != xbbc
++then :
++  critic_missing="$critic_missing sed"
+ fi
+-if test $ac_verc_fail = yes; then
+-  critic_missing="$critic_missing gawk"
++if test "x`$AWK 'BEGIN { split("a:b", a, ":"); print a[2] }'`" != xb
++then :
++  critic_missing="$critic_missing awk"
+ fi
+-
+ for ac_prog in bison
+ do
+   # Extract the first word of "$ac_prog", so it can be a program name with args.
+--- a/elf/Makefile
++++ b/elf/Makefile
+@@ -1419,7 +1419,7 @@
+ 		  -Wl,-soname=$(rtld-installed-name)
+ 	$(call after-link,$@.new)
+ 	$(READELF) -s $@.new \
+-	  | $(AWK) '($$7 ~ /^UND(|EF)$$/ && $$1 != "0:" && $$4 != "REGISTER") { print; p=1 } END { exit p != 0 }'
++	  | $(AWK) '($$7 ~ /^UND(EF)?$$/ && $$1 != "0:" && $$4 != "REGISTER") { print; p=1 } END { exit p != 0 }'
+ 	mv -f $@.new $@
+ 
+ ifeq (yes,$(build-shared))
+--- a/scripts/abilist.awk
++++ b/scripts/abilist.awk
+@@ -109,7 +109,7 @@
+     version = soname " " version (combine_fullname ? " " sofullname : "");
+ 
+   # Append to the string which collects the results.
+-  descs = descs version " " desc "\n";
++  descs[version " " desc] = 1;
+   next;
+ }
+ 
+@@ -121,7 +121,18 @@
+   exit 1
+ }
+ 
+-function emit(end) {
++function merge_sort(a, lo, hi,    mid, i, j, k, tmp) {
++  if (lo >= hi) return;
++  mid = int((lo + hi) / 2);
++  merge_sort(a, lo, mid);
++  merge_sort(a, mid + 1, hi);
++  i = lo; j = mid + 1;
++  for (k = lo; k <= hi; ++k)
++    tmp[k] = (j > hi || (i <= mid && a[i] < a[j])) ? a[i++] : a[j++];
++  for (k = lo; k <= hi; ++k) a[k] = tmp[k];
++}
++
++function emit(end,    key, lines, i, n) {
+   if (!end && (combine || ! parse_names || soname == ""))
+     return;
+   tofile = parse_names && !combine;
+@@ -132,14 +143,16 @@
+       out = out "." ++outfiles[soname];
+     else
+       outfiles[soname] = 1;
+-    outpipe = "LC_ALL=C sort -u > " out;
+-  } else {
+-    outpipe = "LC_ALL=C sort -u";
++    printf "%s", "" > out;
+   }
+-
+-  printf "%s", descs | outpipe;
+-
+-  descs = "";
++  for (key in descs) lines[++n] = key;
++  merge_sort(lines, 1, n);
++  for (i = 1; i <= n; ++i) {
++    if (tofile) print lines[i] > out;
++    else print lines[i];
++  }
++  if (tofile) close(out);
++  delete descs;
+ 
+   if (tofile)
+     print "wrote", out, "for", sofullname;
+--- a/scripts/check-local-headers.sh
++++ b/scripts/check-local-headers.sh
+@@ -33,7 +33,7 @@
+ BEGIN {
+   status = 0
+   exclude = "^" includedir \
+-    "/(.*-.*-.*/|.*-.*/|)(asm[-/]|arch|linux/|selinux/|mach/|mach_debug/|device/|hurd/(((hurd|ioctl)_types|paths)\\.h|ioctls\\.defs|ihash\\.h|version\\.h)|gd|nss3/|nspr4?/|c\\+\\+/|sys/(capability|sdt(|-config))\\.h|libaudit\\.h|audit(_logging|-records)\\.h)"
++    "/(.*-.*-.*/|.*-.*/)?(asm[-/]|arch|linux/|selinux/|mach/|mach_debug/|device/|hurd/(((hurd|ioctl)_types|paths)\\.h|ioctls\\.defs|ihash\\.h|version\\.h)|gd|nss3/|nspr4?/|c\\+\\+/|sys/(capability|sdt(-config)?)\\.h|libaudit\\.h|audit(_logging|-records)\\.h)"
+ }
+ /^[^ ]/ && $1 ~ /.*:/ { obj = $1 }
+ {
+--- a/scripts/gen-posix-conf-vars.awk
++++ b/scripts/gen-posix-conf-vars.awk
+@@ -7,7 +7,7 @@
+   prefix = ""
+ }
+ 
+-$1 ~ /^#/ || $0 ~ /^\s*$/ {
++$1 ~ /^#/ || NF == 0 {
+   next
+ }
+ 
+--- a/scripts/gen-sorted.awk
++++ b/scripts/gen-sorted.awk
+@@ -5,6 +5,9 @@
+ 
+ BEGIN {
+   cnt = split(subdirs, all) + 1
++  n = split(srcdirs, dirs)
++  for (i = 1; i <= n; ++i)
++    exists[dirs[i]] = 1
+   dnt = 0
+ }
+ 
+@@ -15,7 +18,7 @@
+ {
+   subdir = type = FILENAME;
+   sub(/^.*\//, "", type);
+-  sub(/\/[^/]+$/, "", subdir);
++  sub(/\/[^\/]+$/, "", subdir);
+   sub(/^.*\//, "", subdir);
+   thisdir = "";
+ }
+@@ -46,12 +49,13 @@
+   all[cnt++] = thisdir;
+ 
+   this_srcdir = srcpfx thisdir
+-  if (system("test -d " this_srcdir) != 0) {
++  if (!(thisdir in exists)) {
+     print FILENAME ":" FNR ":", "cannot find", this_srcdir > "/dev/stderr";
+     exit 2
+   }
+   file = this_srcdir "/Depend";
+-  if (system("test -f " file) == 0) {
++  if ((getline probe < file) >= 0) {
++    close(file);
+     ARGV[ARGC++] = file;
+     # Emit a dependency on the implicitly-read file.
+     if (srcpfx)
+--- a/scripts/gen-tunables.awk
++++ b/scripts/gen-tunables.awk
+@@ -1,5 +1,15 @@
+ # Generate dl-tunable-list.h from dl-tunables.list
+ 
++# The keys are strings; do not depend on awk array traversal order.
++function sorted_keys(keys, ordered,    key, i, n) {
++  for (key in keys) {
++    for (i = ++n; i > 1 && ordered[i-1] > key; --i)
++      ordered[i] = ordered[i-1];
++    ordered[i] = key;
++  }
++  return n;
++}
++
+ BEGIN {
+   min_of["STRING"]="0"
+   max_of["STRING"]="0"
+@@ -97,8 +107,8 @@
+ 
+   # Otherwise, we have encountered a tunable attribute.
+   split($0, arr, ":")
+-  attr = gensub(/^[ \t]+|[ \t]+$/, "", "g", arr[1])
+-  val = gensub(/^[ \t]+|[ \t]+$/, "", "g", arr[2])
++  attr = arr[1]; gsub(/^[ \t]+|[ \t]+$/, "", attr)
++  val = arr[2]; gsub(/^[ \t]+|[ \t]+$/, "", val)
+ 
+   if (attr == "type") {
+     types[top_ns,ns,tunable] = val
+@@ -134,7 +144,7 @@
+   # TYPES is an associative array where the index is the data
+   # TYPESA is an indexed array where the value is the data
+   # We sort TYPESA
+-  typecount = asorti (types, typesa)
++  typecount = sorted_keys(types, typesa)
+ 
+   print "/* AUTOGENERATED by gen-tunables.awk.  */"
+   print "#ifndef _TUNABLES_H_"
+--- a/scripts/localplt.awk
++++ b/scripts/localplt.awk
+@@ -4,6 +4,15 @@
+ # It writes "NAME: SYMBOL" for each PLT entry in NAME that refers to a
+ # symbol defined in the same object.
+ 
++function number(s,    n, i) {
++  if (s !~ /^0[xX]/) return s + 0;
++  for (i = 3; i <= length(s); ++i)
++    n = n * 16 + index("0123456789abcdef", tolower(substr(s, i, 1))) - 1;
++  return n + 0;
++}
++
++function unversioned(name) { sub(/@.*/, "", name); return name }
++
+ BEGIN {
+   result = 0;
+   pltrelsize = -1;
+@@ -33,8 +42,8 @@
+ 
+ in_shdrs && /^ +\[/ { sub(/\[ +/, "[") }
+ in_shdrs {
+-  address = strtonum("0x" $4);
+-  offset = strtonum("0x" $5);
++  address = number("0x" $4);
++  offset = number("0x" $5);
+   section_offset_by_address[address] = offset;
+ }
+ 
+@@ -47,11 +56,11 @@
+   # Relocations against GNU_IFUNC symbols are not shown as an hexadecimal
+   # value, but rather as the resolver symbol followed by ().
+   if ($4 ~ /\(\)/) {
+-    print whatfile, gensub(/@.*/, "", "g", $5)
++    print whatfile, unversioned($5)
+   } else {
+-    symval = strtonum("0x" $4);
++    symval = number("0x" $4);
+     if (symval != 0)
+-      print whatfile, gensub(/@.*/, "", "g", $5)
++      print whatfile, unversioned($5)
+   }
+ }
+ 
+@@ -59,11 +68,11 @@
+   # Relocations against GNU_IFUNC symbols are not shown as an hexadecimal
+   # value, but rather as the resolver symbol followed by ().
+   if ($4 ~ /\(\)/) {
+-    print whatfile, gensub(/@.*/, "", "g", $5), "RELA", $3
++    print whatfile, unversioned($5), "RELA", $3
+   } else {
+-    symval = strtonum("0x" $4);
++    symval = number("0x" $4);
+     if (symval != 0)
+-      print whatfile, gensub(/@.*/, "", "g", $5), "RELA", $3
++      print whatfile, unversioned($5), "RELA", $3
+   }
+ }
+ 
+@@ -71,11 +80,11 @@
+   # Relocations against GNU_IFUNC symbols are not shown as an hexadecimal
+   # value, but rather as the resolver symbol followed by ().
+   if ($4 ~ /\(\)/) {
+-    print whatfile, gensub(/@.*/, "", "g", $5), "REL", $3
++    print whatfile, unversioned($5), "REL", $3
+   } else {
+-    symval = strtonum("0x" $4);
++    symval = number("0x" $4);
+     if (symval != 0)
+-      print whatfile, gensub(/@.*/, "", "g", $5), "REL", $3
++      print whatfile, unversioned($5), "REL", $3
+   }
+ }
+ 
+@@ -84,13 +93,17 @@
+ in_relocs { next }
+ 
+ $1 == "Relocation" && $2 == "section" && $5 == "offset" {
+-  relocs_offset = strtonum($6);
+-  whatfile = gensub(/^.*\/([^/]+)\.jmprel$/, "\\1:", 1, FILENAME);
++  relocs_offset = number($6);
++  whatfile = FILENAME;
++  if (whatfile ~ /\/[^\/]+\.jmprel$/) {
++    sub(/^.*\//, "", whatfile);
++    sub(/\.jmprel$/, ":", whatfile);
++  }
+   next
+ }
+ 
+ $2 == "(JMPREL)" {
+-  jmprel_addr = strtonum($3);
++  jmprel_addr = number($3);
+   if (jmprel_addr in section_offset_by_address) {
+     jmprel_offset = section_offset_by_address[jmprel_addr];
+   } else {
+@@ -100,12 +113,12 @@
+ }
+ 
+ $2 == "(PLTRELSZ)" {
+-  pltrelsz = strtonum($3);
++  pltrelsz = number($3);
+   next
+ }
+ 
+ $2 == "(RELA)" {
+-  rela_addr = strtonum($3);
++  rela_addr = number($3);
+   if (rela_addr in section_offset_by_address) {
+     rela_offset = section_offset_by_address[rela_addr];
+   } else {
+@@ -116,7 +129,7 @@
+ }
+ 
+ $2 == "(REL)" {
+-  rel_addr = strtonum($3);
++  rel_addr = number($3);
+   if (rel_addr in section_offset_by_address) {
+     rel_offset = section_offset_by_address[rel_addr];
+   } else {
+@@ -127,7 +140,7 @@
+ }
+ 
+ $2 == "(RELR)" {
+-  relr_addr = strtonum($3);
++  relr_addr = number($3);
+   if (relr_addr in section_offset_by_address) {
+     relr_offset = section_offset_by_address[relr_addr];
+   } else {
+--- a/scripts/sysd-rules.awk
++++ b/scripts/sysd-rules.awk
+@@ -1,4 +1,4 @@
+-# This is a GAWK script to generate the sysd-rules file.
++# This is an AWK script to generate the sysd-rules file.
+ # It does not read any input, but it requires that several variables
+ # be set on its command line (using -v) to their makefile counterparts:
+ #	all_object_suffixes	$(all-object-suffixes)
+@@ -6,6 +6,16 @@
+ #	config_sysdirs		$(config_sysdirs)
+ #	sysd_rules_patterns	$(sysd-rules-patterns)
+ 
++# The keys are strings; do not depend on awk array traversal order.
++function sorted_keys(keys, ordered,    key, i, n) {
++  for (key in keys) {
++    for (i = ++n; i > 1 && ordered[i-1] > key; --i)
++      ordered[i] = ordered[i-1];
++    ordered[i] = key;
++  }
++  return n;
++}
++
+ BEGIN {
+   print "sysd-rules-sysdirs :=", config_sysdirs;
+ 
+@@ -28,7 +38,7 @@
+     dep_order = sprintf("%09d", npatterns - length(td[2]));
+     sort_patterns[target_order SUBSEP dep_order] = patterns[i];
+   }
+-  asorti(sort_patterns, map_patterns);
++  sorted_keys(sort_patterns, map_patterns);
+   for (i in map_patterns) {
+     patterns[i] = sort_patterns[map_patterns[i]];
+   }
+@@ -57,7 +67,8 @@
+         if (target_pattern == "%") {
+           command_suffix = "";
+         } else {
+-          prefix = gensub(/%/, "", 1, target_pattern);
++          prefix = target_pattern;
++          sub(/%/, "", prefix);
+           command_suffix = " $(" prefix  "CPPFLAGS)" " $(" prefix  "CFLAGS)";
+         }
+         target = "$(objpfx)" target_pattern o ":";
+--- a/sysdeps/unix/sysv/linux/filter-nr-syscalls.awk
++++ b/sysdeps/unix/sysv/linux/filter-nr-syscalls.awk
+@@ -25,7 +25,7 @@
+ /^#define __NR_(syscalls|arch_specific_syscall|(OABI_)?SYSCALL_BASE|SYSCALL_MASK) / {
+     next;
+ }
+-/^#define __NR_(|64_|[NO]32_)Linux(_syscalls)? / {
++/^#define __NR_(64_|[NO]32_)?Linux(_syscalls)? / {
+     next;
+ }
+ 
+--- a/sysdeps/unix/sysv/linux/gen-syscall-h.awk
++++ b/sysdeps/unix/sysv/linux/gen-syscall-h.awk
+@@ -36,7 +36,7 @@
+ }
+ 
+ # Skip empty lines and comments.
+-/^\s*(|#.*)$/ {
++/^[[:space:]]*(#.*)?$/ {
+     next;
+ }
+ 

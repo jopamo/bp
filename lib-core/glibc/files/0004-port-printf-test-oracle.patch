@@ -1,0 +1,128 @@
+--- a/stdio-common/tst-printf-format.awk
++++ b/stdio-common/tst-printf-format.awk
+@@ -31,7 +31,7 @@
+   # interpretes them as strings rather than numeric values in the
+   # non-bignum mode unless a sign has been explicitly given.  Keep
+   # original 'val' for reporting.
+-  value = gensub(/^(INF|NAN|inf|nan)/, "+\\1", 1, val)
++  value = val; sub(/^(INF|NAN|inf|nan)/, "+&", value)
+   # Neither changes between the conversions applied to this value.
+   value_infnan = value ~ /(INF|NAN|inf|nan)/
+   value_zero = value == 0
+@@ -57,7 +57,7 @@
+   # to be produced, but gawk prepends it anyway.
+   if (index(format, "#") && format ~ /#.*o/)
+     {
+-      tmpfmt = gensub(/#/, "", "g", format)
++      tmpfmt = format; gsub(/#/, "", tmpfmt)
+       tmpout = sprintf(tmpfmt, value)
+       if (tmpout ~ /^ *0/)
+ 	format = tmpfmt
+@@ -67,7 +67,7 @@
+   # outputs 0 instead.
+   else if (index(format, "#") && format ~ /#.*[Xx]/)
+     {
+-      tmpfmt = gensub(/#/, "", "g", format)
++      tmpfmt = format; gsub(/#/, "", tmpfmt)
+       tmpout = sprintf(tmpfmt, value)
+       if (tmpout ~ /^ *$/)
+ 	format = tmpfmt
+@@ -85,11 +85,13 @@
+     {
+       minus = format ~ /-/ ? "-" : ""
+       sign = value ~ /-/ ? "-" : format ~ /\+/ ? "+" : format ~ / / ? " " : ""
+-      if (format ~ /^%[^\.1-9]*[1-9][0-9]*/)
+-	width = gensub(/^%[^\.1-9]*([1-9][0-9]*).*$/, "\\1", 1, format)
++      if (match(format, /^%[^.1-9]*[1-9][0-9]*/)) {
++        width = substr(format, 1, RLENGTH)
++        sub(/^%[^.1-9]*/, "", width)
++      }
+       else
+ 	width = ""
+-      output = gensub(/[-+ ]/, "", "g", output)
++      gsub(/[-+ ]/, "", output)
+       output = sprintf("%" minus width "s", sign output)
+     }
+   # Produce "+" where the '+' flag has been used with a signed integer
+@@ -99,8 +101,11 @@
+   # requested only.
+   else if (value_zero && format ~ /\+.*[di]/)
+     {
+-      output = gensub(/^( *) $/, format ~ /-/ ? "+\\1" : "\\1+", 1, output)
+-      output = gensub(/^$/, "+", 1, output)
++      if (output ~ /^ +$/) {
++        output = substr(output, 2)
++        output = format ~ /-/ ? "+" output : output "+"
++      }
++      sub(/^$/, "+", output)
+     }
+   # Produce " " where the space flag has been used with a signed integer
+   # conversion for zero value.  In that case at least one " " is
+@@ -108,7 +113,7 @@
+   # non-bignum mode produces nothing.
+   else if (value_zero && format ~ / .*[di]/)
+     {
+-      output = gensub(/^$/, " ", 1, output)
++      sub(/^$/, " ", output)
+     }
+   if (output != input)
+     {
+--- a/stdio-common/Makefile
++++ b/stdio-common/Makefile
+@@ -633,7 +633,7 @@
+ 
+ # We can't split a quoted recipe line, so do it via an auxiliary variable.
+ make-tst-printf-format-out = \
+-  AWK='$(AWK)' BASH='$(BASH)' \
++  PYTHON='$(PYTHON)' AWK='$(AWK)' BASH='$(BASH)' \
+     $(BASH) $< $@ $(common-objpfx) \
+     '$(run-program-prefix-before-env) \
+      $(run-program-env) \
+@@ -642,7 +642,7 @@
+      $(run-program-prefix-after-env)'
+ $(objpfx)tst-printf-format-%.out: \
+   tst-printf-format.sh $(foreach c,$(convs),tst-printf-format-$(c).sh) \
+-  $(foreach f,$(xprintf-srcs),$(objpfx)$(f)) tst-printf-format.awk
++  $(foreach f,$(xprintf-srcs),$(objpfx)$(f)) tst-printf-format.awk tst-printf-format-c.py
+ 	$(make-tst-printf-format-out) > $@; \
+ 	$(evaluate-test)
+ 
+--- a/stdio-common/tst-printf-format-c.sh
++++ b/stdio-common/tst-printf-format-c.sh
+@@ -23,12 +23,10 @@
+ common_objpfx=$1; shift
+ test_program_prefix=$1; shift
+ 
+-AWK="env LC_ALL=C ${AWK:-awk}"
+-
+ echo Verifying c
+ (set -o pipefail
+  ${test_program_prefix} \
+   ${common_objpfx}stdio-common/tst-printf-format-${xprintf}-c c |
+-   $AWK -f tst-printf-format.awk 2>&1 |
++   ${PYTHON:-python3} tst-printf-format-c.py 2>&1 |
+    head -n 1 | sed "s/^/Conversion c output error, first line:\n/") 2>&1 ||
+   exit 1
+--- /dev/null
++++ b/stdio-common/tst-printf-format-c.py
+@@ -0,0 +1,20 @@
++"""Check the %c cases as bytes: the data includes both NUL and UCHAR_MAX."""
++import sys
++
++value = None
++cases = 0
++for record in sys.stdin.buffer:
++    if record.startswith(b'val:'):
++        value = record[4:-1]
++        if len(value) != 1:
++            sys.exit('invalid character: %r' % value)
++        continue
++    if value is None or not record.endswith(b':\n'):
++        sys.exit('invalid test record: %r' % record)
++    fmt, *width, actual = record[:-2].split(b':')
++    expected = fmt % (tuple(map(int, width)) + (value,))
++    if actual != expected:
++        sys.exit('%r, %r => %r, expected %r' % (fmt, value, actual, expected))
++    cases += 1
++if not cases:
++    sys.exit('missing character conversions')

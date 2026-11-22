@@ -49,6 +49,8 @@ QA_POLICY_ARCHIVE_EXPECT_EMPTY="
 PATCHES=(
 	"${FILESDIR}"/0001-Disable-ldconfig-during-install.patch
 	"${FILESDIR}"/0002-libio-report-memstream-allocation-failures.patch
+	"${FILESDIR}"/0003-port-build-generators.patch
+	"${FILESDIR}"/0004-port-printf-test-oracle.patch
 )
 
 check_devpts() {
@@ -109,6 +111,7 @@ pkg_pretend() {
 src_prepare() {
 	qa-policy-configure
 	default
+	cp "${FILESDIR}/version-maps.py" "${S}/scripts/" || die
 
 	cd "${WORKDIR}"
 	find . -name configure -exec touch {} +

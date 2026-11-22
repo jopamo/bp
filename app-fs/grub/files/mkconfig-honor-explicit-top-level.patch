@@ -1,0 +1,12 @@
+--- a/util/grub-mkconfig.in
++++ b/util/grub-mkconfig.in
+@@ -160,3 +160,9 @@
++# A caller publishing a kernel can select its image for this invocation.
++# Keep the configured preference for ordinary grub-mkconfig runs.
++requested_top_level=${GRUB_TOP_LEVEL-}
+ if test -f ${sysconfdir}/default/grub ; then
+   . ${sysconfdir}/default/grub
+ fi
++if test -n "$requested_top_level"; then
++  GRUB_TOP_LEVEL=$requested_top_level
++fi

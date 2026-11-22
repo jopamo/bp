@@ -5,7 +5,7 @@ inherit toolchain-funcs
 DESCRIPTION="Tool for inspection and simple manipulation of eBPF programs and maps"
 HOMEPAGE="https://github.com/libbpf/bpftool"
 BRANCH_NAME="snapshot"
-SNAPSHOT=22bab4552f13dacb5a4facc93642108640f56034
+SNAPSHOT=8c3f4d6d201e3492e77b69860434915e5d5c033c
 SRC_URI="https://github.com/jopamo/k1g4/archive/${SNAPSHOT}.tar.gz -> k1g4-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/k1g4-${SNAPSHOT}"
 

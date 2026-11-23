@@ -6,7 +6,7 @@ inherit meson
 
 DESCRIPTION="library and tools for managing linux kernel modules"
 HOMEPAGE="https://git.kernel.org/?p=utils/kernel/kmod/kmod.git"
-SNAPSHOT=8f674de3856030dc76e33a41b5f232e2cdcbbb98
+SNAPSHOT=84d1c408439eb2ebcf385fcfc2265ff2ad8e00db
 SRC_URI="https://github.com/kmod-project/kmod/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

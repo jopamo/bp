@@ -4,7 +4,7 @@ inherit cmake
 
 DESCRIPTION="Provides an API and commands for processing SPIR-V modules"
 HOMEPAGE="https://github.com/KhronosGroup/SPIRV-Tools"
-SNAPSHOT=1a35222815076bf050b7698d63786ee04a2bb04c
+SNAPSHOT=3c8fd35297315682906894621677f1b7003461ef
 SRC_URI="https://github.com/KhronosGroup/SPIRV-Tools/archive/${SNAPSHOT}.tar.gz -> SPIRV-Tools-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/SPIRV-Tools-${SNAPSHOT}"
 

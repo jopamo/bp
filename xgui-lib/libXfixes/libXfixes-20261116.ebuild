@@ -4,7 +4,7 @@ inherit autotools qa-policy
 
 DESCRIPTION="X.Org Xfixes library"
 HOMEPAGE="https://www.x.org/wiki/"
-SNAPSHOT=55bb2d1d57d43e0595ce45393f26eb433d75a7cc
+SNAPSHOT=156e1e39c518f0443073e9c27071e4eceb02e3c0
 SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libXfixes/-/archive/${SNAPSHOT}/libXfixes-${SNAPSHOT}.tar.bz2 -> libXfixes-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/libxfixes-${SNAPSHOT}"
 

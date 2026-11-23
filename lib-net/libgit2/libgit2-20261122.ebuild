@@ -4,7 +4,7 @@ inherit cmake flag-o-matic
 
 DESCRIPTION="Portable, pure-library implementation of core Git functionality"
 HOMEPAGE="https://www.libgit2.org/"
-SNAPSHOT=42a89d7cc9374a19e72fa57011e5fe3a99c7b3bf
+SNAPSHOT=6f7d8484366d8b23ec4ca0509fcfcb8f13aabc8b
 SRC_URI="https://github.com/libgit2/libgit2/archive/${SNAPSHOT}.tar.gz -> libgit2-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/libgit2-${SNAPSHOT}
 
@@ -17,6 +17,8 @@ src_configure() {
 
 	local mycmakeargs=(
 		-DBUILD_SHARED_LIBS=OFF
+		# The distro TLS provider's headers use C99 inline functions.
+		-DCMAKE_C_STANDARD=99
 	)
 	cmake_src_configure
 }

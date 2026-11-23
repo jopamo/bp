@@ -9,7 +9,7 @@ inherit distutils-r1 xdg
 
 DESCRIPTION="Non-linear video editor built with Qt and libopenshot"
 HOMEPAGE="https://www.openshot.org/ https://github.com/OpenShot/openshot-qt"
-SNAPSHOT=ff240b621b4f00720d33749febf1dc7dc6e1af30
+SNAPSHOT=866531489178332a739d55d2afd7efa51d566392
 SRC_URI="https://github.com/OpenShot/openshot-qt/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

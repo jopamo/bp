@@ -6,7 +6,7 @@ inherit cmake
 
 DESCRIPTION="OpenShot audio playback and editing library"
 HOMEPAGE="https://www.openshot.org/ https://github.com/OpenShot/libopenshot-audio"
-SNAPSHOT=c56f94cfb39a995e4e1f52989da3d9b686fef3b3
+SNAPSHOT=7504624e07ea958ba5dcff2b7c1f261b47289b2b
 SRC_URI="https://github.com/OpenShot/libopenshot-audio/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

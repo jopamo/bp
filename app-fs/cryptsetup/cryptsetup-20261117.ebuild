@@ -4,7 +4,7 @@ inherit linux-info autotools flag-o-matic qa-policy
 
 DESCRIPTION="Tool to setup encrypted devices with dm-crypt"
 HOMEPAGE="https://gitlab.com/cryptsetup/cryptsetup/blob/master/README.md"
-SNAPSHOT=268bfe4692484120630ef8d9accf0be02623ac20
+SNAPSHOT=b16f041ce122275b28e500cbafb94dedbcc9e6df
 SRC_URI="https://gitlab.com/cryptsetup/cryptsetup/-/archive/${SNAPSHOT}/cryptsetup-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/cryptsetup-${SNAPSHOT}"
 
@@ -87,7 +87,11 @@ src_test() {
 
 src_install() {
 	default
-	sed -i -E '/^Requires\.private:/ s/[[:space:]]+/, /2g' \
+	sed -i -E '/^Requires\.private:/ {
+		s/[[:blank:]]+$//
+		s/[[:blank:]]+/, /g
+		s/^Requires\.private:, /Requires.private: /
+	}' \
 		"${ED}"/usr/lib/pkgconfig/libcryptsetup.pc || die
 	qa-policy-install
 

@@ -4,7 +4,7 @@ inherit flag-o-matic toolchain-funcs
 
 DESCRIPTION="Complete solution to record, convert and stream audio and video. Includes libavcodec"
 HOMEPAGE="http://ffmpeg.org/"
-SNAPSHOT=b593998340c76a8269515448b565c93d060ae8b4
+SNAPSHOT=4dfdbc94c6ca4c38c9f2111f44e6f18e76235ae5
 SRC_URI="https://github.com/FFmpeg/FFmpeg/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/FFmpeg-${SNAPSHOT}"
 
@@ -182,4 +182,15 @@ src_configure() {
 	fi
 
 	${S}/configure "${myconf[@]}"
+}
+
+src_test() {
+	# FATE runs the uninstalled programs, which have no runtime library path.
+	local -a libdirs=( "${S}"/lib{avcodec,avdevice,avfilter,avformat,avutil,swresample,swscale} )
+	local test_library_path
+	test_library_path=$(IFS=:; printf '%s' "${libdirs[*]}")
+
+	# Do not let the source check mistake an enclosing checkout for FFmpeg.
+	GIT_CEILING_DIRECTORIES="${WORKDIR}" \
+		LD_LIBRARY_PATH="${test_library_path}" emake check
 }

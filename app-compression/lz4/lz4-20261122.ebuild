@@ -4,7 +4,7 @@ inherit meson flag-o-matic qa-policy
 
 DESCRIPTION="Extremely Fast Compression algorithm"
 HOMEPAGE="https://github.com/lz4/lz4"
-SNAPSHOT=8ce5c3d9aff0a23d01e4d2d3dc64fba931ac98c7
+SNAPSHOT=94171b0442a9ae8f1b9bfde58d05abcb377fbcbf
 SRC_URI="https://github.com/lz4/lz4/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/lz4-${SNAPSHOT}/build/meson"
 

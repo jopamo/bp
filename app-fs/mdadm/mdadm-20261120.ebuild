@@ -4,7 +4,7 @@ inherit flag-o-matic toolchain-funcs
 
 DESCRIPTION="Tool for running RAID systems - replacement for the raidtools"
 HOMEPAGE="https://github.com/md-raid-utilities/mdadm"
-SNAPSHOT=5542bf40fab20f09ce3be80ae1cb42584e9fa2f7
+SNAPSHOT=4cd7d33c1d2672c40ee3653006c36fe84cd1a545
 SRC_URI="https://github.com/md-raid-utilities/mdadm/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/mdadm-${SNAPSHOT}
 

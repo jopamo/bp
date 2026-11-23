@@ -6,7 +6,7 @@ inherit go-module
 
 DESCRIPTION="A daemon to control runC"
 HOMEPAGE="https://containerd.io/"
-SNAPSHOT=f3e0fa3f4585c81bb29f9bcde6a146a4fe25b2e2
+SNAPSHOT=c6c04b4c64667ff022d0bd88df69f21fdcd4a45a
 SRC_URI="https://github.com/containerd/containerd/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 # lockstep-go-managed: true
 # lockstep-go-deps: begin
@@ -73,8 +73,8 @@ EGO_SUM=(
 	"github.com/containerd/log v0.2.0/go.mod"
 	"github.com/containerd/log/otel v0.1.0"
 	"github.com/containerd/log/otel v0.1.0/go.mod"
-	"github.com/containerd/nri v0.12.3"
-	"github.com/containerd/nri v0.12.3/go.mod"
+	"github.com/containerd/nri v0.12.5"
+	"github.com/containerd/nri v0.12.5/go.mod"
 	"github.com/containerd/otelttrpc v0.1.0"
 	"github.com/containerd/otelttrpc v0.1.0/go.mod"
 	"github.com/containerd/platforms v1.0.0-rc.5"

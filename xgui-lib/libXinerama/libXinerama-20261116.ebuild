@@ -4,7 +4,7 @@ inherit autotools qa-policy
 
 DESCRIPTION="X.Org Xinerama library"
 HOMEPAGE="https://www.x.org/wiki/"
-SNAPSHOT=d7162b962710bc724b41cabab4e7cea303c4b541
+SNAPSHOT=92d8f35d672537721dcd3a071d04306aa065c29b
 SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libXinerama/-/archive/${SNAPSHOT}/libXinerama-${SNAPSHOT}.tar.bz2 -> libXinerama-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/libxinerama-${SNAPSHOT}"
 

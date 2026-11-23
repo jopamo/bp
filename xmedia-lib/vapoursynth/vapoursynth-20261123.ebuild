@@ -6,12 +6,16 @@ DISTUTILS_EXT=1
 DISTUTILS_USE_PEP517=meson-python
 
 inherit distutils-r1 qa-policy
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND=""
+# lockstep-pypi-deps: end
 
 DESCRIPTION="VapourSynth library for video manipulation"
 HOMEPAGE="https://www.vapoursynth.com/"
-SNAPSHOT=dfe97e09ee0dd76ba495635dbd776361ed66c273
-GLSLANG_SNAPSHOT=168d452a4f460d24b588fed08477a81c44ee27a1
-VULKAN_HEADERS_SNAPSHOT=e3b1eec08173d6b825cd3ac88c885a63b621504a
+SNAPSHOT=e7226aa818cb2dbad09241eac403fa981e01c497
+GLSLANG_SNAPSHOT=6334e1549a49989e04b5329a6a39a328247fd6ed
+VULKAN_HEADERS_SNAPSHOT=d277a0a3cda9c682708c93279f0c72cd6b0ae3f3
 SRC_URI="
 	https://github.com/vapoursynth/vapoursynth/archive/${SNAPSHOT}.tar.gz -> vapoursynth-${SNAPSHOT}.tar.gz
 	https://github.com/KhronosGroup/glslang/archive/${GLSLANG_SNAPSHOT}.tar.gz -> glslang-${GLSLANG_SNAPSHOT}.tar.gz

@@ -103,6 +103,7 @@ grub_configure() {
 
 src_prepare() {
 	eapply "${FILESDIR}/mkconfig-honor-explicit-top-level.patch"
+	eapply "${FILESDIR}/k1g4-menu-branding.patch"
 	eapply "${FILESDIR}/bootstrap-skip-applied-patches.patch"
 	eapply "${FILESDIR}/fix-gnulib-configh-first.patch"
 	eapply "${FILESDIR}/fix-libgcrypt-posix-wrap-implicit-grub-symbols.patch"

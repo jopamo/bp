@@ -4,7 +4,7 @@ inherit cmake qa-policy
 
 DESCRIPTION="Intel VA-API media driver"
 HOMEPAGE="https://github.com/intel/media-driver"
-SNAPSHOT=8ae161b17d46621fe76e46a2477bfe63719e20c8
+SNAPSHOT=6c822931881668691f24713938a382bb7261a7d7
 SRC_URI="https://github.com/intel/media-driver/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/media-driver-${SNAPSHOT}"
 
@@ -19,7 +19,10 @@ DEPEND="
 BDEPEND="
 	app-build/llvm
 "
-RDEPEND="${DEPEND}"
+# Clang links the driver against libunwind from the LLVM package.
+RDEPEND="${DEPEND}
+	app-build/llvm
+"
 PATCHES=(
 	"${FILESDIR}"/intel-media-driver-ninja-response-file.patch
 	"${FILESDIR}"/intel-media-driver-include-errno.patch

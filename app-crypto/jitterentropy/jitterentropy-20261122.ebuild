@@ -4,7 +4,7 @@ inherit flag-o-matic toolchain-funcs qa-policy
 
 DESCRIPTION="Hardware RNG based on CPU timing jitter"
 HOMEPAGE="https://github.com/smuellerDD/jitterentropy-library"
-SNAPSHOT=2aa10e2423fc7d34d67ef666d8eb186d236272d8
+SNAPSHOT=fbbe36ed459a9f4eeb6caecfe66efe581a638fba
 SRC_URI="https://github.com/smuellerDD/jitterentropy-library/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/jitterentropy-library-${SNAPSHOT}
 
@@ -14,6 +14,8 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"
 
+PATCHES=( "${FILESDIR}/jitterentropy-install-uncompressed-manpages.patch" )
+
 src_prepare() {
 	replace-flags -O2 -O0
 	replace-flags -O3 -O0
@@ -22,8 +24,6 @@ src_prepare() {
 
 	default
 
-	# Disable man page compression on install
-	sed -e '/\tgzip.*man/ d' -i Makefile || die
 	# Remove the default upstream optimization level
 	sed -e '/^CFLAGS +=/ s|-O2||' -i Makefile || die
 }

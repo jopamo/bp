@@ -19,3 +19,8 @@ SLOT="$(ver_cut 1-2)"
 KEYWORDS="amd64 arm64"
 
 BDEPEND="app-core/bx"
+
+src_prepare() {
+	eapply "${FILESDIR}/k1g4-tools-boot-banner.patch"
+	kernel-2_src_prepare
+}

@@ -1,0 +1,35 @@
+diff --git a/tools/testing/ktest/ktest.pl b/tools/testing/ktest/ktest.pl
+--- a/tools/testing/ktest/ktest.pl
++++ b/tools/testing/ktest/ktest.pl
+@@ -91,2 +91,3 @@
+ my $version;
++my $kernel_banner = qr/\b(?:Linux|k1g4) version /;
+ my $have_version = 0;
+@@ -1549,1 +1550,1 @@
+-	if (wait_for_monitor($time, "Linux version")) {
++	if (wait_for_monitor($time, $kernel_banner)) {
+@@ -2360,1 +2361,1 @@
+-	if ($full_line =~ /\bLinux version (\S+).*\n/) {
++	if ($full_line =~ /$kernel_banner(\S+).*\n/) {
+@@ -2367,2 +2368,2 @@
+-		doprint "Already booted in Linux kernel $version, but now\n";
+-		doprint "we booted into Linux kernel $1.\n";
++		doprint "Already booted in kernel $version, but now\n";
++		doprint "we booted into kernel $1.\n";
+diff --git a/tools/power/pm-graph/bootgraph.py b/tools/power/pm-graph/bootgraph.py
+--- a/tools/power/pm-graph/bootgraph.py
++++ b/tools/power/pm-graph/bootgraph.py
+@@ -80,1 +80,1 @@
+-		m = re.match(r'^[Ll]inux *[Vv]ersion *(?P<v>\S*) .*', msg)
++		m = re.match(r'^(?:[Ll]inux|k1g4) +[Vv]ersion +(?P<v>\S+)(?: |$)', msg)
+@@ -335,4 +335,6 @@
+-		if(ktime == 0.0 and re.match(r'^Linux version .*', msg)):
+-			if(not sysvals.stamp['kernel']):
+-				sysvals.stamp['kernel'] = sysvals.kernelVersion(msg)
+-			continue
++		if ktime == 0.0:
++			kernel = sysvals.kernelVersion(msg)
++			if kernel != 'unknown':
++				if not sysvals.stamp['kernel']:
++					sysvals.stamp['kernel'] = kernel
++				continue

@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-SNAPSHOT=13f08104c56a643ad13c823e495a06ffeda63c22
+SNAPSHOT=6a1d04b6df3c3cbb276e92d3e44acf25c0434ca5
 
 inherit autotools
 
@@ -38,7 +38,10 @@ BDEPEND="test? (
 	fonts/liberation-fonts
 )"
 
-PATCHES=( "${FILESDIR}/libcupsfilters-test-image-features.patch" )
+PATCHES=(
+	"${FILESDIR}/libcupsfilters-test-image-features.patch"
+	"${FILESDIR}/libcupsfilters-test-prefer-symbol-font.patch"
+)
 
 src_prepare() {
 	default

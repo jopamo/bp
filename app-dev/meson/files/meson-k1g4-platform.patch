@@ -1,0 +1,32 @@
+diff --git a/mesonbuild/utils/universal.py b/mesonbuild/utils/universal.py
+--- a/mesonbuild/utils/universal.py
++++ b/mesonbuild/utils/universal.py
+@@ -133,2 +133,3 @@
+     'has_path_sep',
++    'host_system_name',
+     'is_aix',
+@@ -742,2 +743,7 @@
+-_PLATFORM_SYSTEM_LOWER = platform.system().lower()
++def host_system_name() -> str:
++    system = platform.system()
++    return 'linux' if system == 'k1g4' else system.lower()
++
++
++_PLATFORM_SYSTEM_LOWER = host_system_name()
+ _PLATFORM_RELEASE_LOWER = platform.release().lower()
+diff --git a/mesonbuild/envconfig.py b/mesonbuild/envconfig.py
+--- a/mesonbuild/envconfig.py
++++ b/mesonbuild/envconfig.py
+@@ -735,2 +735,2 @@
+         return 'cygwin'
+-    return platform.system().lower()
++    return mesonlib.host_system_name()
+diff --git a/mesonbuild/scripts/env2mfile.py b/mesonbuild/scripts/env2mfile.py
+--- a/mesonbuild/scripts/env2mfile.py
++++ b/mesonbuild/scripts/env2mfile.py
+@@ -454,4 +454,3 @@
+     def __init__(self, options: T.Any):
+-        import platform
+-        self.platform = platform.system().lower()
++        self.platform = envconfig.detect_system()
+         self.options = options

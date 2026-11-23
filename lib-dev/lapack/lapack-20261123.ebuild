@@ -5,7 +5,7 @@ inherit cmake flag-o-matic
 
 DESCRIPTION="BLAS, CBLAS, LAPACK, LAPACKE reference implementations"
 HOMEPAGE="https://www.netlib.org/lapack/"
-SNAPSHOT=0c5122552367ef2493201220b54582e586beae45
+SNAPSHOT=fab6f2c0bd360bb374ba24e27c74141a0b7c1b41
 SRC_URI="https://github.com/Reference-LAPACK/lapack/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
@@ -23,7 +23,6 @@ src_configure() {
 		-DBUILD_SHARED_LIBS=ON
 		-DBUILD_TESTING=OFF
 		-DCBLAS=ON
-		-DCMAKE_Fortran_COMPILER=gfortran
 		-DCMAKE_SKIP_RPATH=ON
 		-DLAPACKE_WITH_TMG=OFF
 	)

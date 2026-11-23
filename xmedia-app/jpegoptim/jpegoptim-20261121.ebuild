@@ -2,7 +2,7 @@
 
 DESCRIPTION="Utility to optimize JPEG files"
 HOMEPAGE="http://www.kokkonen.net/tjko/projects.html https://github.com/tjko/jpegoptim"
-SNAPSHOT=c83c905c760af88d4379c0ed25d25e8e20550ac6
+SNAPSHOT=42fb0f2dca90590d261aaee120a46f574bdf1998
 SRC_URI="https://github.com/tjko/jpegoptim/archive/${SNAPSHOT}.tar.gz -> jpegoptim-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/jpegoptim-${SNAPSHOT}"
 

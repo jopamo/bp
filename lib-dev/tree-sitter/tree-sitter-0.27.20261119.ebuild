@@ -6,7 +6,7 @@ inherit toolchain-funcs flag-o-matic
 
 DESCRIPTION="Tree-sitter is a parser generator tool and an incremental parsing library"
 HOMEPAGE="https://github.com/tree-sitter/tree-sitter"
-SNAPSHOT=927a2b9505c1e3b8e3b9274f08a1dbc92178d929
+SNAPSHOT=a5ea5ed446a5dd678aa0c36c5cf43c632cc1d923
 SRC_URI="https://github.com/tree-sitter/tree-sitter/archive/${SNAPSHOT}.tar.gz -> tree-sitter-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/tree-sitter-${SNAPSHOT}"
 

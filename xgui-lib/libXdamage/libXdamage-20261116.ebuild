@@ -4,7 +4,7 @@ inherit autotools qa-policy
 
 DESCRIPTION="X.Org Xdamage library"
 HOMEPAGE="https://www.x.org/wiki/"
-SNAPSHOT=4ff0f0e76c974faf920e476abccc65a4990a637c
+SNAPSHOT=067b7cab296c7e5902275f39adef38f16a3418df
 SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libXdamage/-/archive/${SNAPSHOT}/libXdamage-${SNAPSHOT}.tar.bz2 -> libXdamage-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/libxdamage-${SNAPSHOT}"
 

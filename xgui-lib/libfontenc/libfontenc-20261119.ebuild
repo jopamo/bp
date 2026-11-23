@@ -4,7 +4,7 @@ inherit autotools qa-policy
 
 DESCRIPTION="X.Org fontenc library"
 HOMEPAGE="https://www.x.org/wiki/"
-SNAPSHOT=7418fa7a77d1faf795ae40ea92f9ec2828e2a0b9
+SNAPSHOT=4c48b91d69d9a308c6149329d90bef3d5e64547d
 SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libfontenc/-/archive/${SNAPSHOT}/libfontenc-${SNAPSHOT}.tar.bz2 -> libfontenc-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/libfontenc-${SNAPSHOT}"
 

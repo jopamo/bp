@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-SNAPSHOT=7ef9ef67acb3318cc8a9eb75101c8295b76ea4bb
+SNAPSHOT=e68fc6f174308c9def1f6e8715d790a498b65fbb
 
 inherit meson
 

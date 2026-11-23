@@ -1,0 +1,47 @@
+Preserve strict libpng diagnostics but compare fixture data independently
+of the DEFLATE encoding produced by the selected zlib implementation.
+
+--- a/pngtest.c
++++ b/pngtest.c
+@@ -137,0 +138 @@
++static int compare_compressed = 1;
+@@ -1835,0 +1837,3 @@
++   if (!compare_compressed)
++      return 0;
++
+@@ -1998 +2002,2 @@
+-      else if (strcmp(argv[1], "--strict") == 0)
++      else if (strcmp(argv[1], "--strict") == 0 ||
++               strcmp(argv[1], "--strict-content") == 0)
+@@ -2003,0 +2009 @@
++         compare_compressed = strcmp(argv[1], "--strict-content") != 0;
+--- a/tests/pngtest-all
++++ b/tests/pngtest-all
+@@ -25,0 +26,4 @@
++   if [ "$status" -eq 0 ] && [ "$1" = --strict-content ]; then
++       "$PNG_ROUNDTRIP_PYTHON" "$PNG_ROUNDTRIP_COMPARE" "$2" pngout.png
++       status=$?
++   fi
+@@ -37,5 +41,17 @@
+-# The "standard" test
+-TEST --strict "${srcdir}"/pngtest.png
+-
+-# PNG-3 tests
+-TEST --strict "${srcdir}"/contrib/testpngs/png-3/*.png
++TEST_FIXTURE(){
++    if [ -n "${PNG_ROUNDTRIP_COMPARE:-}" ]; then
++        case "$1" in
++            */pngtest.png|*/cicp-display-p3_reencoded.png)
++                TEST --strict-content "$1"
++                return $?
++                ;;
++        esac
++    fi
++    TEST --strict "$1"
++}
++
++# Keep exact comparisons for everything except the two compression fixtures.
++TEST_FIXTURE "${srcdir}"/pngtest.png
++for file in "${srcdir}"/contrib/testpngs/png-3/*.png; do
++    TEST_FIXTURE "$file"
++done

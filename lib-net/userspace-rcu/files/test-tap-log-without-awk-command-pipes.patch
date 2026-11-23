@@ -1,0 +1,57 @@
+--- a/tests/utils/tap-driver.sh
++++ b/tests/utils/tap-driver.sh
+@@ -107,6 +107,7 @@
+ # :; is there to work around a bug in bash 3.2 (and earlier) which
+ # does not always set '$?' properly on redirection failure.
+ # See the Autoconf manual for more details.
++: > "$log_file" || fatal "cannot open test log"
+ :;{
+   (
+     # Ignore common signals (in this subshell only!), to avoid potential
+@@ -142,9 +143,6 @@
+         -v comments="$comments" \
+         -v diag_string="$diag_string" \
+ '
+-# TODO: the usages of "cat >&3" below could be optimized when using
+-#       GNU awk, and/on on systems that supports /dev/fd/.
+-
+ # Implementation note: in what follows, `result_obj` will be an
+ # associative array that (partly) simulates a TAP result object
+ # from the `TAP::Parser` perl module.
+@@ -155,7 +153,7 @@
+
+ function fatal(msg)
+ {
+-  print me ": " msg | "cat >&2"
++  print me ": " msg >> "/dev/stderr"
+   exit 1
+ }
+
+@@ -267,7 +265,7 @@
+   fflush()
+   # Log the result in the log file too, to help debugging (this is
+   # especially true when said result is a TAP error or "Bail out!").
+-  print result msg | "cat >&3";
++  print result msg >> log_file;
+ }
+
+ function testsuite_error(error_message)
+@@ -534,7 +532,7 @@
+         $0 = curline
+       }
+     # Copy any input line verbatim into the log file.
+-    print | "cat >&3"
++    print >> log_file
+     # Parsing of TAP input should stop after a "Bail out!" directive.
+     if (bailed_out)
+       continue
+@@ -628,8 +626,8 @@
+ '
+
+ # TODO: document that we consume the file descriptor 3 :-(
+-} 3>"$log_file"
++} 3>>"$log_file"
+
+ test $? -eq 0 || fatal "I/O or internal error"
+
+ # Local Variables:

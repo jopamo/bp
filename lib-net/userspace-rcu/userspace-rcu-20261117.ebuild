@@ -4,7 +4,7 @@ inherit autotools qa-policy
 
 DESCRIPTION="Userspace RCU (read-copy-update) library"
 HOMEPAGE="https://liburcu.org/"
-SNAPSHOT=645fdc9b720606440a3b1ed74ad394e8eaad796b
+SNAPSHOT=a6df537ffa987b8c68601be24ef17cf937d389c1
 SRC_URI="https://github.com/urcu/userspace-rcu/archive/${SNAPSHOT}.tar.gz -> userspace-rcu-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/userspace-rcu-${SNAPSHOT}"
 
@@ -15,6 +15,8 @@ KEYWORDS="amd64 arm64"
 IUSE="static-libs test"
 
 RESTRICT="!test? ( test )"
+
+PATCHES=( "${FILESDIR}/test-tap-log-without-awk-command-pipes.patch" )
 
 src_prepare() {
 	qa-policy-configure

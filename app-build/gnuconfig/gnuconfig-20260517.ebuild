@@ -12,6 +12,8 @@ LICENSE="GPL-3+"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
+PATCHES=( "${FILESDIR}/k1g4-sysname.patch" )
+
 src_compile() { :;}
 
 src_test() {

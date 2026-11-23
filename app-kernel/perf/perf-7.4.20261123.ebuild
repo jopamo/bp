@@ -3,7 +3,10 @@
 BRANCH_NAME="snapshot"
 SNAPSHOT=41b7826b2fa9213f494c08bddf8d89d501b2270e
 
-PATCHES=( "${FILESDIR}"/perf-inject-aslr-drain-evlist.patch )
+PATCHES=(
+	"${FILESDIR}/perf-inject-aslr-drain-evlist.patch"
+	"${FILESDIR}/perf-k1g4-banner.patch"
+)
 
 inherit flag-o-matic toolchain-funcs
 

@@ -1,0 +1,25 @@
+diff --git a/tools/perf/util/machine.c b/tools/perf/util/machine.c
+--- a/tools/perf/util/machine.c
++++ b/tools/perf/util/machine.c
+@@ -1357,1 +1357,2 @@
+-	const char *prefix = "Linux version ";
++	const char linux_prefix[] = "Linux version ";
++	const char k1g4_prefix[] = "k1g4 version ";
+@@ -1369,2 +1370,5 @@
+-	name = strstr(version, prefix);
+-	if (!name)
++	if (strncmp(version, linux_prefix, sizeof(linux_prefix) - 1) == 0)
++		name = version + sizeof(linux_prefix) - 1;
++	else if (strncmp(version, k1g4_prefix, sizeof(k1g4_prefix) - 1) == 0)
++		name = version + sizeof(k1g4_prefix) - 1;
++	else
+@@ -1372,4 +1376,5 @@
+-	name += strlen(prefix);
+-	tmp = strchr(name, ' ');
+-	if (tmp)
+-		*tmp = '\0';
++
++	tmp = name + strcspn(name, " \t\n");
++	if (tmp == name)
++		return NULL;
++	*tmp = '\0';

@@ -1,0 +1,37 @@
+Subject: rubygems: write encrypted keys as pkcs8
+
+Use PKCS #8 for encrypted private keys. Traditional RSA PEM encryption
+requires MD5 for key derivation, which this provider does not expose.
+Keep unencrypted output and the caller's choice of encryption cipher.
+
+diff --git a/lib/rubygems/security.rb b/lib/rubygems/security.rb
+--- a/lib/rubygems/security.rb
++++ b/lib/rubygems/security.rb
+@@ -589,2 +589,2 @@
+-  # +permissions+. If passed +cipher+ and +passphrase+ those arguments will be
+-  # passed to +to_pem+.
++  # +permissions+. When +cipher+ and +passphrase+ are given, write private keys
++  # as encrypted PKCS #8, or pass those arguments to +to_pem+ for other objects.
+@@ -597 +597,5 @@
+-        io.write pemmable.to_pem cipher, passphrase
++        if pemmable.respond_to?(:private_to_pem)
++          io.write pemmable.private_to_pem cipher, passphrase
++        else
++          io.write pemmable.to_pem cipher, passphrase
++        end
+
+diff --git a/test/rubygems/test_gem_security.rb b/test/rubygems/test_gem_security.rb
+--- a/test/rubygems/test_gem_security.rb
++++ b/test/rubygems/test_gem_security.rb
+@@ -309 +309,4 @@
+-    key_from_file = OpenSSL::PKey::RSA.new File.read(path), passphrase
++    key_file_contents = File.read(path)
++    assert_match(/\A-----BEGIN ENCRYPTED PRIVATE KEY-----\n/, key_file_contents)
++    assert_raise(OpenSSL::PKey::PKeyError) { OpenSSL::PKey.read(key_file_contents, "wrong password") }
++    key_from_file = OpenSSL::PKey::RSA.new key_file_contents, passphrase
+@@ -329 +332,4 @@
+-    assert key_file_contents.split("\n")[2].match(cipher.name)
++    assert_match(/\A-----BEGIN ENCRYPTED PRIVATE KEY-----\n/, key_file_contents)
++    der = key_file_contents.lines[1...-1].join.unpack1("m")
++    encryption_scheme = OpenSSL::ASN1.decode(der).value[0].value[1].value[1]
++    assert_equal "2.16.840.1.101.3.4.1.22", encryption_scheme.value[0].oid # aes-192-cbc

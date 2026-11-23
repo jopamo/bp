@@ -1,0 +1,91 @@
+Subject: rubygems: use pkcs8 for encrypted test keys
+
+Keep the RSA key and replace the EC fixture, preserving both passphrases.
+Use PBKDF2-HMAC-SHA256 and AES-256-CBC instead of legacy PEM derivation.
+
+diff --git a/test/rubygems/encrypted_private_key.pem b/test/rubygems/encrypted_private_key.pem
+--- a/test/rubygems/encrypted_private_key.pem
++++ b/test/rubygems/encrypted_private_key.pem
+@@ -1,30 +1,30 @@
+------BEGIN RSA PRIVATE KEY-----
+-Proc-Type: 4,ENCRYPTED
+-DEK-Info: AES-256-CBC,4851D8D265711252BA5EAD983C957412
+-
+-0CH43Il/Lamd5AIkeYFRdCLJUUiUAEuAlE+DDYJ+Schulv9Lp+Au00VvAH/VVdqP
+-jFzEJ7FIwcPac2y4SVSa8uMGdzezVhduMz3yrwWNSUPFAJCLazh4FhGMmK2kYRfx
+-IReEBebwr1x+e3VqoREfTuwxQqpA5Ho7dgnrzSf2UeIQrnXfDh1rIn3SCqb/xYDI
+-qqQ9bPlDs9iY/W24KM/ZfWOB/Dr6SQXXVDu1JS8EAxB9TK4PRMHZIBlIN+OVzju5
+-v7FDysTu7g2BTH9BeHs4lWFpsUdJmrj0GjGoM9DCH/6xdPHQSWKpDptFu+06htBB
+-zyr2chX5RMjlPxApqtz59YJaHLNhI/nABIAJdEvAgG3CAiYHB4G+X5kQwIYryJIt
+-IeD8oerxNtNOVzunGL/QvYyiLB9EcDEBfPUIlriPCpTFz7r/GCLO2wX3y0u6m631
+-rh/tVRPMzWTSd4HjJiBQZU/d2bVvdOKKY12b1ieai/QiaO7HjgrcVAgWLwJB8XKr
+-QkXIo6W4uZv+W0YVTVQ5lPfwdNY6eQ1ZWPnqIOoczAZtFbs3zdBobgoIjyQ6cEgq
+-fgRsIjJmLVYq39F2oDX7bLdUK5UaPgHWGbNi07cOIn0hqo6YNCw1YaQikUw4qfBb
+-golYKoSV73/M6IVWlTjuzP6CRDRHY80epQjA3FR9P7ToT2VgcsG+pKxoYjZxotGm
+-/E4PEEl+9lxNN9IXR4XuEzWSGTOiNUZ+iVOJIyNQN5tC8k6yYr08s12b9LVzvG+q
+-Ro/bD/3UNaDwfujoSNgwKelZPBZmSkJIUECNDXE2i4hr6WqoJu7ZhpO5f/iU5d+i
+-Ea0bbSne50zlYoIMIa7YG01zgI5Y+sV8BWSwwK+FaH5dORjpRUVat/yIw/Qx8VZ+
+-f9RIfMnOShf5zvXIX8pF+Cayf8nPk4X8rhwrd+gL2cthHlYa58DkfKpJ4FxxRItJ
+-mQ01K29PuQPYBdTXN0A8jurxQgETdM2R0JrLCnDOEleshUJqdsqC69Le5Sn5ucui
+-ZWqxHjm+ycF4OAO99oq1T9QDyUCtIkMXPpf982KYVyzEbNw9hEr5/0CZdCaMEL4M
+-gecBM9rpYeWy0ndmZ/Y9rBdTT6+en2WnONKQj3nCgL8e59y9S1VG+sgQ2LwQ2nxJ
+-Mj2CeFi4B4D+2JdqyDKRFXfGKmzLIWW5Xw7/rrnMc7NtWZjRmUkvAOk3ILC81AmY
+-QPCEuqju5q9hasKfIDBnB7/eNscAvf23Aa/P3A0NBTPcTko+M+Pkpc82m4eXx1Aw
+-MfpfaIcfgPI4LEo+d8IfT0zcPNDuH9ACCcYa8/4q+PnKCmOsxgZ9wGpRHOQ2QfLR
+-qTus6c0l9zab8EWJZBnQvuacUecU64OAryP3QAWZl/NerHsKZ/i9ZIDXtDIscCHl
+-Yylu68l+vBZmfD455QN3iPVqSm4valJTGZnk40STtf8qLAuXdVhbyI921yGIz63n
+-dcRx9+wd9M3VQqmvbrri8FuavTn9/uMMpKeOeR3AIhci8EJdLxhvz2A3+w9cxIO+
+-Imj0syk5TWH0c3menzkYe2cO4P8jqBsb+QRdNcA2+YSTpEsvS7Tqvogl/RWnv7r4
+------END RSA PRIVATE KEY-----
++-----BEGIN ENCRYPTED PRIVATE KEY-----
++MIIFNTBfBgkqhkiG9w0BBQ0wUjAxBgkqhkiG9w0BBQwwJAQQp0Dm+era1oFur1lb
++QJ/FZgICCAAwDAYIKoZIhvcNAgkFADAdBglghkgBZQMEASoEELQX8a3XnitCSV89
++dLLQbJcEggTQfzitc3jwkngqBWCeySsBksAICuo5VGBzOmQDRdko3ZWve+CVmMgZ
++Ro0aVOtar6rUOZqgWGcJ4KFteYQ3M1H6fbAfxntfMl+rMK9P1Ao+EKbq7RZG7ere
++OxCh0kCbabujfZemfhen2Tv7D5FJxDLOoz1p3VaAanagauJnjrItGCYdrwSOXf0X
++u1whyta/klrv37T+dyqOwBHRK1rIZzSiAfGWW7djXtRVxcXcU501EgiSJcVTBVw/
++fOpo5GXRnM4VcE8FKHMQEdsjfzR9DzUnZ7AjRknkRtiQVaxhWRkNIeU2aUKo17va
++B+9yKyLs2SFCcu1suPKPTEPwPBtiQTbv13jzQq9zOgtgwPAWLdalNFtLttnh+mxw
++0F8EcLAaZuc2DorkZrkd1XxZE+six+5GlJ2dsHBIEH1FFDSZzPpzaywCwp4cbQ1I
++3H1syS0TExrcUIlF9ztCeoDG81YDBZk3sED/TOZ/E8xqB9T6KQdlL0tlOJOPTcDQ
++ZJcyrW/PS+hb+EpjZIvFBAkhWI4KEVLlJwsjc0F5mFchBqx1PLKRMZ3xyqRMvERU
++uA4kwQBLeqKQCdOKcKJofd4Kw5m32GcOwjibvb680DbAmF7QMGksm2khqe79cQyN
++HHJ334COVkSPArC2rYdoH2MXtYU8MCx5jOESWxDYa9bBoCYI7puru7UzaqH9Kd+5
++UmypTX2sjy0Kwa5SoAcdf/vZ6zVqkt42zgmmatkjysHQVjarbsnbcRP8vkjddROj
++IxCCAO7o7rLE0+NRKt2y2N9oVUP8/LRVs96OlOro/lJNaqO5pNg18yHAzCaAg4yU
++XB6HDbvVe59YOykhWknLBGfYkIYdVJrrKTXdJ727o41qIErbfHuQm03LNfw4oGtf
++naKMlYc0ZTVR+Zrsvw8ykWO0ThGQhqubLlpY5cpCRDxvmFajlVnWKKoplAFziKI0
++FqEKxDgZ8BUliGOiJzwb20DjkmvUFuTub5YSfMPAYJZJpkvGfjk3OPqvSTDsnBkP
++GOwbPttXjLu5FiZjZSNT7L4xdia4p+wZ7+enV/EhqvG8pe5rxyTOMOfET6m8R7GU
++40RVGuAQ+23Lu4BFRFL1ARfMJgM67taJ7i6PqFgW9XFCWy46OObmoAf8894pzASv
++vbQNb5z2vZIgva4ygX9wGiMm3zajVx2GRrGqgofuB9lnM78D+VE9WMtDCfFnQYug
++HuNxCcX44NuGpXUOlqWMf3tr+6aUxHQ2IUBFFGaGZb2f5tXT31/HAzeKtJz3JzAQ
++2QA5kgWpqA01ib8l1uEN4vIS2EvIOoHFhK+lofgCM/l2uTSa0cY0ybQQ6MNF1L1t
++vjZjeenp/wTZyD8GXjVCw7eUMLgQZA+YFlX5Z3ftcvCi+kesbZ204VhCdhelWUch
++Z8evu4zldrXgS/9kBQ9JF0ZBGDx9wtc31KMrVRnC0FssS1+SLedNxm2fjhKmiAoJ
++XFcEvlv7MCLwPIPaOXTzCbf3UQoSg2TunVZm7gNjV12i7EhtI2BpifyLBTGL8srT
++/o3i2NMWffgNwQyAAqXnEnEI0EK3T/ubf4gtED6JSpu6aLv2GENPotT4459MQpzq
++R+lByOxA5xZjTDcspYu1kIeWPyflbjmOSZBYL09ODaZCCY3V+78ePvs=
++-----END ENCRYPTED PRIVATE KEY-----
+
+diff --git a/test/rubygems/private_ec_key.pem b/test/rubygems/private_ec_key.pem
+--- a/test/rubygems/private_ec_key.pem
++++ b/test/rubygems/private_ec_key.pem
+@@ -1,9 +1,8 @@
+------BEGIN EC PRIVATE KEY-----
+-Proc-Type: 4,ENCRYPTED
+-DEK-Info: AES-256-CBC,4107F98A374CB8EC18F1AA4EA4B6A0DB
+-
+-BRklFxJGcz7gqQYxek8TZkt8qbPhB0FSR6nyw3SYuio/2tlT9ohs74mlK3EbG9Lt
+-Y4OquJbksBFmoB7fIoM4vnuIZ0Eoz2ooxn9tjhBtqJ3mVscYXwZmA3UDUWDMlviQ
+-Fu37OpikQv4TFA1jlmUK0LM8xmUCfUeLl0kHD17lFsz2gkO2kwg8mn/YUMOIaDOu
+-EnnmxbAwnZBpemQkQfpTt2mYL9gu3CcMt5gokBuGDxY=
+------END EC PRIVATE KEY-----
++-----BEGIN ENCRYPTED PRIVATE KEY-----
++MIH0MF8GCSqGSIb3DQEFDTBSMDEGCSqGSIb3DQEFDDAkBBBU1igDNAosvZWF2lAW
++DcFhAgIIADAMBggqhkiG9w0CCQUAMB0GCWCGSAFlAwQBKgQQytJePmxny52ifbJL
++Z+1bVQSBkL/0pZ69RAlWituocqM7hMFue0Xp+NWB8M2sn+b2uoMiA41ERosaOTk/
++emURkay/BIWKimOp82H6ZULPtvctSQ7Cy+xSuAQ3ewJwMCR6QPp9A9HyVv+CtbnC
++uAnj+iYt11xUVvCIPMcyAqAhDVPXilmWCskyfAAc479CR8MimhInvV9Y1fTua4gW
++ZEnPQsrb3Q==
++-----END ENCRYPTED PRIVATE KEY-----

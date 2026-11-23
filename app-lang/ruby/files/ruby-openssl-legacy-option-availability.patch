@@ -1,0 +1,13 @@
+Expose the legacy SSL options only if the provider supplies them.
+
+--- a/ext/openssl/ossl_ssl.c
++++ b/ext/openssl/ossl_ssl.c
+@@ -3091,4 +3091,8 @@ Init_ossl_ssl(void)
++#ifdef SSL_OP_MICROSOFT_BIG_SSLV3_BUFFER
+     /* Deprecated in OpenSSL 1.1.0. */
+     rb_define_const(mSSL, "OP_MICROSOFT_BIG_SSLV3_BUFFER", ULONG2NUM(SSL_OP_MICROSOFT_BIG_SSLV3_BUFFER));
++#endif
++#ifdef SSL_OP_MSIE_SSLV2_RSA_PADDING
+     /* Deprecated in OpenSSL 0.9.7h and 0.9.8b. */
+     rb_define_const(mSSL, "OP_MSIE_SSLV2_RSA_PADDING", ULONG2NUM(SSL_OP_MSIE_SSLV2_RSA_PADDING));
++#endif

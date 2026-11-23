@@ -11,6 +11,12 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 IUSE="debug ipv6 jemalloc socks5 static-libs"
+PATCHES=(
+	"${FILESDIR}/ruby-openssl-legacy-option-availability.patch"
+	"${FILESDIR}/ruby-socket-without-ipv6.patch"
+	"${FILESDIR}/rubygems-encrypted-key-use-pkcs8.patch"
+	"${FILESDIR}/rubygems-write-encrypted-keys-as-pkcs8.patch"
+)
 
 src_prepare() {
 	qa-policy-configure

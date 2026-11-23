@@ -13,7 +13,7 @@ RDEPEND=""
 DESCRIPTION="a command-line program to download videos from YouTube.com and a few more sites"
 HOMEPAGE="https://github.com/yt-dlp/yt-dlp"
 
-SNAPSHOT=412e7f0a4b0588fe884a02b344ac66a06538475b
+SNAPSHOT=1507b26936b46d8613b3df197184a1fa1530afac
 SRC_URI="https://github.com/yt-dlp/yt-dlp/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/yt-dlp-${SNAPSHOT}"
 

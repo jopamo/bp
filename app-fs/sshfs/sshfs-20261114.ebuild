@@ -6,7 +6,7 @@ inherit meson python-any-r1
 
 DESCRIPTION="Fuse-filesystem utilizing the sftp service"
 HOMEPAGE="https://github.com/libfuse/sshfs"
-SNAPSHOT=ab648e583fe6490f910ec37414408a01fc772227
+SNAPSHOT=ba33bab77006cfb81cbd6ecc44a8fc2728d24793
 SRC_URI="https://github.com/libfuse/sshfs/archive/${SNAPSHOT}.tar.gz -> sshfs-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/sshfs-${SNAPSHOT}"
 

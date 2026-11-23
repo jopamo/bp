@@ -1,7 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
-SNAPSHOT=7384c8babcaa411a0014bf223068a633d7bfa899
-SNAPSHOT2="7426bb2fd765b7e3a9d37e61f30875ca76fa6098"
+SNAPSHOT=97027f879ba9a36dbe594720d4710818536e5433
+SNAPSHOT2="2d14e13c296a5a0a8c17e6d71fa7f7cedb0292e7"
 
 inherit flag-o-matic xdg
 
@@ -68,7 +68,9 @@ src_prepare() {
 
 	default
 
-	"${WORKDIR}/wine-staging-${SNAPSHOT2}/staging/patchinstall.py" \
+	# Keep git apply from discovering a repository above the source archive.
+	GIT_CEILING_DIRECTORIES="${WORKDIR}" \
+		"${WORKDIR}/wine-staging-${SNAPSHOT2}/staging/patchinstall.py" \
 		DESTDIR="${S}" --all --no-autoconf || die
 	# Regenerate for both local and staging patches, and check for failures.
 	autoreconf -f || die

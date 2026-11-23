@@ -6,7 +6,7 @@ inherit user
 
 DESCRIPTION="High-performance HTTP server and reverse proxy"
 HOMEPAGE="https://nginx.org"
-SNAPSHOT=58c661b69f3ffbb8fb6d4a2f37087dbf914d0571
+SNAPSHOT=2df4366ef5e380dd7d30f2ff5261ef6bc47252c8
 SRC_URI="https://github.com/nginx/nginx/archive/${SNAPSHOT}.tar.gz -> nginx-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/nginx-${SNAPSHOT}"
 
@@ -14,10 +14,8 @@ LICENSE="BSD-2 BSD SSLeay MIT GPL-2 GPL-2+"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 IUSE="
-	# 'minimal' - aim for a lightweight reverse-proxy-only build
 	minimal
 
-	# Common flags
 	aio
 	debug
 	ssl
@@ -39,6 +37,11 @@ IUSE="
 "
 
 RESTRICT="test"
+
+PATCHES=(
+	"${FILESDIR}/nginx-k1g4-platform.patch"
+	"${FILESDIR}/nginx-ssl-conf-value-types.patch"
+)
 
 pkg_setup() {
 	NGINX_HOME="/var/lib/nginx"
@@ -179,7 +182,7 @@ src_configure() {
 
 	# Finally, run configure
 	ECONF_SOURCE="${S}" \
-		"${S}/auto/configure" "${myconf[@]}"
+		"${S}/auto/configure" "${myconf[@]}" || die "nginx configure failed"
 }
 
 src_compile() {

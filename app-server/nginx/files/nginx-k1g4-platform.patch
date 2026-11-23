@@ -1,0 +1,20 @@
+Recognize k1g4 as using the same kernel interfaces without changing uname.
+
+--- a/auto/os/conf
++++ b/auto/os/conf
+@@ -14 +14 @@ case "$NGX_PLATFORM" in
+-    Linux:*)
++    Linux:* | k1g4:*)
+--- a/auto/unix
++++ b/auto/unix
+@@ -188,3 +188,7 @@ ngx_feature_test="fcntl(0, F_SETFL, O_DIRECT);"
+-if [ $ngx_found = yes -a "$NGX_SYSTEM" = "Linux" ]; then
+-    have=NGX_HAVE_ALIGNED_DIRECTIO . auto/have
+-fi
++if [ "$ngx_found" = yes ]; then
++    case "$NGX_SYSTEM" in
++        Linux | k1g4)
++            have=NGX_HAVE_ALIGNED_DIRECTIO . auto/have
++        ;;
++    esac
++fi

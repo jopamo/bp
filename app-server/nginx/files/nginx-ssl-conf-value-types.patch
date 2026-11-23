@@ -1,0 +1,10 @@
+Require SSL configuration value types before accepting SSL_CONF commands.
+Vesk exposes SSL_CONF_FLAG_FILE but does not implement SSL_CONF_cmd.
+Use nginx's existing rejection path when the required API is unavailable.
+
+--- a/src/event/ngx_event_openssl.c
++++ b/src/event/ngx_event_openssl.c
+@@ -1880 +1880,2 @@ ngx_ssl_conf_commands(ngx_conf_t *cf, ngx_ssl_t *ssl, ngx_array_t *commands)
+-#ifdef SSL_CONF_FLAG_FILE
++#if defined(SSL_CONF_FLAG_FILE) && defined(SSL_CONF_TYPE_FILE)                 \
++    && defined(SSL_CONF_TYPE_DIR)

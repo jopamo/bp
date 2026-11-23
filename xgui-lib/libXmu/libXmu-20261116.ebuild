@@ -4,7 +4,7 @@ inherit autotools qa-policy
 
 DESCRIPTION="X.Org Xmu library"
 HOMEPAGE="https://www.x.org/wiki/"
-SNAPSHOT=ee21c3088aad164207d24bb516756adfdc0642e6
+SNAPSHOT=c3285f5ab8eb259ebac710fde2799730d59625f8
 SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libXmu/-/archive/${SNAPSHOT}/libXmu-${SNAPSHOT}.tar.bz2 -> libXmu-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/libxmu-${SNAPSHOT}"
 
@@ -19,6 +19,8 @@ DEPEND=">=xgui-lib/libXt-1.1.4
 	>=xgui-lib/libX11-1.6.2
 	xgui-tools/xorgproto"
 BDEPEND="doc? ( app-tex/docbookz )"
+
+PATCHES+=( "${FILESDIR}/test-tap-log-without-awk-command-pipes.patch" )
 
 src_prepare() {
 	eautoreconf

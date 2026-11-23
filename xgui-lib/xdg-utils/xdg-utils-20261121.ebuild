@@ -6,7 +6,7 @@ PROPERTIES+=" source-payload"
 
 DESCRIPTION="Portland utils for cross-platform/cross-toolkit/cross-desktop interoperability"
 HOMEPAGE="https://www.freedesktop.org/wiki/Software/xdg-utils/"
-SNAPSHOT=583feca1f55abaa636edae2428abc6d58d7a5ffd
+SNAPSHOT=e6236d667c4fdbb5f86bb13feea2193e399448b9
 SRC_URI="https://gitlab.freedesktop.org/xdg/xdg-utils/-/archive/${SNAPSHOT}/xdg-utils-${SNAPSHOT}.tar.bz2 -> xdg-utils-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/xdg-utils-${SNAPSHOT}"
 

@@ -1,0 +1,12 @@
+--- a/src/Makefile.am
++++ b/src/Makefile.am
+@@ -50,7 +50,8 @@
+ scanner.c: scanner.l
+
+ af_protos.h:
+-	 echo '#include <netinet/in.h>' | $(CC) $(CPPFLAGS) -E -dD - | LC_ALL=C  sed  -n -e "/IPPROTO_MAX/d"  -e "s/^\#define[ \\t]\\+IPPROTO_\\([A-Z0-9_]\\+\\)\\(.*\\)$$/AA_GEN_PROTO_ENT(\\UIPPROTO_\\1, \"\\L\\1\")/p" > $@
++	 echo '#include <netinet/in.h>' | $(CC) $(CPPFLAGS) -E -dD - | \
++	 LC_ALL=C $(AWK) '$$1 == "#define" && $$2 ~ /^IPPROTO_[A-Z0-9_]+$$/ && $$2 != "IPPROTO_MAX" { printf "AA_GEN_PROTO_ENT(%s, \"%s\")\n", $$2, tolower(substr($$2, 9)) }' > $@
+
+ lib_LTLIBRARIES = libapparmor.la
+ noinst_HEADERS = grammar.h parser.h scanner.h af_protos.h private.h PMurHash.h

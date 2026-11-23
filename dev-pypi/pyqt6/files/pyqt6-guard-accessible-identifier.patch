@@ -1,0 +1,19 @@
+Guard the accessible identifier accessors with the same feature as
+the other QWidget accessibility methods. Qt declares all of them
+only when built with accessibility support.
+
+--- a/sip/QtWidgets/qwidget.sip
++++ b/sip/QtWidgets/qwidget.sip
+@@ -515,10 +515,12 @@
+     void setWindowFlag(Qt::WindowType, bool on = true);
+     QScreen *screen() const;
+     void setScreen(QScreen *);
++%If (PyQt_Accessibility)
+ %If (Qt_6_9_0 -)
+     QString accessibleIdentifier() const;
+ %End
+ %If (Qt_6_9_0 -)
+     void setAccessibleIdentifier(const QString &identifier);
+ %End
++%End
+ };

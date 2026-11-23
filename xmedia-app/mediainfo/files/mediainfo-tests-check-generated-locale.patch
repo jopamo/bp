@@ -1,0 +1,8 @@
+Localedef can leave an empty output directory when the locale source
+is absent. Only test a generated locale if its character data exists.
+
+--- a/test/helpers.sh
++++ b/test/helpers.sh
+@@ -51 +51 @@ find_locale() {
+-        if [ -d "${temp_path}/locales/${source}.${charmap}" ] ; then
++        if [ -r "${temp_path}/locales/${source}.${charmap}/LC_CTYPE" ] ; then

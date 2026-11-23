@@ -1,0 +1,9 @@
+--- a/cupsfilters/test-texttopdf-font-coverage.sh
++++ b/cupsfilters/test-texttopdf-font-coverage.sh
+@@ -68,5 +68,5 @@
+   <match target="pattern">
+     <test name="family"><string>monospace</string></test>
+-    <edit name="family" mode="prepend" binding="strong">
++    <edit name="family" mode="prepend_first" binding="strong">
+       <string>${FONT_FAMILY}</string>
+     </edit>

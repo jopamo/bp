@@ -1,0 +1,103 @@
+# Distributed under the terms of the GNU General Public License v2
+
+inherit linux-info autotools flag-o-matic qa-policy
+
+DESCRIPTION="Tool to setup encrypted devices with dm-crypt"
+HOMEPAGE="https://gitlab.com/cryptsetup/cryptsetup/blob/master/README.md"
+SNAPSHOT=b16f041ce122275b28e500cbafb94dedbcc9e6df
+SRC_URI="https://gitlab.com/cryptsetup/cryptsetup/-/archive/${SNAPSHOT}/cryptsetup-${SNAPSHOT}.tar.bz2"
+S="${WORKDIR}/cryptsetup-${SNAPSHOT}"
+
+LICENSE="GPL-2+"
+SLOT="0"
+KEYWORDS="amd64 arm64"
+
+IUSE="argon2 static static-libs udev urandom"
+
+LIB_DEPEND="
+	app-core/util-linux[static-libs(+)]
+	app-fs/lvm2[static-libs(+)]
+	lib-core/libgpg-error[static-libs(+)]
+	lib-core/popt[static-libs(+)]
+	lib-dev/json-c[static-libs(+)]
+	virtual/ssl[static-libs(+)]
+	argon2? ( app-crypto/vesk[static-libs(+)] )
+	udev? ( app-core/systemd[static-libs(+)] )"
+
+RDEPEND="static-libs? ( ${LIB_DEPEND} )
+	${LIB_DEPEND//\[static-libs\(+\)\]}"
+DEPEND="${RDEPEND}
+	app-dev/pkgconf
+	static? ( ${LIB_DEPEND} )"
+
+pkg_setup() {
+	local CONFIG_CHECK="~DM_CRYPT ~CRYPTO ~CRYPTO_CBC ~CRYPTO_SHA256"
+	local WARNING_DM_CRYPT="CONFIG_DM_CRYPT:\tis not set (required for cryptsetup)\n"
+	local WARNING_CRYPTO_SHA256="CONFIG_CRYPTO_SHA256:\tis not set (required for cryptsetup)\n"
+	local WARNING_CRYPTO_CBC="CONFIG_CRYPTO_CBC:\tis not set (required for kernel 2.6.19)\n"
+	local WARNING_CRYPTO="CONFIG_CRYPTO:\tis not set (required for cryptsetup)\n"
+	check_extra_config
+}
+
+src_prepare() {
+	replace-flags "-D_FORTIFY_SOURCE=3" "-D_FORTIFY_SOURCE=2"
+	# Autotools substitutes DEFAULT_LUKS2_LOCK_PATH, not the Meson-only
+	# DEFAULT_LUKS2_LOCK_PATH_UNQUOTED token shipped in this snapshot.
+	sed -i \
+		-e 's/@DEFAULT_LUKS2_LOCK_PATH_UNQUOTED@/@DEFAULT_LUKS2_LOCK_PATH@/' \
+		scripts/cryptsetup.conf.in || die
+	default
+	eautoreconf
+}
+
+src_configure() {
+	qa-policy-configure
+	use elibc_musl && export ac_cv_func_dlvsym=no
+	local myconf=(
+		--disable-asciidoc
+		--disable-internal-argon2
+		--disable-nls
+		--disable-rpath
+		--enable-shared
+		--with-crypto_backend="openssl"
+		--with-tmpfilesdir="${EPREFIX}"/usr/lib/tmpfiles.d
+	    --disable-ssh-token
+		$(use_enable !urandom dev-random)
+		$(use_enable argon2 libargon2)
+		$(use_enable static static-cryptsetup)
+		$(use_enable static-libs static)
+		$(use_enable udev)
+	)
+	ECONF_SOURCE=${S} econf "${myconf[@]}"
+}
+
+src_test() {
+	if [[ ! -e /dev/mapper/control ]] ; then
+		ewarn "No /dev/mapper/control found -- skipping tests"
+		return 0
+	fi
+
+	local p
+	for p in /dev/mapper /dev/loop* ; do
+		addwrite ${p}
+	done
+
+	default
+}
+
+src_install() {
+	default
+	sed -i -E '/^Requires\.private:/ {
+		s/[[:blank:]]+$//
+		s/[[:blank:]]+/, /g
+		s/^Requires\.private:, /Requires.private: /
+	}' \
+		"${ED}"/usr/lib/pkgconfig/libcryptsetup.pc || die
+	qa-policy-install
+
+	if use static ; then
+		mv "${ED%}"/usr/bin/cryptsetup{.static,} || die
+		mv "${ED%}"/usr/bin/veritysetup{.static,} || die
+		use reencrypt && { mv "${ED%}"/usr/bin/cryptsetup-reencrypt{.static,} || die ; }
+	fi
+}

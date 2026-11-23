@@ -1,0 +1,101 @@
+# Distributed under the terms of the GNU General Public License v2
+
+inherit cmake qa-policy toolchain-funcs user
+
+DESCRIPTION="High-performance inference of large language models (llama.cpp)"
+HOMEPAGE="https://github.com/ggml-org/llama.cpp"
+SNAPSHOT=f5e6915c28f10330885fcb9243a93ae98d3115ab
+UI_VERSION=b12651
+SRC_URI="
+	https://github.com/ggml-org/llama.cpp/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz
+	https://github.com/ggml-org/llama.cpp/releases/download/${UI_VERSION}/llama-${UI_VERSION}-ui.tar.gz
+"
+S="${WORKDIR}/llama.cpp-${SNAPSHOT}"
+
+LICENSE="MIT"
+SLOT="0"
+KEYWORDS="amd64 arm64"
+
+IUSE="cuda systemd"
+
+DEPEND="
+	cuda? ( bin/nvidia-cuda )
+	virtual/ssl
+	systemd? ( app-core/systemd )
+"
+RDEPEND="${DEPEND}"
+
+PATCHES=( "${FILESDIR}/httplib-libressl-renegotiation.patch" )
+
+src_prepare() {
+	cmake_src_prepare
+	mv "${WORKDIR}/llama-${UI_VERSION}" ui/apps/chat/dist || die
+}
+
+src_configure() {
+	addpredict "/proc/self/task"
+	qa-policy-configure
+	if use cuda && tc-is-gcc && [[ $(gcc-major-version) == 16 ]]; then
+		ewarn "Allowing GCC 16 for nvcc; this host compiler is not supported by CUDA 13.3."
+		export CUDAFLAGS="${CUDAFLAGS:+${CUDAFLAGS} }-allow-unsupported-compiler"
+	fi
+
+	local mycmakeargs=(
+		-D GGML_CUDA=$(usex cuda ON OFF)
+		-D LLAMA_OPENSSL=ON
+		-D LLAMA_BUILD_UI=OFF
+		-D LLAMA_USE_PREBUILT_UI=OFF
+		-D LLAMA_BUILD_TESTS=OFF
+		-D LLAMA_TESTS_INSTALL=OFF
+	)
+
+	cmake_src_configure
+}
+
+src_compile() {
+	cmake_src_compile
+
+	local ui_build_dir="${BUILD_DIR}/ui/apps/chat"
+	if ! grep -Eq '^#define LLAMA_UI_HAS_ASSETS 1$' "${ui_build_dir}/ui.h"; then
+		eerror "llama-server built without embedded Web UI assets"
+		if [[ -f ${ui_build_dir}/ui.h ]]; then
+			eerror "ui/apps/chat/ui.h:"
+			sed -n '1,40p' "${ui_build_dir}/ui.h" >&2 || true
+		fi
+		if [[ -d ${ui_build_dir}/dist ]]; then
+			eerror "ui/apps/chat/dist contents:"
+			find "${ui_build_dir}/dist" -maxdepth 3 -type f | sort >&2 || true
+		fi
+		if [[ -n ${COREPKG_LOG_FILE} && -f ${COREPKG_LOG_FILE} ]]; then
+			eerror "Recent UI provisioning lines from build log:"
+			grep -nE '(^-- UI:|stderr:|npm|llama-ui-assets|ui/apps/chat/dist)' "${COREPKG_LOG_FILE}" | tail -n 160 >&2 || true
+		fi
+		die "llama-server built without embedded Web UI assets"
+	fi
+}
+
+src_install() {
+	cmake_src_install
+
+	if use systemd; then
+		insinto /usr/lib/systemd/system
+		insopts -m 0644
+		doins "${FILESDIR}"/llama-server.service
+	fi
+
+	insinto /etc/llama-server
+	insopts -m 0644
+	doins "${FILESDIR}"/llama-server.env
+
+	newbin convert_hf_to_gguf.py convert_hf_to_gguf
+	newbin convert_hf_to_gguf_update.py convert_hf_to_gguf_update
+	newbin convert_llama_ggml_to_gguf.py convert_llama_ggml_to_gguf
+	newbin convert_lora_to_gguf.py convert_lora_to_gguf
+
+	qa-policy-install
+}
+
+pkg_preinst() {
+	enewgroup llama 1338
+	enewuser llama 1338 -1 /opt/llm-models llama,video
+}

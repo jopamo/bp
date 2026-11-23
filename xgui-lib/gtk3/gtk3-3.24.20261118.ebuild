@@ -1,0 +1,118 @@
+# Distributed under the terms of the GNU General Public License v2
+
+BRANCH_NAME="gtk-$(ver_cut 1)-$(ver_cut 2)"
+
+inherit meson xdg
+
+DESCRIPTION="Multi-platform toolkit for creating graphical user interfaces"
+HOMEPAGE="https://www.gtk.org/"
+SNAPSHOT=f90db0289333c52b86b08060d6c5ee49742adb28
+SRC_URI="https://github.com/GNOME/gtk/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/gtk-${SNAPSHOT}"
+
+LICENSE="LGPL-2+"
+SLOT="$(ver_cut 1)"
+KEYWORDS="amd64 arm64"
+
+IUSE="cups introspection test wayland X xinerama"
+
+REQUIRED_USE="
+
+	xinerama? ( X )
+"
+
+DEPEND="
+	lib-core/glib
+	xgui-desktop/shared-mime-info
+	xgui-lib/at-spi2-core
+	xgui-lib/cairo[glib,svg,X?]
+	xgui-lib/pigment
+	xgui-lib/pango[introspection?]
+	xmedia-lib/libepoxy[X(+)?]
+	cups? ( lib-print/cups )
+	introspection? ( lib-dev/gobject-introspection )
+	wayland? ( xgui-lib/wayland-protocols )
+	X? (
+		xgui-lib/libX11
+		xgui-lib/libXcomposite
+		xgui-lib/libXcursor
+		xgui-lib/libXdamage
+		xgui-lib/libXext
+		xgui-lib/libXfixes
+		xgui-lib/libXi
+		xgui-lib/libXrandr
+		xinerama? ( xgui-lib/libXinerama )
+	)
+"
+BDEPEND="test? (
+	xgui-icontheme/adwaita-icon-theme
+	X? ( xgui-tools/xvfb-run )
+)"
+
+PDEPEND="
+	xgui-icontheme/adwaita-plus
+"
+
+src_configure() {
+	local emesonargs=(
+		$(meson_use X x11_backend)
+		$(meson_use wayland wayland_backend)
+		$(usex xinerama "-Dxinerama=yes" "-Dxinerama=no" )
+		$(usex cups "-Dprint_backends=cups,file" "-Dprint_backends=file" )
+		$(meson_use introspection)
+		-D demos=false
+		-D examples=false
+		-D broadway_backend=false
+		-D cloudproviders=false
+		-D tracker3=false
+		-D colord=no
+		-D gtk_doc=false
+		-D man=true
+		)
+		meson_src_configure
+}
+
+src_test() {
+	# Use the build root icon theme, not the desktop session configuration.
+	local -x XDG_DATA_DIRS="${GTK3_TEST_DATA_DIRS:-${BROOT%/}/usr/share}"
+
+	if use X; then
+		GDK_BACKEND=x11 xvfb-run -a meson test -C "${BUILD_DIR}" \
+			--print-errorlogs --num-processes "$(makeopts_jobs "${MAKEOPTS}")" \
+			|| die "GTK tests failed"
+	else
+		meson_src_test
+	fi
+}
+
+src_install() {
+	meson_src_install
+
+	insopts -m 0755
+	insinto /etc/gtk-$(ver_cut 1).0
+	doins "${FILESDIR}"/settings.ini
+
+	dosym -r /usr/include/gtk-$(ver_cut 1).0/gdk /usr/include/gdk
+	dosym -r /usr/include/gtk-$(ver_cut 1).0/gtk /usr/include/gtk
+}
+
+pkg_preinst() {
+	xdg_pkg_preinst
+
+	# Make immodules.cache belongs to gtk+ alone
+	local cache="usr/lib/gtk-$(ver_cut 1).0/$(ver_cut 1).0.0/immodules.cache"
+
+	if [[ -e ${EROOT}/${cache} ]]; then
+		cp "${EROOT}"/${cache} "${ED}"/${cache} || die
+	else
+		touch "${ED}"/${cache} || die
+	fi
+}
+
+pkg_postrm() {
+	xdg_pkg_postrm
+
+	if [[ -z ${REPLACED_BY_VERSION} ]]; then
+		rm -f "${EROOT}"/usr/lib/gtk-$(ver_cut 1).0/$(ver_cut 1).0.0/immodules.cache
+	fi
+}

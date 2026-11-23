@@ -1,6 +1,11 @@
 --- a/util/configlexer.lex
 +++ b/util/configlexer.lex
-@@ -64,49 +64 @@
+@@ -61,55 +61,7 @@
+-	inc_toplevel = 0;
++	inc_toplevel = 0;
+ }
+-
++
 -static void config_start_include(const char* filename, int toplevel)
 -{
 -	FILE *input;
@@ -51,7 +56,16 @@
 -	yy_switch_to_buffer(yy_create_buffer(input, YY_BUF_SIZE));
 -}
 +static void config_start_include(const char* filename, int toplevel);
-@@ -751,0 +704,50 @@
+-
++
+ static void config_start_include_glob(const char* filename, int toplevel)
+ {
+@@ -750,3 +702,53 @@
+-	}
++	}
+-
++
+ %%
 +
 +static void config_start_include(const char* filename, int toplevel)
 +{

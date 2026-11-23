@@ -1,0 +1,8 @@
+Leave man page compression to Corepkg. Preserve the install error check.
+
+--- a/Makefile
++++ b/Makefile
+@@ -296,2 +296 @@ define install_pages
+-		install -m 644 $$page $$man/ && \
+-		gzip -n -f -9 $$man/$${page##*/} || exit 1; \
++		install -m 644 $$page $$man/ || exit 1; \

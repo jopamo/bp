@@ -1,0 +1,159 @@
+# Distributed under the terms of the GNU General Public License v2
+
+inherit flag-o-matic toolchain-funcs cmake
+
+DESCRIPTION="Cross-platform build system generator"
+HOMEPAGE="https://cmake.org/"
+SRC_URI="https://github.com/Kitware/CMake/releases/download/v${PV}/${P}.tar.gz"
+
+LICENSE="CMake"
+SLOT="0"
+KEYWORDS="amd64 arm64"
+
+IUSE="bootstrap vim"
+
+DEPEND="
+    !bootstrap? (
+    app-compression/libarchive
+    app-dev/pkgconf
+    app-net/curl
+    lib-core/expat
+    lib-core/zlib
+    lib-dev/libuv
+    )
+"
+
+cmake_src_bootstrap() {
+    # Cleanup args to extract only JOBS.
+    # Because bootstrap does not know anything else.
+    echo ${MAKEOPTS} | egrep -o '(\-j|\-\-jobs)(=?|[[:space:]]*)[[:digit:]]+' > /dev/null
+    if [ $? -eq 0 ]; then
+        par_arg=$(echo ${MAKEOPTS} | egrep -o '(\-j|\-\-jobs)(=?|[[:space:]]*)[[:digit:]]+' | tail -n1 | egrep -o '[[:digit:]]+')
+        par_arg="--parallel=${par_arg}"
+    else
+        par_arg="--parallel=1"
+    fi
+
+    # disable running of cmake in boostrap command
+    sed -i \
+        -e '/"${cmake_bootstrap_dir}\/cmake"/s/^/#DONOTRUN /' \
+        bootstrap || die "sed failed"
+
+    tc-export CC CXX LD
+
+    # bootstrap script isn't exactly /bin/sh compatible
+    ${CONFIG_SHELL:-sh} ./bootstrap \
+        --prefix="${T}/cmakestrap/" \
+        ${par_arg} \
+        || die "Bootstrap failed"
+}
+
+cmake_src_test() {
+    pushd "${BUILD_DIR}" > /dev/null
+
+    local ctestargs
+    [[ -n ${TEST_VERBOSE} ]] && ctestargs="--extra-verbose --output-on-failure"
+
+    # Excluded tests:
+    #    BootstrapTest: we actualy bootstrap it every time so why test it.
+    #    BundleUtilities: bundle creation broken
+    #    CTest.updatecvs: which fails to commit as root
+    #    Fortran: requires fortran
+    #    Qt4Deploy, which tries to break sandbox and ignores prefix
+    #    RunCMake.CPack_RPM: breaks if app-compression/rpm is installed because
+    #        debugedit binary is not in the expected location
+    #    TestUpload, which requires network access
+    "${BUILD_DIR}"/bin/ctest ${ctestargs} \
+        -E "(BootstrapTest|BundleUtilities|CTest.UpdateCVS|Fortran|Qt4Deploy|RunCMake.CPack_RPM|TestUpload)" \
+        || die "Tests failed"
+
+    popd > /dev/null
+}
+
+src_prepare() {
+    replace-flags -O3 -O2
+    append-flags -fno-permissive
+    filter-flags -flto*
+
+    eapply "${FILESDIR}/cmake-implicit-link-fixtures.patch"
+    eapply "${FILESDIR}/cmake-k1g4-platform.patch"
+    cmake_src_prepare
+
+    # Test projects must retain the settings whose behavior they exercise.
+    find Tests -name CMakeLists.txt -exec \
+        sed -i 's/^#_cmake_modify_IGNORE //' {} + || die
+
+    # Rolling GCC snapshots can be identified by CMake but fail to publish
+    # CMAKE_CXX_STANDARD_COMPUTED_DEFAULT from the compiler-id probe.  Keep
+    # GNU C++ usable by falling back to CMake's own GNU default-standard table.
+    sed -i \
+        '/__compiler_check_default_language_standard(CXX 3.4 98 6.0 14 11.1 17)/i\
+if(NOT CMAKE_CXX_STANDARD_COMPUTED_DEFAULT OR NOT DEFINED CMAKE_CXX_EXTENSIONS_COMPUTED_DEFAULT)\
+  if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")\
+    if(NOT DEFINED CMAKE_CXX_EXTENSIONS_COMPUTED_DEFAULT)\
+      set(CMAKE_CXX_EXTENSIONS_COMPUTED_DEFAULT ON)\
+    endif()\
+    if(NOT CMAKE_CXX_STANDARD_COMPUTED_DEFAULT)\
+      if(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 11.1)\
+        set(CMAKE_CXX_STANDARD_COMPUTED_DEFAULT 17)\
+      elseif(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 6.0)\
+        set(CMAKE_CXX_STANDARD_COMPUTED_DEFAULT 14)\
+      elseif(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 3.4)\
+        set(CMAKE_CXX_STANDARD_COMPUTED_DEFAULT 98)\
+      endif()\
+    endif()\
+  endif()\
+endif()\
+' \
+        Modules/Compiler/GNU-CXX.cmake || die "GNU C++ default-standard fallback patch failed"
+
+    # Add gcc libs to the default link paths
+    sed -i \
+        -e "s|@GENTOO_PORTAGE_GCCLIBDIR@|${EPREFIX}/usr/${CHOST}/lib/|g" \
+        -e "s|@GENTOO_PORTAGE_EPREFIX@|${EPREFIX}/|g" \
+        Modules/Platform/{UnixPaths,Darwin}.cmake || die "sed failed"
+
+    # Change the stored type to long.
+    sed -i -E \
+        's/\bcurl_proxytype\s+HTTPProxyType\s*;/long HTTPProxyType;/' \
+        Source/CTest/cmCTestCurl.h || die "curl proxy member type patch failed"
+
+    if use bootstrap || ! has_version \>=${CATEGORY}/${PN}-3.10.0 ; then
+        CMAKE_MAKEFILE_GENERATOR=emake
+        CMAKE_BINARY="${S}/Bootstrap.cmk/cmake"
+        cmake_src_bootstrap
+    fi
+
+    grep -nH "curl_proxytype" Source/CTest/cmCTestCurl.h && die "Leftover curl_proxytype in header"
+}
+
+src_configure() {
+    local system_libs=$(usex bootstrap OFF ON)
+    local mycmakeargs=(
+        -DCMAKE_INSTALL_PREFIX="${EPREFIX}"/usr
+        -DCMAKE_DATA_DIR=/share/${PN}
+        -DSPHINX_MAN=OFF
+        -DSPHINX_HTML=OFF
+        -DCMAKE_USE_SYSTEM_LIBARCHIVE=${system_libs}
+        -DCMAKE_USE_SYSTEM_LIBRARY_BZIP2=${system_libs}
+        -DCMAKE_USE_SYSTEM_LIBRARY_CURL=${system_libs}
+        -DCMAKE_USE_SYSTEM_LIBRARY_EXPAT=${system_libs}
+        -DCMAKE_USE_SYSTEM_LIBRARY_LIBLZMA=${system_libs}
+        -DCMAKE_USE_SYSTEM_LIBRARY_ZLIB=${system_libs}
+        -DCMAKE_USE_SYSTEM_LIBUV=${system_libs}
+    )
+    use bootstrap && mycmakeargs+=( -DCMAKE_USE_OPENSSL=OFF )
+
+    cmake_src_configure
+}
+
+src_install() {
+    cmake_src_install
+
+    use vim || rm -r "${ED}"/usr/share/vim
+
+    rm -r "${ED}"/usr/doc || die
+
+    #lazy update mtime
+    find "${ED}"/usr/share -type f -exec touch {} +
+}

@@ -1,0 +1,63 @@
+The distro FFmpeg build does not include the optional libmp3lame
+encoder. Guard the tests that explicitly require MP3 output, using the
+same capability probe as the optional FLAC and Opus tests.
+
+--- a/tests/test_all.py
++++ b/tests/test_all.py
+@@ -21,6 +21,11 @@
+         return encoder_name in result.stdout
+     except FileNotFoundError:
+         return False
++
++
++requires_mp3_encoder = pytest.mark.skipif(
++    not _has_encoder("libmp3lame"), reason="libmp3lame encoder not available"
++)
+
+
+ def ffmpeg_normalize_call(args: List[str]) -> Tuple[str, str]:
+@@ -227,6 +232,7 @@
+         _, stderr = ffmpeg_normalize_call(["tests/test.mp4", "-v"])
+         assert "exists" in stderr
+
++    @requires_mp3_encoder
+     def test_in_place_overwrite(self, tmp_path):
+         # See issues #22 and #317.
+         test_file = tmp_path / "test.mp3"
+@@ -591,6 +597,7 @@
+         )
+         assert "does not support" in stderr
+
++    @requires_mp3_encoder
+     def test_ofmt_mp3(self):
+         ffmpeg_normalize_call(
+             [
+@@ -607,6 +614,7 @@
+         )
+         assert os.path.isfile("normalized/test.mp3")
+
++    @requires_mp3_encoder
+     def test_ofmt_mp3_auto_codec(self):
+         # Without -c:a, the codec is taken from the output format.
+         ffmpeg_normalize_call(
+@@ -630,10 +638,12 @@
+         )
+         assert "does not support" in stderr
+
++    @requires_mp3_encoder
+     def test_ext_mp3(self):
+         ffmpeg_normalize_call(["tests/test.mp4", "-ext", "mp3", "-c:a", "libmp3lame"])
+         assert os.path.isfile("normalized/test.mp3")
+
++    @requires_mp3_encoder
+     def test_ext_mp3_auto_codec(self):
+         # Without -c:a, the codec is taken from the output extension.
+         ffmpeg_normalize_call(["tests/test.mp4", "-ext", "mp3"])
+@@ -1447,6 +1457,7 @@
+         ffmpeg_normalize_call(["tests/test.mp4", "-n"])  # dry run
+         # No assertion needed - if validation fails, the command will error
+
++    @requires_mp3_encoder
+     def test_replaygain_tags_stripped_after_normalization(self, tmp_path):
+         """Test that ReplayGain tags are stripped after normalization."""
+         import shutil

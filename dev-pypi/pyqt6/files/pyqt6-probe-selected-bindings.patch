@@ -1,0 +1,32 @@
+Run Qt feature probes on explicitly selected modules when requested.
+SIP otherwise skips them and generates bindings for Qt features that
+may be absent, including the Metal and Wayland interfaces in QtGui.
+
+--- a/project.py
++++ b/project.py
+@@ -121,6 +121,10 @@
+
+         # Add our new options.
+         options.append(
++                Option('probe_enabled_bindings', option_type=bool,
++                        help="run feature probes for explicitly enabled bindings"))
++
++        options.append(
+                 Option('confirm_license', option_type=bool,
+                         help="confirm acceptance of the license"))
+
+@@ -194,6 +198,14 @@
+
+         self.bindings['QtCore'].tags.append(
+                 platform_tags_map.get(self.py_platform, 'Linux'))
++
++        # SIP assumes explicitly enabled bindings need no probes. A selected
++        # binding can still depend on Qt features that were not compiled in.
++        if self.enable and self.probe_enabled_bindings:
++            for bindings in self.bindings.values():
++                if not bindings.is_buildable():
++                    raise UserException("Cannot build selected bindings '{}'".format(
++                            bindings.name))
+
+         # Make sure the bindings are buildable.
+         super().update(tool)

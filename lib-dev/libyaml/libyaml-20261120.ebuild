@@ -1,0 +1,40 @@
+# Distributed under the terms of the GNU General Public License v2
+
+inherit autotools libtool qa-policy
+
+DESCRIPTION="YAML 1.1 parser and emitter written in C"
+HOMEPAGE="https://github.com/yaml/libyaml"
+SNAPSHOT=fc96aa689026e314f2177e69a2903ef045aec571
+SRC_URI="https://github.com/yaml/${PN}/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/${PN}-${SNAPSHOT}"
+
+LICENSE="MIT"
+SLOT="0"
+KEYWORDS="amd64 arm64"
+
+IUSE="static-libs test"
+
+RESTRICT="!test? ( test )"
+
+src_prepare() {
+	qa-policy-configure
+	default
+
+	# conditionally remove tests
+	if ! use test; then
+		sed -i -e 's: tests::g' Makefile* || die
+	fi
+
+	elibtoolize
+	eautoreconf
+}
+
+src_configure() {
+	econf $(use_enable static-libs static)
+}
+
+src_install() {
+	default
+	qa-policy-install
+	find "${D}" -name '*.la' -delete || die
+}

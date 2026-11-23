@@ -1,0 +1,5 @@
+--- a/tests/testmaker.sh
++++ b/tests/testmaker.sh
+@@ -109 +109 @@
+-    sed <"${SRCDIR}/${stem}.rules" -e "/###/Q0"
++    sed <"${SRCDIR}/${stem}.rules" -n "/###/q; p"

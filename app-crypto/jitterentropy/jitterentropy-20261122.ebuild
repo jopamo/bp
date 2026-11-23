@@ -1,0 +1,44 @@
+# Distributed under the terms of the GNU General Public License v2
+
+inherit flag-o-matic toolchain-funcs qa-policy
+
+DESCRIPTION="Hardware RNG based on CPU timing jitter"
+HOMEPAGE="https://github.com/smuellerDD/jitterentropy-library"
+SNAPSHOT=fbbe36ed459a9f4eeb6caecfe66efe581a638fba
+SRC_URI="https://github.com/smuellerDD/jitterentropy-library/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S=${WORKDIR}/jitterentropy-library-${SNAPSHOT}
+
+LICENSE="BSD"
+SLOT="0"
+KEYWORDS="amd64 arm64"
+
+IUSE="static-libs"
+
+PATCHES=( "${FILESDIR}/jitterentropy-install-uncompressed-manpages.patch" )
+
+src_prepare() {
+	replace-flags -O2 -O0
+	replace-flags -O3 -O0
+	replace-flags -Os -O0
+	replace-flags -Oz -O0
+
+	default
+
+	# Remove the default upstream optimization level
+	sed -e '/^CFLAGS +=/ s|-O2||' -i Makefile || die
+}
+
+src_compile() {
+	qa-policy-configure
+	emake AR="$(tc-getAR)" CC="$(tc-getCC)"
+}
+
+src_install() {
+	emake PREFIX="${EPREFIX}/usr" \
+		  LIBDIR="lib" \
+		  DESTDIR="${D}" \
+		  INSTALL_STRIP="install" \
+		  install $(usex static-libs install-static '')
+
+	qa-policy-install
+}

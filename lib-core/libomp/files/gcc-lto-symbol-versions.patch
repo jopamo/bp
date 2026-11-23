@@ -1,0 +1,64 @@
+--- a/openmp/runtime/src/kmp_os.h
++++ b/openmp/runtime/src/kmp_os.h
+@@ -422,23 +422,40 @@
+   _KMP_VERSION_SYMBOL(api_name, ver_num, ver_str, "VERSION")
+-#define _KMP_VERSION_SYMBOL(api_name, ver_num, ver_str, default_ver)            \
+-  __typeof__(__kmp_api_##api_name) __kmp_api_##api_name##_##ver_num##_alias     \
+-      __attribute__((alias(KMP_STR(__kmp_api_##api_name))));                    \
+-  __asm__(                                                                      \
+-      ".symver " KMP_STR(__kmp_api_##api_name##_##ver_num##_alias) "," KMP_STR( \
+-          api_name) "@" ver_str "\n\t");                                        \
+-  __asm__(".symver " KMP_STR(__kmp_api_##api_name) "," KMP_STR(                 \
+-      api_name) "@@" default_ver "\n\t")
+-
+-#define KMP_VERSION_OMPC_SYMBOL(apic_name, api_name, ver_num, ver_str)         \
+-  _KMP_VERSION_OMPC_SYMBOL(apic_name, api_name, ver_num, ver_str, "VERSION")
+-#define _KMP_VERSION_OMPC_SYMBOL(apic_name, api_name, ver_num, ver_str,          \
+-                                 default_ver)                                    \
+-  __typeof__(__kmp_api_##apic_name) __kmp_api_##apic_name##_##ver_num##_alias    \
+-      __attribute__((alias(KMP_STR(__kmp_api_##apic_name))));                    \
+-  __asm__(".symver " KMP_STR(__kmp_api_##apic_name) "," KMP_STR(                 \
+-      apic_name) "@@" default_ver "\n\t");                                       \
+-  __asm__(                                                                       \
+-      ".symver " KMP_STR(__kmp_api_##apic_name##_##ver_num##_alias) "," KMP_STR( \
+-          api_name) "@" ver_str "\n\t")
+-
++#define KMP_VERSION_OMPC_SYMBOL(apic_name, api_name, ver_num, ver_str)         \
++  _KMP_VERSION_OMPC_SYMBOL(apic_name, api_name, ver_num, ver_str, "VERSION")
++#if defined(__GNUC__) && !defined(__clang__) && __GNUC__ >= 10
++// Expose the versioned names to GCC's LTO symbol table, not only to the assembler.
++#define _KMP_SYMVER_IMPL(fn, public_name, ver_num, ver_str, default_ver)       \
++  __typeof__(__kmp_api_##fn) __kmp_api_##fn##_##ver_num##_alias              \
++      __attribute__((alias(KMP_STR(__kmp_api_##fn)),                          \
++                     symver(KMP_STR(public_name) "@" ver_str)));              \
++  __typeof__(__kmp_api_##fn) __kmp_api_##fn                                   \
++      __attribute__((symver(KMP_STR(fn) "@@" default_ver)))
++
++#define _KMP_VERSION_SYMBOL(api_name, ver_num, ver_str, default_ver)          \
++  _KMP_SYMVER_IMPL(api_name, api_name, ver_num, ver_str, default_ver)
++#define _KMP_VERSION_OMPC_SYMBOL(apic_name, api_name, ver_num, ver_str,         \
++                                 default_ver)                                 \
++  _KMP_SYMVER_IMPL(apic_name, api_name, ver_num, ver_str, default_ver)
++#else
++#define _KMP_VERSION_SYMBOL(api_name, ver_num, ver_str, default_ver)            \
++  __typeof__(__kmp_api_##api_name) __kmp_api_##api_name##_##ver_num##_alias     \
++      __attribute__((alias(KMP_STR(__kmp_api_##api_name))));                    \
++  __asm__(                                                                      \
++      ".symver " KMP_STR(__kmp_api_##api_name##_##ver_num##_alias) "," KMP_STR( \
++          api_name) "@" ver_str "\n\t");                                        \
++  __asm__(".symver " KMP_STR(__kmp_api_##api_name) "," KMP_STR(                 \
++      api_name) "@@" default_ver "\n\t")
++
++#define _KMP_VERSION_OMPC_SYMBOL(apic_name, api_name, ver_num, ver_str,          \
++                                 default_ver)                                    \
++  __typeof__(__kmp_api_##apic_name) __kmp_api_##apic_name##_##ver_num##_alias    \
++      __attribute__((alias(KMP_STR(__kmp_api_##apic_name))));                    \
++  __asm__(".symver " KMP_STR(__kmp_api_##apic_name) "," KMP_STR(                 \
++      apic_name) "@@" default_ver "\n\t");                                       \
++  __asm__(                                                                       \
++      ".symver " KMP_STR(__kmp_api_##apic_name##_##ver_num##_alias) "," KMP_STR( \
++          api_name) "@" ver_str "\n\t")
++
++#endif // GNU symver attribute
++
+ #else // KMP_USE_VERSION_SYMBOLS

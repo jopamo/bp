@@ -1,0 +1,70 @@
+Invalidate the cached working directory if the filesystem's getcwd
+callback reports an error. Check streamed zlib output by decoding it;
+compatible compressors need not produce identical byte counts.
+
+--- a/generic/tclIOUtil.c
++++ b/generic/tclIOUtil.c
+@@ -2829,10 +2829,14 @@
+ 	    TclFSGetCwdProc2 *proc2 = (TclFSGetCwdProc2 *) fsPtr->getCwdProc;
+
+ 	    retCd = proc2(tsdPtr->cwdClientData);
+-	    if (retCd == NULL && interp != NULL) {
+-		Tcl_SetObjResult(interp, Tcl_ObjPrintf(
+-			"error getting working directory name: %s",
+-			Tcl_PosixError(interp)));
++	    if (retCd == NULL) {
++		if (interp != NULL) {
++		    Tcl_SetObjResult(interp, Tcl_ObjPrintf(
++			    "error getting working directory name: %s",
++			    Tcl_PosixError(interp)));
++		}
++		FsUpdateCwd(NULL, NULL);
++		goto cdDidNotChange;
+ 	    }
+
+ 	    if (retCd == tsdPtr->cwdClientData) {
+--- a/tests/zlib.test
++++ b/tests/zlib.test
+@@ -153,11 +153,13 @@
+     }
+     $strm put -finalize $randdata
+     set data [$strm get]
+-    list [string length $data] [string length [zlib decompress $data]]
++    set expected [string repeat $randdata 3000]
++    list [expr {[string length $data] < [string length $expected]}] \
++        [string equal [zlib decompress $data] $expected]
+ } -cleanup {
+     catch {$strm close}
+-    unset -nocomplain randdata data
+-} -result {120185 18003000}
++    unset -nocomplain randdata data expected
++} -result {1 1}
+ test zlib-7.9 {zlib stream finalize (bug 25842c161)} -constraints zlib -setup {
+     set z1 [zlib stream gzip]
+     set z2 [zlib stream gzip]
+@@ -999,6 +1001,7 @@
+
+ test zlib-12.1 {Tk Bug 9eb55debc5} -constraints zlib -setup {
+     set stream [zlib stream compress]
++    set expected {}
+ } -body {
+     for {set opts {};set y 0} {$y < 60} {incr y} {
+ 	for {set line {};set x 0} {$x < 100} {incr x} {
+@@ -1008,12 +1011,15 @@
+ 	    set opts -finalize
+ 	}
+ 	$stream put {*}$opts $line
++	append expected $line
+     }
+     set data [$stream get]
+-    list [string length $data] [string length [zlib decompress $data]]
++    list [expr {[string length $data] < [string length $expected]}] \
++        [string equal [zlib decompress $data] $expected]
+ } -cleanup {
+     $stream close
+-} -result {12026 18000}
++    unset -nocomplain data expected
++} -result {1 1}
+ test zlib-12.2 {Patrick Dunnigan's issue} -constraints zlib -setup {
+     set filesrc [makeFile {} test.input]
+     set filedst [makeFile {} test.output]

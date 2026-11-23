@@ -1,0 +1,18 @@
+Keep Socket loadable without IPv6 and use the sequential connector when
+there is no second address family to race.
+
+--- a/ext/socket/lib/socket.rb
++++ b/ext/socket/lib/socket.rb
+@@ -615,4 +615,5 @@ class Socket < BasicSocket
+-  ADDRESS_FAMILIES = {
+-    ipv6: Socket::AF_INET6,
+-    ipv4: Socket::AF_INET
+-  }.freeze
++  ADDRESS_FAMILIES = if defined?(Socket::AF_INET6)
++    { ipv6: Socket::AF_INET6, ipv4: Socket::AF_INET }.freeze
++  else
++    { ipv4: Socket::AF_INET }.freeze
++  end
+@@ -667 +668 @@ class Socket < BasicSocket
+-    sock = if fast_fallback && !(host && ip_address?(host))
++    sock = if fast_fallback && ADDRESS_FAMILIES.key?(:ipv6) && !(host && ip_address?(host))

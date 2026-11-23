@@ -1,0 +1,68 @@
+--- a/config/tap-driver.sh
++++ b/config/tap-driver.sh
+@@ -162,8 +162,9 @@
+
+ # :; is there to work around a bug in bash 3.2 (and earlier) which
+ # does not always set '$?' properly on redirection failure.
+ # See the Autoconf manual for more details.
++: > "$log_file" || fatal "cannot open test log"
+ :;{
+   (
+     # Ignore common signals (in this subshell only!), to avoid potential
+     # problems with Korn shells.  Some Korn shells are known to propagate
+@@ -245,11 +246,8 @@
+         -v ignore_exit="$ignore_exit" \
+         -v comments="$comments" \
+         -v diag_string="$diag_string" \
+ '
+-# TODO: the usages of "cat >&3" below could be optimized when using
+-#       GNU awk, and/on on systems that supports /dev/fd/.
+-
+ # Implementation note: in what follows, `result_obj` will be an
+ # associative array that (partly) simulates a TAP result object
+ # from the `TAP::Parser` perl module.
+
+@@ -258,9 +256,9 @@
+ ## ----------- ##
+
+ function fatal(msg)
+ {
+-  print me ": " msg | "cat >&2"
++  print me ": " msg >> "/dev/stderr"
+   exit 1
+ }
+
+ function abort(where)
+@@ -367,9 +365,9 @@
+   # Output on console might be colorized.
+   print decorate_result(result) msg
+   # Log the result in the log file too, to help debugging (this is
+   # especially true when said result is a TAP error or "Bail out!").
+-  print result msg | "cat >&3";
++  print result msg >> log_file;
+ }
+
+ function testsuite_error(error_message)
+ {
+@@ -634,9 +632,9 @@
+         nextline = $0
+         $0 = curline
+       }
+     # Copy any input line verbatim into the log file.
+-    print | "cat >&3"
++    print >> log_file
+     # Parsing of TAP input should stop after a "Bail out!" directive.
+     if (bailed_out)
+       continue
+
+@@ -726,9 +724,9 @@
+ exit 0
+
+ } # End of "BEGIN" block.
+ '
+-} 3>"$log_file"
++} 3>>"$log_file"
+
+ test $? -eq 0 || fatal "I/O or internal error"
+
+ # Local Variables:

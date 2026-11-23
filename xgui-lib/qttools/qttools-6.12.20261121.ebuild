@@ -1,0 +1,61 @@
+# Distributed under the terms of the GNU General Public License v2
+
+BRANCH_NAME="$(ver_cut 1-2)"
+
+inherit cmake flag-o-matic
+
+DESCRIPTION="Qt Tools collection (Assistant, Designer, Linguist, etc.)"
+HOMEPAGE="https://www.qt.io/"
+
+SNAPSHOT=09c256dd8355480e6687040b827b2cb4e12fd011
+# Follow this qttools commit's gitlinks, not the submodules' branch tips.
+# lockstep-gitlink: QLITEHTML_SNAPSHOT SNAPSHOT src/assistant/qlitehtml
+# lockstep-gitlink: QTTOOLS_LITEHTML_SNAPSHOT QLITEHTML_SNAPSHOT src/3rdparty/litehtml
+QLITEHTML_SNAPSHOT=180e3ebb22bb8d82a9bfe88bba46da8c28c9f2a2
+QTTOOLS_LITEHTML_SNAPSHOT=9bc84b8b8d15a4e50f18b327aa30955048b441c2
+SRC_URI="
+	https://invent.kde.org/qt/qt/${PN}/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2
+	https://invent.kde.org/qt/playground/qlitehtml/-/archive/${QLITEHTML_SNAPSHOT}/qlitehtml-${QLITEHTML_SNAPSHOT}.tar.bz2
+	https://invent.kde.org/qt/qt/qttools-litehtml/-/archive/${QTTOOLS_LITEHTML_SNAPSHOT}/qttools-litehtml-${QTTOOLS_LITEHTML_SNAPSHOT}.tar.bz2
+"
+S=${WORKDIR}/${PN}-${SNAPSHOT}
+
+LICENSE="|| ( GPL-2 GPL-3 LGPL-3 ) FDL-1.3"
+SLOT="$(ver_cut 1)"
+KEYWORDS="amd64 arm64"
+
+IUSE="test"
+RESTRICT="!test? ( test )"
+
+DEPEND="
+	>=xgui-lib/qtbase-6.12:6=
+	>=xgui-lib/qtdeclarative-6.12:6=
+	"
+
+src_prepare() {
+	rm -rf "${S}/src/assistant/qlitehtml" || die
+	mv "${WORKDIR}/qlitehtml-${QLITEHTML_SNAPSHOT}" "${S}/src/assistant/qlitehtml" || die
+	rm -rf "${S}/src/assistant/qlitehtml/src/3rdparty/litehtml" || die
+	mv "${WORKDIR}/qttools-litehtml-${QTTOOLS_LITEHTML_SNAPSHOT}" \
+		"${S}/src/assistant/qlitehtml/src/3rdparty/litehtml" || die
+
+	eapply "${FILESDIR}"/${PN}-litehtml-exceptions.patch
+	eapply "${FILESDIR}"/${PN}-litehtml-atoi.patch
+	eapply "${FILESDIR}"/${PN}-qdoc-test-application.patch
+	cmake_src_prepare
+}
+
+append-flags -ffat-lto-objects
+
+src_configure() {
+	local mycmakeargs=(
+		-DQT_BUILD_TESTS=$(usex test ON OFF)
+		-DCMAKE_PROJECT_QtTools_INCLUDE="${FILESDIR}/qttools-build.cmake"
+	)
+	cmake_src_configure
+}
+
+src_test() {
+	local -x QT_QPA_PLATFORM=offscreen
+	cmake_src_test
+}

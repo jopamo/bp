@@ -1,0 +1,45 @@
+# Distributed under the terms of the GNU General Public License v2
+
+DISTUTILS_USE_PEP517=hatchling
+
+inherit distutils-r1 pypi
+DESCRIPTION="Python client library for the OpenAI API"
+HOMEPAGE="https://github.com/openai/openai-python"
+SNAPSHOT=fa01235266183413b4585bd502e384d931de7fd3
+SRC_URI="https://github.com/openai/openai-python/archive/${SNAPSHOT}.tar.gz -> openai-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/openai-python-${SNAPSHOT}"
+
+LICENSE="MIT"
+SLOT="0"
+KEYWORDS="amd64 arm64"
+IUSE="datalib"
+
+RDEPEND="
+	dev-pypi/pydantic[${PYTHON_USEDEP}]
+	dev-pypi/typing-extensions[${PYTHON_USEDEP}]
+	>=dev-pypi/requests-2.20[${PYTHON_USEDEP}]
+	dev-pypi/tqdm[${PYTHON_USEDEP}]
+	dev-pypi/aiohttp[${PYTHON_USEDEP}]
+	datalib? (
+		dev-pypi/numpy[${PYTHON_USEDEP}]
+		>=dev-py/pandas-1.2.3[${PYTHON_USEDEP}]
+		>=dev-py/pandas-stubs-1.1.0.11[${PYTHON_USEDEP}]
+		>=dev-pypi/openpyxl-3.0.7[${PYTHON_USEDEP}]
+	)"
+
+# lockstep-pypi-managed: true
+# lockstep-pypi-deps: begin
+RDEPEND+="
+	dev-pypi/anyio
+	dev-pypi/httpx2
+	dev-pypi/jiter
+	dev-pypi/pydantic
+	dev-pypi/sniffio
+	dev-pypi/typing-extensions
+"
+# lockstep-pypi-deps: end
+
+DEPEND="${RDEPEND}"
+REQUIRED_USE="${PYTHON_REQUIRED_USE}"
+
+RESTRICT="test"

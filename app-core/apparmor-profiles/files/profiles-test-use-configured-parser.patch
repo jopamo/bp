@@ -1,0 +1,22 @@
+Subject: profiles: use the configured parser for attachment checks
+
+The profiles are built separately from the parser in distro packages.
+Use the same parser for the attachment check as for the preceding
+profile compilation. Keep the in-tree parser as the standalone default.
+
+diff --git a/profiles/Makefile b/profiles/Makefile
+--- a/profiles/Makefile
++++ b/profiles/Makefile
+@@ -144 +144 @@
+-		LD_LIBRARY_PATH="$(LD_LIBRARY_PATH)" ../parser/tst/test_profile.py $${profile} --config-file=../parser/tst/parser.conf -QK -S -b ${PROFILES_SOURCE}  || exit 1; \
++		APPARMOR_PARSER="$(PARSER)" LD_LIBRARY_PATH="$(LD_LIBRARY_PATH)" ../parser/tst/test_profile.py $${profile} --config-file=../parser/tst/parser.conf -QK -S -b ${PROFILES_SOURCE}  || exit 1; \
+@@ -151 +151 @@
+-		LD_LIBRARY_PATH="$(LD_LIBRARY_PATH)" ../parser/tst/test_profile.py $${profile} --config-file=../parser/tst/parser.conf -QK -S -b ${PROFILES_SOURCE}  || exit 1; \
++		APPARMOR_PARSER="$(PARSER)" LD_LIBRARY_PATH="$(LD_LIBRARY_PATH)" ../parser/tst/test_profile.py $${profile} --config-file=../parser/tst/parser.conf -QK -S -b ${PROFILES_SOURCE}  || exit 1; \
+diff --git a/parser/tst/test_profile.py b/parser/tst/test_profile.py
+--- a/parser/tst/test_profile.py
++++ b/parser/tst/test_profile.py
+@@ -38 +38,2 @@
+-    cmd = ['../parser/apparmor_parser'] + extra_args + ['-d', profile]
++    parser = os.environ.get('APPARMOR_PARSER', '../parser/apparmor_parser')
++    cmd = [parser] + extra_args + ['-d', profile]

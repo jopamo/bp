@@ -1,0 +1,14 @@
+--- a/subprojects/Makefile
++++ b/subprojects/Makefile
+@@ -57,6 +57,8 @@
+-	FINALDEPS=$(DEPS)
++	FINALDEPS=$(DEPS)
+ endif
+-
++
++FINALDEPS := $(filter-out sdb qjs capstone-v5,$(FINALDEPS))
++
+ default: $(FINALDEPS)
+-
++
+ distdeps: $(DISTDEPS)

@@ -1,0 +1,155 @@
+# Distributed under the terms of the GNU General Public License v2
+
+#BRANCH_NAME="maint-$(ver_cut 1).0"
+
+inherit meson flag-o-matic
+
+DESCRIPTION="implementation of the X Window System display server"
+HOMEPAGE="https://www.x.org/wiki/"
+SNAPSHOT=0b5e2dd6ef70dc366f2357db655efcbd7adb7cb7
+SRC_URI="https://github.com/X11Libre/xserver/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
+S="${WORKDIR}/xserver-${SNAPSHOT}"
+
+LICENSE="MIT"
+SLOT="0"
+KEYWORDS="amd64 arm64"
+
+IUSE="glamor ipv6 minimal nvidia systemd udev wayland xcsecurity +xephyr +xvfb X"
+REQUIRED_USE="
+	nvidia? ( X !elibc_musl )
+"
+
+DEPEND="
+	virtual/ssl
+	xgui-lib/libdrm
+	xgui-lib/libpciaccess
+	xgui-lib/libXau
+	xgui-lib/libxcvt
+	xgui-lib/libXdmcp
+	xgui-lib/libXfont2
+	xgui-lib/libxkbfile
+	xgui-lib/libxshmfence
+	xgui-lib/pixman
+	xgui-lib/rgb
+	xgui-lib/xbitmaps
+	xgui-lib/xcb-util
+	xgui-lib/xtrans
+	xgui-tools/xkeyboard-config
+	xgui-tools/iceauth
+	xgui-tools/xauth
+	xgui-tools/xinit
+	xgui-tools/xkbcomp
+	glamor? (
+		xmedia-lib/libepoxy
+		xgui-tools/mesa
+	)
+	!minimal? (
+		xgui-lib/libX11
+		xgui-lib/libXext
+		xgui-tools/mesa
+	)
+	udev? ( app-core/systemd )
+	systemd? (
+		virtual/dbus
+		app-core/systemd
+	)
+"
+RDEPEND="${DEPEND}"
+BDEPEND="
+	app-dev/pkgconf
+	app-build/flex
+	xgui-tools/xorgproto
+"
+
+PDEPEND="xgui-tools/xf86-input-libinput"
+
+src_prepare() {
+	default
+
+	eapply "${FILESDIR}"/${PN}-backtrace-execinfo.patch
+	eapply "${FILESDIR}"/${PN}-glyph-sha256.patch
+
+	sed -i -E \
+		'/^[[:space:]]*static[[:space:]]+inline[[:space:]]+int[[:space:]]+pci_device_is_boot_display[[:space:]]*\(/,/^[[:space:]]*}\s*$/d' \
+		hw/xfree86/common/xf86_pci_priv.h || die
+}
+
+src_configure() {
+  # avoid forcing immediate binding which can break nvidia GL stubs at link time
+  filter-flags -Wl,-z,defs -Wl,-z,now
+
+  local emesonargs=(
+    # core servers and backends
+    $(meson_use X xorg)          # build the xorg server
+    -Dsuid_wrapper=false         # no legacy privilege or launch wrapper
+    $(meson_use xvfb)            # virtual framebuffer server
+    $(meson_use xephyr)          # no nested xephyr
+    -Dxnest=false                # no legacy Xnest
+    -Dxwin=false                 # no cygwin backend
+    -Dxquartz=false              # no macOS quartz
+    -Dxpbproxy=false             # no proxy
+
+    # rendering and dri paths
+    $(meson_use glamor)          # GL acceleration for modesetting and Xephyr
+    -Dglx=true                   # GLX needed for nvidia proprietary
+    -Ddri1=false                 # dri1 is obsolete
+    -Ddri2=true                  # dri2 required by nvidia GLX
+    -Ddri3=true                  # dri3 for modesetting and modern stacks
+    -Ddrm=true                   # enable drm hooks even if using nvidia
+
+    # device and session management
+    $(meson_use udev)            # input hotplug via libudev
+    $(meson_use systemd systemd_logind) # vt/session handoff through logind
+    $(meson_use systemd systemd_notify) # sd_notify integration
+    -Dvgahw=auto                 # vgahw module auto
+    -Dpciaccess=true             # libpciaccess for probing
+
+    # networking and auth listeners
+    $(meson_use ipv6)
+    -Dlisten_tcp=false           # disable tcp listener for local-only setups
+    -Dlisten_unix=true           # enable unix socket
+    -Dlisten_local=true          # create abstract local socket
+
+    # security and extensions
+    $(meson_use xcsecurity)      # XACE/XC-Security
+    -Ddpms=true                  # display power management
+    -Dscreensaver=true           # MIT-SCREEN-SAVER
+    -Dxres=true                  # X-Resource extension
+    -Dxinerama=true              # Xinerama protocol for multihead
+    -Dxv=true                    # XVideo extension
+    -Ddga=auto                   # DGA if available
+    -Dmitshm=auto                # MIT-SHM
+    -Dagp=false                  # agp helper not needed with modern stacks
+
+    # linux power backends
+    -Dlinux_apm=false            # legacy /proc/apm backend, safe to disable
+    -Dlinux_acpi=false           # legacy /proc/acpi hooks, safe to disable
+
+    # crypto and misc
+    -Dsha1=libcrypto             # link libcrypto for the glyph-cache hash
+    -Dlibunwind=false            # keep unwinder off unless debugging
+    -Dlegacy_nvidia_340x=false   # do not export obsolete 340xx driver entrypoints
+    -Dlegacy_nvidia_padding=false # old ScreenRec ABI padding, not MIT-SHM pixmap support
+
+    # features we explicitly keep off
+    -Dxdmcp=false                # no xdmcp
+    -Dxdm-auth-1=false           # no old auth proto
+    -Dhal=false                  # no hal input stack
+
+    # build products and paths
+    -Dtests=false
+    -Ddocs=false
+    -Ddevel-docs=false
+    -Ddocs-pdf=false
+    -Dxkb_output_dir="${EPREFIX}/var/lib/xkb"
+  )
+
+  meson_src_configure
+}
+
+src_install() {
+        meson_src_install
+	if use X; then
+		dosym -r /usr/bin/Xorg /usr/bin/X
+	fi
+}

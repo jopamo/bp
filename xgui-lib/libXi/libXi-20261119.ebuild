@@ -1,0 +1,49 @@
+# Distributed under the terms of the GNU General Public License v2
+
+inherit autotools qa-policy
+
+DESCRIPTION="X.Org Xi library"
+HOMEPAGE="https://www.x.org/wiki/"
+SNAPSHOT=52faf15466132e5cf50ae1d40d0e8e070a3b1d10
+SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libXi/-/archive/${SNAPSHOT}/libXi-${SNAPSHOT}.tar.bz2 -> libXi-${SNAPSHOT}.tar.bz2"
+S="${WORKDIR}/libxi-${SNAPSHOT}"
+
+LICENSE="MIT"
+SLOT="0"
+
+KEYWORDS="amd64 arm64"
+
+IUSE="doc static-libs"
+
+DEPEND=">=xgui-lib/libX11-1.6.2
+	>=xgui-lib/libXext-1.3.2
+	>=xgui-lib/libXfixes-5.0.1
+	xgui-tools/xorgproto"
+BDEPEND="doc? ( app-tex/docbookz )"
+
+src_prepare() {
+	eautoreconf
+	default
+}
+
+src_configure() {
+	qa-policy-configure
+	local myconf=(
+		--bindir="${EPREFIX}"/usr/bin
+		--sbindir="${EPREFIX}"/usr/bin
+		--libdir="${EPREFIX}"/usr/lib
+		--libexecdir="${EPREFIX}"/usr/libexec
+		--sysconfdir="${EPREFIX}"/etc
+		--localstatedir="${EPREFIX}"/var
+		$(use_enable doc specs)
+		$(use_with doc xmlto)
+		--without-fop
+	)
+	ECONF_SOURCE=${S} econf "${myconf[@]}"
+}
+
+src_install() {
+	default
+	qa-policy-install
+	use static-libs || find "${ED}" -name '*.a' -delete
+}

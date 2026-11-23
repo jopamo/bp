@@ -1,0 +1,13 @@
+Subject: compiler-rt: link fuzzer tests to the configured llvm unwinder
+
+The shared unit test flags suppress the default unwinder whenever
+COMPILER_RT_USE_LLVM_UNWINDER is on. Add the configured library even
+when the tests use the system c++ standard library.
+
+diff --git a/compiler-rt/lib/fuzzer/tests/CMakeLists.txt b/compiler-rt/lib/fuzzer/tests/CMakeLists.txt
+--- a/compiler-rt/lib/fuzzer/tests/CMakeLists.txt
++++ b/compiler-rt/lib/fuzzer/tests/CMakeLists.txt
+@@ -58,0 +59,3 @@
++elseif(COMPILER_RT_USE_LLVM_UNWINDER)
++  # Compiler-RT disables the default unwinder when using the in-tree one.
++  list(APPEND LIBFUZZER_UNITTEST_LINK_FLAGS ${COMPILER_RT_UNWINDER_LINK_LIBS})

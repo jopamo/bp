@@ -1,0 +1,28 @@
+Keep generated CLI files local to each test. The hello.f and hello.f90
+fixtures shared the worker directory, so test_lower_sig could leave
+hello.pyf behind before test_gen_pyf tried to create it.
+
+--- a/numpy/f2py/tests/test_f2py2e.py
++++ b/numpy/f2py/tests/test_f2py2e.py
+@@ -77,7 +77,7 @@
+-@pytest.fixture(scope="session")
+-def hello_world_f90(tmpdir_factory):
++@pytest.fixture
++def hello_world_f90(tmp_path):
+     """Generates a single f90 file for testing"""
+     fdat = util.getpath("tests", "src", "cli", "hiworld.f90").read_text()
+-    fn = tmpdir_factory.getbasetemp() / "hello.f90"
++    fn = tmp_path / "hello.f90"
+     fn.write_text(fdat, encoding="ascii")
+     return fn
+@@ -104,7 +104,7 @@
+-@pytest.fixture(scope="session")
+-def hello_world_f77(tmpdir_factory):
++@pytest.fixture
++def hello_world_f77(tmp_path):
+     """Generates a single f77 file for testing"""
+     fdat = util.getpath("tests", "src", "cli", "hi77.f").read_text()
+-    fn = tmpdir_factory.getbasetemp() / "hello.f"
++    fn = tmp_path / "hello.f"
+     fn.write_text(fdat, encoding="ascii")
+     return fn

@@ -1,0 +1,137 @@
+Register only the EXSLT algorithms the configured provider advertises.
+Keep an independent SHA-1 fixture for providers that omit MD5.
+
+--- a/libexslt/crypto.c
++++ b/libexslt/crypto.c
+@@ -774,21 +774,48 @@
+
+ void
+ exsltCryptoRegister (void) {
+-    xsltRegisterExtModuleFunction ((const xmlChar *) "md4",
+-				   EXSLT_CRYPTO_NAMESPACE,
+-				   exsltCryptoMd4Function);
+-    xsltRegisterExtModuleFunction ((const xmlChar *) "md5",
+-				   EXSLT_CRYPTO_NAMESPACE,
+-				   exsltCryptoMd5Function);
+-    xsltRegisterExtModuleFunction ((const xmlChar *) "sha1",
+-				   EXSLT_CRYPTO_NAMESPACE,
+-				   exsltCryptoSha1Function);
+-    xsltRegisterExtModuleFunction ((const xmlChar *) "rc4_encrypt",
+-				   EXSLT_CRYPTO_NAMESPACE,
+-				   exsltCryptoRc4EncryptFunction);
+-    xsltRegisterExtModuleFunction ((const xmlChar *) "rc4_decrypt",
+-				   EXSLT_CRYPTO_NAMESPACE,
+-				   exsltCryptoRc4DecryptFunction);
++#if defined(HAVE_GCRYPT) && !defined(_WIN32)
++    exsltCryptoGcryptInit ();
++#endif
++
++#if defined(HAVE_GCRYPT) && !defined(_WIN32)
++    if (gcry_md_test_algo (GCRY_MD_MD4) == 0)
++#endif
++    {
++        xsltRegisterExtModuleFunction ((const xmlChar *) "md4",
++    				   EXSLT_CRYPTO_NAMESPACE,
++    				   exsltCryptoMd4Function);
++    }
++
++#if defined(HAVE_GCRYPT) && !defined(_WIN32)
++    if (gcry_md_test_algo (GCRY_MD_MD5) == 0)
++#endif
++    {
++        xsltRegisterExtModuleFunction ((const xmlChar *) "md5",
++    				   EXSLT_CRYPTO_NAMESPACE,
++    				   exsltCryptoMd5Function);
++    }
++
++#if defined(HAVE_GCRYPT) && !defined(_WIN32)
++    if (gcry_md_test_algo (GCRY_MD_SHA1) == 0)
++#endif
++    {
++        xsltRegisterExtModuleFunction ((const xmlChar *) "sha1",
++    				   EXSLT_CRYPTO_NAMESPACE,
++    				   exsltCryptoSha1Function);
++    }
++
++#if defined(HAVE_GCRYPT) && !defined(_WIN32)
++    if (gcry_cipher_test_algo (GCRY_CIPHER_ARCFOUR) == 0)
++#endif
++    {
++        xsltRegisterExtModuleFunction ((const xmlChar *) "rc4_encrypt",
++    				   EXSLT_CRYPTO_NAMESPACE,
++    				   exsltCryptoRc4EncryptFunction);
++        xsltRegisterExtModuleFunction ((const xmlChar *) "rc4_decrypt",
++    				   EXSLT_CRYPTO_NAMESPACE,
++    				   exsltCryptoRc4DecryptFunction);
++    }
+ }
+
+ #else
+--- a/tests/runtest.c
++++ b/tests/runtest.c
+@@ -686,6 +686,36 @@
+     return(ret);
+ }
+
++#if defined(EXSLT_CRYPTO_ENABLED) && !defined(_WIN32)
++static int
++exsltCryptoTest(const char *filename, int options) {
++    const char *algorithm;
++
++    if (strcmp(filename, "./hash.1.xsl") == 0) {
++        if (xsltExtModuleFunctionLookup(BAD_CAST "md5",
++                                        EXSLT_CRYPTO_NAMESPACE) == NULL) {
++            fprintf(stderr, "Skipping %s: provider does not offer MD5\n",
++                    filename);
++            return 0;
++        }
++        algorithm = "sha1";
++    } else if (strcmp(filename, "./sha1.1.xsl") == 0)
++        algorithm = "sha1";
++    else if (strcmp(filename, "./crypt.1.xsl") == 0)
++        algorithm = "rc4_encrypt";
++    else
++        return xsltTest(filename, options);
++
++    if (xsltExtModuleFunctionLookup(BAD_CAST algorithm,
++                                    EXSLT_CRYPTO_NAMESPACE) == NULL) {
++        fprintf(stderr, "Skipping %s: provider does not offer %s\n",
++                filename, algorithm);
++        return 0;
++    }
++    return xsltTest(filename, options);
++}
++#endif
++
+ /************************************************************************
+  *									*
+  *			Tests Descriptions				*
+@@ -728,7 +760,7 @@
+       xsltTest, "exslt/common", "./*.xsl", 0 },
+ #if defined(EXSLT_CRYPTO_ENABLED) && !defined(_WIN32)
+     { "exslt crypto tests",
+-      xsltTest, "exslt/crypto", "./*.xsl", 0 },
++      exsltCryptoTest, "exslt/crypto", "./*.xsl", 0 },
+ #endif
+     { "exslt date tests",
+       xsltTest, "exslt/date", "./*.xsl", 0 },
+--- /dev/null
++++ b/tests/exslt/crypto/sha1.1.xml
+@@ -0,0 +1 @@
++<message>Hello, World!</message>
+--- /dev/null
++++ b/tests/exslt/crypto/sha1.1.out
+@@ -0,0 +1 @@
++0a0a9f2a6772942557ab5355d76af442f8f65e01
+--- /dev/null
++++ b/tests/exslt/crypto/sha1.1.xsl
+@@ -0,0 +1,9 @@
++<xsl:stylesheet version="1.0"
++    xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
++    xmlns:crypto="http://exslt.org/crypto">
++    <xsl:output method="text"/>
++    <xsl:template match="/">
++        <xsl:value-of select="crypto:sha1(string(message))"/>
++        <xsl:text>&#10;</xsl:text>
++    </xsl:template>
++</xsl:stylesheet>

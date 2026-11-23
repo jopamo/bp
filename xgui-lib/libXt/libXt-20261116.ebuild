@@ -1,0 +1,47 @@
+# Distributed under the terms of the GNU General Public License v2
+
+inherit autotools qa-policy
+
+DESCRIPTION="X.Org X Toolkit Intrinsics library"
+HOMEPAGE="https://www.x.org/wiki/"
+SNAPSHOT=c6c4e5ba569579a0c9f339035adc8734ceed903c
+SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libXt/-/archive/${SNAPSHOT}/libXt-${SNAPSHOT}.tar.bz2 -> libXt-${SNAPSHOT}.tar.bz2"
+S="${WORKDIR}/libxt-${SNAPSHOT}"
+
+LICENSE="MIT"
+SLOT="0"
+KEYWORDS="amd64 arm64"
+
+IUSE="test static-libs"
+
+RDEPEND=">=xgui-lib/libX11-1.6.2
+	>=xgui-lib/libSM-1.2.1-r1
+	>=xgui-lib/libICE-1.0.8-r1
+	xgui-tools/xorgproto"
+DEPEND="${RDEPEND}
+	test? ( lib-core/glib )"
+
+src_prepare() {
+	eapply "${FILESDIR}"/${PN}-20260125-gcc15-array-bounds.patch
+	eautoreconf
+	default
+}
+
+src_configure() {
+	qa-policy-configure
+	local myconf=(
+		--bindir="${EPREFIX}"/usr/bin
+		--sbindir="${EPREFIX}"/usr/bin
+		--libdir="${EPREFIX}"/usr/lib
+		--libexecdir="${EPREFIX}"/usr/libexec
+		--sysconfdir="${EPREFIX}"/etc
+		--localstatedir="${EPREFIX}"/var
+	)
+	ECONF_SOURCE=${S} econf "${myconf[@]}"
+}
+
+src_install() {
+	default
+	qa-policy-install
+	use static-libs || find "${ED}" -name '*.a' -delete
+}

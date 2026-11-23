@@ -4,7 +4,7 @@ inherit meson
 
 DESCRIPTION="Provides a standard configuration setup for installing PKCS#11"
 HOMEPAGE="https://p11-glue.freedesktop.org/p11-kit.html https://github.com/p11-glue/p11-kit"
-SNAPSHOT=f9813f90a51761dc75b5dcd8d9766466b8904f5c
+SNAPSHOT=422072e4d6a2eddf36fde36036f17407305bbffe
 PKCS11_JSON_COMMIT=e6ee384f22fe5a3b608af1f1dc51087bc4aaea1f
 SRC_URI="
 	https://github.com/p11-glue/p11-kit/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz
@@ -19,6 +19,7 @@ SLOT="0"
 PATCHES=(
 	"${FILESDIR}/p11-kit-test-rpc-assertions.patch"
 	"${FILESDIR}/p11-kit-test-server-socket-path.patch"
+	"${FILESDIR}/p11-kit-test-server-with-own-client.patch"
 )
 
 DEPEND="app-crypto/vesk"

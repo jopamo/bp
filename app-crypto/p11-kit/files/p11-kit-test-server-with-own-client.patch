@@ -1,0 +1,21 @@
+--- a/p11-kit/test-server.sh
++++ b/p11-kit/test-server.sh
+@@ -52,10 +52,8 @@
+-	: ${P11TOOL=p11tool}
+-	if "$P11TOOL" --version > /dev/null; then
+-		"$P11TOOL" --provider "$P11_MODULE_PATH"/p11-kit-client.so --list-tokens > /dev/null 2> p11tool.err
+-		if test $? -ne 0; then
+-			sed 's/^/# /' p11tool.err
+-			assert_fail "unable to access server"
+-		fi
+-	else
+-		skip "p11tool not found"
+-		return
++	if ! "$abs_top_builddir"/p11-kit/p11-kit-testable list-tokens --only-uris \
++		--provider "$P11_MODULE_PATH"/p11-kit-client.so "pkcs11:" > tokens.out 2> tokens.err; then
++		sed 's/^/# /' tokens.err
++		assert_fail "unable to access server"
++	fi
++	if ! grep -q 'token=TEST%20LABEL$' tokens.out; then
++		sed 's/^/# /' tokens.out
++		assert_fail "mock token not found through server"

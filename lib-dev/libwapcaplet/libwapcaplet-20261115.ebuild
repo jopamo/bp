@@ -4,8 +4,8 @@ inherit toolchain-funcs qa-policy
 
 DESCRIPTION="String interning dictionary library"
 HOMEPAGE="https://www.netsurf-browser.org/projects/libwapcaplet/ https://github.com/netsurf-browser/libwapcaplet"
-SNAPSHOT=c7c128d3eb3223b216c974471f82e9337fbcf4ba
-BS_SNAPSHOT=e429a19d922b52e470fd8a2fd7e84a64b17175c9
+SNAPSHOT=74e49210e9c56381c1e60aea309dc80074a54ede
+BS_SNAPSHOT=b38fe7146aa3af08881ba9d6817f19ee7abe4a86
 SRC_URI="
 	https://github.com/netsurf-browser/libwapcaplet/archive/${SNAPSHOT}.tar.gz -> libwapcaplet-${SNAPSHOT}.tar.gz
 	https://github.com/netsurf-browser/buildsystem/archive/${BS_SNAPSHOT}.tar.gz -> netsurf-buildsystem-${BS_SNAPSHOT}.tar.gz

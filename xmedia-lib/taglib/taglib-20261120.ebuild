@@ -4,7 +4,7 @@ inherit cmake
 
 DESCRIPTION="A library for reading and editing audio meta data"
 HOMEPAGE="https://taglib.github.io/"
-SNAPSHOT=58499cb157c38b8d07b262b15c4ecba9f36aeb9a
+SNAPSHOT=7333be146c0a412d345f7e73554e383ebb8d6fc3
 UTFCPP_SNAPSHOT=2d8e20b22dcb3e9b3c4f52103182ebda949c6089
 # lockstep-gitlink: UTFCPP_SNAPSHOT SNAPSHOT 3rdparty/utfcpp
 SRC_URI="

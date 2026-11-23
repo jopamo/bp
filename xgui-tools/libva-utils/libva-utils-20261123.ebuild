@@ -4,7 +4,7 @@ inherit autotools qa-policy
 
 DESCRIPTION="VA-API utilities, including vainfo"
 HOMEPAGE="https://github.com/intel/libva-utils"
-SNAPSHOT=fb62481b3011bb6760cc3f247d45fb10cd61e452
+SNAPSHOT=926cf158588006f1e3ca1c94fc245b188e0ed807
 SRC_URI="https://github.com/intel/libva-utils/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/libva-utils-${SNAPSHOT}"
 

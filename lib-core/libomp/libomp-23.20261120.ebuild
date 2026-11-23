@@ -5,7 +5,7 @@ inherit cmake
 
 DESCRIPTION="LLVM OpenMP runtime library"
 HOMEPAGE="https://openmp.llvm.org/"
-SNAPSHOT=395ba2c4d274e0d81bea69a49aba372e3743d113
+SNAPSHOT=f51e6963e4edfefbc23dad9b81e5c762f01de4b8
 SRC_URI="https://github.com/llvm/llvm-project/archive/${SNAPSHOT}.tar.gz -> llvm-project-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/llvm-project-${SNAPSHOT}/runtimes"
 
@@ -14,6 +14,14 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 BDEPEND="app-lang/python"
+
+src_prepare() {
+	(
+		cd "${S}/.." || die
+		eapply "${FILESDIR}/gcc-lto-symbol-versions.patch"
+	) || die
+	cmake_src_prepare
+}
 
 src_configure() {
 	local mycmakeargs=(

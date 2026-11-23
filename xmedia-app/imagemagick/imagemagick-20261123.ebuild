@@ -2,7 +2,7 @@
 
 DESCRIPTION="A collection of tools and libraries for many image formats"
 HOMEPAGE="https://www.imagemagick.org/"
-SNAPSHOT=cf973b410447fc051aa05fb93573e29762e34981
+SNAPSHOT=3eeefb9633286904621822e9721971e266af7288
 SRC_URI="https://github.com/ImageMagick/ImageMagick/archive/${SNAPSHOT}.tar.gz -> ImageMagick-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/ImageMagick-${SNAPSHOT}"
 
@@ -25,6 +25,8 @@ DEPEND="
 "
 
 PATCHES=( "${FILESDIR}/${PN}-postscript-negative-scale.patch" )
+
+PATCHES+=( "${FILESDIR}/test-tap-log-without-awk-command-pipes.patch" )
 
 src_prepare() {
 	default

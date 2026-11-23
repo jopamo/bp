@@ -4,7 +4,7 @@ inherit hackage
 
 DESCRIPTION="Shell script analysis tool"
 HOMEPAGE="https://www.shellcheck.net https://github.com/koalaman/shellcheck"
-SNAPSHOT=1046c00b61516a64f85a45e5fbdc69c6c1654eb5
+SNAPSHOT=70f8c60a55cfd4a682196e6d84588dd5adf5d402
 SRC_URI="https://github.com/koalaman/shellcheck/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
@@ -40,7 +40,7 @@ HACKAGE_ROOTS=(
 
 # lockstep-hackage-managed: true
 # lockstep-hackage-deps: begin
-HACKAGE_SNAPSHOT="lts-24.66"
+HACKAGE_SNAPSHOT="lts-24.68"
 HACKAGE_DEPS=(
 	"aeson 2.2.5.1 0 a89fd54b802351ebf57a6be451db25c167c3ccb35583b4a9d2bb54d7d1c43de2"
 	"ansi-terminal 1.1.5 0 408d9232e5304efead718f96138d6d7eb2da608c6121c5c0dc6a71a833b14320"

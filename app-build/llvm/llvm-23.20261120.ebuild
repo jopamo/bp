@@ -1,7 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 BRANCH_NAME="release/$(ver_cut 1).x"
-SNAPSHOT=395ba2c4d274e0d81bea69a49aba372e3743d113
+SNAPSHOT=f51e6963e4edfefbc23dad9b81e5c762f01de4b8
 
 inherit cmake flag-o-matic qa-policy toolchain-funcs
 
@@ -177,6 +177,7 @@ src_prepare() {
     eapply "${FILESDIR}/lldb-check-lua.patch"
     eapply "${FILESDIR}/lldb-vesk-tests.patch"
     eapply "${FILESDIR}/compiler-rt-selected-tests.patch"
+    eapply "${FILESDIR}/libfuzzer-tests-link-configured-unwinder.patch"
     popd >/dev/null || die
 
     sed -i \

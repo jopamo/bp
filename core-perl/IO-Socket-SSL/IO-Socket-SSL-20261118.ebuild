@@ -4,7 +4,7 @@ inherit perl-module
 
 DESCRIPTION="Nearly transparent SSL encapsulation for IO::Socket::INET"
 HOMEPAGE="https://metacpan.org/release/IO-Socket-SSL"
-SNAPSHOT=70c236e67e08fa08af969c5a2829092b62906d0c
+SNAPSHOT=6182228f8fefc4edecd0caa9e60980ff42355a47
 SRC_URI="https://github.com/noxxi/p5-io-socket-ssl/archive/${SNAPSHOT}.tar.gz -> p5-io-socket-ssl-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/p5-io-socket-ssl-${SNAPSHOT}"
 

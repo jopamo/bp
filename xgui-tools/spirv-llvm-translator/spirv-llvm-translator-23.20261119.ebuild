@@ -6,7 +6,7 @@ inherit cmake flag-o-matic
 
 DESCRIPTION="Bi-directional translator between SPIR-V and LLVM IR"
 HOMEPAGE="https://github.com/KhronosGroup/SPIRV-LLVM-Translator"
-SNAPSHOT=db5855d76a0ff33228bcf48032b350b25dcdbcf2
+SNAPSHOT=b5b8fce1604ee82ab8f5bced7e7c7961b5bd4de4
 SRC_URI="https://github.com/KhronosGroup/SPIRV-LLVM-Translator/archive/${SNAPSHOT}.tar.gz -> spirv-llvm-translator-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/SPIRV-LLVM-Translator-${SNAPSHOT}"
 
@@ -23,11 +23,13 @@ RDEPEND="
 	<app-build/llvm-24:0
 "
 DEPEND="${RDEPEND}
-	app-dev/spirv-headers
+	>=app-dev/spirv-headers-20261120
 "
 BDEPEND="app-dev/pkgconf"
 
 PATCHES=(
+	"${FILESDIR}/spirv-printf-format-pointer.patch"
+	"${FILESDIR}/spirv-phi-test-optional-backend.patch"
 )
 
 src_prepare() {
@@ -47,7 +49,8 @@ src_configure() {
 		# Force the *system* LLVM package
 		-DLLVM_DIR="${ESYSROOT}/usr/lib/cmake/llvm"
 
-		#-DLLVM_EXTERNAL_SPIRV_HEADERS_SOURCE_DIR="${ESYSROOT}/usr/include/spirv"
+		# Upstream appends /include to this prefix.
+		-DLLVM_EXTERNAL_SPIRV_HEADERS_SOURCE_DIR="${ESYSROOT}/usr"
 		-DLLVM_SPIRV_INCLUDE_TESTS=$(usex test "ON" "OFF")
 		-Wno-dev
 	)

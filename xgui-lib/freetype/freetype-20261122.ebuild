@@ -6,7 +6,7 @@ BRANCH_NAME="master"
 
 DESCRIPTION="A high-quality and portable font engine"
 HOMEPAGE="https://www.freetype.org/"
-SNAPSHOT=dbb00e529e69a2be629a9ef98498e4f9b188aab1
+SNAPSHOT=504159f2735e26d36f1f87e600d245e1f559f9de
 DLG_SNAPSHOT=395ccad2c1e0daae535c4d20bb0a3f2424648e17
 # lockstep-gitlink: DLG_SNAPSHOT SNAPSHOT subprojects/dlg
 SRC_URI="

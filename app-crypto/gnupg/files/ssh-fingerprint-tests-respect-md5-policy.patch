@@ -1,0 +1,27 @@
+Subject: test ssh fingerprints with the available digest algorithms
+
+Keep all SHA-256 coverage. When libgcrypt does not provide MD5,
+verify that the legacy fingerprint request returns the digest error.
+
+diff --git a/common/t-ssh-utils.c b/common/t-ssh-utils.c
+--- a/common/t-ssh-utils.c
++++ b/common/t-ssh-utils.c
+@@ -351,0 +352,2 @@
++      gpg_error_t md5_unavailable = gcry_md_test_algo (GCRY_MD_MD5);
++
+@@ -396,3 +398,4 @@
+-          if (in_fips_mode)
+-            {
+-              if (!err)
++          if (in_fips_mode || md5_unavailable)
++            {
++              if (!err || (!in_fips_mode
++                           && gpg_err_code (err) != gpg_err_code (md5_unavailable)))
+@@ -400,2 +403,3 @@
+-                  fprintf (stderr, "%s:%d: Getting MD5 fingerprint unexpectedly "
+-                           "worked in FIPS mode for key %d\n", __FILE__, __LINE__, idx);
++                  fprintf (stderr, "%s:%d: MD5 fingerprint did not reject "
++                           "key %d as expected: %s\n", __FILE__, __LINE__, idx,
++                           gpg_strerror (err));
+@@ -403,0 +408 @@
++              gcry_sexp_release (key);

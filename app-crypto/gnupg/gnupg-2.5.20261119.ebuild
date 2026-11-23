@@ -6,7 +6,7 @@ inherit toolchain-funcs flag-o-matic autotools qa-policy
 
 DESCRIPTION="The GNU Privacy Guard, a GPL OpenPGP implementation"
 HOMEPAGE="http://www.gnupg.org/"
-SNAPSHOT=9fbeb5897f8b8e9cfae7f65eb447813a40329d62
+SNAPSHOT=b4a6152796619e7f0ab93eb8141de2938989ed95
 SRC_URI="https://github.com/gpg/gnupg/archive/${SNAPSHOT}.tar.gz -> gnupg-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/gnupg-${SNAPSHOT}"
 
@@ -34,6 +34,7 @@ src_prepare() {
 	filter-flags -Wl,-z,defs -flto*
 
 	eapply "${FILESDIR}"/disable-dev-warning-never.patch
+	eapply "${FILESDIR}"/ssh-fingerprint-tests-respect-md5-policy.patch
 
 	default
 

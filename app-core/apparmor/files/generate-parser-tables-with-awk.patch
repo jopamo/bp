@@ -1,0 +1,9 @@
+--- a/Makefile
++++ b/Makefile
+@@ -397,2 +397 @@
+-		cat base_af_names.h | LC_ALL=C sed -n -e 's/[ \t]\?AF_MAX[ \t]\+[0-9]\+,//g'  -e 's/[ \t]\+\?AF_\([A-Z0-9_]\+\)[ \t]\+\([0-9]\+\),/#ifndef AF_\1\n#  define AF_\1 \2\n#endif\nAA_GEN_NET_ENT("\L\1", \UAF_\1)\n/pg' > $@ ; \
+-		cat base_af_names.h | LC_ALL=C sed -n -e 's/AF_MAX[ \t]\+\([0-9]\+\),\?.*/\n#define AA_AF_MAX \1\n/p' >> $@ ; \
++		LC_ALL=C $(AWK) '$$1 ~ /^AF_[A-Z0-9_]+$$/ && $$2 ~ /^[0-9]+,$$/ { val = $$2; sub(/,$$/, "", val); if ($$1 == "AF_MAX") { printf "\n#define AA_AF_MAX %s\n", val } else { printf "#ifndef %s\n#  define %s %s\n#endif\nAA_GEN_NET_ENT(\"%s\", %s)\n\n", $$1, $$1, val, tolower(substr($$1, 4)), $$1 } }' base_af_names.h > $@ ; \
+@@ -405 +404 @@
+-	../common/list_capabilities.sh | LC_ALL=C sed -n -e "s/[ \\t]\\?CAP_\\([A-Z0-9_]\\+\\)/\{\"\\L\\1\\E\", CAP_\\1, NO_BACKMAP_CAP, capability_flags::BASE_FEATURE\},\\n/pg" > $@
++	../common/list_capabilities.sh | LC_ALL=C $(AWK) '$$1 ~ /^CAP_[A-Z0-9_]+$$/ { printf "{\"%s\", %s, NO_BACKMAP_CAP, capability_flags::BASE_FEATURE},\n\n", tolower(substr($$1, 5)), $$1 }' > $@

@@ -1,0 +1,17 @@
+--- a/parser_lex.l
++++ b/parser_lex.l
+@@ -121,0 +122 @@
++static void push_include_buffer(FILE *file);
+@@ -156 +157 @@
+-		yypush_buffer_state(yy_create_buffer(yyin, YY_BUF_SIZE));
++		push_include_buffer(yyin);
+@@ -207 +208 @@
+-		yypush_buffer_state(yy_create_buffer( yyin, YY_BUF_SIZE ));
++		push_include_buffer(yyin);
+@@ -956,0 +958,6 @@
++
++/* Flex defines YY_BUF_SIZE before this section, but not always in the prologue. */
++static void push_include_buffer(FILE *file)
++{
++	yypush_buffer_state(yy_create_buffer(file, YY_BUF_SIZE));
++}

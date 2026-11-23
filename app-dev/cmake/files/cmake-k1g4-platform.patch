@@ -1,0 +1,17 @@
+diff --git a/bootstrap b/bootstrap
+--- a/bootstrap
++++ b/bootstrap
+@@ -53,2 +53,5 @@
+ cmake_system=`uname`
++if test "$cmake_system" = k1g4; then
++  cmake_system=Linux
++fi
+ cmake_source_dir=`cd "\`dirname \"$0\"\`";pwd`
+diff --git a/Source/cmSystemTools.cxx b/Source/cmSystemTools.cxx
+--- a/Source/cmSystemTools.cxx
++++ b/Source/cmSystemTools.cxx
+@@ -4358,1 +4358,4 @@
+     systemName = uts_name.sysname;
++    if (systemName == "k1g4") {
++      systemName = "Linux";
++    }

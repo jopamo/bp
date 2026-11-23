@@ -4,7 +4,7 @@ inherit meson python-single-r1
 
 DESCRIPTION="GTK+ Documentation Generator"
 HOMEPAGE="https://www.gtk.org/gtk-doc/"
-SNAPSHOT=ec8b5b70ce6b847d715057ea70e9093b6f442eb7
+SNAPSHOT=67bf943c228cbc46ded9247c0e0246f04a1b7060
 SRC_URI="https://gitlab.gnome.org/GNOME/gtk-doc/-/archive/${SNAPSHOT}/gtk-doc-${SNAPSHOT}.tar.bz2 -> gtk-doc-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/gtk-doc-${SNAPSHOT}"
 

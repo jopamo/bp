@@ -6,7 +6,7 @@ inherit autotools
 
 DESCRIPTION="tcltk/tcl - Tool Command Language"
 HOMEPAGE="http://www.tcl.tk/"
-SNAPSHOT=b7fef4003f39e354534c17cc9a106b55e4cedb63
+SNAPSHOT=8c6bb94366468eea835e41605340bc58f2cb5d9a
 SRC_URI="https://github.com/tcltk/tcl/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/tcl-${SNAPSHOT}/unix
 
@@ -31,6 +31,7 @@ src_prepare() {
 	pushd "${S%/*}" >/dev/null || die
 	eapply "${FILESDIR}"/${PN}-async-socket-replacement.patch
 	eapply "${FILESDIR}"/${PN}-test-sandbox-environment.patch
+	eapply "${FILESDIR}"/${PN}-cwd-errors-and-zlib-tests.patch
 	popd >/dev/null || die
 	eautoreconf
 }

@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-SNAPSHOT=6eaadb94b49368d9a020711d62b1166692f28174
+SNAPSHOT=dd29dc4da1f8d695fc4566ac2b9f1b657cc9d272
 
 inherit autotools qa-policy
 
@@ -27,6 +27,7 @@ BDEPEND="
 PATCHES=(
 	"${FILESDIR}/extra-type-macro.patch"
 	"${FILESDIR}/gettext-disabled-nls.patch"
+	"${FILESDIR}/testmaker-stop-sed-portably.patch"
 )
 
 src_prepare() {

@@ -1,12 +1,13 @@
 # Distributed under the terms of the GNU General Public License v2
 
 BRANCH_NAME="master"
-SNAPSHOT=fb625fccf20eb8329c4c0698f9e0351b5647b8cd
-SDB_SNAPSHOT=8edd753d2e2be2f4f90f587f96f80ca90c8433ae
+SNAPSHOT=4b2b722e23278a5cadb79d914f4274ee73779518
+# Match subprojects/*.wrap: these sources are patched during src_prepare.
+SDB_SNAPSHOT=493d5ced7e81409c908a61a27dd58410b3c68d67
 V35ARMV7_SNAPSHOT=7d7a78f52196f6333bd5746dc526684edbfd9af0
 V35ARM64_SNAPSHOT=adfc7238a27ef279cc83f3076c6b107573f75444
-QJS_SNAPSHOT=71e6367f050b42f25d8e5849425070c322705d63
-CAPSTONE_SNAPSHOT=823242a51299ce5a8bac79c0914278419fe4f7a6
+QJS_SNAPSHOT=b51e5278439b2fa0510fbb1f3b3dff9f0064d5d7
+CAPSTONE_SNAPSHOT=2461ca7372067eeb6197f0df048f767a8db3bca3
 
 inherit flag-o-matic toolchain-funcs
 
@@ -35,7 +36,7 @@ DEPEND="
 BDEPEND="app-dev/gperf"
 
 PATCHES=(
-	"${FILESDIR}"/radare2-20261016-qjs-interrupt-handler-context.patch
+	"${FILESDIR}"/radare2-20261123-use-staged-dependencies.patch
 )
 
 src_prepare() {
@@ -49,8 +50,20 @@ src_prepare() {
 	mv "${WORKDIR}/quickjs-${QJS_SNAPSHOT}" subprojects/qjs || die
 	mv "${WORKDIR}/capstone-${CAPSTONE_SNAPSHOT}" subprojects/capstone-v5 || die
 
-	cp -a subprojects/packagefiles/qjs/. subprojects/qjs/ || die
-	cp -a subprojects/packagefiles/capstone-v5/. subprojects/capstone-v5/ || die
+	local project patch_list patch_file
+	local -a patches
+	for project in sdb qjs capstone-v5; do
+		cp -a "subprojects/packagefiles/${project}/." "subprojects/${project}/" || die
+		patch_list=$(sed -n 's/^diff_files = //p' "subprojects/${project}.wrap") || die
+		IFS=, read -r -a patches <<< "${patch_list}"
+		for patch_file in "${patches[@]}"; do
+			patch_file=${patch_file# }
+			(
+				cd "subprojects/${project}" || die
+				eapply "${S}/subprojects/${patch_file}"
+			) || die "failed applying ${patch_file}"
+		done
+	done
 }
 
 src_configure() {

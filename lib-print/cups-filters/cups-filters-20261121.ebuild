@@ -4,7 +4,7 @@ inherit flag-o-matic autotools qa-policy
 
 DESCRIPTION="Cups filters"
 HOMEPAGE="https://github.com/OpenPrinting/cups-filters"
-SNAPSHOT=7ce352539630a7a0bb4a51f413a2936cf5b5892f
+SNAPSHOT=2728f98624ef3c17956f23b587a6523cde299ad5
 SRC_URI="https://github.com/OpenPrinting/${PN}/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

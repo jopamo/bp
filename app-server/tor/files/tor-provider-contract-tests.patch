@@ -179,57 +179,61 @@ Use POSIX cp -R for the zero-length-key test backup.
 +    }
 --- a/src/test/test_tortls_openssl.c
 +++ b/src/test/test_tortls_openssl.c
-@@ -48,2 +47,0 @@
+@@ -48,6 +47,0 @@
 -
+-#if defined(LIBRESSL_VERSION_NUMBER)
+-#define SSL_STATE_STR "before/accept initialization"
+-#else
 -#define SSL_STATE_STR "before SSL initialization"
-@@ -139,0 +138,2 @@
+-#endif
+@@ -143,0 +138,2 @@
 +  char expected[256];
 +  const char *ssl_state;
-@@ -156,0 +157,5 @@
+@@ -160,0 +157,5 @@
 +  tt_assert(tls->ssl);
 +  tt_assert(SSL_in_before(tls->ssl));
 +  tt_assert(!SSL_is_init_finished(tls->ssl));
 +  ssl_state = SSL_state_string_long(tls->ssl);
 +  tt_assert(ssl_state && *ssl_state);
-@@ -158 +163,2 @@
+@@ -162 +163,2 @@
 -  tt_str_op(buf, OP_EQ, SSL_STATE_STR " in HANDSHAKE");
 +  tor_snprintf(expected, sizeof(expected), "%s in HANDSHAKE", ssl_state);
 +  tt_str_op(buf, OP_EQ, expected);
-@@ -162 +168,2 @@
+@@ -166 +168,2 @@
 -  tt_str_op(buf, OP_EQ, SSL_STATE_STR " in OPEN");
 +  tor_snprintf(expected, sizeof(expected), "%s in OPEN", ssl_state);
 +  tt_str_op(buf, OP_EQ, expected);
-@@ -166 +173,2 @@
+@@ -170 +173,2 @@
 -  tt_str_op(buf, OP_EQ, SSL_STATE_STR " in GOTCLOSE");
 +  tor_snprintf(expected, sizeof(expected), "%s in GOTCLOSE", ssl_state);
 +  tt_str_op(buf, OP_EQ, expected);
-@@ -170 +178,2 @@
+@@ -174 +178,2 @@
 -  tt_str_op(buf, OP_EQ, SSL_STATE_STR " in SENTCLOSE");
 +  tor_snprintf(expected, sizeof(expected), "%s in SENTCLOSE", ssl_state);
 +  tt_str_op(buf, OP_EQ, expected);
-@@ -174 +183,2 @@
+@@ -178 +183,2 @@
 -  tt_str_op(buf, OP_EQ, SSL_STATE_STR " in CLOSED");
 +  tor_snprintf(expected, sizeof(expected), "%s in CLOSED", ssl_state);
 +  tt_str_op(buf, OP_EQ, expected);
-@@ -178 +188,2 @@
+@@ -182 +188,2 @@
 -  tt_str_op(buf, OP_EQ, SSL_STATE_STR " in RENEGOTIATE");
 +  tor_snprintf(expected, sizeof(expected), "%s in RENEGOTIATE", ssl_state);
 +  tt_str_op(buf, OP_EQ, expected);
-@@ -182 +193 @@
+@@ -186 +193 @@
 -  tt_str_op(buf, OP_EQ, SSL_STATE_STR);
 +  tt_str_op(buf, OP_EQ, ssl_state);
-@@ -186 +197,3 @@
+@@ -190 +197,3 @@
 -  tt_str_op(buf, OP_EQ, SSL_STATE_STR " in unknown TLS state");
 +  tor_snprintf(expected, sizeof(expected), "%s in unknown TLS state",
 +               ssl_state);
 +  tt_str_op(buf, OP_EQ, expected);
-@@ -249,0 +263 @@
+@@ -253,0 +263 @@
 +  char expected[256];
-@@ -308,0 +323,3 @@
+@@ -312,0 +323,3 @@
 +  tt_assert(tls->ssl);
 +  tt_assert(SSL_in_before(tls->ssl));
 +  tt_assert(!SSL_is_init_finished(tls->ssl));
-@@ -312,2 +329,3 @@
+@@ -316,2 +329,3 @@
 -  expect_log_msg("TLS error with 127.hello: (null)"
 -            " (in (null):(null):" SSL_STATE_STR ")\n");
 +  tor_snprintf(expected, sizeof(expected), "TLS error with 127.hello: (null)"

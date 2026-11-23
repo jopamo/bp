@@ -4,17 +4,17 @@ PYTHON_COMPAT=( python3_13 )
 DISTUTILS_EXT=1
 DISTUTILS_USE_PEP517=sip
 
-inherit distutils-r1 multiprocessing qmake-utils toolchain-funcs
+inherit distutils-r1 multiprocessing pypi qmake-utils toolchain-funcs
 
 DESCRIPTION="Python bindings for Qt 6"
 HOMEPAGE="https://www.riverbankcomputing.com/software/pyqt/"
-SRC_URI="https://files.pythonhosted.org/packages/8b/77/73ae0fd2ce7915ce87269743fd11f14f009b8db60a58759afc1c402327f2/pyqt6-6.12.0.tar.gz"
 
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 IUSE="opengl"
 
+# Build against the distribution's Qt libraries rather than the wheel bundle.
 DEPEND="
 	>=xgui-lib/qtbase-6.12:6=[opengl?]
 	>=xgui-lib/qtscxml-6.12:6=
@@ -32,6 +32,11 @@ BDEPEND="
 	<dev-pypi/pyqt-builder-2[${PYTHON_USEDEP}]
 "
 
+PATCHES=(
+	"${FILESDIR}/pyqt6-probe-selected-bindings.patch"
+	"${FILESDIR}/pyqt6-guard-accessible-identifier.patch"
+)
+
 python_configure() {
 	DISTUTILS_ARGS=(
 		--confirm-license
@@ -47,6 +52,10 @@ python_configure() {
 		"--qmake-setting=QMAKE_CXXFLAGS += ${CXXFLAGS}"
 		"--qmake-setting=QMAKE_LFLAGS += ${LDFLAGS}"
 	)
+	if ! tc-is-cross-compiler; then
+		DISTUTILS_ARGS+=( --probe-enabled-bindings )
+	fi
+
 	local module
 	for module in QtCore QtGui QtWidgets QtNetwork QtSvg QtSvgWidgets QtStateMachine; do
 		DISTUTILS_ARGS+=( --enable="${module}" )

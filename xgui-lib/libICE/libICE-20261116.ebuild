@@ -5,7 +5,7 @@ inherit autotools qa-policy
 DESCRIPTION="X.Org Inter-Client Exchange library"
 HOMEPAGE="https://www.x.org/wiki/"
 
-SNAPSHOT=513399df5206f52db92bb88970f38dc8a3ea1645
+SNAPSHOT=47da151611e7c914c5a3f69ece8c913597e3aea5
 SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libICE/-/archive/${SNAPSHOT}/libICE-${SNAPSHOT}.tar.bz2 -> libICE-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/libice-${SNAPSHOT}"
 

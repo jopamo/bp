@@ -6,7 +6,7 @@ inherit toolchain-funcs flag-o-matic qa-policy
 DESCRIPTION="UASM is a free MASM-compatible assembler"
 HOMEPAGE="https://www.terraspace.co.uk/uasm.html"
 
-SNAPSHOT=fa7add4042f11050aee97150caa17a9ef699c600
+SNAPSHOT=ca2479efdd13ef72bdc367b50a0a62b34c455b2e
 SRC_URI="https://github.com/Terraspace/UASM/archive/${SNAPSHOT}.tar.gz -> uasm-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/UASM-${SNAPSHOT}"
 

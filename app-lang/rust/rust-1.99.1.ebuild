@@ -146,6 +146,8 @@ pkg_setup() {
 }
 
 src_prepare() {
+	eapply "${FILESDIR}/rust-k1g4-bootstrap.patch"
+
 	"${EPYTHON}" - <<'PY' || die
 from pathlib import Path
 

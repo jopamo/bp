@@ -1,0 +1,12 @@
+diff --git a/src/bootstrap/bootstrap.py b/src/bootstrap/bootstrap.py
+--- a/src/bootstrap/bootstrap.py
++++ b/src/bootstrap/bootstrap.py
+@@ -336,3 +336,3 @@
+-    elif kernel == "Linux":
++    elif kernel in ("Linux", "k1g4"):
+         # Apple doesn't support `-o` so this can't be used in the combined
+         # uname invocation above
+@@ -768,2 +768,2 @@
+-            if ostype != "Linux":
++            if ostype not in ("Linux", "k1g4"):
+                 return False

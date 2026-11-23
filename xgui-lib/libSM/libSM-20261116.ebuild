@@ -5,7 +5,7 @@ inherit autotools qa-policy
 DESCRIPTION="X.Org Session Management library"
 HOMEPAGE="https://www.x.org/wiki/"
 
-SNAPSHOT=4aad70b1fe7042980ba53db6464685e92eae084a
+SNAPSHOT=c46d313e418a190dfa5197a583fa89797ae5fc8d
 SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libSM/-/archive/${SNAPSHOT}/libSM-${SNAPSHOT}.tar.bz2 -> libSM-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/libsm-${SNAPSHOT}"
 

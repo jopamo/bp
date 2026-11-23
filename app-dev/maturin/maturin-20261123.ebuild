@@ -32,14 +32,12 @@ CARGO_DEPS="
 	rust-crates/cab-0.6.0
 	rust-crates/camino-1.2.2
 	rust-crates/cargo-config2-0.1.44
-	rust-crates/cargo-cyclonedx-0.5.9
-	rust-crates/cargo-lock-10.1.0
+	rust-crates/cargo-cyclonedx-0.5.10
+	rust-crates/cargo-lock-11.1.0
 	rust-crates/cargo-options-0.8.1
-	rust-crates/cargo-platform-0.1.9
 	rust-crates/cargo-platform-0.3.2
 	rust-crates/cargo-xwin-0.23.1
 	rust-crates/cargo-zigbuild-0.24.0
-	rust-crates/cargo_metadata-0.18.1
 	rust-crates/cargo_metadata-0.23.1
 	rust-crates/cbindgen-0.29.2
 	rust-crates/cc-1.2.60
@@ -79,7 +77,7 @@ CARGO_DEPS="
 	rust-crates/crossbeam-utils-0.8.21
 	rust-crates/crypto-common-0.1.7
 	rust-crates/crypto-common-0.2.1
-	rust-crates/cyclonedx-bom-0.8.1
+	rust-crates/cyclonedx-bom-0.9.0
 	rust-crates/cyclonedx-bom-macros-0.1.0
 	rust-crates/data-encoding-2.10.0
 	rust-crates/der-0.8.3
@@ -98,7 +96,8 @@ CARGO_DEPS="
 	rust-crates/either-1.15.0
 	rust-crates/encode_unicode-1.0.0
 	rust-crates/encoding_rs-0.8.35
-	rust-crates/env_logger-0.10.2
+	rust-crates/env_filter-2.0.0
+	rust-crates/env_logger-0.11.11
 	rust-crates/equivalent-1.0.2
 	rust-crates/errno-0.3.14
 	rust-crates/expect-test-1.5.1
@@ -113,7 +112,7 @@ CARGO_DEPS="
 	rust-crates/foldhash-0.2.0
 	rust-crates/foreign-types-0.3.2
 	rust-crates/foreign-types-shared-0.1.1
-	rust-crates/form_urlencoded-1.2.2
+	rust-crates/form_urlencoded-1.2.3
 	rust-crates/fs-err-3.3.0
 	rust-crates/fs4-0.13.1
 	rust-crates/futures-core-0.3.32
@@ -132,7 +131,6 @@ CARGO_DEPS="
 	rust-crates/hashbrown-0.16.1
 	rust-crates/hashbrown-0.17.0
 	rust-crates/heck-0.5.0
-	rust-crates/hermit-abi-0.5.2
 	rust-crates/hex-0.4.3
 	rust-crates/http-1.4.0
 	rust-crates/httparse-1.10.1
@@ -154,11 +152,13 @@ CARGO_DEPS="
 	rust-crates/indicatif-0.18.4
 	rust-crates/indoc-2.0.7
 	rust-crates/insta-1.47.2
-	rust-crates/is-terminal-0.4.17
 	rust-crates/is_terminal_polyfill-1.70.2
 	rust-crates/itertools-0.13.0
 	rust-crates/itertools-0.14.0
 	rust-crates/itoa-1.0.18
+	rust-crates/jiff-0.2.44
+	rust-crates/jiff-core-0.1.6
+	rust-crates/jiff-static-0.2.44
 	rust-crates/jni-0.21.1
 	rust-crates/jni-sys-0.3.1
 	rust-crates/jni-sys-0.4.1
@@ -230,6 +230,7 @@ CARGO_DEPS="
 	rust-crates/plain-0.2.3
 	rust-crates/platform-info-2.1.0
 	rust-crates/portable-atomic-1.13.1
+	rust-crates/portable-atomic-util-0.2.8
 	rust-crates/potential_utf-0.1.5
 	rust-crates/powerfmt-0.2.0
 	rust-crates/pretty_assertions-1.4.1
@@ -295,7 +296,6 @@ CARGO_DEPS="
 	rust-crates/serde_derive-1.0.228
 	rust-crates/serde_derive_internals-0.29.1
 	rust-crates/serde_json-1.0.151
-	rust-crates/serde_spanned-0.6.9
 	rust-crates/serde_spanned-1.1.1
 	rust-crates/serial_test-3.4.0
 	rust-crates/serial_test_derive-3.4.0
@@ -337,16 +337,12 @@ CARGO_DEPS="
 	rust-crates/time-core-0.1.8
 	rust-crates/time-macros-0.2.27
 	rust-crates/tinystr-0.8.3
-	rust-crates/toml-0.8.23
 	rust-crates/toml-0.9.12+spec-1.1.0
 	rust-crates/toml-1.1.2+spec-1.1.0
-	rust-crates/toml_datetime-0.6.11
 	rust-crates/toml_datetime-0.7.5+spec-1.1.0
 	rust-crates/toml_datetime-1.1.1+spec-1.1.0
-	rust-crates/toml_edit-0.22.27
 	rust-crates/toml_edit-0.25.11+spec-1.1.0
 	rust-crates/toml_parser-1.1.2+spec-1.1.0
-	rust-crates/toml_write-0.1.2
 	rust-crates/toml_writer-1.1.1+spec-1.1.0
 	rust-crates/tracing-0.1.44
 	rust-crates/tracing-attributes-0.1.31
@@ -370,13 +366,13 @@ CARGO_DEPS="
 	rust-crates/untrusted-0.9.0
 	rust-crates/ureq-3.3.0
 	rust-crates/ureq-proto-0.6.0
-	rust-crates/url-2.5.8
+	rust-crates/url-2.5.9
 	rust-crates/urlencoding-2.1.3
 	rust-crates/utf8-zero-0.8.1
 	rust-crates/utf8_iter-1.0.4
 	rust-crates/utf8parse-0.2.2
 	rust-crates/uuid-1.23.1
-	rust-crates/validator-0.19.0
+	rust-crates/validator-0.20.0
 	rust-crates/valuable-0.1.1
 	rust-crates/vcpkg-0.2.15
 	rust-crates/version-ranges-0.1.3
@@ -489,7 +485,7 @@ RDEPEND=""
 # lockstep-pypi-deps: end
 DESCRIPTION="Build and publish crates with pyo3, rust-cpython and cffi bindings"
 HOMEPAGE="https://www.maturin.rs/"
-SNAPSHOT=fe3ae413bae518dd625479af01824e82e733cd83
+SNAPSHOT=033c9a935101bace83b6d503d28a05a7e4c56a17
 SRC_URI="https://github.com/PyO3/maturin/archive/${SNAPSHOT}.tar.gz -> maturin-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/maturin-${SNAPSHOT}"
 

@@ -6,7 +6,7 @@ inherit meson xdg
 
 DESCRIPTION="Multi-platform toolkit for creating graphical user interfaces"
 HOMEPAGE="https://www.gtk.org/"
-SNAPSHOT=bac4a949b151eedada8bc60a97429d2176b0b28b
+SNAPSHOT=f90db0289333c52b86b08060d6c5ee49742adb28
 SRC_URI="https://github.com/GNOME/gtk/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/gtk-${SNAPSHOT}"
 
@@ -14,7 +14,7 @@ LICENSE="LGPL-2+"
 SLOT="$(ver_cut 1)"
 KEYWORDS="amd64 arm64"
 
-IUSE="cups introspection wayland X xinerama"
+IUSE="cups introspection test wayland X xinerama"
 
 REQUIRED_USE="
 
@@ -44,6 +44,11 @@ DEPEND="
 		xinerama? ( xgui-lib/libXinerama )
 	)
 "
+BDEPEND="test? (
+	xgui-icontheme/adwaita-icon-theme
+	X? ( xgui-tools/xvfb-run )
+)"
+
 PDEPEND="
 	xgui-icontheme/adwaita-plus
 "
@@ -65,6 +70,19 @@ src_configure() {
 		-D man=true
 		)
 		meson_src_configure
+}
+
+src_test() {
+	# Use the build root icon theme, not the desktop session configuration.
+	local -x XDG_DATA_DIRS="${GTK3_TEST_DATA_DIRS:-${BROOT%/}/usr/share}"
+
+	if use X; then
+		GDK_BACKEND=x11 xvfb-run -a meson test -C "${BUILD_DIR}" \
+			--print-errorlogs --num-processes "$(makeopts_jobs "${MAKEOPTS}")" \
+			|| die "GTK tests failed"
+	else
+		meson_src_test
+	fi
 }
 
 src_install() {

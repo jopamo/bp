@@ -4,7 +4,7 @@ inherit autotools toolchain-funcs
 
 DESCRIPTION="Netscape Portable Runtime"
 HOMEPAGE="http://www.mozilla.org/projects/nspr/"
-SNAPSHOT=6577b1f2669a52379196131c8d8d38f157029250
+SNAPSHOT=08cfad0d78836a089efd7f1604975f2ada531c2a
 SRC_URI="https://github.com/mozilla/nspr/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

@@ -4,7 +4,7 @@ inherit autotools qa-policy
 
 DESCRIPTION="Libconfig is a simple library for manipulating structured configuration files"
 HOMEPAGE="http://www.hyperrealm.com/libconfig/libconfig.html"
-SNAPSHOT=a82aa4dd3bafc12f44d688d225ee9afff9f37de6
+SNAPSHOT=5fe7f9263474f735287914d131c0be49f28ece7e
 SRC_URI="https://github.com/hyperrealm/libconfig/archive/${SNAPSHOT}.tar.gz -> libconfig-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/libconfig-${SNAPSHOT}"
 

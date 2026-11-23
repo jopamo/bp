@@ -1,17 +1,24 @@
-diff --git a/bootstrap b/bootstrap
 --- a/bootstrap
 +++ b/bootstrap
-@@ -53,2 +53,5 @@
+@@ -51,6 +51,9 @@
+
+ # Detect system and directory information.
  cmake_system=`uname`
 +if test "$cmake_system" = k1g4; then
 +  cmake_system=Linux
 +fi
  cmake_source_dir=`cd "\`dirname \"$0\"\`";pwd`
-diff --git a/Source/cmSystemTools.cxx b/Source/cmSystemTools.cxx
+ cmake_binary_dir=`pwd`
+
 --- a/Source/cmSystemTools.cxx
 +++ b/Source/cmSystemTools.cxx
-@@ -4358,1 +4358,4 @@
+@@ -4559,6 +4559,9 @@
+   if (uname(&uts_name) >= 0) {
+     initialized = true;
      systemName = uts_name.sysname;
 +    if (systemName == "k1g4") {
 +      systemName = "Linux";
 +    }
+
+     if (cmIsOff(systemName)) {
+       systemName = "UnknownOS";

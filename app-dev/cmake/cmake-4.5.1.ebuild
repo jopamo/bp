@@ -75,7 +75,7 @@ src_prepare() {
     append-flags -fno-permissive
     filter-flags -flto*
 
-    eapply "${FILESDIR}/${P}-implicit-link-fixtures.patch"
+    eapply "${FILESDIR}/cmake-implicit-link-fixtures.patch"
     eapply "${FILESDIR}/cmake-k1g4-platform.patch"
     cmake_src_prepare
 

@@ -9,10 +9,11 @@ Base: fontconfig b25ffeabd15b76f86c0c6736f6df2f1b89858010
 diff --git a/test/meson.build b/test/meson.build
 --- a/test/meson.build
 +++ b/test/meson.build
-@@ -47,6 +47,7 @@
+@@ -47,7 +47,8 @@
    ['test-y2038.c', {'include_directories': include_directories('../src'), 'dependencies': libintl_dep}],
    ['test-versioned-conf.c'],
    ['test-issue77.c'],
+   ['test-charset-merge.c'],
 +  ['test-heap-references.c'],
  ]
  tests_build_only = [

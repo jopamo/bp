@@ -4,7 +4,7 @@ inherit flag-o-matic linux-info user meson toolchain-funcs
 
 DESCRIPTION="A networked sound server with an advanced plugin system"
 HOMEPAGE="https://www.freedesktop.org/wiki/Software/PulseAudio/"
-SNAPSHOT=77d25a1e613095bdf87a1d13b65e7c330565077a
+SNAPSHOT=819f2c06ccdc105739e1c714de968f2af1d3e205
 SRC_URI="https://github.com/pulseaudio/pulseaudio/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

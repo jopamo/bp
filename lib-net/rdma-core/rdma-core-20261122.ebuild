@@ -4,7 +4,7 @@ inherit cmake doins python-any-r1
 
 DESCRIPTION="Userspace libraries and tools for RDMA, InfiniBand, and RoCE"
 HOMEPAGE="https://github.com/linux-rdma/rdma-core"
-SNAPSHOT=997f2a6f1c0d6500f01e0199ce38e77aa52eb928
+SNAPSHOT=4b7b208c6ba521aef52c6d6205677cd70942dafd
 SRC_URI="https://github.com/linux-rdma/rdma-core/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

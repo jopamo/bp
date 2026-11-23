@@ -1,0 +1,14 @@
+diff --git a/configure.ac b/configure.ac
+--- a/configure.ac
++++ b/configure.ac
+@@ -349,1 +349,2 @@
+-	ac_sys_system=`uname -s`
++	ac_sys_system=$(uname -s)
++	AS_CASE([$ac_sys_system], [k1g4], [ac_sys_system=Linux])
+diff --git a/Lib/sysconfig/__init__.py b/Lib/sysconfig/__init__.py
+--- a/Lib/sysconfig/__init__.py
++++ b/Lib/sysconfig/__init__.py
+@@ -633,1 +633,3 @@
+     osname, host, release, version, machine = os.uname()
++    if osname == "k1g4":
++        osname = "Linux"

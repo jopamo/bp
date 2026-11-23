@@ -1,8 +1,10 @@
 # Distributed under the terms of the GNU General Public License v2
 
+inherit python-any-r1
+
 DESCRIPTION="Linux firmware files"
 HOMEPAGE="https://git.kernel.org/?p=linux/kernel/git/firmware/linux-firmware.git"
-SNAPSHOT=69e51bb26f3fa3e118dd770f1962a93bed690dc1
+SNAPSHOT=a1ebb5ad7eae3caca60b8b3db5792cf43339ba58
 SRC_URI="https://gitlab.com/kernel-firmware/linux-firmware/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2 -> ${PN}-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/linux-firmware-${SNAPSHOT}"
 
@@ -15,7 +17,9 @@ IUSE="3com airoha amdgpu amd-ucode amdnpu amlogic ar3k ath10k ath11k ath12k
 	dpaa2 i915 intel intel-ish iwlwifi keyspan libertas liquidio mali mediatek
 	mellanox meson moxa mrvl mwl8k mwlwifi myri10ge netronome nouveau nxp
 	phanfw qca qcom qed qlogic radeon realtek regdb rsi rtl_bt rtl_nic rtlwifi
-	rtw88 ti ueagle-atm vxge xe"
+	rtw88 test ti ueagle-atm vxge xe"
+
+BDEPEND="test? ( app-core/git ${PYTHON_DEPS} )"
 
 RESTRICT="strip"
 
@@ -75,9 +79,22 @@ linux_firmware_make_whence() {
 	done < WHENCE
 }
 
-src_prepare() {
-	default
+pkg_setup() {
+	if use test; then
+		python-any-r1_pkg_setup
+	fi
+}
 
+src_test() (
+	# Check the unpruned archive. The upstream linter inventories git ls-files.
+	# A temporary index supplies the inventory without storing firmware blobs.
+	export GIT_DIR="${T}/firmware-check.git" GIT_WORK_TREE="${S}"
+	git init -q || die
+	git add -f -N -- . || die
+	"${EPYTHON}" check_whence.py || die "upstream WHENCE check failed"
+)
+
+linux_firmware_prune() {
 	# current snapshots are WHENCE-driven, and several payload families no
 	# longer map 1:1 to a blunt top-level ${useflag}* removal.
 	use 3com || prune_paths 3com
@@ -150,6 +167,7 @@ src_install() {
 	local whence_install="${T}/WHENCE.install"
 	local whence_backup="${T}/WHENCE.orig"
 
+	linux_firmware_prune
 	linux_firmware_make_whence "${whence_install}"
 
 	cp WHENCE "${whence_backup}" || die

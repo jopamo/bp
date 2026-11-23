@@ -4,7 +4,7 @@ inherit autotools qa-policy
 
 DESCRIPTION="X.Org Xft library"
 HOMEPAGE="https://www.x.org/wiki/"
-SNAPSHOT=9a44b29c1e35fbb78c50cdb855bf4f210e5a676d
+SNAPSHOT=dd919aa3b1f8705465a3d4cfb34085ec3af160ef
 SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libXft/-/archive/${SNAPSHOT}/libXft-${SNAPSHOT}.tar.bz2 -> libXft-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/libxft-${SNAPSHOT}"
 

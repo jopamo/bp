@@ -9,7 +9,7 @@ RDEPEND=""
 # lockstep-pypi-deps: end
 DESCRIPTION="Additional userspace utils to assist with AppArmor profile management"
 HOMEPAGE="https://gitlab.com/apparmor/apparmor/wikis/home"
-SNAPSHOT=8c86289d3428cbba2d60068db839b178a490abe2
+SNAPSHOT=8f7e3c0555dfe366f9d04b7b4b8035ae18d957a4
 SRC_URI="https://gitlab.com/apparmor/apparmor/-/archive/${SNAPSHOT}/apparmor-${SNAPSHOT}.tar.bz2 -> apparmor-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/apparmor-${SNAPSHOT}"
 
@@ -30,6 +30,7 @@ DEPEND="${COMMON_DEPEND}
 RDEPEND="${COMMON_DEPEND}
 	~lib-core/libapparmor-${PV}[python,${PYTHON_USEDEP}]
 	~app-core/apparmor-${PV}
+	app-lang/python-exec:2
 	dev-pypi/psutil[${PYTHON_USEDEP}]"
 
 src_prepare() {
@@ -62,10 +63,15 @@ src_configure() {
 }
 
 src_install() {
+	local launcher
+	local launchers=(
+		"${ED}"/usr/bin/aa-easyprof
+		"${ED}"/usr/bin/aa-{audit,autodep,cleanprof,complain,disable,enforce,genprof,logprof,mergeprof,notify,unconfined}
+	)
+
 	pushd utils > /dev/null || die
 	emake \
-		SBINDIR="${ED}/usr/bin" \
-		USR_SBINDIR="${ED}/usr/bin" \
+		BINDIR="${ED}/usr/bin" \
 		CPP="$(tc-getCPP) -" \
 		DESTDIR="${ED}" \
 		DISTRO="unknown" \
@@ -80,8 +86,18 @@ src_install() {
 	}
 
 	python_foreach_impl install_python
-	python_replicate_script "${D}"/usr/bin/aa-easyprof \
-		"${D}"/usr/bin/aa-{audit,autodep,cleanprof,complain,disable,enforce,genprof,logprof,mergeprof,notify,unconfined}
+	python_replicate_script "${launchers[@]}"
+	# The dispatcher accepts the launcher path as its shebang argument.
+	# Keep the versioned scripts, but use regular launchers instead of
+	# symlinks whose targets live outside this package's image.
+	for launcher in "${launchers[@]}"; do
+		[[ -L ${launcher} ]] || die "missing Python dispatcher link: ${launcher}"
+		rm -- "${launcher}" || die
+		# Identical launchers would be deduplicated into symlinks, losing their basename.
+		printf '#!%s/usr/bin/python-exec2c\n# launcher for %s\n' \
+			"${EPREFIX}" "${launcher##*/}" > "${launcher}" || die
+		chmod 0755 "${launcher}" || die
+	done
 	domenu aa-notify.desktop
 	popd > /dev/null || die
 

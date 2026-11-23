@@ -4,7 +4,7 @@ inherit user autotools flag-o-matic
 
 DESCRIPTION="Robust and highly flexible tunneling application compatible with many OSes"
 HOMEPAGE="https://openvpn.net/"
-SNAPSHOT=9e9f76c872fc67fe5ed9a11853509cf965c30d79
+SNAPSHOT=f7fe6f8f1715dc3943be629a057739cf3fff0725
 SRC_URI="https://github.com/OpenVPN/openvpn/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 	S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

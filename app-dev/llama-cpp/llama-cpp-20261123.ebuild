@@ -4,8 +4,8 @@ inherit cmake qa-policy toolchain-funcs user
 
 DESCRIPTION="High-performance inference of large language models (llama.cpp)"
 HOMEPAGE="https://github.com/ggml-org/llama.cpp"
-SNAPSHOT=372dc5ca157276beb6c67b2e92477e8d662e964a
-UI_VERSION=b12199
+SNAPSHOT=f5e6915c28f10330885fcb9243a93ae98d3115ab
+UI_VERSION=b12651
 SRC_URI="
 	https://github.com/ggml-org/llama.cpp/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz
 	https://github.com/ggml-org/llama.cpp/releases/download/${UI_VERSION}/llama-${UI_VERSION}-ui.tar.gz
@@ -29,7 +29,7 @@ PATCHES=( "${FILESDIR}/httplib-libressl-renegotiation.patch" )
 
 src_prepare() {
 	cmake_src_prepare
-	mv "${WORKDIR}/llama-${UI_VERSION}" tools/ui/dist || die
+	mv "${WORKDIR}/llama-${UI_VERSION}" ui/apps/chat/dist || die
 }
 
 src_configure() {
@@ -55,19 +55,20 @@ src_configure() {
 src_compile() {
 	cmake_src_compile
 
-	if ! grep -Eq '^#define LLAMA_UI_HAS_ASSETS 1$' "${BUILD_DIR}"/tools/ui/ui.h; then
+	local ui_build_dir="${BUILD_DIR}/ui/apps/chat"
+	if ! grep -Eq '^#define LLAMA_UI_HAS_ASSETS 1$' "${ui_build_dir}/ui.h"; then
 		eerror "llama-server built without embedded Web UI assets"
-		if [[ -f ${BUILD_DIR}/tools/ui/ui.h ]]; then
-			eerror "tools/ui/ui.h:"
-			sed -n '1,40p' "${BUILD_DIR}"/tools/ui/ui.h >&2 || true
+		if [[ -f ${ui_build_dir}/ui.h ]]; then
+			eerror "ui/apps/chat/ui.h:"
+			sed -n '1,40p' "${ui_build_dir}/ui.h" >&2 || true
 		fi
-		if [[ -d ${BUILD_DIR}/tools/ui/dist ]]; then
-			eerror "tools/ui/dist contents:"
-			find "${BUILD_DIR}"/tools/ui/dist -maxdepth 3 -type f | sort >&2 || true
+		if [[ -d ${ui_build_dir}/dist ]]; then
+			eerror "ui/apps/chat/dist contents:"
+			find "${ui_build_dir}/dist" -maxdepth 3 -type f | sort >&2 || true
 		fi
 		if [[ -n ${COREPKG_LOG_FILE} && -f ${COREPKG_LOG_FILE} ]]; then
 			eerror "Recent UI provisioning lines from build log:"
-			grep -nE '(^-- UI:|stderr:|npm|llama-ui-embed|tools/ui/dist)' "${COREPKG_LOG_FILE}" | tail -n 160 >&2 || true
+			grep -nE '(^-- UI:|stderr:|npm|llama-ui-assets|ui/apps/chat/dist)' "${COREPKG_LOG_FILE}" | tail -n 160 >&2 || true
 		fi
 		die "llama-server built without embedded Web UI assets"
 	fi

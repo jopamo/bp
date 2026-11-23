@@ -4,7 +4,7 @@ inherit autotools qa-policy
 
 DESCRIPTION="X.Org Xext library"
 HOMEPAGE="https://www.x.org/wiki/"
-SNAPSHOT=508f8adca2540ff8926ac8456cb1c553a8caae76
+SNAPSHOT=4770cdff013c036ba4f043b2c895d1b0bfeb0973
 SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libXext/-/archive/${SNAPSHOT}/libXext-${SNAPSHOT}.tar.bz2 -> libXext-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/libxext-${SNAPSHOT}"
 

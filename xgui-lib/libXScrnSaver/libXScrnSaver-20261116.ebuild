@@ -4,7 +4,7 @@ inherit autotools qa-policy
 
 DESCRIPTION="X.Org XScrnSaver library"
 HOMEPAGE="https://www.x.org/wiki/"
-SNAPSHOT=3f753e7a4050db083474444ae91cc17a849eaa4d
+SNAPSHOT=723953c9a8dba44bcb1866cf06a54be74fbb8089
 SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libXScrnSaver/-/archive/${SNAPSHOT}/libXScrnSaver-${SNAPSHOT}.tar.bz2 -> libXScrnSaver-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/libxscrnsaver-${SNAPSHOT}"
 

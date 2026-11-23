@@ -5,7 +5,7 @@ inherit meson qa-policy
 
 DESCRIPTION="a program which helps to configure compiler and linker flags for development libraries"
 HOMEPAGE="https://git.sr.ht/~kaniini/pkgconf"
-SNAPSHOT=981c80e91c2388d62784858599b57c6d95a198d5
+SNAPSHOT=9f162cc325ff91113dd51c6d3045f446aa8733de
 SRC_URI="https://github.com/pkgconf/pkgconf/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/pkgconf-${SNAPSHOT}"
 

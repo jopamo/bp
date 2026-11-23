@@ -4,8 +4,8 @@ inherit toolchain-funcs qa-policy
 
 DESCRIPTION="CSS parser and selection library"
 HOMEPAGE="https://www.netsurf-browser.org/projects/libcss/ https://github.com/netsurf-browser/libcss"
-SNAPSHOT=2d962e647dfa83909a074307cefaa57b962f3ec2
-BS_SNAPSHOT=e429a19d922b52e470fd8a2fd7e84a64b17175c9
+SNAPSHOT=0c4f51901a152ae551987aabdb7881c4f55cdc08
+BS_SNAPSHOT=b38fe7146aa3af08881ba9d6817f19ee7abe4a86
 SRC_URI="
 	https://github.com/netsurf-browser/libcss/archive/${SNAPSHOT}.tar.gz -> libcss-${SNAPSHOT}.tar.gz
 	https://github.com/netsurf-browser/buildsystem/archive/${BS_SNAPSHOT}.tar.gz -> netsurf-buildsystem-${BS_SNAPSHOT}.tar.gz

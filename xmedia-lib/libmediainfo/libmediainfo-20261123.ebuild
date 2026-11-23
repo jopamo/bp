@@ -4,7 +4,7 @@ inherit autotools flag-o-matic
 
 DESCRIPTION="MediaInfo libraries"
 HOMEPAGE="https://mediaarea.net/mediainfo/ https://github.com/MediaArea/MediaInfoLib"
-SNAPSHOT=99a627e4a0e96b4a063099554c43761a06c5f786
+SNAPSHOT=06e2338f94f3edbf8f1c5311badd03df9e752009
 SRC_URI="https://github.com/MediaArea/MediaInfoLib/archive/${SNAPSHOT}.tar.gz -> MediaInfoLib-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/MediaInfoLib-${SNAPSHOT}/Project/GNU/Library"
 
@@ -18,7 +18,7 @@ RESTRICT="test"
 
 DEPEND="
 	lib-dev/tinyxml2
-	>=xmedia-lib/libzen-20261112
+	>=xmedia-lib/libzen-20261123
 "
 
 src_prepare() {

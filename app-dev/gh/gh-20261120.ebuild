@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-SNAPSHOT=3d5a9e355a837f2f5ee78d7484c118cc1342ad1a
+SNAPSHOT=de06af2c2ea536d5722fda35dc2001565f9b9f64
 SHORT=${SNAPSHOT:0:9}
 
 inherit flag-o-matic go-module
@@ -20,8 +20,8 @@ EGO_SUM=(
 	"charm.land/glamour/v2 v2.0.2-0.20261015065741-010543cac1a0/go.mod"
 	"charm.land/huh/v2 v2.0.3"
 	"charm.land/huh/v2 v2.0.3/go.mod"
-	"charm.land/lipgloss/v2 v2.1.0"
-	"charm.land/lipgloss/v2 v2.1.0/go.mod"
+	"charm.land/lipgloss/v2 v2.1.1"
+	"charm.land/lipgloss/v2 v2.1.1/go.mod"
 	"cloud.google.com/go v0.123.0"
 	"cloud.google.com/go v0.123.0/go.mod"
 	"cloud.google.com/go/auth v0.24.1-0.20261001053825-dbc26066f70a"
@@ -550,8 +550,8 @@ EGO_SUM=(
 	"go.yaml.in/yaml/v3 v3.0.5/go.mod"
 	"golang.org/x/crypto v0.0.0-20190308221718-c2843e01d9a2/go.mod"
 	"golang.org/x/crypto v0.0.0-20210921155107-089bfa567519/go.mod"
-	"golang.org/x/crypto v0.58.0"
-	"golang.org/x/crypto v0.58.0/go.mod"
+	"golang.org/x/crypto v0.59.0"
+	"golang.org/x/crypto v0.59.0/go.mod"
 	"golang.org/x/exp v0.0.0-20261014143641-f0251eb4aa3e"
 	"golang.org/x/exp v0.0.0-20261014143641-f0251eb4aa3e/go.mod"
 	"golang.org/x/mod v0.42.0"
@@ -560,8 +560,8 @@ EGO_SUM=(
 	"golang.org/x/net v0.0.0-20190620200207-3b0461eec859/go.mod"
 	"golang.org/x/net v0.0.0-20210226172049-e18ecbb05110/go.mod"
 	"golang.org/x/net v0.0.0-20220722155237-a158d28d115b/go.mod"
-	"golang.org/x/net v0.61.0"
-	"golang.org/x/net v0.61.0/go.mod"
+	"golang.org/x/net v0.62.0"
+	"golang.org/x/net v0.62.0/go.mod"
 	"golang.org/x/oauth2 v0.37.0"
 	"golang.org/x/oauth2 v0.37.0/go.mod"
 	"golang.org/x/sync v0.0.0-20190423024810-112230192c58/go.mod"
@@ -579,14 +579,14 @@ EGO_SUM=(
 	"golang.org/x/sys v0.50.0/go.mod"
 	"golang.org/x/term v0.0.0-20201126162022-7de9c90e9dd1/go.mod"
 	"golang.org/x/term v0.0.0-20210927222741-03fcf44c2211/go.mod"
-	"golang.org/x/term v0.47.0"
-	"golang.org/x/term v0.47.0/go.mod"
+	"golang.org/x/term v0.48.0"
+	"golang.org/x/term v0.48.0/go.mod"
 	"golang.org/x/text v0.3.0/go.mod"
 	"golang.org/x/text v0.3.3/go.mod"
 	"golang.org/x/text v0.3.7/go.mod"
 	"golang.org/x/text v0.4.0/go.mod"
-	"golang.org/x/text v0.43.0"
-	"golang.org/x/text v0.43.0/go.mod"
+	"golang.org/x/text v0.44.0"
+	"golang.org/x/text v0.44.0/go.mod"
 	"golang.org/x/time v0.16.0"
 	"golang.org/x/time v0.16.0/go.mod"
 	"golang.org/x/tools v0.0.0-20180917221912-90fa682c2a6e/go.mod"

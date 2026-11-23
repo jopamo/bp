@@ -4,7 +4,7 @@
 
 DESCRIPTION="Intel ACPI Source Language (ASL) compiler"
 HOMEPAGE="https://www.acpica.org/downloads/"
-SNAPSHOT=e85aa3bebaae81ed1e6d163511ac7e1eafe732cf
+SNAPSHOT=dee9a9e3c7979750d377995e6d58ffcc30c0d55d
 SRC_URI="https://github.com/acpica/acpica/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 
@@ -44,8 +44,7 @@ src_test() {
 
 src_install() {
 	cd generate/unix || die
-	emake install DESTDIR="${D}" BITS=${BITS}
-	default
+	emake install DESTDIR="${D}" BITS=64 INSTALLFLAGS="-m 755"
 
 	if use test && has test ${FEATURES}; then
 		tb="${T}"/testresults.tar.bz2
@@ -62,7 +61,7 @@ aslts_test() {
 	export ASL="${S}"/generate/unix/bin/iasl \
 		acpibin="${S}"/generate/unix/bin/acpibin \
 		acpiexec="${S}"/generate/unix/bin/acpiexec \
-		ASLTSDIR="${WORKDIR}/${MY_TESTS_P}"/tests/aslts
+		ASLTSDIR="${S}/tests/aslts"
 	export	PATH="${PATH}:${ASLTSDIR}/bin"
 	echo "$ASLTSDIR" >"${T}"/asltdir
 	cd "${ASLTSDIR}" || die

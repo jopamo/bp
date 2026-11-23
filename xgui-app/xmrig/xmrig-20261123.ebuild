@@ -6,7 +6,7 @@ inherit cmake
 
 DESCRIPTION="RandomX, CryptoNight, AstroBWT and Argon2 CPU/GPU miner"
 HOMEPAGE="https://xmrig.com/"
-SNAPSHOT=b2ca72480c58d197e18c885d9fc1a0c8d517e60a
+SNAPSHOT=be97bc8f864fdd94b1c336c8ee62136578f0b080
 SRC_URI="https://github.com/xmrig/xmrig/archive/${SNAPSHOT}.tar.gz -> xmrig-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/xmrig-${SNAPSHOT}"
 
@@ -16,7 +16,12 @@ KEYWORDS="amd64 arm64"
 
 IUSE="http"
 
-DEPEND="app-var/hwloc"
+RDEPEND="
+	app-var/hwloc
+	lib-dev/libuv
+	virtual/ssl
+"
+DEPEND="${RDEPEND}"
 
 src_prepare() {
 	cmake_src_prepare
@@ -28,11 +33,12 @@ src_configure() {
 	local mycmakeargs=(
 		-D WITH_HTTP=$(usex http ON OFF)
 		-D WITH_CUDA=OFF
+		-D CMAKE_SKIP_RPATH=ON
 	)
 
 	cmake_src_configure
 }
 
 src_install() {
-	dobin ${WORKDIR}/${P}_build/xmrig
+	dobin "${BUILD_DIR}/xmrig"
 }

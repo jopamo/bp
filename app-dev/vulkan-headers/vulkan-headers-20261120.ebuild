@@ -6,7 +6,7 @@ PROPERTIES+=" source-payload"
 
 DESCRIPTION="Vulkan Header files and API registry"
 HOMEPAGE="https://github.com/KhronosGroup/Vulkan-Headers"
-SNAPSHOT=88487f687f3100ebe1d3559a8a34d971ee85b977
+SNAPSHOT=d277a0a3cda9c682708c93279f0c72cd6b0ae3f3
 SRC_URI="https://github.com/KhronosGroup/Vulkan-Headers/archive/${SNAPSHOT}.tar.gz -> Vulkan-Headers-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/Vulkan-Headers-${SNAPSHOT}"
 

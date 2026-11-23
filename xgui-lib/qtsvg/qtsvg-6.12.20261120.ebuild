@@ -7,7 +7,7 @@ inherit cmake flag-o-matic
 DESCRIPTION="SVG image format support module for Qt 6"
 HOMEPAGE="https://www.qt.io/"
 
-SNAPSHOT=38cb5f90ccbd491468355a8da7f981c3f2571940
+SNAPSHOT=e1f77f7d286bd582caf940efc4ac2a05f8ad2817
 SRC_URI="https://invent.kde.org/qt/qt/${PN}/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2"
 S=${WORKDIR}/${PN}-${SNAPSHOT}
 

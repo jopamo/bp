@@ -6,7 +6,7 @@ inherit cmake
 
 DESCRIPTION="SCXML and state machine libraries for Qt 6"
 HOMEPAGE="https://www.qt.io/"
-SNAPSHOT=b921d407e44f6d570e0a0405cdd479b9fc6fdbed
+SNAPSHOT=f4cb251d4dc98aa3ac8bdd5d66ccb4d1d39bdb44
 SRC_URI="https://invent.kde.org/qt/qt/${PN}/-/archive/${SNAPSHOT}/${PN}-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

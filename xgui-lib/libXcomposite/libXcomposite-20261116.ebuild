@@ -4,7 +4,7 @@ inherit autotools qa-policy
 
 DESCRIPTION="X.Org Xcomposite library"
 HOMEPAGE="https://www.x.org/wiki/"
-SNAPSHOT=a6d5d773e2a4e5a11b58f3a894f2085686baa6f4
+SNAPSHOT=56e7501b509945cabaa5c1c4672efed5f59694dd
 SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libXcomposite/-/archive/${SNAPSHOT}/libXcomposite-${SNAPSHOT}.tar.bz2 -> libXcomposite-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/libxcomposite-${SNAPSHOT}"
 

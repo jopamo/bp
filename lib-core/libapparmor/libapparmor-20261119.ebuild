@@ -13,7 +13,7 @@ RDEPEND=""
 # lockstep-pypi-deps: end
 DESCRIPTION="Library to support AppArmor userspace utilities"
 HOMEPAGE="https://gitlab.com/apparmor/apparmor/wikis/home"
-SNAPSHOT=d223f07eae44bff64f8a64a17da83b4728f310e5
+SNAPSHOT=8f7e3c0555dfe366f9d04b7b4b8035ae18d957a4
 SRC_URI="https://gitlab.com/apparmor/apparmor/-/archive/${SNAPSHOT}/apparmor-${SNAPSHOT}.tar.bz2 -> apparmor-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/apparmor-${SNAPSHOT}/libraries/${PN}"
 
@@ -29,6 +29,8 @@ BDEPEND+="
 	perl? ( app-lang/swig )
 	python? ( app-lang/swig )
 "
+
+PATCHES=( "${FILESDIR}/0001-generate-protocol-table-with-awk.patch" )
 
 src_prepare() {
 	qa-policy-configure

@@ -1,50 +1,32 @@
 --- a/util/grub.d/10_linux.in
 +++ b/util/grub.d/10_linux.in
-@@ -26,12 +26,14 @@
- export TEXTDOMAIN=@PACKAGE@
- export TEXTDOMAINDIR="@localedir@"
-
+@@ -29 +29 @@
 -CLASS="--class gnu-linux --class gnu --class os"
 +CLASS="--class k1g4 --class gnu-linux --class gnu --class os"
-
- if [ "x${GRUB_DISTRIBUTOR}" = "x" ] ; then
+@@ -32 +32,2 @@
 -  OS=GNU/Linux
 +  OS=k1g4
 +  legacy_os=GNU/Linux
- else
+@@ -34 +35,2 @@
 -  OS="${GRUB_DISTRIBUTOR} GNU/Linux"
 +  OS="${GRUB_DISTRIBUTOR} k1g4"
 +  legacy_os="${GRUB_DISTRIBUTOR} GNU/Linux"
-   CLASS="--class $(echo ${GRUB_DISTRIBUTOR} | tr 'A-Z' 'a-z' | cut -d' ' -f1|LC_ALL=C sed 's,[^[:alnum:]_],_,g') ${CLASS}"
- fi
-
-@@ -80,6 +82,22 @@
- esac
-
- title_correction_code=
+@@ -82,0 +85,14 @@
 +submenu_title="$(gettext_printf "Advanced options for %s" "${OS}")"
 +legacy_submenu_title="$(gettext_printf "Advanced options for %s" "${legacy_os}")"
 +
-+# Retain saved, configured, and one-shot defaults from before the rename.
-+# Escape each title before forming a GRUB submenu path.
++# Use IDs so titles starting with a number (such as 1g4) cannot be
++# mistaken for numeric menu indexes. Escape the submenu delimiter in titles.
 +rewrite_k1g4_default ()
 +{
-+  old_title="$1"
-+  new_title="$2"
-+  if [ "$#" = 4 ]; then
-+      old_title="$(printf '%s' "$3" | sed 's,>,>>,g')>$(printf '%s' "$1" | sed 's,>,>>,g')"
-+      new_title="$(printf '%s' "$4" | sed 's,>,>>,g')>$(printf '%s' "$2" | sed 's,>,>>,g')"
++  old_title="$(printf '%s' "$1" | sed 's,>,>>,g')"
++  if [ "$#" = 3 ]; then
++      old_title="$(printf '%s' "$3" | sed 's,>,>>,g')>$old_title"
 +  fi
-+  title_correction_code="${title_correction_code}if [ \"x\$default\" = '$(printf 'x%s' "$old_title" | grub_quote)' ]; then default='$(printf '%s' "$new_title" | grub_quote)'; fi
++  title_correction_code="${title_correction_code}if [ \"x\$default\" = '$(printf 'x%s' "$old_title" | grub_quote)' ]; then default='$(printf '%s' "$2" | grub_quote)'; fi
 +"
 +}
-
- linux_entry ()
- {
-@@ -93,17 +111,22 @@
-   fi
-   if [ x$type != xsimple ] ; then
-       case $type in
+@@ -96,4 +112,6 @@
 -	  recovery)
 -	      title="$(gettext_printf "%s, with Linux %s (recovery mode)" "${os}" "${version}")" ;;
 -	  *)
@@ -55,35 +37,31 @@
 +          *)
 +              title="$(gettext_printf "%s, with k1g4 %s" "${os}" "${version}")"
 +              legacy_title="$(gettext_printf "%s, with Linux %s" "${legacy_os}" "${version}")" ;;
-       esac
+@@ -101,5 +119,7 @@
 -      if [ x"$title" = x"$GRUB_ACTUAL_DEFAULT" ] || [ x"Previous Linux versions>$title" = x"$GRUB_ACTUAL_DEFAULT" ]; then
 -	  replacement_title="$(echo "Advanced options for ${OS}" | sed 's,>,>>,g')>$(echo "$title" | sed 's,>,>>,g')"
 -	  quoted="$(echo "$GRUB_ACTUAL_DEFAULT" | grub_quote)"
 -	  title_correction_code="${title_correction_code}if [ \"x\$default\" = '$quoted' ]; then default='$(echo "$replacement_title" | grub_quote)'; fi;"
 -	  grub_warn "$(gettext_printf "Please don't use old title \`%s' for GRUB_DEFAULT, use \`%s' (for versions before 2.00) or \`%s' (for 2.00 or later)" "$GRUB_ACTUAL_DEFAULT" "$replacement_title" "gnulinux-advanced-$boot_device_id>gnulinux-$version-$type-$boot_device_id")"
-+      if [ "x$GRUB_DISABLE_SUBMENU" = xtrue ]; then
-+          rewrite_k1g4_default "$legacy_title" "$title"
-+      else
-+          rewrite_k1g4_default "$legacy_title" "$title" "$legacy_submenu_title" "$submenu_title"
-+          rewrite_k1g4_default "$legacy_title" "$title" "Previous Linux versions" "$submenu_title"
-+          # Older configurations also use a bare entry title for the submenu.
-+          rewrite_k1g4_default "$legacy_title" "$(printf '%s' "$submenu_title" | sed 's,>,>>,g')>$(printf '%s' "$title" | sed 's,>,>>,g')"
-       fi
-       echo "menuentry '$(echo "$title" | grub_quote)' ${CLASS} \$menuentry_id_option 'gnulinux-$version-$type-$boot_device_id' {" | sed "s/^/$submenu_indentation/"
-   else
-+      rewrite_k1g4_default "$legacy_os" "$os"
-       echo "menuentry '$(echo "$os" | grub_quote)' ${CLASS} \$menuentry_id_option 'gnulinux-simple-$boot_device_id' {" | sed "s/^/$submenu_indentation/"
-@@ -140,5 +163,5 @@
-     fi
-     printf '%s\n' "${prepare_boot_cache}" | sed "s/^/$submenu_indentation/"
-   fi
++      entry_id="gnulinux-$version-$type-$boot_device_id"
++      id_path="$(printf '%s' "$entry_id" | sed 's,>,>>,g')"
++      if [ "x$GRUB_DISABLE_SUBMENU" != xtrue ]; then
++          id_path="$(printf '%s' "gnulinux-advanced-$boot_device_id" | sed 's,>,>>,g')>$id_path"
++          rewrite_k1g4_default "$legacy_title" "$id_path" "$legacy_submenu_title"
++          rewrite_k1g4_default "$legacy_title" "$id_path" "Previous Linux versions"
++          rewrite_k1g4_default "$title" "$id_path" "$submenu_title"
+@@ -107 +127,3 @@
+-      echo "menuentry '$(echo "$title" | grub_quote)' ${CLASS} \$menuentry_id_option 'gnulinux-$version-$type-$boot_device_id' {" | sed "s/^/$submenu_indentation/"
++      rewrite_k1g4_default "$legacy_title" "$id_path"
++      rewrite_k1g4_default "$title" "$id_path"
++      echo "menuentry '$(echo "$title" | grub_quote)' ${CLASS} \$menuentry_id_option '$entry_id' {" | sed "s/^/$submenu_indentation/"
+@@ -108,0 +131,3 @@
++      id_path="$(printf '%s' "gnulinux-simple-$boot_device_id" | sed 's,>,>>,g')"
++      rewrite_k1g4_default "$legacy_os" "$id_path"
++      rewrite_k1g4_default "$os" "$id_path"
+@@ -143 +168 @@
 -  message="$(gettext_printf "Loading Linux %s ..." ${version})"
 +  message="$(gettext_printf "Loading k1g4 %s ..." "${version}")"
-   sed "s/^/$submenu_indentation/" << EOF
-@@ -294,5 +317,5 @@
-     fi
-     # TRANSLATORS: %s is replaced with an OS name
+@@ -296 +321 @@
 -    echo "submenu '$(gettext_printf "Advanced options for %s" "${OS}" | grub_quote)' \$menuentry_id_option 'gnulinux-advanced-$boot_device_id' {"
 +    echo "submenu '$(printf '%s' "$submenu_title" | grub_quote)' \$menuentry_id_option 'gnulinux-advanced-$boot_device_id' {"
-     is_top_level=false
-   fi

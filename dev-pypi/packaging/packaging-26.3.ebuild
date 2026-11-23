@@ -4,6 +4,7 @@ EAPI=8
 MERGE_MANIFEST_MODE="tree-blake3-v1"
 
 PYTHON_COMPAT=( python3_{11..14} )
+PATCHES=( "${FILESDIR}/packaging-k1g4-wheel-tags.patch" )
 
 DISTUTILS_USE_PEP517="flit"
 

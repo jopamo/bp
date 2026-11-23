@@ -1,0 +1,8 @@
+diff --git a/src/packaging/tags.py b/src/packaging/tags.py
+--- a/src/packaging/tags.py
++++ b/src/packaging/tags.py
+@@ -921,3 +921,3 @@
+         return android_platforms()
+-    elif platform.system() == "Linux":
++    elif platform.system() in ("Linux", "k1g4"):
+         return _linux_platforms()

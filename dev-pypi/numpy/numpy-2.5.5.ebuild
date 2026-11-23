@@ -3,7 +3,7 @@
 EAPI=8
 MERGE_MANIFEST_MODE="tree-blake3-v1"
 
-PYTHON_COMPAT=( python3_{11..14} )
+PYTHON_COMPAT=( python3_{12..14} )
 
 DISTUTILS_EXT=1
 DISTUTILS_USE_PEP517="meson-python"
@@ -37,9 +37,9 @@ RDEPEND+="
 DEPEND="${RDEPEND}"
 BDEPEND="
 	${RDEPEND}
-	>=app-dev/meson-1.5.2
-	>=dev-pypi/cython-3.0.6[${PYTHON_USEDEP}]
-	>=dev-pypi/meson-python-0.15.0[${PYTHON_USEDEP}]
+	>=app-dev/meson-1.8.3
+	>=dev-pypi/cython-3.1.0[${PYTHON_USEDEP}]
+	>=dev-pypi/meson-python-0.18.0[${PYTHON_USEDEP}]
 	lapack? ( app-dev/pkgconf )
 	test? (
 		$(python_gen_cond_dep '
@@ -56,10 +56,7 @@ EPYTEST_PLUGINS=( hypothesis pytest-timeout )
 EPYTEST_XDIST=1
 distutils_enable_tests pytest
 
-PATCHES=(
-	"${FILESDIR}"/${PN}-2.3.2-no-detect.patch
-	"${FILESDIR}"/${PN}-2.3.3-avx512f-only.patch
-)
+PATCHES=( "${FILESDIR}/numpy-2.5.5-isolate-f2py-cli-fixtures.patch" )
 
 # tiny baseline per supported arch
 _numpy_baseline() {
@@ -138,6 +135,8 @@ python_test() {
 	)
 
 	cd "${BUILD_DIR}/install$(python_get_sitedir)" || die
+	# Cython subprocesses run from a temporary directory and need the staged .pxd files.
+	local -x PYTHONPATH="${PWD}${PYTHONPATH:+:${PYTHONPATH}}"
 	epytest
 }
 

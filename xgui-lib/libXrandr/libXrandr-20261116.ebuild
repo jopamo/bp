@@ -4,7 +4,7 @@ inherit autotools qa-policy
 
 DESCRIPTION="X.Org Xrandr library"
 HOMEPAGE="https://www.x.org/wiki/"
-SNAPSHOT=8a4ba1974bcf07057cf891128d86ae1ab5303574
+SNAPSHOT=cc7082d2af97458dbb6d7e4bbda7b8884030e05f
 SRC_URI="https://gitlab.freedesktop.org/xorg/lib/libXrandr/-/archive/${SNAPSHOT}/libXrandr-${SNAPSHOT}.tar.bz2 -> libXrandr-${SNAPSHOT}.tar.bz2"
 S="${WORKDIR}/libxrandr-${SNAPSHOT}"
 

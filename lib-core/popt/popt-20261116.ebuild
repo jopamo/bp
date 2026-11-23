@@ -5,7 +5,7 @@ inherit cmake
 DESCRIPTION="Parse Options - Command line parser"
 HOMEPAGE="http://rpm5.org/"
 
-SNAPSHOT=af6f19e5968d48608a062d6d92d28b7fd248f8ea
+SNAPSHOT=972a325b21caf1bdf1cae40e4be83a6327c84acc
 SRC_URI="https://github.com/rpm-software-management/popt/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S=${WORKDIR}/popt-${SNAPSHOT}
 

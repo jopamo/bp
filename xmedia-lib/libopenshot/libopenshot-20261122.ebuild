@@ -7,7 +7,7 @@ inherit cmake python-single-r1
 
 DESCRIPTION="Video editing library with Python bindings for OpenShot"
 HOMEPAGE="https://www.openshot.org/ https://github.com/OpenShot/libopenshot"
-SNAPSHOT=528ebb1539ddd1df8db780776fe087963def1e6b
+SNAPSHOT=c23ef4ad9a4893092ddea78fa140c81838738721
 SRC_URI="https://github.com/OpenShot/libopenshot/archive/${SNAPSHOT}.tar.gz -> ${PN}-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/${PN}-${SNAPSHOT}"
 

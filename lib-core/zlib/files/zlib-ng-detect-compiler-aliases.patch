@@ -1,0 +1,21 @@
+Recognize GCC and Clang invoked through aliases such as cc. Otherwise,
+configure can select generic linker flags and omit the shared library SONAME.
+
+--- a/configure
++++ b/configure
+@@ -356,3 +356,15 @@
++# Compiler aliases and wrappers may hide the name from the version checks.
++if test "$gcc" -eq 0; then
++  if compiler_macros=$($cc $CFLAGS -dM -E "$test.c" 2>> configure.log); then
++    if printf '%s\n' "$compiler_macros" | grep -q '^#define __clang__ '; then
++      gcc=1
++      clang=1
++    elif printf '%s\n' "$compiler_macros" | grep -q '^#define __GNUC__ '; then
++      gcc=1
++    fi
++  fi
++fi
++
+ # Set library name depending on zlib-compat option
+ if test $compat -eq 0; then
+   LIBNAME=libz-ng

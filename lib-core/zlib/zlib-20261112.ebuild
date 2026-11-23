@@ -17,6 +17,8 @@ KEYWORDS="amd64 arm64"
 
 IUSE="static-libs"
 
+PATCHES=( "${FILESDIR}/zlib-ng-detect-compiler-aliases.patch" )
+
 src_configure() {
 	qa-policy-configure
 	tc-export CC AR RANLIB
@@ -37,6 +39,10 @@ src_test() {
 
 src_install() {
 	default
+	LC_ALL=C "$(tc-getREADELF)" -d "${ED}/usr/lib/libz.so" |
+		grep -Eq '\(SONAME\)[[:space:]].*\[libz\.so\.1\]$' ||
+		die "libz.so is missing its libz.so.1 SONAME"
+
 	use static-libs || rm -f "${ED}"/usr/lib/libz.a || die
 
 	qa-policy-install

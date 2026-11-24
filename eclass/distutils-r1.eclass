@@ -2072,10 +2072,19 @@ _distutils-r1_post_python_compile() {
 			include-system-site-packages = true
 		EOF
 
-		# we need to change shebangs to point to the venv-python
-		find "${bindir}" -type f -exec sed -i \
-			-e "1s@^#!\(${EPREFIX}/usr/bin/\(python\|pypy\)\)@#!${root}\1@" \
-			{} + || die
+		# Only point Python scripts at the venv; wheels can ship native
+		# executables here, and sed need not support regexes on NUL input.
+		local f prefix shebang_dir="#!${EPREFIX}/usr/bin/"
+		find "${bindir}" -type f -print0 | while IFS= read -r -d '' f; do
+			# Probe at most through "python", stopping at NUL or EOF.
+			{ IFS= read -r -d '' -n "$(( ${#shebang_dir} + 6 ))" prefix || :; } < "${f}" || die
+			case ${prefix} in
+				"${shebang_dir}"python*|"${shebang_dir}"pypy*)
+					sed -i -e "1s@^#!@#!${root}@" "${f}" || die
+					;;
+			esac
+		done
+		assert "rewriting venv shebangs failed"
 
 		_distutils-r1_compare_installed_files
 	fi

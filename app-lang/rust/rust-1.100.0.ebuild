@@ -245,6 +245,7 @@ src_configure() {
 		mandir = "share/man"
 		[rust]
 		codegen-units-std = 1
+		deny-warnings = false
 		optimize = 3
 		llvm-tools = true
 		lld = false

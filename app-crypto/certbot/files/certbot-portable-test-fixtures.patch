@@ -1,0 +1,53 @@
+Exercise bind refusal on the available address families and use a fixed GMT+8
+offset for interval arithmetic without requiring an optional regional zone.
+
+--- a/src/certbot/_internal/tests/plugins/standalone_test.py
++++ b/src/certbot/_internal/tests/plugins/standalone_test.py
+@@ -47,20 +47,15 @@
+         assert self.mgr.running() == {}
+
+     def test_run_bind_error(self):
+-        some_server = socket.socket(socket.AF_INET6)
+-        some_server.bind(("", 0))
+-        port = some_server.getsockname()[1]
+-        maybe_another_server = socket.socket()
+-        try:
+-            maybe_another_server.bind(("", port))
+-        except OSError:
+-            pass
++        from certbot._internal.plugins.standalone import ServerManager
++        # Occupy the port on every address family available to the listener.
++        owner = ServerManager(self.http_01_resources)
++        server = owner.run(0, challenge_type=challenges.HTTP01)
++        port = server.getsocknames()[0][1]
++        self.addCleanup(owner.stop, port)
+         with pytest.raises(errors.StandaloneBindError):
+-            self.mgr.run(port,
+-            challenge_type=challenges.HTTP01)
++            self.mgr.run(port, challenge_type=challenges.HTTP01)
+         assert self.mgr.running() == {}
+-        some_server.close()
+-        maybe_another_server.close()
+
+
+ def get_open_port():
+--- a/src/certbot/_internal/tests/storage_test.py
++++ b/src/certbot/_internal/tests/storage_test.py
+@@ -6,7 +6,6 @@
+ import sys
+ import unittest
+ from unittest import mock
+-import zoneinfo
+
+ import configobj
+ import pytest
+@@ -687,7 +686,8 @@
+         time_2 = datetime.datetime(2012, 10, 18, 21, 31, 16, tzinfo=datetime.timezone.utc)
+
+         # in different time zone (GMT+8)
+-        time_3 = datetime.datetime(2015, 10, 26, 22, 25, 41, tzinfo=zoneinfo.ZoneInfo('Asia/Shanghai'))
++        gmt_plus_8 = datetime.timezone(datetime.timedelta(hours=8))
++        time_3 = datetime.datetime(2015, 10, 26, 22, 25, 41, tzinfo=gmt_plus_8)
+
+         intended = {
+             (time_1, ""): time_1,

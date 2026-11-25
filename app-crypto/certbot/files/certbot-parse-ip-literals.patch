@@ -1,0 +1,38 @@
+Identify IP literals without requiring socket support for their address family.
+
+--- a/src/certbot/util.py
++++ b/src/certbot/util.py
+@@ -2,11 +2,11 @@
+ import argparse
+ import atexit
+ import errno
++import ipaddress
+ import itertools
+ import logging
+ import platform
+ import re
+-import socket
+ import subprocess
+ import sys
+ from typing import Any
+@@ -668,16 +668,10 @@
+
+     """
+     try:
+-        socket.inet_pton(socket.AF_INET, address)
+-        # If this line runs it was ip address (ipv4)
+-        return True
+-    except OSError:
+-        # It wasn't an IPv4 address, so try ipv6
+-        try:
+-            socket.inet_pton(socket.AF_INET6, address)
+-            return True
+-        except OSError:
+-            return False
++        ipaddress.ip_address(address)
++    except ValueError:
++        return False
++    return True
+
+
+ def is_wildcard_domain(domain: Union[str, bytes]) -> bool:

@@ -21,7 +21,7 @@ DESCRIPTION="Let’s Encrypt client to automate deployment of X.509 certificates
 
 HOMEPAGE="https://github.com/certbot/certbot"
 KEYWORDS="amd64 arm64"
-SNAPSHOT=0b98752f94bc07edaebc10567a3b04cb532f6021
+SNAPSHOT=ea2c98272d65645d205077e138bbb7a3300345da
 SRC_URI="https://github.com/certbot/certbot/archive/${SNAPSHOT}.tar.gz -> certbot-${SNAPSHOT}.tar.gz"
 S="${WORKDIR}/certbot-${SNAPSHOT}/certbot"
 
@@ -29,6 +29,11 @@ LICENSE="Apache-2.0"
 SLOT="0"
 
 IUSE="selinux"
+
+PATCHES=(
+	"${FILESDIR}/certbot-parse-ip-literals.patch"
+	"${FILESDIR}/certbot-portable-test-fixtures.patch"
+)
 
 BDEPEND="
 	test? (
@@ -39,13 +44,13 @@ BDEPEND="
 	)
 "
 
-# See certbot/setup.py for acme >= dep
+# The 20261120 ACME snapshot provides the required 5.11.0.dev0.
 RDEPEND="
-	>=app-crypto/acme-${PV}[${PYTHON_USEDEP}]
+	>=app-crypto/acme-20261120[${PYTHON_USEDEP}]
 	>=dev-pypi/configargparse-1.5.3[${PYTHON_USEDEP}]
 	>=dev-pypi/configobj-5.0.6[${PYTHON_USEDEP}]
 	app-crypto/vesk[${PYTHON_USEDEP}]
-	>=dev-pypi/distro-1.0.1[${PYTHON_USEDEP}]
+	>=dev-pypi/distro-1.7.0[${PYTHON_USEDEP}]
 	>=dev-pypi/josepy-2.0.0[${PYTHON_USEDEP}]
 	>=dev-pypi/parsedatetime-2.6[${PYTHON_USEDEP}]
 	dev-pypi/pyrfc3339[${PYTHON_USEDEP}]

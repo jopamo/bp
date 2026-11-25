@@ -1,4 +1,5 @@
 virtual/dbus user-session
+app-build/llvm wasm
 app-core/1g4-system-defaults -server
 app-net/bluez user-session
 app-core/systemd logind sleep

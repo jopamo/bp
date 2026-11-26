@@ -99,10 +99,16 @@ KEYWORDS="amd64"
 IUSE=""
 RESTRICT="test"
 
-# Build against the Gecko snapshot's bundled NSS/NSPR and Rust crates.
 DEPEND="
+	app-compression/zstd
 	fonts/fontconfig
 	lib-core/glib
+	lib-core/libffi
+	lib-core/zlib
+	lib-dev/icu
+	lib-dev/libevent
+	lib-dev/nspr
+	lib-dev/nss
 	virtual/dbus[X,user-session]
 	xgui-lib/cairo[X]
 	xgui-lib/freetype
@@ -118,8 +124,18 @@ DEPEND="
 	xgui-lib/libXi
 	xgui-lib/libXrandr
 	xgui-lib/libxcb
+	xgui-lib/libdrm
 	xgui-lib/pango
+	xgui-lib/pigment
+	xgui-lib/pixman
 	xgui-tools/alsa-lib
+	xgui-tools/mesa
+	xmedia-lib/libdav1d
+	xmedia-lib/libjpeg-turbo
+	xmedia-lib/libpng
+	xmedia-lib/libvpx
+	xmedia-lib/libwebp
+	xmedia-lib/pipewire
 	xmedia-lib/pulseaudio
 	elibc_musl? ( app-build/llvm[libcxx,syslibcxxabi] )
 	elibc_glibc? ( app-build/gcc-lib )
@@ -160,7 +176,7 @@ src_prepare() {
 	ln -s "${resource_dir}/include" "${WORKDIR}/wasi-resource/include" || die
 	ln -s "${WORKDIR}/libclang_rt-${WASI_SDK}" "${WORKDIR}/wasi-resource/lib" || die
 
-	cat > "${WORKDIR}/mozconfig" <<-EOF || die
+	cat > "${WORKDIR}/mozconfig" <<-'EOF' || die
 		ac_add_options --enable-application=browser
 		ac_add_options --enable-default-toolkit=cairo-gtk3-x11-only
 		ac_add_options --disable-bootstrap
@@ -171,6 +187,7 @@ src_prepare() {
 		ac_add_options --disable-install-strip
 		ac_add_options --prefix=/usr
 		ac_add_options --libdir=/usr/lib
+		. "$topsrcdir/1g4/mozconfig.system-libs"
 		mk_add_options MOZ_OBJDIR=@TOPSRCDIR@/obj
 		export MOZ_APP_REMOTINGNAME=firefox-1g4
 	EOF

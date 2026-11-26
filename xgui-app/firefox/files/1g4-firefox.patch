@@ -1,9 +1,31 @@
-Apply the 1g4 Firefox source changes (privacy, native musl and Clang fixes).
+Apply the 1g4 Firefox privacy, toolchain and system library changes.
 
 Upstream base: 79cae699787ab5cb701a5a1359d70fccc8f4bad4
-1g4 reference: ef9864dd0af9518c1612d1bf18671ba5b9aa3ae0
-The standalone 1g4 launcher is excluded; the ebuild supplies the mozconfig.
+1g4 reference: 0c45e0dba96d62b79f5716f07ef5be1e4d1f9af1
+The ebuild supplies its own mozconfig and shares the system library options.
 
+diff --git a/1g4/mozconfig.system-libs b/1g4/mozconfig.system-libs
+new file mode 100644
+index 0000000000000000000000000000000000000000..594b651c625364ca37f4423787011fbeace7de31
+--- /dev/null
++++ b/1g4/mozconfig.system-libs
+@@ -0,0 +1,16 @@
++# Use the distribution libraries through Firefox's supported configure switches.
++ac_add_options --with-system-nss
++ac_add_options --with-system-zlib
++ac_add_options --with-system-zstd
++ac_add_options --with-system-jpeg
++ac_add_options --with-system-png
++ac_add_options --with-system-webp
++ac_add_options --with-system-libvpx
++ac_add_options --with-system-dav1d
++ac_add_options --with-system-icu
++ac_add_options --with-system-ffi
++ac_add_options --with-system-libevent
++ac_add_options --with-system-pixman
++ac_add_options --with-system-pipewire
++ac_add_options --with-system-gbm
++ac_add_options --with-system-libdrm
 diff --git a/browser/actors/BlockedSiteChild.sys.mjs b/browser/actors/BlockedSiteChild.sys.mjs
 index c0cd55117d29b00f7605d8dde949db41647943e3..7976e1515d7735f17c079b67f024f1c888451d41 100644
 --- a/browser/actors/BlockedSiteChild.sys.mjs
@@ -469,6 +491,30 @@ index e8c23adfe97c7bfa2313e448fd0dcd4a74bdbbc5..28fb2b1501d73c430fd49fcf163472a7
 
  @depends("--enable-maintenance-service", when=target_is_windows)
  @imports(_from="mozbuild.nsis", _import="installer_files")
+diff --git a/build/gn_processor.py b/build/gn_processor.py
+index 2dd5a0721fd3e18c8959eea82634586f50b53334..38706d7ccabc6d146250ecd06ad9eabbe6157f83 100644
+--- a/build/gn_processor.py
++++ b/build/gn_processor.py
+@@ -908,12 +908,17 @@ def write_mozbuild(topsrcdir, write_mozbuild_variables, relsrcdir, configs):
+         except KeyError:
+             pass
+         try:
+-            if relsrcdir in write_mozbuild_variables["INCLUDE_SYSTEM_DAV1D_HANDLING"]:
++            if relsrcdir in write_mozbuild_variables["INCLUDE_SYSTEM_LIBAOM_HANDLING"]:
+                 mb.write('if CONFIG["MOZ_SYSTEM_AV1"]:\n')
+-                mb.write('    CXXFLAGS += CONFIG["MOZ_SYSTEM_DAV1D_CFLAGS"]\n')
+                 mb.write('    CXXFLAGS += CONFIG["MOZ_SYSTEM_LIBAOM_CFLAGS"]\n')
+         except KeyError:
+             pass
++        try:
++            if relsrcdir in write_mozbuild_variables["INCLUDE_SYSTEM_DAV1D_HANDLING"]:
++                mb.write('if CONFIG["MOZ_SYSTEM_LIBDAV1D"]:\n')
++                mb.write('    CXXFLAGS += CONFIG["MOZ_SYSTEM_LIBDAV1D_CFLAGS"]\n')
++        except KeyError:
++            pass
+         try:
+             if relsrcdir in write_mozbuild_variables["INCLUDE_GECKO_ZLIB_HANDLING"]:
+                 mb.write('USE_LIBS += [ "zlib" ]\n')
 diff --git a/build/moz.configure/nss.configure b/build/moz.configure/nss.configure
 index b9960309a4233c4980ea7af76d98e7f33819ce49..e8308c41a2aae6f9b2acc3c1cd8d1a4ea423fbcb 100644
 --- a/build/moz.configure/nss.configure
@@ -496,7 +542,7 @@ index b9960309a4233c4980ea7af76d98e7f33819ce49..e8308c41a2aae6f9b2acc3c1cd8d1a4e
  project_flag(
      env="NSS_EXTRA_SYMBOLS_FILE",
 diff --git a/config/external/moz.build b/config/external/moz.build
-index 961353353255ff20ab83050798fdb40c332629d9..1e828e66580b62e2c3312fc3d3afde097d9f38d6 100644
+index 961353353255ff20ab83050798fdb40c332629d9..28c1e6dce946d5c42e12b9fffa15f9fd8e9b7154 100644
 --- a/config/external/moz.build
 +++ b/config/external/moz.build
 @@ -11,7 +11,7 @@ DIRS += [
@@ -508,6 +554,101 @@ index 961353353255ff20ab83050798fdb40c332629d9..1e828e66580b62e2c3312fc3d3afde09
      DIRS += ["mozinference"]
 
  if CONFIG["MOZ_USING_WASM_SANDBOXING"]:
+@@ -43,6 +43,8 @@ if not CONFIG["MOZ_SYSTEM_LIBVPX"]:
+
+ if not CONFIG["MOZ_SYSTEM_AV1"]:
+     external_dirs += ["media/libaom"]
++
++if not CONFIG["MOZ_SYSTEM_LIBDAV1D"]:
+     external_dirs += ["media/libdav1d"]
+
+ if not CONFIG["MOZ_SYSTEM_PNG"]:
+diff --git a/config/system-headers.mozbuild b/config/system-headers.mozbuild
+index e0f68e759128e2dcac803b2d26d9471ad9fb1f10..aac45c71effc26317458e39e82ade6d80baa3b23 100644
+--- a/config/system-headers.mozbuild
++++ b/config/system-headers.mozbuild
+@@ -1309,6 +1309,11 @@ if CONFIG["MOZ_SYSTEM_ZLIB"]:
+         "zlib.h",
+     ]
+
++if CONFIG["MOZ_SYSTEM_ZSTD"]:
++    system_headers += [
++        "zstd.h",
++    ]
++
+ if CONFIG["MOZ_SYSTEM_LIBEVENT"]:
+     system_headers += [
+         "event2/event_compat.h",
+@@ -1326,7 +1331,7 @@ if CONFIG["MOZ_ENABLE_LIBPROXY"]:
+         "proxy.h",
+     ]
+
+-if CONFIG["MOZ_SYSTEM_AV1"]:
++if CONFIG["MOZ_SYSTEM_LIBDAV1D"]:
+     system_headers += [
+         "dav1d/dav1d.h",
+     ]
+diff --git a/dom/compression/FormatZstd.cpp b/dom/compression/FormatZstd.cpp
+index bd33994e297f2b885521fde710077b8023a93bf5..bfda265ef462844386cb2ae01efc9314a9d6cbcf 100644
+--- a/dom/compression/FormatZstd.cpp
++++ b/dom/compression/FormatZstd.cpp
+@@ -4,9 +4,10 @@
+
+ #include "FormatZstd.h"
+
++#include <zstd.h>
++
+ #include "BaseAlgorithms.h"
+ #include "mozilla/dom/TransformStreamDefaultController.h"
+-#include "zstd/zstd.h"
+
+ namespace mozilla::dom::compression {
+
+diff --git a/dom/compression/moz.build b/dom/compression/moz.build
+index 941e0c486c6f6393a527775904d119500d9ad527..25902844a02ab0de048985638bb2979dde8148ec 100644
+--- a/dom/compression/moz.build
++++ b/dom/compression/moz.build
+@@ -21,6 +21,9 @@ UNIFIED_SOURCES += [
+
+ FINAL_LIBRARY = "xul"
+
++if CONFIG["MOZ_SYSTEM_ZSTD"]:
++    CXXFLAGS += CONFIG["MOZ_ZSTD_CFLAGS"]
++
+ SOURCE_HEADERS += [
+     "BaseAlgorithms.h",
+     "FormatBrotli.h",
+diff --git a/dom/media/platforms/moz.build b/dom/media/platforms/moz.build
+index c7c5d9e1c22d5ff4a5d86d3c6cfdc645ef5c6912..1b6190f2daf4fcd51ed1f8f414b4aead67e306b5 100644
+--- a/dom/media/platforms/moz.build
++++ b/dom/media/platforms/moz.build
+@@ -72,8 +72,10 @@ UNIFIED_SOURCES += [
+ ]
+ if CONFIG["MOZ_SYSTEM_AV1"]:
+     CXXFLAGS += CONFIG["MOZ_SYSTEM_LIBAOM_CFLAGS"]
+-    CXXFLAGS += CONFIG["MOZ_SYSTEM_LIBDAV1D_CFLAGS"]
+     OS_LIBS += CONFIG["MOZ_SYSTEM_LIBAOM_LIBS"]
++
++if CONFIG["MOZ_SYSTEM_LIBDAV1D"]:
++    CXXFLAGS += CONFIG["MOZ_SYSTEM_LIBDAV1D_CFLAGS"]
+     OS_LIBS += CONFIG["MOZ_SYSTEM_LIBDAV1D_LIBS"]
+
+ if CONFIG["MOZ_OMX"]:
+diff --git a/dom/media/webrtc/third_party_build/gn-configs/webrtc.json b/dom/media/webrtc/third_party_build/gn-configs/webrtc.json
+index e5f628792a631ceed10619afb30d29e0f4c31979..6a215659fd64686ff1747cd0a122bbd9179ac070 100644
+--- a/dom/media/webrtc/third_party_build/gn-configs/webrtc.json
++++ b/dom/media/webrtc/third_party_build/gn-configs/webrtc.json
+@@ -31,7 +31,9 @@
+       "third_party/libwebrtc/modules/video_capture/video_capture_internal_impl_gn"
+     ],
+     "INCLUDE_SYSTEM_DAV1D_HANDLING": [
+-      "third_party/libwebrtc/modules/video_coding/codecs/av1/dav1d_decoder_gn",
++      "third_party/libwebrtc/modules/video_coding/codecs/av1/dav1d_decoder_gn"
++    ],
++    "INCLUDE_SYSTEM_LIBAOM_HANDLING": [
+       "third_party/libwebrtc/modules/video_coding/codecs/av1/libaom_av1_encoder_gn"
+     ],
+     "INCLUDE_SYSTEM_LIBVPX_HANDLING": [
 diff --git a/dom/media/webspeech/recognition/moz.build b/dom/media/webspeech/recognition/moz.build
 index 508ca01e6c56c95e1f356c3c72178977eb05779b..ac4cb006b60aba3edb211983bce9f5ad5b206208 100644
 --- a/dom/media/webspeech/recognition/moz.build
@@ -552,6 +693,100 @@ index 650b09efb56261e92ecf058a98ce8be6474204da..be75e3d7a07ad7aa2e84cf94fb9004e0
      std::fs::write(format!("{out_dir}/{shader}.h"), result).unwrap();
  }
 
+diff --git a/image/PNGCompat.h b/image/PNGCompat.h
+new file mode 100644
+index 0000000000000000000000000000000000000000..f91e16a8a58af2d3d988c46939c768519a59622b
+--- /dev/null
++++ b/image/PNGCompat.h
+@@ -0,0 +1,20 @@
++/* This Source Code Form is subject to the terms of the Mozilla Public
++ * License, v. 2.0. If a copy of the MPL was not distributed with this
++ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
++
++#ifndef mozilla_image_PNGCompat_h
++#define mozilla_image_PNGCompat_h
++
++#include <png.h>
++
++// Newer system libpng headers name the APNG frame operations after the
++// fcTL chunk; the bundled APNG patch uses the shorter names.
++#if !defined(PNG_DISPOSE_OP_NONE) && defined(PNG_fcTL_DISPOSE_OP_NONE)
++#  define PNG_DISPOSE_OP_NONE PNG_fcTL_DISPOSE_OP_NONE
++#  define PNG_DISPOSE_OP_BACKGROUND PNG_fcTL_DISPOSE_OP_BACKGROUND
++#  define PNG_DISPOSE_OP_PREVIOUS PNG_fcTL_DISPOSE_OP_PREVIOUS
++#  define PNG_BLEND_OP_SOURCE PNG_fcTL_BLEND_OP_SOURCE
++#  define PNG_BLEND_OP_OVER PNG_fcTL_BLEND_OP_OVER
++#endif
++
++#endif  // mozilla_image_PNGCompat_h
+diff --git a/image/decoders/moz.build b/image/decoders/moz.build
+index 9c9afb247a542deb86790289e5654948841e27b6..c7fd5c862d3a29140a46f42c409b6c37078ece9e 100644
+--- a/image/decoders/moz.build
++++ b/image/decoders/moz.build
+@@ -32,6 +32,9 @@ UNIFIED_SOURCES += [
+ if CONFIG["MOZ_SYSTEM_AV1"]:
+     CXXFLAGS += CONFIG["MOZ_SYSTEM_LIBAOM_CFLAGS"]
+
++if CONFIG["MOZ_SYSTEM_LIBDAV1D"]:
++    CXXFLAGS += CONFIG["MOZ_SYSTEM_LIBDAV1D_CFLAGS"]
++
+ if CONFIG["MOZ_JXL"]:
+     UNIFIED_SOURCES += [
+         "JxlDecodePool.cpp",
+diff --git a/image/decoders/nsPNGDecoder.cpp b/image/decoders/nsPNGDecoder.cpp
+index 3279ce3cd16ab3a85549ae1e3786ea99e8ad720e..d98e1842503f9d01c8f1fb92687d7afbf3738873 100644
+--- a/image/decoders/nsPNGDecoder.cpp
++++ b/image/decoders/nsPNGDecoder.cpp
+@@ -10,6 +10,7 @@
+
+ #include "EXIF.h"
+ #include "ImageLogging.h"  // Must appear first
++#include "PNGCompat.h"
+ #include "RasterImage.h"
+ #include "SurfaceCache.h"
+ #include "SurfacePipeFactory.h"
+@@ -20,7 +21,6 @@
+ #include "nsColor.h"
+ #include "nsRect.h"
+ #include "nspr.h"
+-#include "png.h"
+
+ using namespace mozilla::gfx;
+
+diff --git a/image/encoders/png/nsPNGEncoder.cpp b/image/encoders/png/nsPNGEncoder.cpp
+index df68909b40a3c353171a279af6ec47c6cfc39c0b..5ed81a920b97e47a966499458523163af3ad33d4 100644
+--- a/image/encoders/png/nsPNGEncoder.cpp
++++ b/image/encoders/png/nsPNGEncoder.cpp
+@@ -8,6 +8,7 @@
+ #include <cstring>
+
+ #include "ImageLogging.h"
++#include "PNGCompat.h"
+ #include "mozilla/CheckedInt.h"
+ #include "mozilla/UniquePtrExtensions.h"
+ #include "nsCRT.h"
+diff --git a/image/moz.build b/image/moz.build
+index 5d633121a66a1886de1d224f14077727450f0104..c7fd72ca8f0edd5b6d7e38a818292dada4e91f65 100644
+--- a/image/moz.build
++++ b/image/moz.build
+@@ -146,6 +146,9 @@ LOCAL_INCLUDES += CONFIG["SKIA_INCLUDES"]
+ if CONFIG["MOZ_SYSTEM_AV1"]:
+     CXXFLAGS += CONFIG["MOZ_SYSTEM_LIBAOM_CFLAGS"]
+
++if CONFIG["MOZ_SYSTEM_LIBDAV1D"]:
++    CXXFLAGS += CONFIG["MOZ_SYSTEM_LIBDAV1D_CFLAGS"]
++
+ # Add libFuzzer configuration directives
+ include("/tools/fuzzing/libfuzzer-config.mozbuild")
+
+@@ -178,6 +181,7 @@ SOURCE_HEADERS += [
+     "LookupResult.h",
+     "MultipartImage.h",
+     "OrientedImage.h",
++    "PNGCompat.h",
+     "ProgressTracker.h",
+     "RasterImage.h",
+     "ScriptedNotificationObserver.h",
 diff --git a/js/src/util/NativeStack.cpp b/js/src/util/NativeStack.cpp
 index ab0f9a1b94e429115d87709367c46f3a702d9eab..b9f54430412e4c743c14ab40203bf2e9eae708d8 100644
 --- a/js/src/util/NativeStack.cpp
@@ -604,6 +839,25 @@ index 1c715512d3bada7b6a6dad1c85a673aa30ccc706..b135d69a0324ddc48d5fdd1e42c7ce33
  #ifdef JS_STANDALONE
    // The rust hooks are initialized by Gecko on non-standalone builds.
    install_rust_hooks();
+diff --git a/media/ffvpx/libavcodec/moz.build b/media/ffvpx/libavcodec/moz.build
+index 9153f6a16c6f36320e4181a900d2f94f35b34387..f1d28cf423f4d512bfc679e790abf5a1707a4261 100644
+--- a/media/ffvpx/libavcodec/moz.build
++++ b/media/ffvpx/libavcodec/moz.build
+@@ -129,10 +129,12 @@ if not CONFIG['MOZ_FFVPX_AUDIOONLY']:
+     ]
+
+     if CONFIG["MOZ_SYSTEM_AV1"]:
+-        CFLAGS += CONFIG['MOZ_SYSTEM_LIBDAV1D_CFLAGS']
+         CFLAGS += CONFIG['MOZ_SYSTEM_LIBAOM_CFLAGS']
+-        OS_LIBS += CONFIG['MOZ_SYSTEM_LIBDAV1D_LIBS']
+         OS_LIBS += CONFIG['MOZ_SYSTEM_LIBAOM_LIBS']
++
++    if CONFIG["MOZ_SYSTEM_LIBDAV1D"]:
++        CFLAGS += CONFIG['MOZ_SYSTEM_LIBDAV1D_CFLAGS']
++        OS_LIBS += CONFIG['MOZ_SYSTEM_LIBDAV1D_LIBS']
+     else:
+         USE_LIBS += [
+             'dav1d',
 diff --git a/memory/build/Mutex.h b/memory/build/Mutex.h
 index 995d5543972af689785ff97afc371e769b5fb8a5..87cf404be714a559f7546c05837f5d2cd6bd3aa6 100644
 --- a/memory/build/Mutex.h
@@ -643,6 +897,73 @@ index 7c23a3e8a625178ad2c965cad14d33c699491b75..372c4a6cc1e4ec88e331cb2bcee0614b
  #    undef NOTHROW_MALLOC_DECL
  #    define NOTHROW_MALLOC_DECL MALLOC_DECL
  // Some places don't care about the distinction.
+diff --git a/netwerk/streamconv/converters/moz.build b/netwerk/streamconv/converters/moz.build
+index 6093967c7e55b179bef9026fce677cb8df64ba5c..613123c938a6c9065f2b295426924fd79ac22125 100644
+--- a/netwerk/streamconv/converters/moz.build
++++ b/netwerk/streamconv/converters/moz.build
+@@ -28,9 +28,10 @@ LOCAL_INCLUDES += [
+     "/netwerk/base",
+ ]
+
+-DIRS += [
+-    "/third_party/zstd",
+-]
++if CONFIG["MOZ_SYSTEM_ZSTD"]:
++    CXXFLAGS += CONFIG["MOZ_ZSTD_CFLAGS"]
++else:
++    DIRS += ["/third_party/zstd"]
+
+ SOURCE_HEADERS += [
+     "mozTXTToHTMLConv.h",
+diff --git a/netwerk/streamconv/converters/nsHTTPCompressConv.cpp b/netwerk/streamconv/converters/nsHTTPCompressConv.cpp
+index 67ba5eb2d47d30dbd58284b6d388cff0b4bad35d..56b98cc7dba0be1871fad87bdb9bd043be966edb 100644
+--- a/netwerk/streamconv/converters/nsHTTPCompressConv.cpp
++++ b/netwerk/streamconv/converters/nsHTTPCompressConv.cpp
+@@ -38,8 +38,7 @@
+ #include "brotli/decode.h"
+ #include "dec/state.h"
+
+-#define ZSTD_STATIC_LINKING_ONLY 1
+-#include "zstd/zstd.h"
++#include <zstd.h>
+
+ namespace mozilla {
+ namespace net {
+@@ -113,15 +112,6 @@ class BrotliWrapper {
+   uint8_t mHeader[36];  // \FF\44\43\42 + 32-byte SHA-256
+ };
+
+-#ifdef ZSTD_INFALLIBLE
+-// zstd can grab large blocks; use an infallible alloctor
+-static void* zstd_malloc(void*, size_t size) { return moz_xmalloc(size); }
+-
+-static void zstd_free(void*, void* address) { free(address); }
+-
+-ZSTD_customMem const zstd_allocators = {zstd_malloc, zstd_free, nullptr};
+-#endif
+-
+ class ZstdWrapper {
+  public:
+   ZstdWrapper(nsIRequest* aRequest, nsHTTPCompressConv::CompressMode aMode) {
+@@ -148,17 +138,10 @@ class ZstdWrapper {
+       }
+     }
+
+-#ifdef ZSTD_INFALLIBLE
+-    mDStream = ZSTD_createDStream_advanced(zstd_allocators);  // infallible
+-#else
+-    mDStream = ZSTD_createDStream();  // fallible
++    mDStream = ZSTD_createDStream();
+     if (!mDStream) {
+-      MOZ_RELEASE_ASSERT(ZSTD_defaultCMem.customAlloc == nullptr &&
+-                         ZSTD_defaultCMem.customFree == nullptr &&
+-                         ZSTD_defaultCMem.opaque == nullptr);
+       return;
+     }
+-#endif
+     if (mDictionary) {
+       DICTIONARY_LOG(("zstd: dictionary %zu bytes", length));
+       ZSTD_DCtx_reset(mDStream, ZSTD_reset_session_only);
 diff --git a/netwerk/test/unit/test_auth_multiple.js b/netwerk/test/unit/test_auth_multiple.js
 index 65d430c4a1991e0552096cb286fdc9d2323d9aaa..4cccd4abef0cf41fc77617d5d920dbbe6298015d 100644
 --- a/netwerk/test/unit/test_auth_multiple.js
@@ -745,7 +1066,7 @@ index 48a9a4d82bf2a58d87ceb6dbe3ab94e96fcc81d5..2601f3bf778b1361fcea92b08e64772a
 
    // server that accepts 1.2->1.2 and a client max 1.3. expect 1.2
 diff --git a/security/manager/ssl/moz.build b/security/manager/ssl/moz.build
-index 34b286ec7ddd0d0cb4b6795d3f4c317e9d353e36..ff50822f2d367390547732606f2e4cfa122ffb91 100644
+index 34b286ec7ddd0d0cb4b6795d3f4c317e9d353e36..b2015177f79e989533c9eb2d24f8ead93e74ac1c 100644
 --- a/security/manager/ssl/moz.build
 +++ b/security/manager/ssl/moz.build
 @@ -54,6 +54,9 @@ MOZ_SRC_FILES += [
@@ -758,6 +1079,16 @@ index 34b286ec7ddd0d0cb4b6795d3f4c317e9d353e36..ff50822f2d367390547732606f2e4cfa
  EXPORTS += [
      "CommonSocketControl.h",
      "CryptoTask.h",
+@@ -289,6 +292,9 @@ DEFINES["NSS_ENABLE_ECC"] = "True"
+ if CONFIG["MOZ_SYSTEM_NSS"]:
+     DEFINES["MOZ_SYSTEM_NSS"] = True
+
++if CONFIG["MOZ_SYSTEM_ZSTD"]:
++    CXXFLAGS += CONFIG["MOZ_ZSTD_CFLAGS"]
++
+ # mozpkix is linked statically from the in-tree sources independent of whether
+ # system NSS is used or not.
+ USE_LIBS += ["mozpkix"]
 diff --git a/security/manager/ssl/nsNSSComponent.cpp b/security/manager/ssl/nsNSSComponent.cpp
 index 1bb3e050923c850f0937aa9b13f216f1f9c88c95..88d83d378aa55b50a6fd47a8d0eff664b4f72880 100644
 --- a/security/manager/ssl/nsNSSComponent.cpp
@@ -868,9 +1199,18 @@ index 1bb3e050923c850f0937aa9b13f216f1f9c88c95..88d83d378aa55b50a6fd47a8d0eff664
    // Enable ciphers for PKCS#12
    SEC_PKCS12EnableCipher(PKCS12_RC4_40, 1);
 diff --git a/security/manager/ssl/nsNSSIOLayer.cpp b/security/manager/ssl/nsNSSIOLayer.cpp
-index 2dc07ed74446140413bea9dc537aaaed0adcd579..c418ec1eec26adc1bbca406d223182d8e804d5a3 100644
+index 2dc07ed74446140413bea9dc537aaaed0adcd579..c1efae7170b325c6d519422e58c8abd5a539e5ed 100644
 --- a/security/manager/ssl/nsNSSIOLayer.cpp
 +++ b/security/manager/ssl/nsNSSIOLayer.cpp
+@@ -58,7 +58,7 @@
+ #include "sslexp.h"
+ #include "sslproto.h"
+ #include "zlib.h"
+-#include "zstd/zstd.h"
++#include <zstd.h>
+
+ #if defined(__arm__)
+ #  include "mozilla/arm.h"
 @@ -1540,6 +1540,14 @@ static nsresult nsSSLIOLayerSetOptions(PRFileDesc* fd, bool forSTARTTLS,
      range.min = range.max;
    }
@@ -1464,6 +1804,34 @@ index 9b1efa0bb59c9d9164f6b7d4b3a3e8b6d08b6c96..dfc6ef61a70ac4864876206ec0f8d250
  #include <cstddef>
  #include <cstdint>
  #include <memory>
+diff --git a/third_party/libwebrtc/modules/video_coding/codecs/av1/dav1d_decoder_gn/moz.build b/third_party/libwebrtc/modules/video_coding/codecs/av1/dav1d_decoder_gn/moz.build
+index 4dec968aad575c2f4fc1c61f8d0115697491f771..b56d8512ee4f18bda481ca447eee900396f87fb9 100644
+--- a/third_party/libwebrtc/modules/video_coding/codecs/av1/dav1d_decoder_gn/moz.build
++++ b/third_party/libwebrtc/modules/video_coding/codecs/av1/dav1d_decoder_gn/moz.build
+@@ -5,9 +5,8 @@
+
+   ### This moz.build was AUTOMATICALLY GENERATED from a GN config,  ###
+   ### DO NOT edit it by hand.                                       ###
+-if CONFIG["MOZ_SYSTEM_AV1"]:
+-    CXXFLAGS += CONFIG["MOZ_SYSTEM_DAV1D_CFLAGS"]
+-    CXXFLAGS += CONFIG["MOZ_SYSTEM_LIBAOM_CFLAGS"]
++if CONFIG["MOZ_SYSTEM_LIBDAV1D"]:
++    CXXFLAGS += CONFIG["MOZ_SYSTEM_LIBDAV1D_CFLAGS"]
+
+ COMPILE_FLAGS["OS_INCLUDES"] = []
+ AllowCompilerWarnings()
+diff --git a/third_party/libwebrtc/modules/video_coding/codecs/av1/libaom_av1_encoder_gn/moz.build b/third_party/libwebrtc/modules/video_coding/codecs/av1/libaom_av1_encoder_gn/moz.build
+index b8aaa34e6c8e3f9eb76c7cd3eb26cebd74d98fa5..9eaaea8531fb8e9c62425f2ca00a456d8e897124 100644
+--- a/third_party/libwebrtc/modules/video_coding/codecs/av1/libaom_av1_encoder_gn/moz.build
++++ b/third_party/libwebrtc/modules/video_coding/codecs/av1/libaom_av1_encoder_gn/moz.build
+@@ -6,7 +6,6 @@
+   ### This moz.build was AUTOMATICALLY GENERATED from a GN config,  ###
+   ### DO NOT edit it by hand.                                       ###
+ if CONFIG["MOZ_SYSTEM_AV1"]:
+-    CXXFLAGS += CONFIG["MOZ_SYSTEM_DAV1D_CFLAGS"]
+     CXXFLAGS += CONFIG["MOZ_SYSTEM_LIBAOM_CFLAGS"]
+
+ COMPILE_FLAGS["OS_INCLUDES"] = []
 diff --git a/third_party/libwebrtc/rtc_base/platform_thread_types.cc b/third_party/libwebrtc/rtc_base/platform_thread_types.cc
 index 697bedadb944fda76c5cc3b666e2b6a5516b706e..3da0a9e0a593b77bbf7a2bf5516b83a5f641b517 100644
 --- a/third_party/libwebrtc/rtc_base/platform_thread_types.cc
@@ -1476,6 +1844,19 @@ index 697bedadb944fda76c5cc3b666e2b6a5516b706e..3da0a9e0a593b77bbf7a2bf5516b83a5
  #include <sys/prctl.h>
  #include <sys/syscall.h>
 
+diff --git a/third_party/zstd/moz.build b/third_party/zstd/moz.build
+index 62c41ae3fd0392ccf1c5bf82459e14837e804f9f..b6ad44fca7629953cd5553ab4197a761e5c8d93e 100644
+--- a/third_party/zstd/moz.build
++++ b/third_party/zstd/moz.build
+@@ -7,7 +7,7 @@
+ with Files('**'):
+     BUG_COMPONENT = ('Core', 'Networking')
+
+-EXPORTS.zstd += [
++EXPORTS += [
+     'lib/zstd.h',
+     'lib/zstd_errors.h',
+ ]
 diff --git a/toolkit/components/contentrelevancy/ContentRelevancyManager.sys.mjs b/toolkit/components/contentrelevancy/ContentRelevancyManager.sys.mjs
 index be2386fcdf02325ee0d99cbd49419a88646bf38d..ea068469747894942dc56bb1c8cea24e75e1c412 100644
 --- a/toolkit/components/contentrelevancy/ContentRelevancyManager.sys.mjs
@@ -1810,6 +2191,29 @@ index d434a7c139b67dea67e660536ad5bd1f36f66f9a..8ec8c77af94281cb79130520069e5e43
  }
 
  static void TerminateHandler() {
+diff --git a/toolkit/library/moz.build b/toolkit/library/moz.build
+index 9403040be010e47d10564af21fccbdb21d74d920..16fca796e3f703916297e22b2f8f50cb3b564a91 100644
+--- a/toolkit/library/moz.build
++++ b/toolkit/library/moz.build
+@@ -294,6 +294,9 @@ if CONFIG["MOZ_SYSTEM_PNG"]:
+ if CONFIG["MOZ_SYSTEM_WEBP"]:
+     OS_LIBS += CONFIG["MOZ_WEBP_LIBS"]
+
++if CONFIG["MOZ_SYSTEM_ZSTD"]:
++    OS_LIBS += CONFIG["MOZ_ZSTD_LIBS"]
++
+ if CONFIG["MOZ_SYSTEM_LIBEVENT"]:
+     OS_LIBS += CONFIG["MOZ_LIBEVENT_LIBS"]
+
+@@ -302,6 +305,8 @@ if CONFIG["MOZ_SYSTEM_LIBVPX"]:
+
+ if CONFIG["MOZ_SYSTEM_AV1"]:
+     OS_LIBS += CONFIG["MOZ_SYSTEM_LIBAOM_LIBS"]
++
++if CONFIG["MOZ_SYSTEM_LIBDAV1D"]:
+     OS_LIBS += CONFIG["MOZ_SYSTEM_LIBDAV1D_LIBS"]
+
+ if not CONFIG["MOZ_TREE_PIXMAN"]:
 diff --git a/toolkit/modules/AppConstants.sys.mjs b/toolkit/modules/AppConstants.sys.mjs
 index b8d2e7e8e3a27d84f5ba27217a0155540482104f..670f157d9b544d9e8755c428f66d0d5eba31621d 100644
 --- a/toolkit/modules/AppConstants.sys.mjs
@@ -1877,6 +2281,81 @@ index 5fde6adfc9a27f24cbc4ec586ab728a0ded76a29..e9a0a3238d67e71b7f6a56793f9e459c
      "MOZ_MAINTENANCE_SERVICE",
      "MOZ_BACKGROUNDTASKS",
      "MOZ_UPDATE_AGENT",
+diff --git a/toolkit/moz.configure b/toolkit/moz.configure
+index db4f912ddd35024b01730b1a12dc4b338f7cf05a..79e4dd2bd6ed6d623383aa0396c46482a38a8439 100644
+--- a/toolkit/moz.configure
++++ b/toolkit/moz.configure
+@@ -952,27 +952,32 @@ set_define("MOZ_FFMPEG", True, when=ffmpeg)
+
+ # AV1 Video Codec Support
+ # ==============================================================
+-option("--with-system-av1", help="Use system av1 (located with pkg-config)")
++option("--with-system-av1", help="Use system libaom and dav1d (located with pkg-config)")
++option("--with-system-dav1d", help="Use system dav1d (located with pkg-config)")
+
++imply_option("--with-system-dav1d", True, when="--with-system-av1")
+ pkg_check_modules("MOZ_SYSTEM_LIBAOM", "aom >= 3.0.0", when="--with-system-av1")
+-pkg_check_modules("MOZ_SYSTEM_LIBDAV1D", "dav1d >= 1.2.1", when="--with-system-av1")
++pkg_check_modules("MOZ_SYSTEM_LIBDAV1D", "dav1d >= 1.2.1", when="--with-system-dav1d")
+
+
+-@depends(target, "--with-system-av1", when=compile_environment)
+-def dav1d_asm(target, system_av1):
+-    if not system_av1 and target.cpu in ("arm", "aarch64", "x86", "x86_64"):
++@depends(target, "--with-system-dav1d", when=compile_environment)
++def dav1d_asm(target, system_dav1d):
++    if not system_dav1d and target.cpu in ("arm", "aarch64", "x86", "x86_64"):
+         return True
+
+
+-@depends(target, "--with-system-av1", when=compile_environment)
+-def dav1d_nasm(target, system_av1):
+-    if not system_av1 and target.cpu in ("x86", "x86_64"):
++@depends(
++    target, "--with-system-av1", "--with-system-dav1d", when=compile_environment
++)
++def av1_nasm(target, system_av1, system_dav1d):
++    if (not system_av1 or not system_dav1d) and target.cpu in ("x86", "x86_64"):
+         return namespace(version="2.14", what="AV1")
+
+
+ set_config("MOZ_DAV1D_ASM", dav1d_asm)
+ set_define("MOZ_DAV1D_ASM", dav1d_asm)
+ set_config("MOZ_SYSTEM_AV1", True, when="--with-system-av1")
++set_config("MOZ_SYSTEM_LIBDAV1D", True, when="--with-system-dav1d")
+
+ # JXL Image Codec Support
+ # ==============================================================
+@@ -1346,6 +1351,20 @@ system_webp = pkg_check_modules(
+
+ set_config("MOZ_SYSTEM_WEBP", depends(when=system_webp)(lambda: True))
+
++# zstd decompression
++# ==============================================================
++system_lib_option(
++    "--with-system-zstd",
++    help="Use system libzstd (located with pkg-config)",
++    when=use_pkg_config,
++)
++
++system_zstd = pkg_check_modules(
++    "MOZ_ZSTD", "libzstd >= 1.6.0", when="--with-system-zstd"
++)
++
++set_config("MOZ_SYSTEM_ZSTD", depends(when=system_zstd)(lambda: True))
++
+
+ # Build Freetype in the tree
+ # ==============================================================
+@@ -2636,7 +2655,7 @@ set_config("FFVPX_USE_NASM", True, when=ffvpx.use_nasm)
+
+ # nasm detection
+ # ==============================================================
+-@depends(dav1d_nasm, vpx_nasm, jpeg_nasm, ffvpx_nasm, when=compile_environment)
++@depends(av1_nasm, vpx_nasm, jpeg_nasm, ffvpx_nasm, when=compile_environment)
+ def need_nasm(*requirements):
+     requires = {
+         x.what: x.version if hasattr(x, "version") else True for x in requirements if x
 diff --git a/widget/gtk/moz.build b/widget/gtk/moz.build
 index d366eb63122f9c2b14ccacc3e5f4f676808618cc..d69f5c9ed61871ff1a40eb9572b1751d01d9d7be 100644
 --- a/widget/gtk/moz.build

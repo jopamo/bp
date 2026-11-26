@@ -182,6 +182,11 @@ src_prepare() {
 }
 
 _firefox_build_env() {
+	# Configure treats XARGS as an executable path, not a command with flags.
+	local xargs_path
+	xargs_path=$(type -P xargs) || die "xargs from app-core/findutils was not found in PATH"
+	export XARGS="${xargs_path}"
+
 	export CC=clang CXX=clang++
 	export MOZCONFIG="${WORKDIR}/mozconfig"
 	export MACH_BUILD_PYTHON_NATIVE_PACKAGE_SOURCE=none
@@ -208,7 +213,7 @@ src_compile() {
 	_firefox_build_env
 	filter-flags -fexceptions '-flto*'
 	replace-flags '-D_FORTIFY_SOURCE=3' '-D_FORTIFY_SOURCE=2'
-	./mach build -j "$(makeopts_jobs)" || die
+	./mach build -j "$(makeopts_jobs)" || die "mach build failed"
 }
 
 src_install() {

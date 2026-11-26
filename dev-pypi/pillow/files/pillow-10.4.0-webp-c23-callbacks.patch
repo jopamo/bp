@@ -1,0 +1,16 @@
+C23 treats an empty parameter list as taking no arguments. Match the
+PyCFunction signature required by METH_NOARGS without changing what the
+Python methods accept.
+
+--- a/src/_webp.c
++++ b/src/_webp.c
+@@ -886,3 +886,3 @@
+ PyObject *
+-WebPDecoderVersion_wrapper() {
++WebPDecoderVersion_wrapper(PyObject *self, PyObject *unused) {
+     return Py_BuildValue("i", WebPGetDecoderVersion());
+@@ -914,3 +914,3 @@
+ PyObject *
+-WebPDecoderBuggyAlpha_wrapper() {
++WebPDecoderBuggyAlpha_wrapper(PyObject *self, PyObject *unused) {
+     return Py_BuildValue("i", WebPDecoderBuggyAlpha());

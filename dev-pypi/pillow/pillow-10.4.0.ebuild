@@ -31,6 +31,8 @@ KEYWORDS="amd64 arm64"
 SRC_URI="https://files.pythonhosted.org/packages/cd/74/ad3d526f3bf7b6d3f408b73fde271ec69dfac8b81341a318ce825f2b3812/pillow-10.4.0.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/pillow-10.4.0"
 
+PATCHES=( "${FILESDIR}/pillow-10.4.0-webp-c23-callbacks.patch" )
+
 BDEPEND="
 	app-dev/pkgconf
 	dev-pypi/gpep517[${PYTHON_USEDEP}]

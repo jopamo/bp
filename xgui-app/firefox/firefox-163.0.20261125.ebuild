@@ -140,7 +140,6 @@ DEPEND="
 "
 RDEPEND="
 	${DEPEND}
-	!bin/firefox-nightly-bin
 	xmedia-app/ffmpeg
 	xmedia-lib/libglvnd
 "
@@ -234,14 +233,14 @@ src_compile() {
 src_install() {
 	_firefox_build_env
 	DESTDIR="${D}" ./mach install || die
-	# Keep the real executable and bundled libraries together; use a relative
-	# link for the package image and for installations into alternate roots.
-	dosym -r /usr/lib/firefox/firefox /usr/bin/firefox
+	# Mach installs /usr/bin/firefox, which belongs to firefox-nightly-bin.
+	rm "${ED}/usr/bin/firefox" || die
+	dosym -r /usr/lib/firefox/firefox /usr/bin/firefox-1g4
 
 	local branding=browser/branding/unofficial size
 	for size in 16 22 24 32 48 64 128 256; do
-		newicon -s "${size}" "${branding}/default${size}.png" firefox.png
+		newicon -s "${size}" "${branding}/default${size}.png" firefox-1g4.png
 	done
-	newicon -s scalable "${branding}/content/about-logo.svg" firefox.svg
+	newicon -s scalable "${branding}/content/about-logo.svg" firefox-1g4.svg
 	domenu "${FILESDIR}/firefox.desktop"
 }

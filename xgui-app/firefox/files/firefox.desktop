@@ -1,8 +1,8 @@
 [Desktop Entry]
-Name=Firefox
+Name=Firefox (1g4)
 GenericName=Web Browser
-Exec=firefox %u
-Icon=firefox
+Exec=firefox-1g4 %u
+Icon=firefox-1g4
 Terminal=false
 Type=Application
 Categories=Network;WebBrowser;

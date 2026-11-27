@@ -1,0 +1,182 @@
+Remove SCTP socket activation for kernels without SCTP or its UAPI header.
+
+--- a/man/systemd.socket.xml
++++ b/man/systemd.socket.xml
+@@ -324,10 +324,9 @@
+       <varlistentry>
+         <term><varname>SocketProtocol=</varname></term>
+-        <listitem><para>Takes one of <option>udplite</option>,
+-        <option>sctp</option> or <option>mptcp</option>. The socket will use
+-        the UDP-Lite (<constant>IPPROTO_UDPLITE</constant>), SCTP
+-        (<constant>IPPROTO_SCTP</constant>) or MPTCP
+-        (<constant>IPPROTO_MPTCP</constant>) protocol, respectively.</para>
++        <listitem><para>Takes either <option>udplite</option> or <option>mptcp</option>.
++        The socket will use UDP-Lite (<constant>IPPROTO_UDPLITE</constant>) or
++        MPTCP (<constant>IPPROTO_MPTCP</constant>), respectively.
++        Socket units requesting SCTP are refused.</para>
+
+         <xi:include href="version-info.xml" xpointer="v229"/>
+         </listitem>
+--- a/src/core/dbus-socket.c
++++ b/src/core/dbus-socket.c
+@@ -170,7 +170,7 @@
+         if (i == IPPROTO_IP)
+                 return "";
+
+-        if (!IN_SET(i, IPPROTO_UDPLITE, IPPROTO_SCTP, IPPROTO_MPTCP))
++        if (!IN_SET(i, IPPROTO_UDPLITE, IPPROTO_MPTCP))
+                 return NULL;
+
+         return ip_protocol_to_name(i);
+--- a/src/core/load-fragment.c
++++ b/src/core/load-fragment.c
+@@ -90,7 +90,11 @@
+         r = parse_ip_protocol(s);
+         if (r < 0)
+                 return r;
+-        if (!IN_SET(r, IPPROTO_UDPLITE, IPPROTO_SCTP, IPPROTO_MPTCP))
++        if (r == IPPROTO_SCTP)
++                /* Preserve the rejected setting through drop-in parsing so socket_verify() refuses
++                 * the unit rather than listening on the default protocol. */
++                return SOCKET_PROTOCOL_DISABLED;
++        if (!IN_SET(r, IPPROTO_UDPLITE, IPPROTO_MPTCP))
+                 return -EPROTONOSUPPORT;
+
+         return r;
+--- a/src/core/socket.c
++++ b/src/core/socket.c
+@@ -1,7 +1,6 @@
+ /* SPDX-License-Identifier: LGPL-2.1-or-later */
+
+ #include <fcntl.h>
+-#include <linux/sctp.h>
+ #include <mqueue.h>
+ #include <netinet/tcp.h>
+ #include <sys/stat.h>
+@@ -421,6 +420,9 @@
+ static int socket_verify(Socket *s) {
+         assert(s);
+         assert(UNIT(s)->load_state == UNIT_LOADED);
++
++        if (s->socket_protocol == SOCKET_PROTOCOL_DISABLED)
++                return log_unit_error_errno(UNIT(s), SYNTHETIC_ERRNO(ENOEXEC), "SocketProtocol= requests SCTP, which is not supported. Refusing.");
+
+         if (!s->ports)
+                 return log_unit_error_errno(UNIT(s), SYNTHETIC_ERRNO(ENOEXEC), "Unit has no Listen setting (ListenStream=, ListenDatagram=, ListenFIFO=, ...). Refusing.");
+@@ -1070,15 +1072,9 @@
+         }
+
+         if (s->no_delay) {
+-                if (s->socket_protocol == IPPROTO_SCTP) {
+-                        r = setsockopt_int(fd, SOL_SCTP, SCTP_NODELAY, true);
+-                        if (r < 0)
+-                                log_socket_option_errno(s, r, "SCTP_NODELAY");
+-                } else {
+-                        r = setsockopt_int(fd, SOL_TCP, TCP_NODELAY, true);
+-                        if (r < 0)
+-                                log_socket_option_errno(s, r, "TCP_NODELAY");
+-                }
++                r = setsockopt_int(fd, SOL_TCP, TCP_NODELAY, true);
++                if (r < 0)
++                        log_socket_option_errno(s, r, "TCP_NODELAY");
+         }
+
+         if (s->broadcast) {
+@@ -1693,12 +1689,7 @@
+                         switch (p->address.type) {
+
+                         case SOCK_STREAM:
+-                                if (IN_SET(s->socket_protocol, IPPROTO_SCTP, IPPROTO_MPTCP))
+-                                        p->address.protocol = s->socket_protocol;
+-                                break;
+-
+-                        case SOCK_SEQPACKET:
+-                                if (s->socket_protocol == IPPROTO_SCTP)
++                                if (s->socket_protocol == IPPROTO_MPTCP)
+                                         p->address.protocol = s->socket_protocol;
+                                 break;
+
+--- a/src/core/socket.h
++++ b/src/core/socket.h
+@@ -44,6 +44,9 @@
+         _SOCKET_RESULT_INVALID = -EINVAL,
+ } SocketResult;
+
++/* Nonnegative so the config parser records an explicit disabled protocol. */
++#define SOCKET_PROTOCOL_DISABLED INT_MAX
++
+ typedef struct SocketPort {
+         Socket *socket;
+
+--- a/src/include/override/linux/sctp.h
++++ /dev/null
+@@ -1,7 +0,0 @@
+-/* SPDX-License-Identifier: LGPL-2.1-or-later */
+-#pragma once
+-
+-/* The kernel header depends on <arpa/inet.h> being included. */
+-
+-#include <arpa/inet.h>
+-#include_next <linux/sctp.h>    /* IWYU pragma: export */
+--- a/src/include/override/sys/socket.h
++++ b/src/include/override/sys/socket.h
+@@ -18,11 +18,6 @@
+ #define SO_PASSRIGHTS 83
+ #endif
+
+-/* Not exposed yet. Defined in include/linux/socket.h. */
+-#ifndef SOL_SCTP
+-#define SOL_SCTP 132
+-#endif
+-
+ /* Supported since kernel v2.6.17 (2c7946a7bf45ae86736ab3b43d0085e43947945c).
+  * Defined since glibc-2.39 */
+ #ifndef SCM_SECURITY
+--- a/test/units/TEST-23-UNIT-FILE.verify-unit-files.sh
++++ b/test/units/TEST-23-UNIT-FILE.verify-unit-files.sh
+@@ -49,3 +49,45 @@
+
+     systemd-analyze --recursive-errors=no --man=no verify "$unit_file"
+ done
++
++# Refuse explicit SCTP configurations instead of falling back to TCP.
++work=$(mktemp -d)
++trap 'rm -rf -- "$work"' EXIT
++export SYSTEMD_UNIT_PATH="$work"
++
++cat >"$work/no-sctp.service" <<'UNIT'
++[Unit]
++DefaultDependencies=no
++[Service]
++ExecStart=/bin/true
++UNIT
++
++socket="$work/no-sctp.socket"
++cat >"$socket" <<'UNIT'
++[Unit]
++DefaultDependencies=no
++[Socket]
++ListenStream=127.0.0.1:12345
++UNIT
++
++verify_socket() {
++    systemd-analyze --generators=no --man=no --recursive-errors=no verify "$socket"
++}
++
++reject_sctp() {
++    if verify_socket >"$work/log" 2>&1; then
++        echo 'SCTP socket unit was accepted' >&2
++        exit 1
++    fi
++    grep -F 'SocketProtocol= requests SCTP, which is not supported.' "$work/log"
++}
++
++verify_socket
++mkdir "$socket.d"
++printf '[Socket]\nSocketProtocol=132\n' >"$socket.d/protocol.conf"
++reject_sctp
++rm "$socket.d/protocol.conf"
++printf 'SocketProtocol=sctp\n' >>"$socket"
++reject_sctp
++printf '[Socket]\nSocketProtocol=mptcp\n' >"$socket.d/protocol.conf"
++verify_socket

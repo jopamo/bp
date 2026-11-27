@@ -1,0 +1,34 @@
+Use the bp snapshot signature only for format-patch's default trailer.
+Keep explicit signature options and configuration unchanged.
+
+--- a/builtin/log.c
++++ b/builtin/log.c
+@@ -10,3 +10,4 @@
+ #include "builtin.h"
++#include "bp-format-patch-signature.h"
+ #include "abspath.h"
+ #include "config.h"
+@@ -2032 +2033,2 @@
+-	const char *signature = git_version_string;
++	static const char default_signature[] = BP_FORMAT_PATCH_SIGNATURE;
++	const char *signature = default_signature;
+@@ -2454 +2456 @@
+-	 *   5. Default `git_version_string`.
++	 *   5. Default snapshot signature.
+@@ -2458 +2460 @@
+-	} else if (signature && signature != git_version_string) {
++	} else if (signature && signature != default_signature) {
+--- a/t/t4014-format-patch.sh
++++ b/t/t4014-format-patch.sh
+@@ -1106,4 +1106,5 @@
+-test_expect_success 'get git version' '
+-	git_version=$(git --version) &&
+-	git_version=${git_version#git version }
++test_expect_success 'get bp patch signature' '
++	patch_signature=$(cut -d \" -f2 \
++		"$TEST_DIRECTORY/../builtin/bp-format-patch-signature.h") &&
++	test -n "$patch_signature"
+ '
+@@ -1112 +1113 @@
+-	printf "%s\n%s\n\n" "-- " "${1:-$git_version}"
++	printf "%s\n%s\n\n" "-- " "${1:-$patch_signature}"

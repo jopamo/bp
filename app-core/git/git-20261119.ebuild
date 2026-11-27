@@ -39,10 +39,17 @@ DEPEND="
 PATCHES=(
 	"${FILESDIR}/git-reftable-test-tag.patch"
 	"${FILESDIR}/git-blame-test-expr.patch"
+	"${FILESDIR}/git-format-patch-signature.patch"
 )
 
 src_prepare() {
 	default
+	local version
+	version=$(GIT_VERSION= sh ./GIT-VERSION-GEN "${S}" \
+		'--format=@GIT_MAJOR_VERSION@.@GIT_MINOR_VERSION@.@GIT_MICRO_VERSION@') || die
+	[[ ${version} =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || die "Unexpected Git version: ${version}"
+	printf '#define BP_FORMAT_PATCH_SIGNATURE "%s.lol.g%s"\n' \
+		"${version}" "${SNAPSHOT:0:12}" > builtin/bp-format-patch-signature.h || die
 	eautoreconf
 }
 

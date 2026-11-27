@@ -1,0 +1,17 @@
+Strip only the leading ./ from each early archive member. The find
+output is NUL-delimited; a text sed cannot process it on musl.
+
+--- a/dracut.sh
++++ b/dracut.sh
+@@ -3272,7 +3272,10 @@
+         if ! (
+             umask 077
+             cd "$early_cpio_dir/d"
+-            find . -print0 | sed -e 's,\./,,g' | sort -z \
++            find . -print0 \
++                | while LC_ALL=C IFS= read -r -d '' path; do
++                    printf '%s\0' "${path#./}" || exit 1
++                done | sort -z \
+                 | cpio -o ${CPIO_REPRODUCIBLE:+--reproducible} --null \
+                     ${cpio_owner:+-R "$cpio_owner"} -H newc --quiet > "${DRACUT_TMPDIR}/initramfs.img"
+         ); then

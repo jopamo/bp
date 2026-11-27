@@ -41,6 +41,7 @@ DEPEND="${CDEPEND}
 PATCHES=(
 	"${FILESDIR}/dracut-require-individual-boot-providers.patch"
 	"${FILESDIR}/dracut-honor-dmsquash-overlay-selection.patch"
+	"${FILESDIR}/dracut-early-cpio-nul-paths.patch"
 )
 
 src_configure() {

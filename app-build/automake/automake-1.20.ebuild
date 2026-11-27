@@ -9,11 +9,7 @@ SRC_URI="mirror://gnu/${PN}/${P}.tar.xz"
 LICENSE="GPL-2+"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-
-PATCHES=(
-	"${FILESDIR}/cpio-tar-fallback.patch"
-	"${FILESDIR}/archiver-test-prerequisites.patch"
-)
+IUSE="bootstrap"
 
 COMMON_DEPEND="
 	app-build/autoconf
@@ -21,13 +17,23 @@ COMMON_DEPEND="
 "
 RDEPEND="
 	${COMMON_DEPEND}
-	app-core/bx
+	!bootstrap? ( app-core/bx )
 	app-build/gnuconfig
 "
 BDEPEND="
 	${COMMON_DEPEND}
-	app-core/bx
+	!bootstrap? ( app-core/bx )
 "
+
+src_prepare() {
+	# BX itself needs Autotools-built libraries. Use the upstream archive
+	# handling until BX can be installed.
+	if ! use bootstrap; then
+		eapply "${FILESDIR}/cpio-tar-fallback.patch"
+		eapply "${FILESDIR}/archiver-test-prerequisites.patch"
+	fi
+	default
+}
 
 src_compile() {
 	# Build matching generators before regenerating patched release macros.

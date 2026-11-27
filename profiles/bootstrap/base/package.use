@@ -1,4 +1,5 @@
 # Temporary feature reductions for the first source-built toolchain.
+app-build/automake bootstrap
 app-build/gettext -acl
 app-build/m4 -nls
 app-build/texinfo -nls

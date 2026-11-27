@@ -1,0 +1,2 @@
+# Use the seed's GCC; build the target compiler once libc is available.
+=lib-core/glibc-2.40* bootstrap -caps

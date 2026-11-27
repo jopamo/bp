@@ -1,5 +1,7 @@
 bin/nvidia-drivers:primary-gpu - Make NVIDIA the Xorg primary GPU.
+app-build/automake:bootstrap - Use the upstream archive fallback until BX is available.
 app-lang/python:perf - Enable Linux perf profiling support with perf trampoline, frame pointers, and unstripped binaries.
 app-dev/cmake:bootstrap - Build with bundled libraries and without TLS for the native bootstrap stage.
 app-dev/pkgconf:build - Build the command-only Makefile.lite variant without Meson or libpkgconf.
 app-lang/perl:build - Omit crypt support and post-install documentation tools for the native bootstrap stage.
+lib-core/glibc:bootstrap - Build glibc with GCC from the native build seed before installing the target GCC.

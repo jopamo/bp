@@ -10,6 +10,9 @@ RDEPEND="elibc_musl? (
 )
 		!elibc_musl? (
 			lib-core/glibc
-			virtual/libcrypt
 			!lib-core/musl[elibc_musl]
 )"
+
+# On glibc, libcrypt is a separate compatibility library. Install it after
+# libc, so building its provider can already use a shell and Python.
+PDEPEND="!elibc_musl? ( virtual/libcrypt )"

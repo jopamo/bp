@@ -13,7 +13,9 @@ S=${WORKDIR}
 
 KEYWORDS="amd64 arm64"
 
-DEPEND="
+# The shell and hosts file are used by the installed configuration, not
+# to create the filesystem layout. Install the layout before libc and Bash.
+PDEPEND="
 	app-core/bash
 	app-core/hosts
 "

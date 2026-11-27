@@ -1,1 +1,4 @@
+# 39-bit VA kernels cap vm.mmap_rnd_bits at 24. Disable this flag
+# to use 32 on kernels configured to support it.
+app-core/1g4-system-defaults mmap-rnd-bits-24
 app-kernel/linux-firmware mali

@@ -11,7 +11,7 @@ S=${WORKDIR}
 LICENSE="metapackage"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-IUSE="ipv6 router +server user-namespaces"
+IUSE="ipv6 mmap-rnd-bits-24 router +server user-namespaces"
 
 RDEPEND="
 	app-core/kmod
@@ -35,6 +35,11 @@ src_install() {
 	insinto /usr/lib/sysctl.d
 	newins "${FILESDIR}"/1g4-memory.sysctl 1g4-memory.conf
 	newins "${FILESDIR}"/sysctl-hardening.conf 00-hardening.conf
+	if use mmap-rnd-bits-24; then
+		# Ship one assignment so the initramfs uses the same value.
+		sed -i 's/^vm\.mmap_rnd_bits = 32$/vm.mmap_rnd_bits = 24/' \
+			"${ED}"/usr/lib/sysctl.d/00-hardening.conf || die
+	fi
 
 	if ! use ipv6; then
 		newins "${FILESDIR}"/sysctl-disable-ipv6.conf 10-disable-ipv6.conf

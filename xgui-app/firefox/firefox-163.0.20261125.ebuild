@@ -137,8 +137,6 @@ DEPEND="
 	xmedia-lib/libwebp
 	xmedia-lib/pipewire
 	xmedia-lib/pulseaudio
-	elibc_musl? ( app-build/llvm[libcxx,syslibcxxabi] )
-	elibc_glibc? ( app-build/gcc-lib )
 "
 RDEPEND="
 	${DEPEND}

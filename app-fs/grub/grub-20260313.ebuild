@@ -112,6 +112,7 @@ src_prepare() {
 	eapply "${FILESDIR}/fix-configure-nopie-detection.patch"
 	eapply "${FILESDIR}/fix-build-rules-nopie.patch"
 	eapply "${FILESDIR}/fix-bison-api-pure.patch"
+	eapply "${FILESDIR}/fix-musl-errorh-getroot.patch"
 
 	gl_stage_gnulib
 

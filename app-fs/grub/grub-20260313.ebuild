@@ -125,6 +125,7 @@ src_prepare() {
 	eapply "${FILESDIR}/fix-config-util-guards.patch"
 	eapply "${FILESDIR}/fix-config-util-no-assert-in-freestanding.patch"
 	eapply "${FILESDIR}"/fix-musl-dirent-static-assert.patch
+	eapply "${FILESDIR}/fix-gnulib-off64-t-macro.patch"
 
 	default
 

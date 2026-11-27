@@ -234,6 +234,7 @@ src_configure() {
 		tools = ["cargo","clippy","rustdoc","rustfmt","rust-analyzer","rust-analyzer-proc-macro-srv","analysis","src","wasm-component-ld"]
 		vendor = true
 		sanitizers = false
+		profiler = true
 		optimized-compiler-builtins = true
 		[install]
 		prefix = "${EPREFIX}/usr"

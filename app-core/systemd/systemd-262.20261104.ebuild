@@ -195,6 +195,7 @@ src_configure() {
 src_install() {
 	meson_src_install
 
+	newsysusers "${FILESDIR}/clock-sysusers" "${PN}-clock.conf"
 	use resolve && newsysusers "${FILESDIR}/resolve-sysusers" "${PN}-resolve.conf"
 	use networkd && newsysusers "${FILESDIR}/network-sysusers" "${PN}-network.conf"
 	use coredump && newsysusers "${FILESDIR}/coredump-sysusers" "${PN}-coredump.conf"

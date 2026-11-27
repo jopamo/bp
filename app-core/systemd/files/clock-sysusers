@@ -1,0 +1,2 @@
+# RTC and PTP device group used by 50-udev-default.rules.
+g clock -

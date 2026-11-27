@@ -6,6 +6,7 @@ DESCRIPTION="Glasgow Haskell Compiler"
 HOMEPAGE="https://www.haskell.org/ghc/"
 
 GHC_BOOTSTRAP_VERSION=9.8.2
+GHC_BOOTSTRAP_NCURSES=6.6-20261121
 HADRIAN_BOOTSTRAP_SOURCES_VERSION=9.8.1
 # Keep GHC aligned with the LTS used by Cabal and source-built Hackage closures.
 # lockstep-stackage-compiler: true
@@ -13,6 +14,9 @@ STACKAGE_SNAPSHOT="lts-24.68"
 SRC_URI="
 	https://downloads.haskell.org/~ghc/${PV}/${P}-src.tar.xz
 	https://downloads.haskell.org/~ghc/${PV}/hadrian-bootstrap-sources/hadrian-bootstrap-sources-${HADRIAN_BOOTSTRAP_SOURCES_VERSION}.tar.gz
+	!elibc_musl? (
+		https://invisible-mirror.net/archives/ncurses/current/ncurses-${GHC_BOOTSTRAP_NCURSES}.tgz
+	)
 	amd64? (
 		elibc_musl? (
 			https://downloads.haskell.org/~ghc/${GHC_BOOTSTRAP_VERSION}/ghc-${GHC_BOOTSTRAP_VERSION}-x86_64-alpine3_12-linux-static-int_native.tar.xz
@@ -74,9 +78,37 @@ ghc_bootstrap_dir() {
 		"${WORKDIR}/ghc-${GHC_BOOTSTRAP_VERSION}-${platform}"
 }
 
+ghc_build_bootstrap_tinfo() (
+	local source="${WORKDIR}/ncurses-${GHC_BOOTSTRAP_NCURSES}"
+	local build="${WORKDIR}/ghc-bootstrap-ncurses"
+
+	mkdir -p "${build}" || die
+	cd "${build}" || die
+	tc-export CC
+	# The Debian bindists need a non-threaded libtinfo.so.6 and the
+	# NCURSES6_TINFO_* symbol versions derived from the wide-character map.
+	"${source}/configure" \
+		--with-shared --with-abi-version=6 --enable-widec \
+		--with-termlib=tinfo \
+		--with-versioned-syms="${source}/package/ncursesw.map" \
+		--with-default-terminfo-dir="${EPREFIX}/usr/share/terminfo" \
+		--without-cxx --without-cxx-binding --without-ada \
+		--without-debug --without-normal --without-progs \
+		--without-tests --without-manpages || die
+	emake -C include -j1
+	emake -C ncurses "../lib/libtinfo.so.${GHC_BOOTSTRAP_NCURSES%%-*}"
+)
+
 ghc_bootstrap_terminfo_compat() {
 	local compat_dir="${T}/ghc-bootstrap-libs"
 	local target curses_target="${EPREFIX}/usr/lib/libncursesw.so.6"
+
+	if ! use elibc_musl; then
+		compat_dir="${WORKDIR}/ghc-bootstrap-ncurses/lib"
+		[[ -f ${compat_dir}/libtinfo.so.6 ]] || die "missing GHC bootstrap libtinfo"
+		ghc_prepend_library_path "${compat_dir}"
+		return
+	fi
 
 	# GHC uses the terminfo API, linked as libtinfo.so.6 or libncursesw.so.6
 	# depending on the bootstrap distribution. bp's threaded ncurses uses
@@ -95,14 +127,18 @@ ghc_bootstrap_terminfo_compat() {
 		ln -sf "${target}" "${compat_dir}/libtinfo.so.6" || die
 		[[ -e ${curses_target} ]] || curses_target=${target}
 		ln -sf "${curses_target}" "${compat_dir}/libncursesw.so.6" || die
-		case :${LD_LIBRARY_PATH-}: in
-			*:"${compat_dir}":*) ;;
-			*) export LD_LIBRARY_PATH="${compat_dir}${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}" ;;
-		esac
+		ghc_prepend_library_path "${compat_dir}"
 		return
 	done
 
 	die "failed to find a terminfo library for the GHC bootstrap compiler"
+}
+
+ghc_prepend_library_path() {
+	case :${LD_LIBRARY_PATH-}: in
+		*:"$1":*) ;;
+		*) export LD_LIBRARY_PATH="$1${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}" ;;
+	esac
 }
 
 src_prepare() {
@@ -118,6 +154,9 @@ src_configure() {
 
 	bootstrap_dir=$(ghc_bootstrap_dir)
 	bootstrap_root="${T}/ghc-bootstrap"
+	if ! use elibc_musl; then
+		ghc_build_bootstrap_tinfo
+	fi
 	ghc_bootstrap_terminfo_compat
 
 	pushd "${bootstrap_dir}" >/dev/null || die
@@ -128,7 +167,7 @@ src_configure() {
 	popd >/dev/null || die
 
 	export PATH="${bootstrap_root}/bin:${PATH}"
-	"${bootstrap_root}/bin/ghc" --info >/dev/null ||
+	LD_BIND_NOW=1 "${bootstrap_root}/bin/ghc" --info >/dev/null ||
 		die "installed GHC bootstrap compiler is not executable"
 
 	# Upstream's prefetched 9.8.1 archive has the same external sources as the

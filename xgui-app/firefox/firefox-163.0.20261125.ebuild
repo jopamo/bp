@@ -153,6 +153,8 @@ BDEPEND="
 	app-lang/python
 	>=app-lang/rust-1.95.0
 	app-server/nodejs
+	virtual/dbus[X,user-session]
+	xgui-tools/xvfb-run
 "
 
 PATCHES=( "${FILESDIR}/1g4-firefox.patch" )
@@ -178,6 +180,8 @@ src_prepare() {
 		ac_add_options --enable-default-toolkit=cairo-gtk3-x11-only
 		ac_add_options --disable-bootstrap
 		ac_add_options --enable-linker=lld
+		ac_add_options MOZ_PGO=1
+		ac_add_options --enable-lto=thin
 		ac_add_options --disable-updater
 		ac_add_options --disable-tests
 		ac_add_options --enable-1g4-privacy
@@ -227,7 +231,12 @@ src_compile() {
 	_firefox_build_env
 	filter-flags -fexceptions '-flto*'
 	replace-flags '-D_FORTIFY_SOURCE=3' '-D_FORTIFY_SOURCE=2'
-	./mach build -j "$(makeopts_jobs)" || die "mach build failed"
+
+	# Mach trains the instrumented browser against local HTTP servers before
+	# rebuilding with the collected profile and ThinLTO.
+	GDK_BACKEND=x11 MOZ_DISABLE_NONLOCAL_CONNECTIONS=1 dbus-run-session -- \
+		xvfb-run -a -s "-screen 0 1920x1080x24" \
+		./mach build -j "$(makeopts_jobs)" || die "mach PGO build failed"
 }
 
 src_install() {

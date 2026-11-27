@@ -1,7 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 BRANCH_NAME="snapshot"
-SNAPSHOT=0d60105fcb439ed28febfc60edc60cb737851d38
+SNAPSHOT=27ad13b67af02f31399a1f1bfbd508c6b9c57dc3
 
 PATCHES=(
 	"${FILESDIR}/perf-inject-aslr-drain-evlist.patch"

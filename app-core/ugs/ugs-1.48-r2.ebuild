@@ -12,6 +12,7 @@ KEYWORDS="amd64 arm64"
 IUSE="ipv6 video"
 
 RDEPEND="
+	app-core/bx
 	virtual/ssl
 	video? (
 		>=xmedia-app/ffmpeg-20261004[avcodec,avfilter,avformat,ffmpeg,swresample]
@@ -39,7 +40,6 @@ src_install() {
 		ubuntu_kernel
 		xbkup
 		xchroot
-		zgrep
 	)
 	for f in "${bin_utils[@]}"; do
 		dobin "${FILESDIR}/bin/$f"

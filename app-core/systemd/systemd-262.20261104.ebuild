@@ -195,6 +195,13 @@ src_configure() {
 src_install() {
 	meson_src_install
 
+	# logind starts autovt@ttyN.service when switching to an unused VT.
+	# Presetting getty@tty1.service only creates the tty1 instance alias.
+	if use logind; then
+		local unitdir=$(systemd_get_systemunitdir)
+		dosym -r "${unitdir}"/getty@.service "${unitdir}"/autovt@.service
+	fi
+
 	newsysusers "${FILESDIR}/clock-sysusers" "${PN}-clock.conf"
 	use resolve && newsysusers "${FILESDIR}/resolve-sysusers" "${PN}-resolve.conf"
 	use networkd && newsysusers "${FILESDIR}/network-sysusers" "${PN}-network.conf"

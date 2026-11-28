@@ -1,7 +1,9 @@
 [Unit]
 Description=Configure 1g4 default zram swap
 DefaultDependencies=no
-After=systemd-modules-load.service systemd-sysctl.service
+# zramctl waits for udev to initialize the block device.
+Wants=systemd-udevd.service
+After=systemd-modules-load.service systemd-sysctl.service systemd-udevd.service systemd-udev-trigger.service
 Before=swap.target shutdown.target
 Conflicts=shutdown.target
 ConditionVirtualization=!container

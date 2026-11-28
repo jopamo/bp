@@ -10,5 +10,7 @@ app-lang/python -ssl -sqlite -readline -ncurses
 app-core/util-linux -cryptsetup -cryptsetup-dlopen -systemd -python -pylibmount
 app-core/procps -systemd
 app-core/dbus -systemd
+app-core/1g4-system-defaults -oomd
+app-core/systemd -oomd
 app-fs/cryptsetup -udev
 app-fs/lvm2 dm-only -systemd -udev

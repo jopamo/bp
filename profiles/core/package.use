@@ -14,7 +14,8 @@ app-core/attr static-libs
 app-core/debianutils installkernel
 app-core/git curl
 app-core/kmod tools
-app-core/systemd logind resolve
+app-core/1g4-system-defaults oomd
+app-core/systemd logind oomd resolve
 app-crypto/blake3 shared
 app-crypto/botan boost lzma
 app-emu/capstone diet

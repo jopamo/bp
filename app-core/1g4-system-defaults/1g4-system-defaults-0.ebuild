@@ -11,12 +11,13 @@ S=${WORKDIR}
 LICENSE="metapackage"
 SLOT="0"
 KEYWORDS="amd64 arm64"
-IUSE="ipv6 mmap-rnd-bits-24 router +server user-namespaces"
+IUSE="ipv6 mmap-rnd-bits-24 oomd router +server user-namespaces"
 
 RDEPEND="
 	app-core/kmod
-	app-core/systemd
+	app-core/systemd[oomd?]
 	app-core/util-linux
+	oomd? ( virtual/dbus )
 "
 
 src_install() {
@@ -63,13 +64,21 @@ src_install() {
 
 	systemd_newunit "${FILESDIR}"/1g4-zram-setup.service 1g4-zram-setup.service
 	systemd_enable_service swap.target 1g4-zram-setup.service
+
+	if use oomd; then
+		local unitdir=$(systemd_get_systemunitdir)
+		insinto "${unitdir}"/user@.service.d
+		newins "${FILESDIR}"/1g4-user-oomd.conf 50-1g4-oomd.conf
+		systemd_enable_service multi-user.target systemd-oomd.service
+		dosym -r "${unitdir}"/systemd-oomd.service \
+			"${unitdir}"/dbus-org.freedesktop.oom1.service
+	fi
 }
 
 pkg_postinst() {
-	elog "Installed 1g4 zram defaults."
-	elog "The service is enabled for boot."
-	elog "This package does not reset or reconfigure active swap during merge."
-	elog "To apply the updated unit wiring on a running system explicitly:"
-	elog "  systemctl daemon-reload"
-	elog "  systemctl reenable 1g4-zram-setup.service"
+	elog "Zram setup is pulled in at boot; this merge leaves active swap unchanged."
+	if use oomd; then
+		elog "systemd-oomd and its user-workload policy take effect on the next boot."
+		elog "Check active swap with 'swapon --show' and monitored cgroups with 'oomctl dump'."
+	fi
 }
